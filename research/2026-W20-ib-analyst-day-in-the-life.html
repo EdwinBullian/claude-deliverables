@@ -1,42 +1,77 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IB Analyst Day-in-the-Life — Research W20 2026</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; line-height: 1.7; padding: 2rem; }
-  .container { max-width: 800px; margin: 0 auto; }
-  .meta { color: #888; font-size: 0.82rem; margin-bottom: 1.5rem; }
-  h1 { font-size: 1.8rem; color: #f5e6d3; border-bottom: 2px solid #f5e6d355; padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
-  h2 { font-size: 1.3rem; color: #a8d8ea; margin-top: 2rem; margin-bottom: 0.8rem; }
-  h3 { font-size: 1rem; color: #f5e6d3; margin-top: 1.2rem; margin-bottom: 0.4rem; }
-  .summary { background: #16213e; border-left: 3px solid #a8d8ea; padding: 1rem 1.2rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; }
-  .section { background: #16213e; border-left: 3px solid #f5e6d355; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-radius: 0 8px 8px 0; }
-  table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.86rem; }
-  th { background: #16213e; color: #a8d8ea; padding: 0.6rem; text-align: left; border-bottom: 2px solid #a8d8ea44; }
-  td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #2a2a4a; vertical-align: top; }
-  .cit { background: #0f3460; border: 1px solid #a8d8ea44; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; }
-  .cit h3 { color: #f5e6d3; margin-top: 0; }
-  .cit p { color: #c0c0c0; font-size: 0.92rem; }
-  p { color: #c0c0c0; font-size: 0.92rem; margin-bottom: 0.6rem; }
-  ul, ol { color: #c0c0c0; font-size: 0.88rem; margin-left: 1.2rem; margin-bottom: 0.6rem; }
-  li { margin-bottom: 0.3rem; }
-  strong { color: #f5e6d3; }
-  .tag { display: inline-block; background: #a8d8ea22; color: #a8d8ea; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; margin-right: 4px; }
-  .callout { background: #0f3460; border: 1px solid #a8d8ea33; border-radius: 6px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.88rem; color: #c0c0c0; }
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; color: var(--text); }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.container { max-width: 900px; margin: 0 auto; }
+/* Cards */
+.summary, .section, .cit, .exec-summary { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.cit { border-left: 4px solid var(--accent2); border-radius: 0 6px 6px 0; }
+.section { border-left: 4px solid rgba(27,58,92,0.35); border-radius: 0 6px 6px 0; }
+.section h3 { margin-top: 0; }
+/* Research */
+.example { background: #f0ebe0; border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; margin: 0.6rem 0; font-size: 0.87rem; font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text); white-space: pre-wrap; }
+.layer { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.layer strong { color: var(--accent); }
+.benchmark { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.79rem; font-family: -apple-system, sans-serif; margin-left: 4px; }
+.tag { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-family: -apple-system, sans-serif; margin-right: 4px; }
+/* Thesis bull/base/bear */
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+/* Health status */
+.status-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1.5rem; }
+.kv { background: var(--card); border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv span { color: var(--subtle); font-size: 0.75rem; display: block; font-family: -apple-system, sans-serif; }
+.kv strong { color: var(--heading); font-size: 0.92rem; }
+.kv.good { border-left-color: var(--good); }
+.kv.warn { border-left-color: var(--warn); }
+.kv.bad { border-left-color: var(--danger); }
+.alert { background: rgba(166,124,61,0.1); border: 1px solid rgba(166,124,61,0.35); border-radius: 6px; padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.88rem; color: var(--warn); font-family: -apple-system, sans-serif; }
+.alert-new { background: rgba(74,124,89,0.1); border-color: rgba(74,124,89,0.35); color: var(--good); }
+.adj { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.adj strong { color: var(--accent); }
+.milestone { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; text-align: center; }
+.milestone .label { color: var(--subtle); font-size: 0.88rem; font-family: -apple-system, sans-serif; }
+.milestone .value { color: var(--heading); font-size: 1.15rem; font-weight: bold; }
+/* Callout (market scans) */
+.callout { background: var(--card); border-left: 4px solid var(--accent2); padding: 1rem 1.25rem; margin: 0.8rem 0; border-radius: 0 6px 6px 0; }
+.callout strong, .callout p { color: var(--text); }
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>IB Analyst Day-in-the-Life: Bulge Bracket vs. Boutique</h1>
   <p class="meta">Research Date: 2026-05-12 | Effort: 6 hrs | Queue Priority: #1 | Week 2026-W20</p>
-  <p class="meta" style="margin-top:-1rem;">Topics: BB vs. Elite Boutique, Pitching vs. Live Deal, Analyst Workflow, Compensation, Exit Opportunities</p>
+  <p class="meta">Topics: BB vs. Elite Boutique, Pitching vs. Live Deal, Analyst Workflow, Compensation, Exit Opportunities</p>
 
   <div class="summary">
     <strong>Executive Summary</strong>
-    <p style="margin-top:0.5rem; margin-bottom:0;">Investment banking analysts occupy one of the most demanding entry-level roles in finance — and one of the most valuable as a launching pad into PE, VC, and beyond. The experience varies dramatically by firm type. Bulge brackets offer brand, scale, and structured training; elite boutiques offer deal depth, compensation, and accelerated autonomy. The job splits into two modes that alternate constantly: pitching mode (60–65 hrs/wk) and live deal mode (100–120 hrs/wk). The sharpest skill the job builds isn't financial modeling — it's operating under ambiguity with zero margin for error.</p>
+    <p>Investment banking analysts occupy one of the most demanding entry-level roles in finance — and one of the most valuable as a launching pad into PE, VC, and beyond. The experience varies dramatically by firm type. Bulge brackets offer brand, scale, and structured training; elite boutiques offer deal depth, compensation, and accelerated autonomy. The job splits into two modes that alternate constantly: pitching mode (60–65 hrs/wk) and live deal mode (100–120 hrs/wk). The sharpest skill the job builds isn't financial modeling — it's operating under ambiguity with zero margin for error.</p>
   </div>
 
   <h2>1. What Analysts Actually Do</h2>
@@ -105,8 +140,8 @@
   <div class="cit">
     <h3>Implications for Eddie (IB → VC Path)</h3>
     <p>Given your target of IB → VC with a tech focus, the optimal firm type is an <strong>elite boutique or bulge bracket with a strong TMT (tech, media, telecom) coverage group</strong>. VC funds recruiting from IB want people with tech deal exposure — an analyst who worked on SaaS M&A, tech IPOs, or software LBOs is far more compelling than one who worked on consumer or healthcare deals. When recruiting at Mendoza, target banks' tech groups, not just IB broadly.</p>
-    <p style="margin-top:0.6rem;"><strong>The Mendoza reality:</strong> Notre Dame is a target school for regional and middle market banks (Piper Sandler, Baird, Harris Williams) and some BB offices outside NYC. For BB New York and top elite boutiques, Mendoza is semi-target — doable but requires proactive networking. Your freshman and sophomore networking work is genuinely important, not just resumé-building theater.</p>
-    <p style="margin-top:0.6rem; color: #a8d8ea;"><strong>The PE vs. VC exit question:</strong> PE recruiting starts in year one before you're truly competent. VC recruiting is more off-cycle and relationship-driven. Think of the IB stint as: work hard for 2 years, get deal experience in tech, stay aware of the PE recruiting cycle but don't be consumed by it, and build relationships with VC-focused alumni during years 2–3 when you have actual deal stories to tell.</p>
+    <p><strong>The Mendoza reality:</strong> Notre Dame is a target school for regional and middle market banks (Piper Sandler, Baird, Harris Williams) and some BB offices outside NYC. For BB New York and top elite boutiques, Mendoza is semi-target — doable but requires proactive networking. Your freshman and sophomore networking work is genuinely important, not just resumé-building theater.</p>
+    <p><strong>The PE vs. VC exit question:</strong> PE recruiting starts in year one before you're truly competent. VC recruiting is more off-cycle and relationship-driven. Think of the IB stint as: work hard for 2 years, get deal experience in tech, stay aware of the PE recruiting cycle but don't be consumed by it, and build relationships with VC-focused alumni during years 2–3 when you have actual deal stories to tell.</p>
   </div>
 </div>
 </body>
