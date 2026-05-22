@@ -1,35 +1,66 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Health Weekly Review — W19 2026</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; line-height: 1.7; padding: 2rem; }
-  .container { max-width: 800px; margin: 0 auto; }
-  .meta { color: #888; font-size: 0.82rem; margin-bottom: 1.5rem; }
-  h1 { font-size: 1.8rem; color: #f5e6d3; border-bottom: 2px solid #f5e6d355; padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
-  h2 { font-size: 1.3rem; color: #a8d8ea; margin-top: 2rem; margin-bottom: 0.8rem; }
-  h3 { font-size: 1rem; color: #f5e6d3; margin-top: 1.2rem; margin-bottom: 0.4rem; }
-  .status-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1.5rem; }
-  .kv { background: #16213e; border-left: 3px solid #a8d8ea; padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; }
-  .kv span { color: #888; font-size: 0.75rem; display: block; }
-  .kv strong { color: #f5e6d3; font-size: 0.92rem; }
-  .good { border-left-color: #4caf7d; }
-  .warn { border-left-color: #f5a623; }
-  .bad { border-left-color: #e57373; }
-  table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.86rem; }
-  th { background: #16213e; color: #a8d8ea; padding: 0.6rem; text-align: left; border-bottom: 2px solid #a8d8ea44; }
-  td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #2a2a4a; vertical-align: top; }
-  .alert { background: #2d1a0a; border: 1px solid #f5a62344; border-radius: 6px; padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.86rem; color: #f5a623; }
-  .section { background: #16213e; border-left: 3px solid #f5e6d355; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-radius: 0 8px 8px 0; }
-  .adj { background: #16213e; border: 1px solid #a8d8ea33; border-radius: 6px; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.88rem; }
-  .adj strong { color: #a8d8ea; }
-  p { color: #c0c0c0; font-size: 0.92rem; margin-bottom: 0.6rem; }
-  ul, ol { color: #c0c0c0; font-size: 0.88rem; margin-left: 1.2rem; margin-bottom: 0.6rem; }
-  li { margin-bottom: 0.3rem; }
-  strong { color: #f5e6d3; }
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; color: var(--text); }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.container { max-width: 900px; margin: 0 auto; }
+/* Cards */
+.summary, .section, .cit, .exec-summary { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.cit { border-left: 4px solid var(--accent2); border-radius: 0 6px 6px 0; }
+.section { border-left: 4px solid rgba(27,58,92,0.35); border-radius: 0 6px 6px 0; }
+.section h3 { margin-top: 0; }
+/* Research */
+.example { background: #f0ebe0; border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; margin: 0.6rem 0; font-size: 0.87rem; font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text); white-space: pre-wrap; }
+.layer { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.layer strong { color: var(--accent); }
+.benchmark { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.79rem; font-family: -apple-system, sans-serif; margin-left: 4px; }
+.tag { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-family: -apple-system, sans-serif; margin-right: 4px; }
+/* Thesis bull/base/bear */
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+/* Health status */
+.status-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1.5rem; }
+.kv { background: var(--card); border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv span { color: var(--subtle); font-size: 0.75rem; display: block; font-family: -apple-system, sans-serif; }
+.kv strong { color: var(--heading); font-size: 0.92rem; }
+.kv.good { border-left-color: var(--good); }
+.kv.warn { border-left-color: var(--warn); }
+.kv.bad { border-left-color: var(--danger); }
+.alert { background: rgba(166,124,61,0.1); border: 1px solid rgba(166,124,61,0.35); border-radius: 6px; padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.88rem; color: var(--warn); font-family: -apple-system, sans-serif; }
+.alert-new { background: rgba(74,124,89,0.1); border-color: rgba(74,124,89,0.35); color: var(--good); }
+.adj { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.adj strong { color: var(--accent); }
+.milestone { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; text-align: center; }
+.milestone .label { color: var(--subtle); font-size: 0.88rem; font-family: -apple-system, sans-serif; }
+.milestone .value { color: var(--heading); font-size: 1.15rem; font-weight: bold; }
+/* Callout (market scans) */
+.callout { background: var(--card); border-left: 4px solid var(--accent2); padding: 1rem 1.25rem; margin: 0.8rem 0; border-radius: 0 6px 6px 0; }
+.callout strong, .callout p { color: var(--text); }
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
 </style>
 </head>
 <body>
@@ -53,7 +84,7 @@
     <tr><td>Fri May 8</td><td>Type 85 (indoor gym)</td><td>26 min</td><td>136</td><td>102 bpm</td></tr>
     <tr><td>Sat May 9</td><td>Type 85 (indoor gym)</td><td>120 min</td><td>692</td><td>110 bpm</td></tr>
   </table>
-  <p style="margin-top:0.6rem; font-size:0.82rem; color:#888;">Tue/Thu show only 3-min stretch sessions — not counted. Notion workout tracker shows no logs for W19 (2nd consecutive week gap). Zepp is the only confirmed data source.</p>
+  <p>Tue/Thu show only 3-min stretch sessions — not counted. Notion workout tracker shows no logs for W19 (2nd consecutive week gap). Zepp is the only confirmed data source.</p>
 
   <h2>Recovery</h2>
   <table>
@@ -66,7 +97,7 @@
     <tr><td>Sat May 9</td><td>7.98</td><td>81</td><td>51</td></tr>
     <tr><td><strong>W19 avg</strong></td><td><strong>7.27 hr</strong></td><td><strong>77</strong></td><td><strong>53 bpm</strong></td></tr>
   </table>
-  <p style="margin-top:0.6rem;">Sleep avg 7.27 hr — above 7.0 hr threshold. One short night May 6 (6.15 hr, AP Stats exam context — isolated). RHR avg 53 bpm vs. W18 avg 54 bpm → Δ = -1 bpm (stable, slight improvement). RHR vs baseline (52 bpm): +1 bpm — within normal range. No injury log entries.</p>
+  <p>Sleep avg 7.27 hr — above 7.0 hr threshold. One short night May 6 (6.15 hr, AP Stats exam context — isolated). RHR avg 53 bpm vs. W18 avg 54 bpm → Δ = -1 bpm (stable, slight improvement). RHR vs baseline (52 bpm): +1 bpm — within normal range. No injury log entries.</p>
   <p><strong>HRV/SpO2/Respiratory rate:</strong> Unavailable — Apple Health `health_latest.json` not found (3rd consecutive week). Zepp API has not exposed HRV since 2024.</p>
   <p><strong>Overall recovery: Good*</strong> — 0 confirmed hits on rubric. Asterisk: HRV blind spot could mask moderate recovery.</p>
 
@@ -94,7 +125,7 @@
     <li>W20 is a hybrid transition week: exam-mode through Wednesday, ramp begins Thursday</li>
     <li>Re-establishing Cronometer logging is priority for post-finals week</li>
   </ul>
-  <p style="margin-top:0.6rem; font-size:0.82rem; color:#888;">Data sources: Zepp MCP (sleep, RHR, workouts), Cronometer MCP (no data returned), Apple Health file (not found). zepp_cli.py and cronometer_cli.py both failed — MCP fallback used.</p>
+  <p>Data sources: Zepp MCP (sleep, RHR, workouts), Cronometer MCP (no data returned), Apple Health file (not found). zepp_cli.py and cronometer_cli.py both failed — MCP fallback used.</p>
 </div>
 </body>
 </html>
