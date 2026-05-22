@@ -1,0 +1,714 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Optimization — Complete Deep Dive Report</title>
+  <style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3, h4 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+h4 { color: var(--heading); font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0.4rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; color: var(--text); }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+.meta, .label { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.container { max-width: 900px; margin: 0 auto; }
+.header { border-bottom: 2px solid var(--accent); padding-bottom: 1rem; margin-bottom: 2rem; }
+/* Cards */
+.summary, .section, .cit, .exec-summary, .card, .finding, .note, .highlight, .topic { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.cit { border-left: 4px solid var(--accent2); border-radius: 0 6px 6px 0; }
+.section { border-left: 4px solid rgba(27,58,92,0.35); border-radius: 0 6px 6px 0; }
+.section h3 { margin-top: 0; }
+/* Research */
+.example, .code-block, pre { background: #f0ebe0; border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; margin: 0.6rem 0; font-size: 0.87rem; font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text); white-space: pre-wrap; }
+.layer { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.layer strong { color: var(--accent); }
+.benchmark, .badge { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.79rem; font-family: -apple-system, sans-serif; margin-left: 4px; }
+.tag { display: inline-block; background: rgba(27,58,92,0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-family: -apple-system, sans-serif; margin-right: 4px; }
+/* Thesis */
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+/* Health */
+.status-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1.5rem; }
+.kv { background: var(--card); border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv span { color: var(--subtle); font-size: 0.75rem; display: block; font-family: -apple-system, sans-serif; }
+.kv strong { color: var(--heading); font-size: 0.92rem; }
+.kv.good { border-left-color: var(--good); }
+.kv.warn { border-left-color: var(--warn); }
+.kv.bad { border-left-color: var(--danger); }
+.alert { background: rgba(166,124,61,0.1); border: 1px solid rgba(166,124,61,0.35); border-radius: 6px; padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.88rem; color: var(--warn); font-family: -apple-system, sans-serif; }
+.alert-new { background: rgba(74,124,89,0.1); border-color: rgba(74,124,89,0.35); color: var(--good); }
+.adj { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.adj strong { color: var(--accent); }
+.milestone { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; text-align: center; }
+.milestone .label { color: var(--subtle); font-size: 0.88rem; }
+.milestone .value { color: var(--heading); font-size: 1.15rem; font-weight: bold; }
+.callout { background: var(--card); border-left: 4px solid var(--accent2); padding: 1rem 1.25rem; margin: 0.8rem 0; border-radius: 0 6px 6px 0; }
+.callout.warn { border-left-color: var(--warn); }
+.callout.danger { border-left-color: var(--danger); }
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="label">Research Report · Health · Deep Dive</div>
+  <h1>The Complete Guide to Sleep Optimization</h1>
+  <div class="subtitle">Timing, Cycles, Supplements, Routines, Blue Light, Napping, Athletic Performance & Your Personal Protocol</div>
+  <div class="meta">Generated via NotebookLM + Research Agent · 50+ sources · April 2026</div>
+</div>
+
+<div class="toc">
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#architecture">Sleep Architecture: Stages, Cycles & the Brain</a></li>
+    <li><a href="#circadian">The Circadian Clock: Timing, Melatonin & Cortisol</a></li>
+    <li><a href="#chronotypes">Chronotypes: Your Genetic Sleep Blueprint</a></li>
+    <li><a href="#light">Photobiology: Light, Blue Light & Melatonin</a></li>
+    <li><a href="#temperature">Thermoregulation: Temperature & Sleep Quality</a></li>
+    <li><a href="#supplements">Supplements: Evidence-Based Guide</a></li>
+    <li><a href="#nutrition">Nutrition, Caffeine & Diet Effects on Sleep</a></li>
+    <li><a href="#exercise">Exercise Timing & Sleep</a></li>
+    <li><a href="#napping">The Science of Napping</a></li>
+    <li><a href="#athletic">Athletic Performance & Sleep</a></li>
+    <li><a href="#health">Health Consequences of Sleep Deprivation</a></li>
+    <li><a href="#psychology">Psychological & Behavioral Optimization</a></li>
+    <li><a href="#cbti">CBT-I: The Gold Standard for Insomnia</a></li>
+    <li><a href="#timelimited">Optimizing Sleep When Time-Restricted</a></li>
+    <li><a href="#protocol">Your Personal Sleep Protocol: The Complete Guide</a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1: SLEEP ARCHITECTURE -->
+<div class="section" id="architecture">
+<h2>Section I</h2>
+<h3>Sleep Architecture: Stages, Cycles & the Brain</h3>
+
+<p>Sleep is not a passive state of unconsciousness but a highly active, precisely regulated biological process. Current neuroscience defines it as a dynamic series of brain-state transitions that serve irreplaceable physiological and cognitive functions. A full night consists of 4–6 repeating cycles, each lasting approximately 90–110 minutes. What happens in each cycle — and when during the night — determines whether you wake up restored or depleted.</p>
+
+<h4>The Four Stages of Sleep</h4>
+
+<p><strong>Stage N1 (Light Sleep — 2–5% of total sleep)</strong> is the brief transition from wakefulness. The EEG shifts from rhythmic alpha waves (8–13 Hz) to low-voltage theta waves (4–8 Hz). Muscle activity decreases, occasional hypnic jerks occur, and the arousal threshold is very low. Abnormally high N1 is a clinical marker of significant sleep fragmentation.</p>
+
+<p><strong>Stage N2 (Core Sleep — 45–55% of total sleep)</strong> is the quantitative majority of the night. Defined by two key neural signatures: <em>sleep spindles</em> (brief 11–16 Hz bursts linked to memory consolidation and IQ) and <em>K-complexes</em> (high-amplitude waveforms that protect sleep from environmental disturbances while maintaining environmental monitoring). Heart rate slows, core body temperature continues falling, and motor learning begins.</p>
+
+<p><strong>Stage N3 / Slow-Wave Sleep (15–25% of total sleep)</strong> is the most physically restorative stage. High-amplitude delta waves (0.5–2 Hz) dominate. This stage is concentrated in the <em>first third of the night</em> (cycles 1–2) and is when: growth hormone is secreted in its largest nightly pulse, immune cytokines are released, glycogen is replenished, and the glymphatic system performs its critical brain-clearing function. Arousal threshold is highest — being woken from N3 causes profound grogginess (sleep inertia).</p>
+
+<p><strong>REM Sleep (20–25% of total sleep)</strong> is "paradoxical sleep" — the EEG pattern is nearly identical to waking (fast, low-voltage activity) yet the body is in complete voluntary muscle atonia. REM is concentrated in the <em>final third of the night</em> (cycles 4–6, especially 5–7am). It is essential for: emotional memory consolidation, creative problem-solving, emotional regulation (prefrontal dampening of amygdala reactivity), and testosterone/GH secretion. The first REM period lasts ~10 minutes; the final can last 45–60 minutes.</p>
+
+<table>
+  <tr><th>Stage</th><th>EEG Signal</th><th>% of Night</th><th>When It Dominates</th><th>Primary Function</th></tr>
+  <tr><td><strong>N1</strong></td><td>Theta (4–8 Hz)</td><td>2–5%</td><td>Sleep onset</td><td>Transition buffer</td></tr>
+  <tr><td><strong>N2</strong></td><td>Spindles + K-complexes</td><td>45–55%</td><td>Throughout</td><td>Motor learning, memory</td></tr>
+  <tr><td><strong>N3</strong></td><td>Delta (0.5–2 Hz)</td><td>15–25%</td><td>First half (10pm–2am)</td><td>Physical repair, GH, immune</td></tr>
+  <tr><td><strong>REM</strong></td><td>Beta/Alpha-like</td><td>20–25%</td><td>Second half (2am–8am)</td><td>Emotional regulation, creativity</td></tr>
+</table>
+
+<h4>Why Cutting Sleep Short Is Disproportionately Harmful</h4>
+<p>Sleeping 6 hours instead of 8 does not cut 25% of sleep — it cuts approximately <strong>60% of your REM sleep</strong>. The final two cycles (5am–7am) are almost entirely REM. This is why even modest sleep restriction has outsized cognitive and emotional consequences. A single week of 6-hour nights produces cognitive impairment equivalent to two full nights of total sleep deprivation.</p>
+
+<h4>The Glymphatic System: Your Brain's Waste Clearance</h4>
+<p>During N3 sleep, brain cells (astrocytes) shrink by up to 60%, creating channels for cerebrospinal fluid to flush metabolic waste. The glymphatic system is <strong>10× more active during sleep than waking</strong>. It removes beta-amyloid (linked to Alzheimer's) and tau proteins. Even a single night of sleep deprivation measurably increases amyloid accumulation. Lateral (side) sleeping position has been shown to optimize glymphatic flow.</p>
+
+<h4>The Two-Process Model of Sleep Regulation</h4>
+<p>Sleep timing is governed by two interacting processes:<br>
+<strong>Process C (Circadian)</strong>: The SCN biological clock creates cyclical alertness, including a paradoxical "forbidden zone" — a peak in alertness 1–3 hours before habitual bedtime that makes it extremely difficult to sleep even when tired.<br>
+<strong>Process S (Homeostatic/Adenosine)</strong>: Adenosine accumulates during wakefulness, building "sleep pressure." Sleep clears adenosine. Caffeine works by <em>blocking</em> adenosine receptors — masking fatigue without reducing it. The half-life of caffeine is 5–7 hours, meaning a 3pm coffee has 50% active at 8–10pm.</p>
+
+<h4>Neurochemistry of Waking and Sleeping</h4>
+<p>Wakefulness is maintained by the ascending reticular activating system (ARAS) using: acetylcholine, dopamine, norepinephrine, serotonin, histamine, and orexin/hypocretin. Sleep initiation requires the preoptic area of the hypothalamus to release GABA, inhibiting these arousal centers. Narcolepsy results from orexin neuron loss. N3 has the lowest ACh levels; REM paradoxically mirrors the high ACh of wakefulness.</p>
+</div>
+
+<!-- SECTION 2: CIRCADIAN RHYTHM -->
+<div class="section" id="circadian">
+<h2>Section II</h2>
+<h3>The Circadian Clock: Timing, Melatonin & Cortisol</h3>
+
+<p>The circadian clock is the most powerful regulator of human biology. It controls not just sleep-wake timing but also every major hormonal system, immune function, metabolism, cell division, and even the expression of thousands of genes. Getting sleep timing right is arguably more important than sleep duration.</p>
+
+<h4>The Suprachiasmatic Nucleus (SCN)</h4>
+<p>The master pacemaker is the suprachiasmatic nucleus — approximately 20,000 neurons in the anterior hypothalamus. It runs on a native cycle of ~24.2 hours and requires daily calibration via light. The SCN receives direct input from melanopsin-containing intrinsically photosensitive retinal ganglion cells (ipRGCs), which are maximally sensitive to 460–480 nm (blue) wavelength light.</p>
+
+<p>The SCN synchronizes peripheral clocks in every organ — liver, heart, kidneys, gut, pancreas, immune cells. Misalignment between central and peripheral clocks (via irregular eating, shift work, or social jet lag) is a major driver of metabolic disease, even independent of sleep duration.</p>
+
+<h4>The Cortisol Awakening Response (CAR)</h4>
+<p>Within 30 minutes of waking, cortisol rises 30–50% — this is the Cortisol Awakening Response, not a stress response but a physiological activation signal. It sets energy, alertness, immune function, and stress resilience for the entire day. The CAR is suppressed by: sleeping past your habitual wake time, immediate phone/screen use, and prior-night artificial light exposure. It is maximized by: consistent wake time, morning outdoor light, and morning exercise.</p>
+
+<h4>Melatonin: The Darkness Signal (Not a Sleep Drug)</h4>
+<p>Melatonin is produced by the pineal gland exclusively in response to darkness. Dim-light melatonin onset (DLMO) begins ~2 hours before habitual sleep time. Peak occurs around midnight–2am. Half-life is 40–60 minutes. Critically, melatonin does not cause sleep — it <em>signals</em> that it is biological night, coordinating all circadian-regulated processes. Even 10 lux (a very dim lamp) can suppress melatonin. Overhead LED lighting routinely delivers 200–500 lux, which can completely suppress melatonin onset.</p>
+
+<div class="callout">
+  <strong>Key Insight</strong>
+  Light from below eye level (lamps, candles, floor lighting) has dramatically less melatonin-suppressing effect than overhead lighting — because the ipRGCs that drive melatonin suppression are situated in the upper visual field. Switching to floor lamps in the evening costs nothing and meaningfully protects melatonin.
+</div>
+
+<h4>Core Body Temperature and Sleep Timing</h4>
+<p>Core body temperature (CBT) follows a precise circadian rhythm: peaks around 5–7pm (~37.2°C), then falls 1–2°C to initiate sleep, reaches nadir at 4–5am, and rises again to produce natural waking. This CBT drop is <em>essential</em> for sleep onset — it is not a consequence of sleep, it is a prerequisite. Heat dissipation occurs via peripheral vasodilation (warm hands, feet, face). The classic sign of sleepiness — warm hands before bed — is this mechanism in action.</p>
+
+<h4>Social Jet Lag</h4>
+<p>Social jet lag is the discrepancy between biological clock time and social schedule. Average in industrialized societies: 1–1.5 hours. Each hour of social jet lag is associated with 33% increased odds of overweight/obesity. It reduces subjective alertness equivalent to 3+ hours less sleep. Chronic social jet lag is linked to depression, metabolic syndrome, and cardiovascular disease. The most effective fix: anchor wake time every day (including weekends) within 30 minutes.</p>
+</div>
+
+<!-- SECTION 3: CHRONOTYPES -->
+<div class="section" id="chronotypes">
+<h2>Section III</h2>
+<h3>Chronotypes: Your Biological Sleep Timing</h3>
+
+<p>Chronotype is not a personality preference — it is a genetically and physiologically determined trait controlling your circadian phase. It dictates when your cortisol peaks, when your melatonin rises, when your body temperature drops, and when your cognitive performance is highest. Forcing a Wolf-type person to operate on Lion hours is the equivalent of chronic partial jet lag.</p>
+
+<h4>The Four Chronotype Model</h4>
+<table>
+  <tr><th>Chronotype</th><th>Population %</th><th>Natural Wake</th><th>Natural Sleep</th><th>Peak Performance</th></tr>
+  <tr><td><strong>Lion (Morning)</strong></td><td>~15%</td><td>5:30–6:30am</td><td>9:30–10:30pm</td><td>Morning, early afternoon</td></tr>
+  <tr><td><strong>Bear (Intermediate)</strong></td><td>~50%</td><td>7:00–8:00am</td><td>11:00pm–12:00am</td><td>Mid-morning to afternoon</td></tr>
+  <tr><td><strong>Wolf (Evening)</strong></td><td>~20%</td><td>9:00–10:00am</td><td>12:30–2:00am</td><td>Late afternoon, evening</td></tr>
+  <tr><td><strong>Dolphin (Light/Irregular)</strong></td><td>~10%</td><td>6:30–7:30am</td><td>11:30pm–12:30am</td><td>Highly variable, mid-morning</td></tr>
+</table>
+
+<p>Chronotype is measured objectively via the Munich Chronotype Questionnaire (MCTQ), which uses free-day (weekend) sleep midpoint, and the Morningness-Eveningness Questionnaire (MEQ). It shifts across lifespan: children are typically earlier; adolescents experience a 1–2 hour evening phase delay; adults gradually shift earlier again through midlife. By age 60, most people are earlier than at age 20.</p>
+
+<h4>Chronotype-Aligned Training (2026 RCT Data)</h4>
+<p>A 2026 randomized controlled trial found that athletes who aligned exercise timing with their chronotype experienced significantly greater strength gains and cardiovascular adaptations compared to those training against their chronotype. For Bears and Wolves, afternoon training (3–6pm) aligns with peak body temperature and muscle function; for Lions, morning training (6–9am) is optimal.</p>
+
+<h4>Working Against Your Chronotype</h4>
+<p>Social jet lag — forced early wake-ups for school or work against a late chronotype — produces the same physiological stress and performance impairment as transmeridian travel. Teenagers, who are biologically Wolves due to pubertal phase delay, are particularly harmed by early school start times. For Wolves who cannot shift their schedule, the most effective mitigations are: bright light immediately upon waking, strict weekend anchor times (no more than 30-minute sleep-in), and evening light restriction starting at 8pm.</p>
+</div>
+
+<!-- SECTION 4: PHOTOBIOLOGY / BLUE LIGHT -->
+<div class="section" id="photobiology">
+<h2>Section IV</h2>
+<h3>Photobiology: Light, Blue Light & Sleep</h3>
+
+<p>Light is the single most powerful external regulator of circadian timing and melatonin production. Modern humans live in a completely abnormal light environment: bright, blue-enriched light at night, and insufficient morning light relative to outdoor exposure. Correcting this is the highest-leverage, zero-cost intervention for sleep quality.</p>
+
+<h4>How Light Affects Sleep Biology</h4>
+<p>The ipRGC photoreceptors in the retina respond maximally to 460–480 nm (blue) light wavelengths. They project directly to the SCN via the retinohypothalamic tract — bypassing the visual cortex entirely. This is why bright light exposure affects circadian timing even in people who are visually impaired. The key signal is not just wavelength but intensity (lux) and timing.</p>
+
+<ul>
+  <li><strong>Morning light (within 60 min of waking):</strong> Sets circadian anchor point. Triggers the CAR, raises serotonin (serotonin is the precursor to melatonin), and initiates a timer so that melatonin rises ~16 hours later at the correct time. Even overcast outdoor light (~10,000 lux) vastly exceeds indoor lighting (~200–500 lux).</li>
+  <li><strong>Afternoon/sunset light:</strong> Orange-red wavelength at low angle. Signals the ipRGCs to prepare for evening melatonin onset. This is why outdoor sunset viewing actively accelerates the transition to nighttime biology.</li>
+  <li><strong>Evening blue light:</strong> Suppresses melatonin, delays DLMO, reduces total sleep time, reduces REM, and increases cortisol. Even 10 lux can suppress melatonin by 50% in sensitive individuals.</li>
+</ul>
+
+<h4>The Melatonin Suppression Study (Key Finding)</h4>
+<p>Standard overhead LED room lighting (200–500 lux at 6500K) completely suppresses melatonin onset when exposure begins 2+ hours before bed. A landmark study found that room light before bedtime suppressed melatonin by 71.4% and delayed the melatonin onset by 90 minutes on average. This single factor explains a large portion of modern sleep dysfunction.</p>
+
+<h4>Blue Light Glasses: What the Evidence Shows</h4>
+<p>Blue-light blocking glasses (amber/orange lenses, not "yellow-tinted") that block 99%+ of wavelengths below 550nm are effective at preserving melatonin when worn 2–3 hours before bed. Standard "computer glasses" with light yellow tinting and minimal blue blocking show minimal effect. Look for glasses explicitly rated to block at least 98% of 460–480nm light. The evidence for reducing digital eyestrain is weaker than for circadian protection.</p>
+
+<h4>Practical Light Protocol</h4>
+<table>
+  <tr><th>Time</th><th>Target</th><th>Action</th></tr>
+  <tr><td>Wake – 60 min</td><td>Bright, blue-rich light</td><td>Outdoors 10–20 min; or 10,000 lux lamp</td></tr>
+  <tr><td>Afternoon</td><td>Moderate indoor/outdoor</td><td>Work near windows; outdoor break ideal</td></tr>
+  <tr><td>Sunset window</td><td>Low-angle orange light</td><td>5 min outdoor viewing resets melatonin timing</td></tr>
+  <tr><td>90 min pre-bed</td><td>Dim, warm light only</td><td>Floor lamps &lt;50 lux; no overhead LEDs</td></tr>
+  <tr><td>60 min pre-bed</td><td>Screens off or BB glasses</td><td>Amber glasses (98%+ blocking) if screens used</td></tr>
+  <tr><td>Bedroom</td><td>Absolute darkness</td><td>Blackout curtains; mask if needed; no charging LEDs</td></tr>
+</table>
+</div>
+
+<!-- SECTION 5: THERMOREGULATION -->
+<div class="section" id="thermoregulation">
+<h2>Section V</h2>
+<h3>Thermoregulation: Temperature & Sleep</h3>
+
+<p>Core body temperature (CBT) is a master regulator of sleep onset, sleep depth, and wake timing. The temperature drop required to initiate sleep is not metaphorical — it is a hard physiological prerequisite. Understanding how to manipulate temperature is one of the most evidence-backed and underutilized sleep tools available.</p>
+
+<h4>The Mechanics of Sleep-Onset Temperature Drop</h4>
+<p>Sleep onset requires a 1–2°C drop in CBT. This is accomplished through peripheral vasodilation: blood rushes to the hands, feet, and face, radiating heat to the environment. This is why warm hands and feet are a reliable sign of approaching sleepiness. You can accelerate this process by facilitating heat dissipation from the body surface — the opposite of warming your core.</p>
+
+<h4>The Optimal Sleep Temperature: 18–20°C (65–68°F)</h4>
+<p>The most consistently supported range in the research literature is 18–20°C (65–68°F) for the sleeping environment. Above 24°C, sleep efficiency declines significantly. Below 16°C, cortisol elevates and sleep architecture is disrupted. The ideal scenario is a cool room with sufficient bedding to allow thermoregulation via covers.</p>
+
+<h4>Temperature Hacks Backed by Research</h4>
+<ul>
+  <li><strong>Warm bath/shower 1–2 hours before bed:</strong> Counterintuitively, this accelerates sleep. The warm water drives blood to the skin surface, and when you exit, this blood radiates heat rapidly — producing a faster-than-normal CBT drop. Meta-analyses show this reduces sleep onset latency by an average of 9 minutes and improves self-reported sleep quality. Timing: 1–2 hours before bed, 40–43°C water for 10+ minutes.</li>
+  <li><strong>Warm hands/feet:</strong> Wearing socks to bed, or placing a hot water bottle near your feet, accelerates peripheral vasodilation. One study found wearing socks to bed reduced sleep onset latency by ~15 minutes.</li>
+  <li><strong>Cooling mattress pads (ChiliSleep, Eight Sleep):</strong> These maintain the bed surface at a programmable temperature throughout the night. The most effective approach is to slightly warm the bed during the first half (18–20°C) and cool it further (16–18°C) for deep N3 in the first half, then warm slightly again for the REM-dominant second half. High-performance athletes commonly use these.</li>
+  <li><strong>Cold room, warm bedding:</strong> The combination of a cold ambient environment with adequate covers allows your body to self-regulate — moving limbs in and out as needed. This is ideal because it adapts to your body's changing needs throughout the night.</li>
+</ul>
+
+<h4>Exercise and Temperature</h4>
+<p>Vigorous exercise elevates CBT by 1–3°C, which then drops over 4–6 hours. This post-exercise temperature drop can actually facilitate sleep if exercise finishes 4+ hours before bed. However, exercise within 1–2 hours of bed keeps CBT elevated, delaying sleep onset. Morning and afternoon exercise consistently produce better sleep outcomes than late-evening exercise across the literature, though the effect is moderate and individual variation is significant.</p>
+</div>
+
+<!-- SECTION 6: SUPPLEMENTS -->
+<div class="section" id="supplements">
+<h2>Section VI</h2>
+<h3>Sleep Supplements: Evidence, Dosing & Protocols</h3>
+
+<p>The supplement landscape for sleep is deeply polluted with marketing. Most products sold for sleep do not have meaningful clinical evidence, and several (high-dose melatonin, diphenhydramine/ZzzQuil) are actively counterproductive when used regularly. Below is a framework grounded in pharmacology and the available evidence, organized by mechanism.</p>
+
+<h4>Melatonin: The Most Misused Sleep Supplement</h4>
+<p>The standard American dose of melatonin is 5–10 mg — an amount that produces blood melatonin levels 10–100x the normal physiological range. The optimal supplemental dose for sleep <em>timing</em> (when genuinely needed) is <strong>0.3–0.5 mg</strong>, taken 30–60 minutes before the desired sleep onset time. This is the pharmacological dose; 10 mg is a pharmacological overdose relative to the body's normal signal.</p>
+
+<div class="warning">
+  <strong>⚠ 2025 AHA Cardiovascular Finding (Lapointe et al., JAHA 2025)</strong><br>
+  A large prospective study published in the Journal of the American Heart Association (2025) found that long-term nightly melatonin use was associated with a <strong>90% higher risk of incident heart failure</strong> in adults (Hazard Ratio: 1.89, 95% CI: 1.32–2.70). This was an observational association, not established causation, and the mechanism is unknown. However, given the widespread nightly use of melatonin and this signal's magnitude, caution is warranted for long-term regular use. Melatonin is best reserved for circadian reset (jet lag, phase shifting) rather than nightly sleep induction.
+</div>
+
+<h4>Melatonin: When It IS Appropriate</h4>
+<ul>
+  <li><strong>Jet lag:</strong> 0.5 mg taken at 10pm destination time for 3–5 days. Evidence: strong.</li>
+  <li><strong>Circadian phase advancement (shifting sleep earlier):</strong> 0.3 mg taken 5–6 hours before desired sleep time. Evidence: moderate.</li>
+  <li><strong>Occasional use:</strong> 0.3–1 mg maximum. Evidence for acute use: good. For nightly use: see above.</li>
+</ul>
+
+<h4>Magnesium</h4>
+<p>Magnesium is the most evidence-backed regular-use sleep supplement. It is a cofactor in over 300 enzymatic reactions, including GABA receptor activation (sedation), adenosine production (sleep pressure), and melatonin synthesis. Approximately 50–70% of Americans are deficient relative to optimal levels, and deficiency is associated with insomnia, nighttime waking, and restless legs.</p>
+<table>
+  <tr><th>Form</th><th>Bioavailability</th><th>Best For</th><th>Dose</th></tr>
+  <tr><td><strong>Glycinate</strong></td><td>High</td><td>Sleep, anxiety</td><td>200–400 mg before bed</td></tr>
+  <tr><td><strong>Threonate (L-T)</strong></td><td>High (CNS)</td><td>Brain/cognitive effects</td><td>144 mg Mg++ before bed</td></tr>
+  <tr><td><strong>Bisglycinate</strong></td><td>High</td><td>Sleep, muscle relaxation</td><td>200–300 mg before bed</td></tr>
+  <tr><td>Oxide</td><td>Very low (~4%)</td><td>Laxative only — avoid</td><td>—</td></tr>
+  <tr><td>Citrate</td><td>Moderate</td><td>Constipation, decent sleep</td><td>200–400 mg</td></tr>
+</table>
+
+<h4>L-Theanine</h4>
+<p>L-theanine is an amino acid from green tea that increases alpha brain waves (relaxed, non-drowsy alertness) and modulates GABA and glutamate pathways. It does not cause sedation but reduces anxiety-driven sleep disruption. Evidence for reducing time to sleep and improving sleep quality in subclinical anxiety: good. Dose: 100–400 mg, 30–60 min before bed. It pairs well with magnesium glycinate — the combination is more effective than either alone.</p>
+
+<h4>Apigenin</h4>
+<p>Apigenin is a flavonoid found in chamomile (and many plants) that binds to GABA-A receptors (the same target as benzodiazepines, but with much lower affinity and no dependence risk). Evidence for mild anxiolytic and sleep-promoting effects: moderate. Dose: 50 mg before bed. Available as a supplement; chamomile tea contains ~3–5 mg per cup (requires extraction for full effect). Huberman's most frequently cited sleep supplement.</p>
+
+<h4>Ashwagandha (KSM-66)</h4>
+<p>Ashwagandha (specifically KSM-66 extract) reduces cortisol, lowers physiological stress markers, and improves sleep onset and quality in stressed individuals. Effect is cumulative — takes 4–8 weeks to fully manifest. Dose: 300–600 mg of KSM-66 extract, taken before bed or with dinner. Evidence: good for stress-related insomnia; moderate for general sleep improvement.</p>
+
+<h4>Glycine</h4>
+<p>Glycine, the simplest amino acid, lowers core body temperature when taken before bed by promoting peripheral vasodilation — directly facilitating the CBT drop required for sleep onset. Dose: 3 g, 30–60 min before bed. Evidence: good for sleep quality and morning alertness. Also supports glymphatic function and collagen synthesis (skin and joint benefit).</p>
+
+<h4>Inositol</h4>
+<p>Inositol (specifically myo-inositol) at 900 mg before bed has emerging evidence for reducing nighttime waking and improving sleep continuity, particularly in individuals with anxiety or insulin resistance. Mechanism: modulates serotonin and GABA signaling. Evidence: moderate, but growing. Dose: 900 mg before bed.</p>
+
+<h4>Recommended Nightly Stack (Evidence-Based)</h4>
+<div class="protocol-box">
+  <strong>Core Stack (30–60 min before bed):</strong><br>
+  • Magnesium Glycinate or Bisglycinate — 200–400 mg<br>
+  • L-Theanine — 200 mg<br>
+  • Apigenin — 50 mg<br>
+  <br>
+  <strong>Optional Add-Ons:</strong><br>
+  • Glycine — 3 g (especially if sleep onset is difficult or you run warm)<br>
+  • Ashwagandha KSM-66 — 300 mg (if stress/cortisol is a factor)<br>
+  • Inositol — 900 mg (if nighttime waking is an issue)<br>
+  <br>
+  <strong>Avoid nightly:</strong> Melatonin (see 2025 AHA study above); antihistamine sleep aids (ZzzQuil, Benadryl) — suppress REM, build tolerance within 3–4 days, associated with cognitive impairment with long-term use.
+</div>
+</div>
+
+<!-- SECTION 7: NUTRITION & CAFFEINE -->
+<div class="section" id="nutrition">
+<h2>Section VII</h2>
+<h3>Nutrition, Caffeine & Sleep</h3>
+
+<h4>Caffeine: Half-Life, Adenosine Masking, and Sleep Architecture</h4>
+<p>Caffeine is the world's most widely used psychoactive drug — and the most commonly self-administered sleep disruptor. It works by competitively binding adenosine receptors without activating them, preventing adenosine from producing its sedating effect. Crucially, adenosine continues to accumulate while caffeine is active. When caffeine clears, the full adenosine load hits simultaneously — this is the "crash." Caffeine does not destroy adenosine; it only delays its effects.</p>
+
+<p>The mean half-life of caffeine in healthy adults is <strong>5–7 hours</strong>, though this varies significantly (range: 3–10 hours) based on genetics (CYP1A2 enzyme variants), hormonal status, and medications. Practical implications:</p>
+<table>
+  <tr><th>Coffee time</th><th>% caffeine remaining at 10pm</th></tr>
+  <tr><td>8:00am</td><td>~6%</td></tr>
+  <tr><td>12:00pm</td><td>~25%</td></tr>
+  <tr><td>2:00pm</td><td>~35%</td></tr>
+  <tr><td>3:00pm</td><td>~44%</td></tr>
+  <tr><td>5:00pm</td><td>~66%</td></tr>
+</table>
+
+<p>Even when people feel they "sleep fine" after afternoon coffee, the research shows measurable reductions in N3 sleep and REM quality. A 2013 study found 400mg caffeine taken <em>6 hours</em> before bed reduced total sleep time by more than 1 hour, even though subjects did not perceive impaired sleep. This suggests caffeine's sleep-disrupting effects are often invisible to the user.</p>
+
+<div class="callout">
+  <strong>The 90-Minute Delay Rule:</strong> Delay your first caffeine intake 90–120 minutes after waking. This allows the post-wake cortisol spike (CAR) to provide its natural alertness signal first. Taking caffeine immediately upon waking blunts the CAR and creates a dependence cycle.
+</div>
+
+<h4>Sleep Cutoff Time</h4>
+<p>For most people: last caffeine intake by <strong>1–2pm maximum</strong> for an 11pm bedtime. Slow metabolizers (CYP1A2*1F allele, common) should cut off by noon. If you frequently feel wired at night, try eliminating all caffeine after noon for two weeks and assess sleep quality changes.</p>
+
+<h4>Alcohol: The Arch-Enemy of REM</h4>
+<p>Alcohol is a GABA-A agonist and is sedating in the short term, but it produces sleep that is fundamentally different from normal sleep. Alcohol metabolism releases acetaldehyde in the second half of the night, causing: REM suppression, fragmented sleep, heightened sympathetic nervous system activity, and next-day fatigue. Even 1–2 drinks in the evening measurably reduces REM by 9–25% and increases early morning waking. Alcohol is the single most common self-administered REM disruptor.</p>
+
+<h4>Food Timing & Sleep Quality</h4>
+<ul>
+  <li><strong>Large meals within 3 hours of bed:</strong> Elevate core body temperature during digestion, reducing the CBT drop needed for sleep onset. Associated with increased waking and reduced deep sleep.</li>
+  <li><strong>High glycemic foods before bed:</strong> Blood glucose spikes and subsequent crashes can cause nighttime waking. Low-glycemic or protein-forward pre-bed snacks (if eating at all) are preferable.</li>
+  <li><strong>Kiwifruit:</strong> 2 kiwis consumed 1 hour before bed for 4 weeks improved sleep onset latency by 35%, total sleep time by 13%, and sleep efficiency by 5% in a RCT (n=24). Mechanism: high serotonin content + antioxidant effects. Among the best-evidenced food interventions for sleep.</li>
+  <li><strong>Tart cherry juice:</strong> 240ml twice daily for 7 days significantly increased melatonin metabolite output (urinary 6-SMT), reduced insomnia severity, and increased total sleep time by ~84 minutes vs. placebo (University of Northumbria, 2012). Contains naturally occurring melatonin + procyanidins that inhibit melatonin breakdown enzymes.</li>
+  <li><strong>Meal timing and circadian alignment:</strong> Eating in alignment with your active phase (not late at night) reduces circadian disruption to peripheral organ clocks. The liver clock, in particular, is highly sensitive to meal timing, and misalignment is implicated in metabolic syndrome.</li>
+</ul>
+</div>
+
+<!-- SECTION 8: EXERCISE & SLEEP -->
+<div class="section" id="exercise">
+<h2>Section VIII</h2>
+<h3>Exercise & Sleep: A Bidirectional Relationship</h3>
+
+<p>Exercise and sleep have a powerful bidirectional relationship — good sleep improves athletic performance, and regular exercise improves sleep quality. This is one of the most robust findings in the sleep literature: exercise is one of the few interventions shown to increase N3 (slow wave) sleep in a dose-responsive manner.</p>
+
+<h4>How Exercise Improves Sleep</h4>
+<ul>
+  <li><strong>Increases SWS (N3):</strong> Physical exertion drives greater adenosine accumulation and metabolic fatigue, increasing the homeostatic drive for deep sleep. Resistance training, in particular, is associated with the strongest N3 increases.</li>
+  <li><strong>Reduces sleep onset latency:</strong> Exercise reduces the time it takes to fall asleep, on average by 15–30 minutes in sedentary individuals who begin a training program.</li>
+  <li><strong>Reduces nighttime waking:</strong> Regular exercisers show significantly fewer nighttime awakenings and better sleep continuity.</li>
+  <li><strong>Reduces anxiety and depression:</strong> Both are among the primary drivers of insomnia. Exercise's effects on mood are well-established and translate to sleep quality improvements.</li>
+</ul>
+
+<h4>Timing: When to Exercise</h4>
+<p>The effect of exercise timing on sleep is more nuanced than commonly represented. The general guidance — avoid intense exercise 3 hours before bed — is valid on average but has exceptions:</p>
+<ul>
+  <li><strong>Morning (6–9am):</strong> Maximally reinforces the cortisol awakening response, sets the circadian anchor, and benefits those with late-onset insomnia (waking before desired).</li>
+  <li><strong>Afternoon (3–6pm):</strong> Aligns with peak body temperature and muscle performance for most chronotypes. Produces the largest strength gains for Bears and Wolves. The post-exercise CBT drop 4–6 hours later coincides with ideal sleep onset time.</li>
+  <li><strong>Evening (7–9pm):</strong> Can delay sleep onset by 1–2 hours in sensitive individuals due to elevated core temperature and sympathetic arousal. However, some individuals tolerate this well — genetics and training history matter. If late-evening is your only option, keep intensity moderate, prioritize cold shower immediately after, and extend wind-down time.</li>
+</ul>
+
+<h4>Types of Exercise and Sleep Effects</h4>
+<table>
+  <tr><th>Exercise Type</th><th>Sleep Effect</th><th>Notes</th></tr>
+  <tr><td>Resistance training</td><td>Strongest ↑ in SWS/N3</td><td>Growth hormone surge during N3 drives muscle repair — mutually reinforcing</td></tr>
+  <tr><td>Aerobic/cardio</td><td>↑ Sleep efficiency, ↓ onset</td><td>Best for reducing anxiety-related insomnia</td></tr>
+  <tr><td>HIIT</td><td>Mixed — timing-dependent</td><td>Avoid within 4 hrs of bed; morning HIIT = strong circadian anchor</td></tr>
+  <tr><td>Yoga/stretching</td><td>↓ Cortisol, ↑ parasympathetic</td><td>Excellent pre-bed option — does not elevate core temperature</td></tr>
+  <tr><td>Walking</td><td>Modest but consistent ↑</td><td>10,000 steps/day associated with lower insomnia risk; post-meal walks improve blood glucose and sleep quality</td></tr>
+</table>
+</div>
+
+<!-- SECTION 9: NAPPING -->
+<div class="section" id="napping">
+<h2>Section IX</h2>
+<h3>Napping: Science, Strategy & Timing</h3>
+
+<p>Napping is one of the most culturally misunderstood sleep behaviors. Used correctly, naps are performance-enhancing tools. Used incorrectly, they sabotage nighttime sleep. The science is clear on when, how long, and for whom naps work best.</p>
+
+<h4>Nap Types by Duration</h4>
+<table>
+  <tr><th>Nap Type</th><th>Duration</th><th>Sleep Stages Reached</th><th>Benefits</th><th>Downsides</th></tr>
+  <tr><td><strong>Power Nap</strong></td><td>10–20 min</td><td>N1, N2 onset</td><td>Alertness, motor speed, mood</td><td>None if timed right</td></tr>
+  <tr><td><strong>Caffeine Nap</strong></td><td>20–25 min</td><td>N1, N2</td><td>Enhanced alertness vs. either alone</td><td>Requires ~200mg caffeine pre-nap</td></tr>
+  <tr><td><strong>SWS Nap</strong></td><td>60–90 min</td><td>N1–N3</td><td>Memory consolidation, creativity</td><td>Sleep inertia on waking; may reduce nighttime sleep</td></tr>
+  <tr><td><strong>Full Cycle</strong></td><td>90–110 min</td><td>N1–N3–REM</td><td>Maximum restoration</td><td>Significant sleep inertia; reduces nighttime pressure</td></tr>
+</table>
+
+<h4>The Caffeine Nap: Best of Both Worlds</h4>
+<p>The caffeine nap exploits the pharmacokinetics of caffeine. Consume 200mg caffeine (1–2 cups of coffee), immediately lie down and nap for 20 minutes. Caffeine takes 20–30 minutes to reach peak plasma concentration, so it kicks in precisely as you wake from N2 sleep. Studies show caffeine naps improve driving performance and alertness more than either a nap alone or caffeine alone. This technique is particularly valuable for shift workers and long-haul drivers.</p>
+
+<h4>Optimal Nap Timing</h4>
+<p>The ideal nap window is the natural post-lunch circadian dip: <strong>1pm–3pm</strong> (or 7–8 hours after waking). This aligns with a predictable drop in alertness built into human circadian biology, which exists independent of meal timing. Napping after 3pm (for typical sleepers) begins cutting into adenosine clearance time, making nighttime sleep harder to initiate and reducing N3 depth.</p>
+
+<h4>Sleep Inertia</h4>
+<p>Sleep inertia — the groggy, disoriented state upon waking — is caused by waking mid-N3 sleep. The deeper you are in SWS when you wake, the worse the inertia and the longer it takes to clear (up to 30 minutes for severe cases). To avoid sleep inertia from naps: keep naps under 25 minutes or allow a full 90-minute cycle. Setting two alarms (20 min + 90 min) gives you the option to surface naturally at the end of N2 or at the end of a full cycle.</p>
+
+<h4>Who Benefits Most from Napping</h4>
+<ul>
+  <li>Those sleeping fewer than 7 hours nightly (compensatory benefit)</li>
+  <li>Athletes in heavy training blocks (enhances recovery, GH release)</li>
+  <li>Those with high cognitive or creative demands (memory consolidation)</li>
+  <li>Night-shift workers (timed pre-shift naps reduce accident risk)</li>
+</ul>
+
+<p>Those with chronic insomnia or sleep onset difficulties should initially <em>avoid</em> daytime napping, as it reduces the adenosine-driven sleep pressure that makes nighttime sleep initiation easier. Once nighttime sleep is consolidated, strategic napping can be reintroduced.</p>
+</div>
+
+<!-- SECTION 10: ATHLETIC PERFORMANCE -->
+<div class="section" id="athletic">
+<h2>Section X</h2>
+<h3>Sleep & Athletic Performance</h3>
+
+<p>Sleep is the single most powerful recovery tool available to athletes — bar none. No supplement, training protocol, or nutritional strategy approaches the magnitude of performance impact that adequate, high-quality sleep produces. The Stanford sleep extension studies made this finding undeniable.</p>
+
+<h4>The Stanford Basketball Study (Mah et al., 2011)</h4>
+<p>In this landmark study, Stanford University basketball players were instructed to sleep as much as possible (targeting 10 hours) for 5–7 weeks. Results were dramatic:</p>
+<ul>
+  <li>Sprint times improved by 4% (half-court: 16.2s → 15.5s)</li>
+  <li>Shooting accuracy improved by 9% (three-point) and 9.2% (free throw)</li>
+  <li>Reaction time improved significantly</li>
+  <li>Self-reported vigor and mood elevated; fatigue scores dropped</li>
+</ul>
+<p>The same protocol produced equally striking results in swimmers, tennis players, and football players in follow-up studies. The universal finding: elite athletes are sleeping less than optimal and performance is meaningfully suppressed as a result.</p>
+
+<h4>What Sleep Deprivation Does to Athletes</h4>
+<table>
+  <tr><th>Metric</th><th>Effect of Sleep Restriction</th></tr>
+  <tr><td>Maximal strength</td><td>↓ 8–12% after 2 nights of 6hr sleep</td></tr>
+  <tr><td>Cardiovascular endurance</td><td>↓ ~10–30% in time-to-exhaustion tests</td></tr>
+  <tr><td>Reaction time</td><td>↓ Equivalent to 0.05–0.08 BAC (legally drunk)</td></tr>
+  <tr><td>Injury risk</td><td>↑ 1.7× in adolescent athletes sleeping &lt;8hr (Milewski et al., 2014)</td></tr>
+  <tr><td>Muscle glycogen repletion</td><td>Slowed — impairs performance the following day</td></tr>
+  <tr><td>Growth hormone secretion</td><td>↓ significantly with SWS disruption; impairs muscle protein synthesis</td></tr>
+  <tr><td>Cortisol balance</td><td>↑ catabolic cortisol; ↓ anabolic testosterone ratio</td></tr>
+</table>
+
+<h4>Sleep for Basketball Specifically</h4>
+<p>Basketball is one of the most cognitively demanding sports — requiring split-second decision-making under fatigue, 3D spatial awareness, and motor precision under stress. Sleep affects all three dimensions: reaction time, spatial accuracy (shooting mechanics), and executive function (court vision, play recognition). Additionally, basketball involves frequent lateral movement patterns where proprioceptive accuracy matters — all of which degrade with sleep deprivation. For a basketball player, sleep is literally a performance-enhancing drug.</p>
+
+<h4>Sleep Extension Protocol for Athletes</h4>
+<div class="protocol-box">
+  During heavy training phases:<br>
+  • Target 9–10 hours in bed (allow body to determine how much it takes)<br>
+  • Add a 20-min power nap post-lunch<br>
+  • Prioritize sleep over early morning training when training load is high<br>
+  • Track readiness (HRV, subjective energy) — use it to modulate training intensity<br>
+  • Protect the final 2 sleep cycles (5am–7am) — this is your REM window
+</div>
+
+<h4>Recovery and the Testosterone/GH Axis</h4>
+<p>Growth hormone (GH) is released almost exclusively during the first N3 sleep cycle (approximately 10pm–midnight for a 10:30pm sleeper). GH drives protein synthesis, fat mobilization, tissue repair, and immune function. Testosterone is primarily secreted during sleep, with peak production occurring during REM in the second half of the night. Sleep restriction below 5 hours for one week has been shown to reduce testosterone by 10–15% in young healthy men — equivalent to aging 10–15 years. These hormonal effects make adequate sleep non-negotiable for muscle building and body composition goals.</p>
+</div>
+
+<!-- SECTION 11: HEALTH CONSEQUENCES -->
+<div class="section" id="health">
+<h2>Section XI</h2>
+<h3>The Health Consequences of Poor Sleep</h3>
+
+<p>Sleep deprivation is a genuine public health crisis. The CDC reports that <strong>35.2% of American adults</strong> regularly sleep fewer than 7 hours per night. The downstream consequences touch nearly every major disease category.</p>
+
+<h4>By the Numbers</h4>
+<table>
+  <tr><th>Condition</th><th>Risk Increase with Chronic Short Sleep</th></tr>
+  <tr><td>All-cause mortality</td><td>↑ 12% (7–8hr) → ↑ 15–25% (&lt;6hr)</td></tr>
+  <tr><td>Cardiovascular disease</td><td>↑ 48% (AHA; &lt;6hr vs. 7–8hr)</td></tr>
+  <tr><td>Type 2 diabetes</td><td>↑ 2× risk with &lt;6hr; insulin sensitivity ↓ 40% after 1 week of 5hr nights</td></tr>
+  <tr><td>Obesity</td><td>↑ 55% in adults; ↑ 89% in children — ghrelin ↑, leptin ↓</td></tr>
+  <tr><td>Depression</td><td>Bidirectional: insomnia is both cause and symptom; ↑ 2–4×</td></tr>
+  <tr><td>Alzheimer's disease</td><td>↑ beta-amyloid accumulation; chronic short sleep in midlife associated with ↑ dementia risk</td></tr>
+  <tr><td>Cancer</td><td>WHO classified night shift work as "probable carcinogen" (2007); immune NK cells ↓ 72% after one night of 4hr sleep</td></tr>
+  <tr><td>COVID-19 / infection severity</td><td>Sleeping &lt;6hr: 4.2× more likely to develop a cold after rhinovirus exposure vs. 7hr+ sleepers</td></tr>
+</table>
+
+<h4>Cognitive Consequences</h4>
+<p>17–19 hours of sustained wakefulness produces cognitive impairment equivalent to a blood alcohol concentration (BAC) of 0.05%. After 24 hours awake: equivalent to 0.10% BAC (above the legal driving limit in every U.S. state). A week of sleeping 6 hours produces the same cumulative cognitive impairment as two full nights of total deprivation — but subjects rate themselves as only mildly impaired, demonstrating that sleep deprivation impairs the brain's ability to accurately self-assess its own impairment.</p>
+
+<h4>Immune Function</h4>
+<p>Sleep is when the immune system consolidates its adaptive responses. Cytokine production, T-cell activity, natural killer cell function, and vaccine efficacy all depend on adequate sleep. One landmark study found that sleeping &lt;6 hours the week before receiving a hepatitis B vaccine reduced antibody response by over 50%. In practical terms: if you're vaccinated, sick, or fighting infection, additional sleep is one of the most effective interventions available.</p>
+
+<h4>Metabolic Consequences</h4>
+<p>Sleep restriction increases ghrelin (hunger hormone) by 24% and decreases leptin (satiety hormone) by 18%, producing a combined ~24% increase in appetite — with a specific preference for high-calorie, high-carbohydrate foods. This is not willpower failure; it is a metabolic response. Additionally, insulin sensitivity decreases 40% after one week of 5-hour nights — a change that would qualify as pre-diabetic in standard diagnostic criteria.</p>
+
+<h4>Emotional Regulation</h4>
+<p>The amygdala (the brain's threat-detection center) is 60% more reactive to negative stimuli after one night of sleep deprivation. The prefrontal cortex — which regulates amygdala responses — shows reduced connectivity with the amygdala under sleep deprivation, effectively removing the brake on emotional reactivity. This is why emotional volatility, heightened anxiety, and impaired social judgment are among the earliest and most consistent effects of poor sleep. This has direct implications for decision-making in high-stakes environments like trading, sports, and social situations.</p>
+</div>
+
+<!-- SECTION 12: SLEEP PSYCHOLOGY & CBT-I -->
+<div class="section" id="psychology">
+<h2>Section XII</h2>
+<h3>Sleep Psychology & CBT-I</h3>
+
+<p>Cognitive Behavioral Therapy for Insomnia (CBT-I) is the gold standard first-line treatment for chronic insomnia — more effective than sleeping pills in randomized trials, and with durable effects that last long after treatment ends. Understanding the psychological mechanisms of sleep is critical even for people without clinical insomnia, because the same principles govern sleep quality for everyone.</p>
+
+<h4>The Core Problem: Hyperarousal and Sleep Effort</h4>
+<p>Chronic insomnia is maintained by a single paradox: the harder you try to sleep, the less you can. Sleep is an involuntary process — it requires releasing effort, not exerting it. Lying in bed anxious about sleep elevates cortisol, activates the sympathetic nervous system, and makes sleep neurobiologically impossible regardless of how tired you are. This is the insomnia trap.</p>
+
+<div class="callout">
+  <strong>Key Insight:</strong> Sleep is the one biological function that responds inversely to effort. Worrying about sleep makes it worse. Racing thoughts, clock-watching, and "trying harder" are the maintenance mechanisms of insomnia — not signs that something is fundamentally broken.
+</div>
+
+<h4>The Five Components of CBT-I</h4>
+<ul>
+  <li><strong>Sleep Restriction Therapy (SRT):</strong> Temporarily restricts time in bed to match actual sleep time, consolidating fragmented sleep into a shorter, more efficient window. Counterintuitive but highly effective — typically produces rapid improvement in sleep efficiency within 1–2 weeks.</li>
+  <li><strong>Stimulus Control:</strong> Re-establishes the bed as a cue exclusively for sleep and sex. Rules: only go to bed when sleepy; if awake for 20+ min, get up and do something quiet until sleepy; no screens in bed; get up at the same time every day regardless of sleep quality.</li>
+  <li><strong>Sleep Hygiene:</strong> The behavioral and environmental factors covered elsewhere in this report (light, temperature, caffeine, etc.).</li>
+  <li><strong>Relaxation Training:</strong> Progressive muscle relaxation (PMR), diaphragmatic breathing, and body scan techniques that shift the autonomic nervous system toward parasympathetic dominance before bed.</li>
+  <li><strong>Cognitive Restructuring:</strong> Identifying and challenging catastrophic thoughts about sleep ("I won't function tomorrow if I don't sleep"). Replacing with accurate, non-catastrophic framings ("I've functioned on less sleep before; one bad night won't ruin me").</li>
+</ul>
+
+<h4>The 4-7-8 Breathing Technique</h4>
+<p>Developed by Andrew Weil, MD, the 4-7-8 technique activates the parasympathetic nervous system via the vagus nerve. Protocol: inhale through nose for 4 counts → hold for 7 counts → exhale through mouth for 8 counts. The extended exhale activates baroreceptors and lowers heart rate. Use for 4 cycles when experiencing pre-sleep racing thoughts. Evidence: moderate for reducing acute anxiety; physiological mechanism well-understood.</p>
+
+<h4>Progressive Muscle Relaxation (PMR)</h4>
+<p>PMR involves systematically tensing and releasing muscle groups from feet to head, activating the relaxation response. A 2021 study found 20 minutes of PMR before bed produced measurable reductions in cortisol and improved sleep quality scores. Particularly effective for somatic anxiety (physical tension, racing heart) vs. purely cognitive anxiety.</p>
+
+<h4>Racing Mind Protocols</h4>
+<ul>
+  <li><strong>The 5-minute brain dump:</strong> Write everything in your mind on paper before bed — to-do lists, worries, anything. Physical externalization removes the brain's need to hold information "active." This is evidence-backed; one study found writing a to-do list before bed reduced sleep onset latency by an average of 9 minutes.</li>
+  <li><strong>Cognitive shuffle:</strong> Deliberately generate a random sequence of unrelated images (a shoe → a cloud → a doorknob → an orange...). This mimics the hypnagogic imagery of natural sleep onset and is incompatible with analytical thought. Developed by Luc Beaulieu-Prévost, PhD; growing evidence base.</li>
+  <li><strong>The 20-minute rule:</strong> If you've been awake for 20+ minutes, get out of bed. Do something calming in dim light (reading physical book, light stretching) until you feel genuinely sleepy. This preserves the bed-as-sleep-cue association and breaks the anxiety loop.</li>
+</ul>
+</div>
+
+<!-- SECTION 13: BEDROOM ENVIRONMENT -->
+<div class="section" id="bedroom">
+<h2>Section XIII</h2>
+<h3>The Sleep Environment: Bedroom Optimization</h3>
+
+<h4>Light</h4>
+<p>The bedroom should be as dark as possible during sleep. Darkness is not just a comfort preference — even dim light through closed eyelids detects by photoreceptors and can partially suppress melatonin and shift circadian timing. Blackout curtains are the most important bedroom upgrade for people in urban/suburban areas where light pollution is constant. If total blackout isn't possible, a sleep mask (contoured to avoid eyelid pressure) is effective.</p>
+<p>Additional rules: no charging indicator LEDs (cover with black tape), no standby lights, no alarm clock with bright display. The clock-face itself is a psychological trigger — if you can see the time in the middle of the night, you will check it, and clock-watching amplifies insomnia.</p>
+
+<h4>Sound</h4>
+<p>Complete silence is optimal for most people, but ambient noise can mask disruptive sounds when silence isn't available. White noise, pink noise, and brown noise all work via acoustic masking — they prevent the auditory cortex from detecting jarring transient sounds (car horns, partners snoring). Pink and brown noise are generally preferred to white noise — they contain more low-frequency energy that is less fatiguing. Nature sounds (rain, flowing water) are popular and effective, likely through the same mechanism plus a mild relaxation response. Optimal volume: just enough to mask background noise, typically 50–60 dB.</p>
+
+<h4>Temperature (Recap)</h4>
+<p>18–20°C (65–68°F). Cool room + adequate bedding for thermoregulation. Adjustable as needed for partner. Wool and natural fiber bedding (linen, cotton) breathe better than synthetic fabrics and are preferred for hot sleepers.</p>
+
+<h4>The Bed Association</h4>
+<p>The most psychologically important rule: use the bed only for sleep (and sex). Working in bed, watching TV, scrolling on your phone, or reading while highly stimulated all teach the brain to associate the bed with wakefulness. This association is powerful and takes weeks to form in either direction — which is why it's worth protecting. Keep your laptop, TV, and most importantly your phone out of the bedroom entirely.</p>
+
+<h4>The Phone in the Bedroom</h4>
+<p>This deserves special emphasis. Research on phone-free bedrooms shows: faster sleep onset, reduced nighttime waking, better morning mood, and reduced anxiety. The mechanisms are multiple: light emission (especially if checking during the night), alerting notifications that trigger arousal, the cognitive load of social media creating hyperarousal, and the behavioral cue of the phone's presence triggering habitual checking. Charge your phone in another room. Use a dedicated alarm clock. This is one of the highest-leverage, lowest-cost sleep upgrades available.</p>
+</div>
+
+<!-- SECTION 14: TIME-RESTRICTED PROTOCOL -->
+<div class="section" id="time-restricted">
+<h2>Section XIV</h2>
+<h3>Optimizing Sleep When Time-Restricted</h3>
+
+<p>When total sleep time is limited (6 hours or fewer due to life constraints), the goal shifts from maximizing duration to maximizing sleep quality per unit of time. The following protocol is designed to recover the most critical functions from a shorter sleep window.</p>
+
+<h4>Priority Hierarchy When Sleep Is Limited</h4>
+<ol>
+  <li><strong>Protect the sleep anchor window:</strong> The most critical sleep is N3 (first half of night: 10pm–2am for a 10pm sleeper) + the final REM cycles. Sleeping 11pm–5am (6 hours) captures peak GH release, deep SWS, and at least 2 REM cycles. Sleeping 1am–7am (6 hours) severely disrupts the SWS window and misaligns with circadian cortisol timing.</li>
+  <li><strong>Consistent bedtime and wake time:</strong> On 6 hours, variability is more costly than on 8. An irregular 6-hour schedule produces worse outcomes than a consistent one because the circadian system never fully synchronizes.</li>
+  <li><strong>Intensify sleep hygiene:</strong> On reduced hours, every disruption has a larger proportional impact. Strict darkness, temperature control, no alcohol, no caffeine after noon become non-negotiable rather than optional.</li>
+  <li><strong>Supplement stack becomes more critical:</strong> Magnesium glycinate + L-theanine help maximize SWS and reduce sleep fragmentation on short sleep windows.</li>
+  <li><strong>Strategic napping:</strong> A 20-minute power nap between 1–3pm can partially compensate for reduced nighttime sleep without significantly impacting nighttime sleep quality at those short durations.</li>
+</ol>
+
+<h4>The 10-3-2-1-0 Rule</h4>
+<p>A widely used framework that compresses sleep hygiene into five checkpoints:</p>
+<div class="protocol-box">
+  <strong>10</strong> hours before bed: Last caffeine intake<br>
+  <strong>3</strong> hours before bed: Last large meal; last alcohol<br>
+  <strong>2</strong> hours before bed: Last intense work or mentally stimulating activity<br>
+  <strong>1</strong> hour before bed: Screens off (or amber glasses on); dim lights; wind-down begins<br>
+  <strong>0</strong>: Times you hit snooze — alarm is for waking, not a negotiation
+</div>
+
+<h4>The Ideal Bedtime Window for Optimal Health</h4>
+<p>A large UK Biobank study (88,026 participants) found that sleep onset between <strong>10pm–11pm</strong> was associated with the lowest risk of cardiovascular events, compared to earlier or later sleep onset times. The 11pm–midnight group had 12% higher risk; midnight+ had 25% higher risk; before 10pm had 24% higher risk. Mechanism: the 10pm–11pm window best aligns with the natural circadian cortisol trough and melatonin peak for most chronotypes, maximizing sleep architecture efficiency.</p>
+
+<h4>Short Sleep Damage Mitigation</h4>
+<p>No protocol can fully replicate 8 hours of sleep in 6. The honest answer is that sustained short sleep accumulates cognitive and health debt that recovery sleep can only partially reverse. That said, short-term short-sleep periods (a demanding week) can be navigated with:</p>
+<ul>
+  <li>Recovery sleep (sleeping in on weekends) — partially but not fully reverses performance deficits</li>
+  <li>Strategic 20-min naps</li>
+  <li>Morning bright light to maintain circadian anchor</li>
+  <li>Aggressive light, temperature, and supplement protocols for the sleep you do get</li>
+  <li>Reducing training intensity during high sleep-debt periods</li>
+</ul>
+</div>
+
+<!-- SECTION 15: EDDIE'S PERSONAL PROTOCOL -->
+<div class="section" id="protocol">
+<h2>Section XV</h2>
+<h3>Eddie's Sleep Protocol: The Practical Snapshot</h3>
+<p>Synthesized from the full evidence base — designed for a high-performance 18-year-old athlete (basketball, lifting) entering college. Adaptable as schedule changes.</p>
+
+<h4>🌅 Morning Routine (Wake–60 min)</h4>
+<div class="protocol-box">
+  <strong>Target wake time: 7:00–8:00am</strong> (Bear chronotype — consistent every day including weekends ±30 min max)<br><br>
+  1. No snoozing — alarm means up<br>
+  2. Phone stays off/out of bedroom until routine is done<br>
+  3. Within 5 min of waking: drink 16oz water (you wake dehydrated)<br>
+  4. Within 60 min of waking: 10–20 min of outdoor light exposure — go outside, even if overcast. Walk, shoot around, or just sit outside with coffee.<br>
+  5. Delay first coffee until 90 min after waking (8:30–9:30am) — let the natural CAR do its job first<br>
+  6. Morning exercise (lifting or basketball) is ideal for Bear chronotype: 9am–12pm window
+</div>
+
+<h4>☀️ Daytime Rules</h4>
+<div class="protocol-box">
+  • Last caffeine: 1:00pm maximum (2:00pm absolute hard cutoff on rare occasions)<br>
+  • Eat dinner 2–3 hours before bed. Avoid heavy meals after 8pm.<br>
+  • Optional nap: 1:00–3:00pm window, max 20 min (set 25-min alarm). Skip if sleep is already good.<br>
+  • Get sunlight exposure throughout the day when possible — eat outside, walk outside<br>
+  • Evening exercise (basketball games): Finish by 8pm ideally; cold shower after if later; extend wind-down
+</div>
+
+<h4>🌙 90-Minute Wind-Down (9:00–10:30pm)</h4>
+<div class="protocol-box">
+  <strong>9:00pm — Dim the lights:</strong> Turn off overhead lights. Floor lamps and warm bulbs only.<br>
+  <strong>9:00pm — Phone goes on charger outside the bedroom</strong> (or across the room on Do Not Disturb)<br>
+  <strong>9:30pm — Supplement stack:</strong><br>
+  &nbsp;&nbsp;&nbsp;• Magnesium Glycinate 300–400 mg<br>
+  &nbsp;&nbsp;&nbsp;• L-Theanine 200 mg<br>
+  &nbsp;&nbsp;&nbsp;• Apigenin 50 mg<br>
+  &nbsp;&nbsp;&nbsp;• Glycine 3 g (on hard training days or if running warm)<br>
+  &nbsp;&nbsp;&nbsp;• Ashwagandha KSM-66 300 mg (if stress is elevated)<br>
+  <strong>9:30pm — Screens off</strong> (or amber glasses on if using phone/computer)<br>
+  <strong>9:30–10:30pm — Wind-down activities only:</strong> Reading (physical book), light stretching, music, journaling, casual conversation. No social media, no gaming, no stimulating content.<br>
+  <strong>Optional warm shower:</strong> 40–43°C for 10–15 min at 9:00pm accelerates sleep onset<br>
+  <strong>10:00–10:30pm — Brain dump:</strong> Write tomorrow's to-do list and any lingering thoughts. This offloads mental load and reduces racing thoughts.
+</div>
+
+<h4>🛏️ Bedroom Checklist</h4>
+<div class="protocol-box">
+  ✓ Temperature: 18–20°C (65–68°F) — AC or fan<br>
+  ✓ Darkness: Blackout curtains or sleep mask. No LED indicators.<br>
+  ✓ Sound: White/brown noise app if needed for masking<br>
+  ✓ Phone: Out of the room or across the room, Do Not Disturb<br>
+  ✓ Clock: No visible display — phone alarm set, that's it<br>
+  ✓ No TV, no laptop in bed<br>
+  ✓ Bed only for sleep
+</div>
+
+<h4>💤 Target Sleep</h4>
+<div class="protocol-box">
+  <strong>Bedtime: 10:30–11:00pm</strong><br>
+  <strong>Wake time: 7:00–7:30am</strong><br>
+  <strong>Total in bed: 8.5 hours → Target 8 hours sleep</strong><br>
+  <br>
+  Adjust based on training load. Heavy training blocks: target 9 hours. Rest days: 8 minimum.<br>
+  Track subjective energy (1–10 scale) each morning for 2 weeks — use it to calibrate your personal optimal window.
+</div>
+
+<h4>📋 Supplement Stack Summary</h4>
+<table>
+  <tr><th>Supplement</th><th>Dose</th><th>Timing</th><th>Priority</th></tr>
+  <tr><td>Magnesium Glycinate</td><td>300–400 mg</td><td>30 min pre-bed</td><td>🔴 Core</td></tr>
+  <tr><td>L-Theanine</td><td>200 mg</td><td>30 min pre-bed</td><td>🔴 Core</td></tr>
+  <tr><td>Apigenin</td><td>50 mg</td><td>30 min pre-bed</td><td>🔴 Core</td></tr>
+  <tr><td>Glycine</td><td>3 g</td><td>30 min pre-bed</td><td>🟡 High value</td></tr>
+  <tr><td>Ashwagandha KSM-66</td><td>300 mg</td><td>Evening / pre-bed</td><td>🟡 If stressed</td></tr>
+  <tr><td>Inositol</td><td>900 mg</td><td>Pre-bed</td><td>🟢 If waking at night</td></tr>
+  <tr><td>Melatonin</td><td>0.3–0.5 mg max</td><td>Pre-bed if needed</td><td>⚪ Occasional only (see AHA 2025)</td></tr>
+</table>
+
+<h4>🏀 Basketball Performance Priority List</h4>
+<div class="protocol-box">
+  <strong>Game days:</strong> Prioritize 8+ hours the night before. No late nights the day before a game.<br>
+  <strong>After late games:</strong> Blue light glasses in the car home; wind-down immediately on arrival; glycine 3g if wired.<br>
+  <strong>Heavy training weeks:</strong> Add a 20-min nap at 1–2pm; target 9 hours in bed; reduce late-night screen time.<br>
+  <strong>Travel (jet lag):</strong> Use 0.3mg melatonin at 10pm destination time for 3 nights; get outdoor morning light immediately on arrival; match meal times to destination.
+</div>
+
+<h4>🏆 Top 10 Interventions: Ranked by Evidence + Impact</h4>
+<ol>
+  <li><strong>Consistent wake time</strong> (same every day ±30 min) — most powerful circadian anchor</li>
+  <li><strong>Morning outdoor light</strong> (10–20 min within 60 min of waking) — sets melatonin timing for the evening</li>
+  <li><strong>Eliminate phone from bedroom</strong> — removes light, cognitive arousal, behavioral cues</li>
+  <li><strong>Bedroom temperature 18–20°C</strong> — directly enables the CBT drop needed for sleep onset</li>
+  <li><strong>Last caffeine by 1pm</strong> — eliminates the single most common invisible sleep disruptor</li>
+  <li><strong>Dim lights/screens off 90 min before bed</strong> — preserves melatonin onset and DLMO timing</li>
+  <li><strong>Magnesium Glycinate + L-Theanine + Apigenin</strong> — the evidence-backed pre-bed stack</li>
+  <li><strong>Warm shower 1–2 hours pre-bed</strong> — accelerates the CBT drop via peripheral vasodilation</li>
+  <li><strong>10pm–11pm bedtime target</strong> — best-evidence window for cardiovascular and circadian alignment</li>
+  <li><strong>No alcohol</strong> (or absolute minimum, early in evening) — most destructive commonly-used REM suppressor</li>
+</ol>
+</div>
+
+
+<!-- FOOTER -->
+<div>
+  <p><strong>Sleep Optimization Deep Dive</strong> — Research Report</p>
+  <p>Generated via NotebookLM · 90+ sources · April 24, 2026</p>
+  <p>NotebookLM Notebook: <a href="https://notebooklm.google.com/notebook/288a229b-9e05-4b9f-b9e7-e86afe985f31">Sleep Optimization Deep Dive</a></p>
+  <p>This report is for informational purposes. Health decisions should be made in consultation with qualified medical professionals.</p>
+</div>
+
+</div><!-- end container -->
+</body>
+</html>
