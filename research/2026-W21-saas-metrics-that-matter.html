@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Metrics That Matter — Research W21 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; line-height: 1.7; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  .meta { color: #888; font-size: 0.82rem; margin-bottom: 1.5rem; }
+  h1 { font-size: 1.8rem; color: #f5e6d3; border-bottom: 2px solid #f5e6d355; padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.3rem; color: #a8d8ea; margin-top: 2rem; margin-bottom: 0.8rem; }
+  h3 { font-size: 1rem; color: #f5e6d3; margin-top: 1.2rem; margin-bottom: 0.4rem; }
+  .summary { background: #16213e; border-left: 3px solid #a8d8ea; padding: 1rem 1.2rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; }
+  .section { background: #16213e; border-left: 3px solid #f5e6d355; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-radius: 0 8px 8px 0; }
+  .section h3 { margin-top: 0; }
+  .example { background: #0f1a2e; border: 1px solid #a8d8ea33; padding: 0.8rem 1rem; border-radius: 6px; margin: 0.6rem 0; font-size: 0.88rem; font-family: 'JetBrains Mono', 'Courier New', monospace; color: #c0c0c0; }
+  table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.86rem; }
+  th { background: #16213e; color: #a8d8ea; padding: 0.6rem; text-align: left; border-bottom: 2px solid #a8d8ea44; }
+  td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #2a2a4a; vertical-align: top; }
+  .cit { background: #0f3460; border: 1px solid #a8d8ea44; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; }
+  .cit h3 { color: #f5e6d3; margin-top: 0; }
+  .cit p { color: #c0c0c0; font-size: 0.92rem; }
+  p { color: #c0c0c0; font-size: 0.92rem; margin-bottom: 0.6rem; }
+  ul, ol { color: #c0c0c0; font-size: 0.88rem; margin-left: 1.2rem; margin-bottom: 0.6rem; }
+  li { margin-bottom: 0.3rem; }
+  strong { color: #f5e6d3; }
+  .benchmark { display: inline-block; background: #a8d8ea22; color: #a8d8ea; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-family: monospace; margin-left: 6px; }
+  .layer { background: #16213e; border: 1px solid #a8d8ea33; border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.5rem; font-size: 0.88rem; }
+  .layer strong { color: #a8d8ea; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>SaaS Metrics That Matter</h1>
+  <p class="meta">Research Date: 2026-05-19 | Effort: 8 hrs | Queue Priority: #1 | Week 2026-W21</p>
+  <p class="meta" style="margin-top:-1rem;">Topics: ARR, NRR/GRR, CAC/LTV, Rule of 40, Magic Number, RPO, Red Flags</p>
+
+  <div class="summary">
+    <strong>Executive Summary</strong>
+    <p style="margin-top:0.5rem; margin-bottom:0;">SaaS metrics are the language of tech-focused finance — IB, PE, and VC alike. A company growing ARR at 40% but hemorrhaging customers is fundamentally different from one growing 25% with 95%+ gross retention, even if their top-line numbers look similar in a given quarter. The key takeaway: NRR is the single most powerful predictor of valuation multiples — for every 1% increase in revenue retention, a SaaS company's value increases ~12% over five years. But NRR alone is incomplete without GRR, unit economics, and the Rule of 40.</p>
+  </div>
+
+  <h2>1. ARR / MRR — The Revenue Foundation</h2>
+  <div class="section">
+    <h3>What It Is & Why It Matters</h3>
+    <p><strong>ARR</strong> (Annual Recurring Revenue) = annualized value of all active subscription contracts. <strong>MRR</strong> = ARR ÷ 12. These are the primary metrics for measuring SaaS size and trajectory — and they matter more than GAAP revenue because they isolate the subscription engine, the part of the business that compounds.</p>
+    <div class="example">ARR = MRR × 12
+Include: recurring subscription fees only
+Exclude: implementation fees, professional services, hardware, one-time items
+
+Company with $100M GAAP revenue + $70M ARR ($30M services) is fundamentally less valuable
+than $100M GAAP revenue + $95M ARR.</div>
+    <p><strong>The MRR bridge:</strong> Sophisticated analysts decompose MRR rather than projecting aggregate growth: <em>Net New MRR = New MRR + Expansion MRR − Contraction MRR − Churned MRR</em>. This lets you model acquisition rates, expansion rates, and churn rates independently — the approach used by PE firms in SaaS diligence.</p>
+    <p><strong>Where to find it:</strong> Non-GAAP metric disclosed in MD&A "Key Business Metrics" subsection (when disclosed at all). CrowdStrike, Snowflake, Datadog report explicitly. Others require backing into an ARR estimate by stripping services revenue from the income statement.</p>
+    <p>2026 benchmark: <span class="benchmark">Median public SaaS ARR growth: 19–21%</span> <span class="benchmark">Top quartile: 40%+</span></p>
+  </div>
+
+  <h2>2. NRR — The Single Most Powerful SaaS Metric</h2>
+  <div class="section">
+    <h3>Net Revenue Retention</h3>
+    <p>NRR measures how much revenue existing customers generate over time, including expansion, contraction, and churn. It answers: <em>"If we stopped acquiring new customers entirely, would revenue grow or shrink?"</em></p>
+    <div class="example">NRR = (Starting MRR + Expansion MRR − Contraction MRR − Churned MRR) / Starting MRR × 100
+
+Example: Start $50K MRR | Lose $1.5K churn + $500 downgrades | Gain $3K upsells
+NRR = ($50K − $1.5K − $500 + $3K) / $50K = 102%</div>
+    <p><strong>Why NRR > 100% is transformative:</strong> An NRR of 120% means existing customers generate 20% more revenue annually without acquiring a single new customer. New customer acquisition stacks on top of organic expansion — closest thing to a "cheat code" in SaaS economics.</p>
+    <p><strong>Where to find it:</strong> MD&A section. Different names: "dollar-based net retention rate" (CrowdStrike, Snowflake), "net revenue retention rate" (Datadog), "dollar-based net expansion rate" (Twilio). Always read the company's specific definition — methodologies vary.</p>
+    <p>2026 benchmark: <span class="benchmark">Median public SaaS NRR: 101%</span> <span class="benchmark">Top quartile: 111%+</span> <span class="benchmark">Elite (Snowflake peak): 130%+</span></p>
+  </div>
+
+  <h2>3. GRR — The Hidden Truth Behind NRR</h2>
+  <div class="section">
+    <h3>Gross Revenue Retention</h3>
+    <p>GRR measures revenue retained from existing customers <em>before</em> counting expansion. It cannot exceed 100%. It reveals whether expansion revenue is masking a churn problem.</p>
+    <div class="example">GRR = (Starting MRR − Contraction MRR − Churned MRR) / Starting MRR × 100
+
+Company A: GRR 95%, NRR 115% → Healthy. Low churn, genuine expansion on top.
+Company B: GRR 75%, NRR 115% → Dangerous. Losing 25% of base annually, covering it
+                                with aggressive upselling. If expansion slows, churn becomes visible fast.
+
+Both have identical NRR. Company A is far more valuable.</div>
+    <p>This GRR/NRR distinction is one of the most important analytical insights in SaaS: a high NRR can mask a serious churn problem. PE and VC due diligence always asks for both.</p>
+    <p>2026 benchmark: <span class="benchmark">Median GRR: 89%</span> <span class="benchmark">Top quartile: 95%+</span> <span class="benchmark">Enterprise SaaS best-in-class: 95–98%</span></p>
+  </div>
+
+  <h2>4. CAC, LTV & Unit Economics</h2>
+  <div class="section">
+    <h3>Is Growth Economically Sustainable?</h3>
+    <div class="example">CAC = Total S&M Spend / New Customers Acquired
+LTV = (ARPA × Gross Margin) / Customer Churn Rate
+  where ARPA = ARR / Total Customers
+
+LTV:CAC Ratio:
+  &lt;1:1  → Losing money on every customer
+  1–3:1 → Inefficient
+  3–5:1 → Healthy (target)
+  &gt;5:1  → Efficient or underinvesting in growth
+
+CAC Payback Period = CAC / (ARPA × Gross Margin / 12)
+  Target: &lt;18 months enterprise SaaS, &lt;12 months SMB SaaS</div>
+    <p><strong>Critical:</strong> Use fully-loaded S&M costs — salaries, commissions, SBC allocated to S&M, tools, paid media, events. Using only direct marketing spend understates true CAC significantly.</p>
+    <p><strong>Why payback matters more than LTV:CAC in practice:</strong> A 4:1 LTV:CAC ratio looks great on paper, but if payback takes 30 months and you're burning $200K/month, you run out of cash before the economics materialize. Payback captures the timing dimension that LTV:CAC misses.</p>
+    <p>2026 benchmark: <span class="benchmark">Public SaaS median LTV:CAC: 4.2:1</span> <span class="benchmark">Private SaaS median: 3.1:1</span></p>
+  </div>
+
+  <h2>5. Rule of 40</h2>
+  <div class="section">
+    <h3>Growth-Profitability Balance</h3>
+    <div class="example">Rule of 40 Score = Revenue Growth Rate (%) + FCF Margin (%)
+
+A company growing 50% with -10% margins (score: 40) is as "healthy" as
+one growing 15% with 25% margins (score: 40).</div>
+    <p><strong>But not all 40s are equal:</strong> Buyers pay more per point of growth than per point of margin. A score of 45 built on 35% growth + 10% margin is worth more than 5% growth + 40% margin. Growth creates optionality; margin preserves current value.</p>
+    <p><strong>Evolving to "Rule of X":</strong> Score = (Growth Rate × 2) + FCF Margin. This reflects the empirical reality that markets assign a higher multiple per point of growth. Under this framework, a 25% grower with 10% margins (score: 60) significantly outranks a 10% grower with 30% margins (score: 50).</p>
+    <p>2026 benchmark: <span class="benchmark">Median public SaaS: 28%</span> <span class="benchmark">Only 20% exceed 40</span> <span class="benchmark">&gt;40 companies: 10.7x EV/Rev avg</span> <span class="benchmark">Each +10 pts ≈ +1.1x EV/Rev</span></p>
+  </div>
+
+  <h2>6. Magic Number & RPO</h2>
+  <div class="section">
+    <h3>Sales Efficiency & Forward Visibility</h3>
+    <div class="example">Magic Number = [(Current Qtr Revenue − Prior Qtr Revenue) × 4] / Prior Qtr S&M Spend
+  &gt;1.0 → Efficient. Signal to increase investment.
+  0.5–1.0 → Acceptable.
+  &lt;0.5 → Inefficient. Investigate sales cycle, market fit, or spending.
+
+RPO (Remaining Performance Obligations) = all contracted revenue not yet recognized
+  = Deferred Revenue (invoiced) + Unbilled Backlog (contracted, not invoiced)
+  cRPO (current) = revenue expected in next 12 months → most actionable for forecasting
+
+Billings = Revenue + Change in Deferred Revenue
+  Rising deferred revenue (billings &gt; revenue) = customers prepaying → positive signal</div>
+    <p><strong>RPO analytical use:</strong> If revenue is growing 25% but cRPO is growing 35%, the business is likely to accelerate. If cRPO growth lags revenue growth, deceleration may be ahead.</p>
+  </div>
+
+  <h2>7. Red Flags</h2>
+  <table>
+    <tr><th>Signal</th><th>What It Might Mean</th></tr>
+    <tr><td>GAAP/non-GAAP divergence</td><td>Possible manipulation; SEC has brought charges based on this</td></tr>
+    <tr><td>MRR doesn't reconcile to GAAP revenue</td><td>Professional services or one-time fees misclassified as recurring</td></tr>
+    <tr><td>Rising NRR + declining GRR</td><td>Expansion masking base churn — fragile if expansion slows</td></tr>
+    <tr><td>Company stops disclosing GRR</td><td>May be hiding deteriorating base retention</td></tr>
+    <tr><td>cRPO growth decelerating vs. revenue</td><td>Leading indicator of future revenue deceleration</td></tr>
+    <tr><td>Revenue recognition policy changes</td><td>Scrutinize footnotes for timing shifts or performance obligation changes</td></tr>
+    <tr><td>Customer concentration risk</td><td>NRR/GRR may not be representative; one large churn craters both metrics</td></tr>
+    <tr><td>Late 10-K / 10-Q filings</td><td>Serious red flag regardless of management explanation — accounting or audit issues</td></tr>
+  </table>
+
+  <h2>8. The Analyst's SaaS Evaluation Framework</h2>
+  <div class="layer"><strong>Layer 1 — Revenue Quality:</strong> ARR? % of total revenue that's recurring? ARR growth rate?</div>
+  <div class="layer"><strong>Layer 2 — Retention Quality:</strong> NRR? GRR? Is expansion masking churn? How do metrics trend over time?</div>
+  <div class="layer"><strong>Layer 3 — Unit Economics:</strong> LTV:CAC ratio? CAC payback period? Magic Number?</div>
+  <div class="layer"><strong>Layer 4 — Growth-Profitability Balance:</strong> Rule of 40 score? Built on growth or margin? Trajectory?</div>
+  <div class="layer"><strong>Layer 5 — Forward Visibility:</strong> RPO growth? cRPO vs. revenue growth? Pipeline accelerating or decelerating?</div>
+  <div class="layer"><strong>Layer 6 — Red Flag Scan:</strong> GAAP/non-GAAP divergence? Customer concentration? GRR declining? Late filings?</div>
+
+  <div class="cit">
+    <h3>Implications for Eddie</h3>
+    <p><strong>For IB recruiting and interviews:</strong> SaaS metrics questions are increasingly common in TMT banking interviews. Knowing formulas is table stakes — what separates candidates is understanding <em>why</em> NRR matters more than revenue growth for valuation, or explaining the GRR/NRR distinction with the "expansion masking churn" insight. The framework for finding metrics in 10-K filings is directly applicable to the analyst workflow.</p>
+    <p style="margin-top:0.6rem;"><strong>For VC career goals:</strong> VC investors live and die by these metrics at the startup level. Early-stage companies don't file 10-Ks — you get this data from management decks and data rooms. But the analytical framework is identical. Understanding how NRR compounds, what a healthy LTV:CAC looks like, and when a Magic Number signals product-market fit vs. market saturation is core VC pattern recognition.</p>
+    <p style="margin-top:0.6rem; color: #a8d8ea;"><strong>Connecting to previous research:</strong> W18 10-K analysis covered where to find financial data in filings. This builds on that by showing specifically what SaaS-specific data to extract. The W21 Cloudflare thesis uses NRR (118%, +7pp YoY) and DBNR as core evidence of the land-and-expand model — that's this framework in practice.</p>
+  </div>
+</div>
+</body>
+</html>
