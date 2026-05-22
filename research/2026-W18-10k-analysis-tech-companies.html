@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Read 10-K Filings for Tech Companies — Research W18 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; line-height: 1.7; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  .meta { color: #888; font-size: 0.82rem; margin-bottom: 1.5rem; }
+  h1 { font-size: 1.8rem; color: #f5e6d3; border-bottom: 2px solid #f5e6d355; padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.3rem; color: #a8d8ea; margin-top: 2rem; margin-bottom: 0.8rem; }
+  h3 { font-size: 1rem; color: #f5e6d3; margin-top: 1.2rem; margin-bottom: 0.4rem; }
+  .summary { background: #16213e; border-left: 3px solid #a8d8ea; padding: 1rem 1.2rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; }
+  .section { background: #16213e; border-left: 3px solid #f5e6d355; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-radius: 0 8px 8px 0; }
+  .section h3 { margin-top: 0; }
+  table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.86rem; }
+  th { background: #16213e; color: #a8d8ea; padding: 0.6rem; text-align: left; border-bottom: 2px solid #a8d8ea44; }
+  td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #2a2a4a; vertical-align: top; }
+  .cit { background: #0f3460; border: 1px solid #a8d8ea44; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; }
+  .cit h3 { color: #f5e6d3; margin-top: 0; }
+  .cit p { color: #c0c0c0; font-size: 0.92rem; }
+  p { color: #c0c0c0; font-size: 0.92rem; margin-bottom: 0.6rem; }
+  ul, ol { color: #c0c0c0; font-size: 0.88rem; margin-left: 1.2rem; margin-bottom: 0.6rem; }
+  li { margin-bottom: 0.3rem; }
+  strong { color: #f5e6d3; }
+  code { background: #16213e; padding: 2px 6px; border-radius: 3px; font-size: 0.84rem; color: #a8d8ea; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>How to Read &amp; Analyze 10-K Filings for Tech Companies</h1>
+  <p class="meta">Research Date: 2026-04-28 | Effort: 8 hrs | Queue Priority: #1 | Week 2026-W18</p>
+
+  <div class="summary">
+    <strong>Executive Summary</strong>
+    <p style="margin-top:0.5rem; margin-bottom:0;">The 10-K is the most important document a public company produces. For a future analyst, the ability to read a 10-K quickly and extract signal from noise is a foundational skill. This report builds two capabilities simultaneously: knowing the structure of any 10-K, and knowing the translation layer that converts GAAP line items into tech-relevant metrics. Tech companies present a unique challenge — their most important assets (software, network effects, brand) are often invisible on the balance sheet.</p>
+  </div>
+
+  <h2>1. The Structure: What's in a 10-K</h2>
+  <p>The 10-K follows standardized SEC Regulation S-K format — same structure across every public company, enabling direct comparison.</p>
+  <div class="section">
+    <h3>Part I — The Business</h3>
+    <ul>
+      <li><strong>Item 1 — Business:</strong> Company overview, products, markets, competition, employees. Management's own description of the business.</li>
+      <li><strong>Item 1A — Risk Factors:</strong> Required to be specific and material (not boilerplate). Priority order matters — a risk that moved from #8 to #3 is management signaling something changed.</li>
+      <li><strong>Item 3 — Legal Proceedings:</strong> Active litigation with potential material impact.</li>
+    </ul>
+  </div>
+  <div class="section">
+    <h3>Part II — Financial Information</h3>
+    <ul>
+      <li><strong>Item 7 — MD&amp;A:</strong> Management's narrative on financial results. Highest-signal section after the financials themselves. Test: does management explain <em>why</em> numbers changed, or just restate them in sentence form?</li>
+      <li><strong>Item 8 — Financial Statements:</strong> Audited IS, BS, CFS, and all footnotes. The actual numbers.</li>
+    </ul>
+  </div>
+
+  <h2>2. The Reading Order That Actually Works</h2>
+  <h3>First Pass (~30–60 min) — Orient and Screen</h3>
+  <ol>
+    <li><strong>Business overview (Item 1):</strong> What does the company do? Who are customers? How is revenue generated?</li>
+    <li><strong>Risk Factors (Item 1A):</strong> Skim quickly. Look for <em>new</em> risks vs. last year and any that are unusually specific or abnormally long.</li>
+    <li><strong>Revenue trend in MD&amp;A (Item 7):</strong> Growth over 3 years, gross margin trajectory, operating margin trend.</li>
+    <li><strong>Cash flow statement (Item 8):</strong> OCF should confirm earnings story. Rising net income + flat OCF = quality-of-earnings concern.</li>
+    <li><strong>Auditor's opinion:</strong> Clean? Any "going concern" qualifications?</li>
+  </ol>
+  <h3>Second Pass (~2–4 hours) — Deep Dive</h3>
+  <ol>
+    <li>Full MD&amp;A read with annotations | Line-by-line income statement and margin analysis</li>
+    <li>Balance sheet health: cash, debt, working capital | Full cash flow statement</li>
+    <li>Critical footnotes: revenue recognition, SBC, deferred revenue, debt terms, segment data</li>
+    <li>YoY comparison: what changed between this year's and last year's filing?</li>
+  </ol>
+
+  <h2>3. Tech-Specific Accounting: What GAAP Hides</h2>
+  <div class="section">
+    <h3>Stock-Based Compensation (SBC)</h3>
+    <p>Expensed on income statement under GAAP. Most tech companies report non-GAAP operating income adding it back. <strong>Right framework:</strong> track GAAP margins to understand total comp cost, but also track how fast SBC grows relative to revenue — faster growth = declining capital efficiency.</p>
+  </div>
+  <div class="section">
+    <h3>Revenue Recognition &amp; Deferred Revenue</h3>
+    <p>Under ASC 606, subscription revenue is recognized ratably over the contract period, not when cash is received. <strong>Deferred revenue is a forward-looking indicator</strong> — growing deferred revenue means the customer base is paying ahead. A deceleration in deferred revenue growth often precedes revenue growth deceleration by 2–4 quarters.</p>
+  </div>
+  <div class="section">
+    <h3>Remaining Performance Obligations (RPO)</h3>
+    <p>Disclosed in revenue footnotes per ASC 606. Represents all contracted revenue not yet recognized — both invoiced (deferred revenue) and uninvoiced backlog. <strong>Consecutive quarters of RPO growth exceeding revenue growth</strong> = company is selling faster than it's recognizing (bullish). The reverse is a warning sign.</p>
+  </div>
+  <div class="section">
+    <h3>Goodwill &amp; Intangibles from Acquisitions</h3>
+    <p>Goodwill isn't amortized but can be impaired. Other intangibles (customer lists, technology, patents) are amortized — hits income statement for acquirers. Goodwill impairments are often disclosed as "indicators of impairment" in risk factors before the charge actually hits.</p>
+  </div>
+
+  <h2>4. The Three Margins That Matter</h2>
+  <ol>
+    <li><strong>Gross Margin:</strong> For SaaS/software, 70–80%+ expected. Compression signals commoditization or rising hosting/support costs. Expansion signals pricing power.</li>
+    <li><strong>Operating Margin:</strong> Most comparable profitability metric across companies. Add back SBC and amortization to get "adjusted" version. <em>Trend</em> matters as much as level.</li>
+    <li><strong>Free Cash Flow Margin (FCF / Revenue):</strong> FCF = OCF − Capex. Purest signal of cash generation quality. Above 20% for mature software = strong.</li>
+  </ol>
+
+  <h2>5. Red Flags Cheat Sheet</h2>
+  <table>
+    <tr><th>Signal</th><th>Location</th><th>What It Might Mean</th></tr>
+    <tr><td>Revenue growth decelerating while SBC rising</td><td>IS + CF footnote</td><td>Efficiency deteriorating, buying growth with stock</td></tr>
+    <tr><td>Net income growing, OCF flat</td><td>CF statement</td><td>Revenue recognition pulling forward future cash, or AR growing</td></tr>
+    <tr><td>Deferred revenue declining</td><td>Balance sheet</td><td>Customers signing shorter contracts or not renewing ahead</td></tr>
+    <tr><td>Risk factors reordered or expanded</td><td>Item 1A</td><td>Management's internal concerns have shifted</td></tr>
+    <tr><td>Goodwill impairment</td><td>IS / footnotes</td><td>Prior acquisition underperforming expectations</td></tr>
+    <tr><td>Rising DSO</td><td>AR on BS vs. revenue</td><td>Revenue quality concern or customer stress</td></tr>
+    <tr><td>Non-GAAP definition changes</td><td>MD&amp;A</td><td>Possibly masking GAAP deterioration</td></tr>
+    <tr><td>Segment redefinition</td><td>Segment note</td><td>Often obscures deterioration in a specific unit</td></tr>
+  </table>
+
+  <div class="cit">
+    <h3>Implications for Eddie</h3>
+    <p><strong>Career (IB):</strong> As a first-year analyst, you will read 10-Ks constantly. The workflow in Section 2 is the actual skillset — learn to navigate it fast. Practical exercise before Notre Dame: take any mega-cap tech company (Microsoft, Google, Nvidia) and do the full 4-hour deep read. Write a 2-page memo on what you found. Do this 3–4 times and you'll be ahead of almost every other analyst joining alongside you.</p>
+    <p style="margin-top:0.6rem;"><strong>Career (VC):</strong> VCs rarely read 10-Ks on private companies, but the analytical instincts transfer directly to diligence data rooms, cap tables, and financial packages. Understanding how metrics like ARR, NRR, and RPO appear in public filings sharpens your ability to evaluate those same metrics when founders present them in pitch decks.</p>
+    <p style="margin-top:0.6rem; color: #a8d8ea;"><strong>Current Palantir Thesis connection:</strong> PLTR's 10-K is an excellent hands-on exercise. Their revenue recognition across Government vs. Commercial segments, the RPO disclosures, and GAAP vs. non-GAAP presentation are all high-complexity examples of exactly the accounting topics covered here.</p>
+  </div>
+</div>
+</body>
+</html>
