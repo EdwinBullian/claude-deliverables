@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cap Table Mechanics — Research W19 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; line-height: 1.7; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  .meta { color: #888; font-size: 0.82rem; margin-bottom: 1.5rem; }
+  h1 { font-size: 1.8rem; color: #f5e6d3; border-bottom: 2px solid #f5e6d355; padding-bottom: 0.5rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.3rem; color: #a8d8ea; margin-top: 2rem; margin-bottom: 0.8rem; }
+  h3 { font-size: 1rem; color: #f5e6d3; margin-top: 1.2rem; margin-bottom: 0.4rem; }
+  .summary { background: #16213e; border-left: 3px solid #a8d8ea; padding: 1rem 1.2rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; }
+  .section { background: #16213e; border-left: 3px solid #f5e6d355; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-radius: 0 8px 8px 0; }
+  .example { background: #0f1a2e; border: 1px solid #a8d8ea33; padding: 0.8rem 1rem; border-radius: 6px; margin: 0.6rem 0; font-size: 0.88rem; font-family: 'JetBrains Mono', 'Courier New', monospace; color: #c0c0c0; }
+  .cit { background: #0f3460; border: 1px solid #a8d8ea44; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; }
+  .cit h3 { color: #f5e6d3; margin-top: 0; }
+  .cit p { color: #c0c0c0; font-size: 0.92rem; }
+  p { color: #c0c0c0; font-size: 0.92rem; margin-bottom: 0.6rem; }
+  ul, ol { color: #c0c0c0; font-size: 0.88rem; margin-left: 1.2rem; margin-bottom: 0.6rem; }
+  li { margin-bottom: 0.3rem; }
+  strong { color: #f5e6d3; }
+  .tag { display: inline-block; background: #a8d8ea22; color: #a8d8ea; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Cap Table Mechanics in Seed-Stage Startups</h1>
+  <p class="meta">Research Date: 2026-05-07 | Effort: 10 hrs | Queue Priority: #1 | Week 2026-W19</p>
+  <p class="meta" style="margin-top:-1rem;">Topics: Dilution, Option Pools, SAFEs, Pro Rata Rights, Anti-Dilution, Exit Waterfall</p>
+
+  <div class="summary">
+    <strong>Executive Summary</strong>
+    <p style="margin-top:0.5rem; margin-bottom:0;">A capitalization table is not just a list of who owns what — it's the operating system for ownership economics, governance, and incentives. Every term sheet provision, every employee stock grant, every new round, and every exit calculation routes through the cap table. The three most common mistakes — option pool shuffles, pre/post-money confusion in convertible instruments, and skipping pro rata — together account for the majority of founder regret stories from the seed era. Each is mechanical: you can model your way out of every one in Excel before signing anything.</p>
+  </div>
+
+  <h2>1. Cap Table Structure</h2>
+  <p>A serious cap table tracks securities by class: <strong>Common Stock</strong> (founders, employees post-exercise), <strong>Preferred Stock</strong> (investors, by series), <strong>Stock Options</strong> (ISOs/NSOs out of the option pool), <strong>Convertible Securities</strong> (SAFEs, notes), and <strong>Warrants</strong>. The <strong>fully-diluted</strong> view assumes every option is granted and exercised and every convertible converts — this is the number that matters for negotiation and exit math.</p>
+
+  <h2>2. Option Pool — The Single Most Misunderstood Mechanic</h2>
+  <p>Standard at seed: 10–15% of post-money fully diluted ownership. The mechanic that matters: <strong>when the option pool is created matters enormously for who gets diluted.</strong></p>
+  <div class="section">
+    <h3>The Pre-Money Option Pool Shuffle</h3>
+    <p>Almost every standard term sheet requires the option pool be created <strong>pre-money</strong> — meaning the dilution for the new pool comes from existing shareholders (founders + prior investors), not the new investors.</p>
+    <div class="example">
+Example: $5M seed at $20M post-money ($15M pre). Investor wants 12.5% post-money pool.
+
+Pre-money pool: founders end at 62.5% post-money (not 75%)
+Post-money pool: founders end at ~65.6%, investor at ~21.9%
+
+Cost: ~3 points of dilution → on a $500M exit, that's ~$15M transferred from founders.
+    </div>
+    <p><strong>How to push back:</strong> Right-size the pool to actual hiring plans. Model the exact hires you need through Series A — if you only need 7%, don't accept a 12.5% pool. Investors push back with "buffer" argument; founders push back with a real hiring plan grounded in candidate conversations.</p>
+  </div>
+
+  <h2>3. Convertible Securities — SAFEs and Notes</h2>
+  <div class="section">
+    <h3>SAFE Types (YC Post-Money SAFE is Standard)</h3>
+    <ul>
+      <li><strong>Cap-only SAFE:</strong> Converts at lower of next round price or cap-implied price. Common for early high-conviction checks.</li>
+      <li><strong>Cap + Discount SAFE:</strong> Converts at better of cap or discount. Most common today.</li>
+      <li><strong>MFN SAFE:</strong> Allows holder to take best terms of any subsequent SAFE before priced round.</li>
+    </ul>
+    <p style="margin-top:0.6rem;"><strong>Critical update:</strong> YC's 2018 post-money SAFE locks in the holder's percentage at signing relative to the cap. A founder taking $5M of post-money SAFEs at a $25M cap is locking in 20% dilution before any priced round. Many first-time founders raise $4–6M of SAFEs without realizing they've given up 25–35% before ever seeing a priced Series A.</p>
+  </div>
+
+  <h2>4. Dilution Math — The Core Equation</h2>
+  <div class="example">
+Investor Ownership % = New Money / Post-Money Valuation
+Post-Money = Pre-Money + New Money
+
+$5M check at $15M pre-money → investor owns 25%, valued at $20M post-money.
+Existing shareholders diluted from 100% to 75%.
+
+Compounding through rounds (typical single founder at each round):
+  Seed:   25% dilution → founder owns 37.5%
+  A:      22% dilution → founder owns 29.3%
+  B:      18% dilution → founder owns 24.0%
+  C:      15% dilution → founder owns 20.4%
+  + option pool top-ups (~3-5%/round) → likely 12–15% at Series C
+  </div>
+
+  <h2>5. Pro Rata Rights</h2>
+  <p>A pro rata right gives an existing investor the right to participate in future rounds at their existing ownership percentage, preventing dilution. <strong>Pro rata is the single most valuable right seed investors negotiate.</strong> For a seed fund owning 10% of a company that becomes $5B, the difference between exercising and not exercising pro rata through Series A-D can be $250M+ in fund returns.</p>
+  <p><strong>Founder perspective:</strong> Limit pro rata to "major investors" at seed (so only the lead has it). In a hot Series A oversubscribed round, existing investors taking 60% on pro rata can block the new lead — negotiate percentage or dollar caps.</p>
+
+  <h2>6. Liquidation Preferences &amp; Exit Waterfall</h2>
+  <div class="section">
+    <h3>Standard: 1x Non-Participating Preferred</h3>
+    <p>Preferred holder gets either (a) their original investment back OR (b) their pro rata share as if converted to common — whichever is higher. <strong>Non-participating</strong> = cannot double-dip. Industry standard at seed/Series A in competitive markets.</p>
+    <div class="example">
+Example: $20M raise at $80M post-money, 1x non-participating.
+Founders own 60% common. Investor owns 25% preferred.
+
+Exit at $20M:  Investor takes full $20M preference. Common gets $0.
+Exit at $80M:  Investor converts (25% = $20M). Founders: ~$60M × 75% = $45M.
+Exit at $200M: Investor converts (25% = $50M). Founders: 60% × $200M = $120M.
+    </div>
+  </div>
+  <p><strong>Stacked preferences:</strong> Series B preference sits senior to Series A. At a distressed exit, later investors get paid first. This is why founders and seed investors should care about every successive round's terms — they can't vote against the Series B term sheet but are directly affected by it.</p>
+
+  <h2>7. Common Mistakes</h2>
+  <p><strong>Founder mistakes (ranked by cost):</strong></p>
+  <ol>
+    <li>Skipping the 83(b) election — 30-day window from stock grant; missing it can cost tens of millions at exit in ordinary income tax.</li>
+    <li>Not understanding pre-money pool shuffles — costs 3–5 points per round if not negotiated.</li>
+    <li>Raising too much SAFE capital before a priced round — $4–6M SAFEs can lock in 25–35% dilution at Series A.</li>
+    <li>Granting too much equity to early advisors — 0.5% at incorporation is worth $5M at $1B exit.</li>
+    <li>Not modeling SAFE conversion before signing each one.</li>
+  </ol>
+
+  <div class="cit">
+    <h3>Implications for Eddie (VC Career Path)</h3>
+    <p>Cap tables are the lingua franca of venture capital. The ability to look at a term sheet and instantly compute post-money ownership, implied dilution, pro rata math, and exit waterfall sensitivity is one of the most concrete, learnable skills you can bring to a VC internship interview.</p>
+    <p style="margin-top:0.6rem;"><strong>Skill-building exercise:</strong> Build a working cap table model in Excel for a hypothetical company: founders + ESOP → $1.5M SAFE at $10M cap → $5M priced seed at $20M post-money with 12% pool top-up → $15M Series A at $60M post-money with 13% pool top-up. Compute fully-diluted ownership at each stage and at $50M / $200M / $500M exit. If you can build this model in under 2 hours, you have the mechanics.</p>
+    <p style="margin-top:0.6rem; color: #a8d8ea;"><strong>PLTR connection:</strong> PLTR's 5%+ annual SBC dilution is the public-market analog to a startup's 5% pool top-up at every round. The cap table framework makes the PLTR dilution analysis more intuitive.</p>
+  </div>
+</div>
+</body>
+</html>
