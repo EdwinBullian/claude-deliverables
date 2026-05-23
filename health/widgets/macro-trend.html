@@ -6,117 +6,123 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      width: 100%; height: 200px; overflow: hidden;
-      background: #191919;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    body { padding: 10px 16px 8px; display: flex; flex-direction: column; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .title {
-      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.5px; color: rgba(255,255,255,0.35);
-    }
-    .legend { display: flex; gap: 12px; }
-    .leg-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: rgba(255,255,255,0.4); }
+    html, body { width: 100%; height: 218px; overflow: hidden; background: #191919; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    body { padding: 10px 16px 6px; display: flex; flex-direction: column; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .title { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.35); }
+    .legend { display: flex; gap: 10px; }
+    .leg { display: flex; align-items: center; gap: 4px; font-size: 9px; color: rgba(255,255,255,0.38); }
     .leg-dot { width: 8px; height: 8px; border-radius: 2px; }
-    .chart-wrap { flex: 1; position: relative; }
+    .chart-wrap { flex: 1; position: relative; min-height: 0; }
+    .hydration { font-size: 8.5px; color: rgba(74,144,196,0.42); margin-top: 3px; }
   </style>
 </head>
 <body>
   <div class="header">
-    <span class="title">Calories &amp; Protein — May 17–21</span>
+    <span class="title">W21 Macro Breakdown — May 18–24</span>
     <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#4a90c4"></div>Calories</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#e8943a;border-radius:50%"></div>Protein</div>
+      <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Protein</div>
+      <div class="leg"><div class="leg-dot" style="background:#4a90c4"></div>Carbs</div>
+      <div class="leg"><div class="leg-dot" style="background:#c45a5a"></div>Fat</div>
     </div>
   </div>
   <div class="chart-wrap"><canvas id="chart"></canvas></div>
-
+  <div class="hydration">&#128167; Hydration not tracked — log water in Cronometer to see here</div>
 <script>
-Chart.defaults.color = 'rgba(255,255,255,0.45)';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.color = 'rgba(255,255,255,0.38)';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+
+// W21 May 18(Mon)–24(Sun). Data from Cronometer.
+// Macro calories: protein=4cal/g  carbs=4cal/g  fat=9cal/g
+const labels   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const protG    = [ 62, 133, 140,  83, 0, 0, 0];
+const carbG    = [ 45,  98, 183,  16, 0, 0, 0];
+const fatG     = [ 33,  89, 116,  46, 0, 0, 0];
+const protCal  = protG.map(g => g*4);
+const carbCal  = carbG.map(g => g*4);
+const fatCal   = fatG.map(g => Math.round(g*9));
+const hasData  = protG.map(g => g > 0);
 
 const targetPlugin = {
-  id: 'targets',
-  afterDraw(chart) {
-    const { ctx, chartArea, scales } = chart;
+  id:'target',
+  afterDraw(chart){
+    const {ctx,chartArea,scales} = chart;
     if (!chartArea) return;
-    const x1 = chartArea.left, x2 = chartArea.right;
+    const y = scales.y.getPixelForValue(3000);
     ctx.save();
     ctx.setLineDash([4,4]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
     ctx.lineWidth = 1;
-
-    const yCal = scales.yL.getPixelForValue(3000);
-    ctx.strokeStyle = 'rgba(74,144,196,0.4)';
-    ctx.beginPath(); ctx.moveTo(x1,yCal); ctx.lineTo(x2,yCal); ctx.stroke();
-    ctx.fillStyle = 'rgba(74,144,196,0.45)';
-    ctx.font = '8.5px Inter,system-ui,sans-serif';
-    ctx.fillText('3000 target', x2-52, yCal-3);
-
-    const yPro = scales.yR.getPixelForValue(165);
-    ctx.strokeStyle = 'rgba(232,148,58,0.4)';
-    ctx.beginPath(); ctx.moveTo(x1,yPro); ctx.lineTo(x2,yPro); ctx.stroke();
-    ctx.fillStyle = 'rgba(232,148,58,0.45)';
-    ctx.fillText('165g target', x2-52, yPro-3);
-
+    ctx.beginPath(); ctx.moveTo(chartArea.left,y); ctx.lineTo(chartArea.right,y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.font = '8px Inter,system-ui,sans-serif';
+    ctx.fillText('3000 target', chartArea.right-58, y-3);
     ctx.restore();
   }
 };
 
 new Chart(document.getElementById('chart').getContext('2d'), {
-  type: 'bar',
-  plugins: [targetPlugin],
-  data: {
-    labels: ['5/17','5/18','5/19','5/20','5/21'],
-    datasets: [
+  type:'bar',
+  plugins:[targetPlugin],
+  data:{
+    labels,
+    datasets:[
       {
-        label: 'Calories',
-        data: [1341, 709, 1717, 2323, 792],
-        backgroundColor: ctx => {
-          const v = ctx.raw;
-          return v >= 2800 ? 'rgba(76,175,80,0.7)' : v >= 1800 ? 'rgba(255,183,77,0.65)' : 'rgba(229,115,115,0.65)';
-        },
-        borderRadius: 3, yAxisID: 'yL', order: 2,
+        label:'Protein',
+        data: protCal,
+        backgroundColor: protCal.map((v,i) => hasData[i] ? 'rgba(232,148,58,0.85)' : 'rgba(255,255,255,0.045)'),
+        stack:'m', borderRadius:0, borderSkipped:false,
       },
       {
-        label: 'Protein (g)',
-        data: [102, 62, 133, 140, 83],
-        type: 'line',
-        borderColor: '#e8943a',
-        backgroundColor: 'rgba(232,148,58,0.1)',
-        pointBackgroundColor: ctx => ctx.raw >= 165 ? '#76c442' : '#e8943a',
-        pointRadius: 4, borderWidth: 2, fill: false, tension: 0.3,
-        yAxisID: 'yR', order: 1,
+        label:'Carbs',
+        data: carbCal,
+        backgroundColor: carbCal.map((v,i) => hasData[i] ? 'rgba(74,144,196,0.82)' : 'transparent'),
+        stack:'m', borderRadius:0, borderSkipped:false,
+      },
+      {
+        label:'Fat',
+        data: fatCal,
+        backgroundColor: fatCal.map((v,i) => hasData[i] ? 'rgba(196,90,90,0.78)' : 'transparent'),
+        stack:'m', borderRadius:[3,3,0,0], borderSkipped:false,
       }
     ]
   },
-  options: {
-    responsive: true, maintainAspectRatio: false, animation: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#2a2a2a', titleColor: '#f0f0f0', bodyColor: 'rgba(255,255,255,0.65)',
-        borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
-        titleFont: { size: 11 }, bodyFont: { size: 11 }, padding: 8,
+  options:{
+    responsive:true, maintainAspectRatio:false, animation:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#2a2a2a', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,0.65)',
+        borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        mode:'index', intersect:false,
+        callbacks:{
+          title: ctx => {
+            const d=['Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23','Sun 5/24'];
+            return d[ctx[0].dataIndex];
+          },
+          label: ctx => {
+            if (!hasData[ctx.dataIndex]) return null;
+            const names=['Protein','Carbs','Fat'];
+            const grams=[protG,carbG,fatG];
+            return ' '+names[ctx.datasetIndex]+': '+grams[ctx.datasetIndex][ctx.dataIndex]+'g  ('+ctx.raw+' cal)';
+          },
+          afterBody: ctx => {
+            const i=ctx[0].dataIndex;
+            if (!hasData[i]) return [' No log for this day'];
+            const total=protCal[i]+carbCal[i]+fatCal[i];
+            return [' Total: ~'+total+' kcal'];
+          }
+        }
       }
     },
-    scales: {
-      x: {
-        ticks: { font: { size: 9.5 }, color: 'rgba(255,255,255,0.38)', maxRotation: 0 },
-        grid: { display: false }, border: { display: false }
+    scales:{
+      x:{ stacked:true,
+        ticks:{font:{size:10.5},color:'rgba(255,255,255,0.4)',maxRotation:0},
+        grid:{display:false}, border:{display:false}
       },
-      yL: {
-        position: 'left', min: 0, max: 3500,
-        ticks: { font: { size: 9.5 }, stepSize: 700, color: 'rgba(255,255,255,0.38)' },
-        grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false },
-        title: { display: true, text: 'kcal', font: { size: 9 }, color: 'rgba(255,255,255,0.3)' }
-      },
-      yR: {
-        position: 'right', min: 0, max: 200,
-        ticks: { font: { size: 9.5 }, stepSize: 50, color: 'rgba(232,148,58,0.6)' },
-        grid: { display: false }, border: { display: false },
-        title: { display: true, text: 'protein g', font: { size: 9 }, color: 'rgba(232,148,58,0.5)' }
+      y:{ stacked:true, min:0, max:3600,
+        ticks:{font:{size:9},stepSize:900,color:'rgba(255,255,255,0.3)',callback:v=>v===0?'':Math.round(v/1000*10)/10+'k'},
+        grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false}
       }
     }
   }
