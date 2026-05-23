@@ -8,37 +8,18 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       width: 100%; height: 200px; overflow: hidden;
-      background: #e4d9c4;
+      background: #191919;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     body { padding: 10px 16px 8px; display: flex; flex-direction: column; }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .title {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #7a6a55;
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: rgba(255,255,255,0.35);
     }
-    .legend {
-      display: flex;
-      gap: 12px;
-    }
-    .leg-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      color: #7a6a55;
-    }
-    .leg-dot {
-      width: 8px; height: 8px; border-radius: 2px;
-    }
+    .legend { display: flex; gap: 12px; }
+    .leg-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: rgba(255,255,255,0.4); }
+    .leg-dot { width: 8px; height: 8px; border-radius: 2px; }
     .chart-wrap { flex: 1; position: relative; }
   </style>
 </head>
@@ -46,120 +27,96 @@
   <div class="header">
     <span class="title">Calories &amp; Protein — May 17–21</span>
     <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#1b3a5c"></div>Calories</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#c0692b; border-radius:50%"></div>Protein</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#4a90c4"></div>Calories</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#e8943a;border-radius:50%"></div>Protein</div>
     </div>
   </div>
-  <div class="chart-wrap">
-    <canvas id="chart"></canvas>
-  </div>
+  <div class="chart-wrap"><canvas id="chart"></canvas></div>
 
 <script>
-const ctx = document.getElementById('chart').getContext('2d');
+Chart.defaults.color = 'rgba(255,255,255,0.45)';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
 
-// Dashed target line plugin
-const targetLinesPlugin = {
-  id: 'targetLines',
+const targetPlugin = {
+  id: 'targets',
   afterDraw(chart) {
     const { ctx, chartArea, scales } = chart;
     if (!chartArea) return;
-    const yL = scales.yL, yR = scales.yR;
     const x1 = chartArea.left, x2 = chartArea.right;
-
-    // Calorie target: 3000 kcal
-    const yCal = yL.getPixelForValue(3000);
     ctx.save();
-    ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = 'rgba(27,58,92,0.35)';
-    ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.moveTo(x1, yCal); ctx.lineTo(x2, yCal); ctx.stroke();
-    ctx.fillStyle = 'rgba(27,58,92,0.5)';
-    ctx.font = '9px Inter, system-ui, sans-serif';
-    ctx.fillText('target 3000', x2 - 52, yCal - 3);
+    ctx.setLineDash([4,4]);
+    ctx.lineWidth = 1;
 
-    // Protein target: 165g
-    const yPro = yR.getPixelForValue(165);
-    ctx.strokeStyle = 'rgba(192,105,43,0.35)';
-    ctx.beginPath(); ctx.moveTo(x1, yPro); ctx.lineTo(x2, yPro); ctx.stroke();
-    ctx.fillStyle = 'rgba(192,105,43,0.55)';
-    ctx.fillText('target 165g', x2 - 52, yPro - 3);
+    const yCal = scales.yL.getPixelForValue(3000);
+    ctx.strokeStyle = 'rgba(74,144,196,0.4)';
+    ctx.beginPath(); ctx.moveTo(x1,yCal); ctx.lineTo(x2,yCal); ctx.stroke();
+    ctx.fillStyle = 'rgba(74,144,196,0.45)';
+    ctx.font = '8.5px Inter,system-ui,sans-serif';
+    ctx.fillText('3000 target', x2-52, yCal-3);
+
+    const yPro = scales.yR.getPixelForValue(165);
+    ctx.strokeStyle = 'rgba(232,148,58,0.4)';
+    ctx.beginPath(); ctx.moveTo(x1,yPro); ctx.lineTo(x2,yPro); ctx.stroke();
+    ctx.fillStyle = 'rgba(232,148,58,0.45)';
+    ctx.fillText('165g target', x2-52, yPro-3);
 
     ctx.restore();
   }
 };
 
-new Chart(ctx, {
+new Chart(document.getElementById('chart').getContext('2d'), {
   type: 'bar',
-  plugins: [targetLinesPlugin],
+  plugins: [targetPlugin],
   data: {
-    labels: ['Sun 5/17', 'Mon 5/18', 'Tue 5/19', 'Wed 5/20', 'Thu 5/21'],
+    labels: ['5/17','5/18','5/19','5/20','5/21'],
     datasets: [
       {
         label: 'Calories',
         data: [1341, 709, 1717, 2323, 792],
-        backgroundColor: (ctx) => {
+        backgroundColor: ctx => {
           const v = ctx.raw;
-          return v >= 2800 ? 'rgba(45,106,63,0.75)' : v >= 2000 ? 'rgba(192,147,43,0.75)' : 'rgba(192,57,43,0.65)';
+          return v >= 2800 ? 'rgba(76,175,80,0.7)' : v >= 1800 ? 'rgba(255,183,77,0.65)' : 'rgba(229,115,115,0.65)';
         },
-        borderRadius: 3,
-        yAxisID: 'yL',
-        order: 2,
+        borderRadius: 3, yAxisID: 'yL', order: 2,
       },
       {
         label: 'Protein (g)',
         data: [102, 62, 133, 140, 83],
         type: 'line',
-        borderColor: '#c0692b',
-        backgroundColor: 'rgba(192,105,43,0.15)',
-        pointBackgroundColor: (ctx) => ctx.raw >= 165 ? '#2d6a3f' : '#c0692b',
-        pointRadius: 4,
-        pointHoverRadius: 5,
-        borderWidth: 2,
-        fill: false,
-        tension: 0.3,
-        yAxisID: 'yR',
-        order: 1,
+        borderColor: '#e8943a',
+        backgroundColor: 'rgba(232,148,58,0.1)',
+        pointBackgroundColor: ctx => ctx.raw >= 165 ? '#76c442' : '#e8943a',
+        pointRadius: 4, borderWidth: 2, fill: false, tension: 0.3,
+        yAxisID: 'yR', order: 1,
       }
     ]
   },
   options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    interaction: { mode: 'index', intersect: false },
+    responsive: true, maintainAspectRatio: false, animation: false,
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: 'rgba(27,58,92,0.92)',
-        titleFont: { size: 11, family: 'Inter, system-ui' },
-        bodyFont: { size: 11, family: 'Inter, system-ui' },
-        padding: 8,
-        callbacks: {
-          afterBody: () => ['─── Targets ───', 'Calories: 2800–3200', 'Protein: 165 g']
-        }
+        backgroundColor: '#2a2a2a', titleColor: '#f0f0f0', bodyColor: 'rgba(255,255,255,0.65)',
+        borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+        titleFont: { size: 11 }, bodyFont: { size: 11 }, padding: 8,
       }
     },
     scales: {
       x: {
-        ticks: { font: { size: 9.5 }, color: '#7a6a55', maxRotation: 0 },
-        grid: { display: false },
-        border: { display: false }
+        ticks: { font: { size: 9.5 }, color: 'rgba(255,255,255,0.38)', maxRotation: 0 },
+        grid: { display: false }, border: { display: false }
       },
       yL: {
-        position: 'left',
-        min: 0, max: 3500,
-        ticks: { font: { size: 9.5 }, color: '#7a6a55', stepSize: 700 },
-        grid: { color: 'rgba(27,58,92,0.07)' },
-        border: { display: false },
-        title: { display: true, text: 'kcal', font: { size: 9 }, color: '#7a6a55' }
+        position: 'left', min: 0, max: 3500,
+        ticks: { font: { size: 9.5 }, stepSize: 700, color: 'rgba(255,255,255,0.38)' },
+        grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false },
+        title: { display: true, text: 'kcal', font: { size: 9 }, color: 'rgba(255,255,255,0.3)' }
       },
       yR: {
-        position: 'right',
-        min: 0, max: 200,
-        ticks: { font: { size: 9.5 }, color: '#c0692b', stepSize: 50 },
-        grid: { display: false },
-        border: { display: false },
-        title: { display: true, text: 'g protein', font: { size: 9 }, color: '#c0692b' }
+        position: 'right', min: 0, max: 200,
+        ticks: { font: { size: 9.5 }, stepSize: 50, color: 'rgba(232,148,58,0.6)' },
+        grid: { display: false }, border: { display: false },
+        title: { display: true, text: 'protein g', font: { size: 9 }, color: 'rgba(232,148,58,0.5)' }
       }
     }
   }
