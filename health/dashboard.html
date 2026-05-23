@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏋️ Health Dashboard — Eddie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #e4d9c4;
+      --card: #dbd0ba;
+      --card-inner: #d0c5aa;
+      --accent: #1b3a5c;
+      --accent-light: #2a5280;
+      --text: #1a1a1a;
+      --text-muted: #5a5040;
+      --green: #2d6a3f;
+      --green-bg: #d4edda;
+      --yellow: #7a5c00;
+      --yellow-bg: #fff3cd;
+      --red: #7a1f1f;
+      --red-bg: #f8d7da;
+      --border: rgba(27,58,92,0.15);
+      --shadow: 0 2px 8px rgba(27,58,92,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--accent);
+      color: white;
+      padding: 20px 28px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .header-left .subtitle {
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: 3px;
+    }
+    .header-right {
+      text-align: right;
+    }
+    .header-right .date {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+    .header-right .updated {
+      font-size: 11px;
+      opacity: 0.55;
+      margin-top: 2px;
+    }
+
+    /* ── PHASE BANNER ── */
+    .phase-banner {
+      background: #c8b99a;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 28px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .phase-banner span { opacity: 0.65; font-weight: 400; margin-left: 4px; }
+
+    /* ── LAYOUT ── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 20px 24px 28px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; padding: 14px 14px 20px; }
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card.full-width { grid-column: 1 / -1; }
+
+    .card-header {
+      background: var(--accent);
+      color: white;
+      padding: 11px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-header h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .card-header .header-link {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .card-header .header-link:hover { color: white; }
+
+    .card-body { padding: 15px 16px; }
+
+    /* ── METRIC ROW ── */
+    .metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-label {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .metric-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 5px;
+    }
+
+    /* ── STATUS BADGE ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .badge.green { background: var(--green-bg); color: var(--green); }
+    .badge.yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .badge.red { background: var(--red-bg); color: var(--red); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      margin-top: 4px;
+    }
+    .progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .progress-label-row strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .progress-bar-bg {
+      background: var(--card-inner);
+      border-radius: 6px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .fill-green { background: #2d6a3f; }
+    .fill-yellow { background: #c0932b; }
+    .fill-red { background: #c0392b; }
+    .fill-accent { background: var(--accent); }
+
+    /* ── MACRO GRID ── */
+    .macro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .macro-tile {
+      background: var(--card-inner);
+      border-radius: 8px;
+      padding: 9px 10px;
+      text-align: center;
+    }
+    .macro-tile .macro-num {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .macro-tile .macro-name {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+    .macro-tile .macro-pct {
+      font-size: 10px;
+      font-weight: 600;
+      margin-top: 3px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    .pct-green { background: var(--green-bg); color: var(--green); }
+    .pct-yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .pct-red { background: var(--red-bg); color: var(--red); }
+
+    /* ── SLEEP BARS ── */
+    .sleep-stage-bar {
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 14px;
+      margin: 8px 0 6px;
+    }
+    .sleep-stage-bar .s-deep { background: #1b3a5c; }
+    .sleep-stage-bar .s-light { background: #6b95bd; }
+    .sleep-stage-bar .s-rem { background: #a0bfd6; }
+    .sleep-stage-bar .s-wake { background: #d0c5aa; border: 1px solid #bfb49a; }
+
+    .sleep-legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── WORKOUT SESSION ── */
+    .session-card {
+      background: var(--card-inner);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .session-card:last-child { margin-bottom: 0; }
+    .session-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .session-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .session-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .session-stats {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .session-stat {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .session-stat strong { color: var(--text); font-weight: 600; }
+
+    /* ── SCHEDULE ── */
+    .schedule-row {
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 10px;
+    }
+    .schedule-row:last-child { border-bottom: none; }
+    .sched-day {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .sched-label {
+      font-size: 12px;
+      color: var(--text);
+      flex: 1;
+    }
+    .sched-today {
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── BODY STATS ── */
+    .body-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .body-stat-row:last-child { border-bottom: none; }
+    .body-stat-label { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+    .body-stat-value { font-size: 15px; font-weight: 700; color: var(--accent); }
+    .body-stat-goal { font-size: 11px; color: var(--text-muted); margin-top: 1px; text-align: right; }
+
+    /* ── NOTE BOX ── */
+    .note-box {
+      background: var(--yellow-bg);
+      border-left: 3px solid #c0932b;
+      border-radius: 0 6px 6px 0;
+      padding: 8px 11px;
+      margin-top: 10px;
+      font-size: 11.5px;
+      color: var(--yellow);
+      line-height: 1.5;
+    }
+
+    .section-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin: 12px 0 6px;
+    }
+
+    /* ── CHART CONTAINER ── */
+    .chart-wrap {
+      position: relative;
+      height: 120px;
+      margin-top: 10px;
+    }
+
+    /* ── HR INDICATOR ── */
+    .hr-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .hr-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+    .hr-circle .hr-num { font-size: 18px; font-weight: 800; line-height: 1; }
+    .hr-circle .hr-unit { font-size: 9px; opacity: 0.7; }
+    .hr-details { flex: 1; }
+    .hr-details .hr-label { font-size: 12px; font-weight: 600; color: var(--text); }
+    .hr-details .hr-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>🏋️ Health Dashboard</h1>
+    <div class="subtitle">Eddie · Morning Snapshot</div>
+  </div>
+  <div class="header-right">
+    <div class="date">Saturday, May 23 2026</div>
+    <div class="updated">Generated today · refresh on demand</div>
+  </div>
+</div>
+
+<div class="phase-banner">
+  📅 Phase: Post-Finals Ramp
+  <span>W21 target: 5 sessions · progressive overload · PRs on upper pressing</span>
+</div>
+
+<div class="grid">
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SLEEP & RECOVERY                                   -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-header">
+      <h2>🌙 Sleep &amp; Recovery</h2>
+      <span class="badge yellow">Score 73</span>
+    </div>
+    <div class="card-body">
+
+      <div class="metric-row">
+        <span class="metric-label">Last night</span>
+        <span class="metric-value">8h 10m <span class="metric-sub">1:52 AM → 10:06 AM</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Resting HR</span>
+        <span class="metric-value">55 bpm <span class="metric-sub">baseline 52 · +3</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Awakenings</span>
+        <span class="metric-value">3</span>
+      </div>
+
+      <div class="section-label">Sleep stages</div>
+      <!-- Total 490 min: deep 52, light 292, rem 146, wake 4 -->
+      <div class="sleep-stage-bar">
+        <div class="s-deep"  style="width:10.6%"></div>
+        <div class="s-light" style="width:59.6%"></div>
+        <div class="s-rem"   style="width:29.0%"></div>
+        <div class="s-wake"  style="width: 0.8%"></div>
+      </div>
+      <div class="sleep-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1b3a5c"></div>Deep 52 min</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6b95bd"></div>Light 292 min</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a0bfd6"></div>REM 146 min</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d0c5aa; border:1px solid #bfb49a"></div>Awake 4 min</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="metric-row">
+        <span class="metric-label">W20 sleep avg</span>
+        <span class="metric-value">7.6 hr <span class="metric-sub">score 78</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">W19 sleep avg</span>
+        <span class="metric-value">7.3 hr <span class="metric-sub">score 77</span></span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- WORKOUTS                                           -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-header">
+      <h2>🏋️ Workouts</h2>
+      <a href="https://www.notion.so/a596211728c64cdf8634dd1a6f51e744" target="_blank" class="header-link">Open Tracker →</a>
+    </div>
+    <div class="card-body">
+
+      <div class="section-label">Last session · May 21 (Zepp)</div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <span class="session-title">💪 Strength Session</span>
+          <span class="session-date">Wed May 21</span>
+        </div>
+        <div class="session-stats">
+          <div class="session-stat">⏱ <strong>42 min</strong></div>
+          <div class="session-stat">🔥 <strong>262 cal</strong></div>
+          <div class="session-stat">❤️ avg <strong>116 bpm</strong></div>
+          <div class="session-stat">⬆ max <strong>137 bpm</strong></div>
+          <div class="session-stat">TE <strong>18</strong></div>
+        </div>
+      </div>
+
+      <div class="session-card">
+        <div class="session-header">
+          <span class="session-title">⚡ Warmup / Activation</span>
+          <span class="session-date">Wed May 21</span>
+        </div>
+        <div class="session-stats">
+          <div class="session-stat">⏱ <strong>8–9 min</strong></div>
+          <div class="session-stat">🔥 <strong>83 cal</strong></div>
+          <div class="session-stat">❤️ avg <strong>115 bpm</strong></div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        ⚠️ No sets/reps logged in Notion this week. Log weights in the Workout Tracker after each session to enable lift comparisons.
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">This week — W21 schedule</div>
+
+      <div class="schedule-row">
+        <span class="sched-day">Mon</span>
+        <span class="sched-label">🔥 Upper — Bodybuilding</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Tue</span>
+        <span class="sched-label">⚡ Lower — Explosive</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Wed</span>
+        <span class="sched-label">✅ Strength done</span>
+        <span class="badge green" style="font-size:10px">Done</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Thu</span>
+        <span class="sched-label">💪 Push — Chest/Shoulders/Tris</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Fri</span>
+        <span class="sched-label">🏋️ Pull — Back/Biceps</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Sat</span>
+        <span class="sched-label">🦵 Legs — Plyometrics</span>
+        <span class="sched-today">TODAY</span>
+      </div>
+      <div class="schedule-row">
+        <span class="sched-day">Sun</span>
+        <span class="sched-label">💤 Full rest</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- NUTRITION                                          -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="card full-width">
+    <div class="card-header">
+      <h2>🥩 Nutrition — 7-Day View</h2>
+      <span class="badge red">Underlogged</span>
+    </div>
+    <div class="card-body">
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+
+        <!-- Left: today + averages -->
+        <div>
+          <div class="section-label">Today · May 23</div>
+          <div class="metric-row">
+            <span class="metric-label">Calories</span>
+            <span class="metric-value">— <span class="metric-sub">not logged yet</span></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Target</span>
+            <span class="metric-value">2,800–3,200 kcal</span>
+          </div>
+
+          <div class="divider"></div>
+          <div class="section-label">7-day averages (May 17–21, 5 days)</div>
+
+          <div class="progress-wrap" style="margin-bottom:10px;">
+            <div class="progress-label-row">
+              <span><strong>Calories</strong></span>
+              <span>1,376 / 3,000 kcal <strong style="color:var(--red)">46%</strong></span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-red" style="width:46%"></div></div>
+          </div>
+
+          <div class="progress-wrap" style="margin-bottom:10px;">
+            <div class="progress-label-row">
+              <span><strong>Protein</strong></span>
+              <span>104 / 165 g <strong style="color:var(--yellow)">63%</strong></span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-yellow" style="width:63%"></div></div>
+          </div>
+
+          <div class="progress-wrap" style="margin-bottom:10px;">
+            <div class="progress-label-row">
+              <span><strong>Carbs</strong></span>
+              <span>79 / 300 g <strong style="color:var(--red)">26%</strong></span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-red" style="width:26%"></div></div>
+          </div>
+
+          <div class="progress-wrap" style="margin-bottom:10px;">
+            <div class="progress-label-row">
+              <span><strong>Fat</strong></span>
+              <span>73 / 90 g <strong style="color:var(--yellow)">81%</strong></span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-yellow" style="width:81%"></div></div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-label-row">
+              <span><strong>Fiber</strong></span>
+              <span>14 / 35 g <strong style="color:var(--red)">40%</strong></span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill fill-red" style="width:40%"></div></div>
+          </div>
+
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="badge red">0/5 calorie days on target</span>
+            <span class="badge yellow">2/5 protein days on target</span>
+          </div>
+
+          <div class="note-box" style="margin-top:10px;">
+            Low averages likely reflect partial logging days (May 18: 708 kcal, May 21: 792 kcal). Log all meals in Cronometer to get accurate data.
+          </div>
+        </div>
+
+        <!-- Right: daily chart -->
+        <div>
+          <div class="section-label">Daily calories &amp; protein — this week</div>
+          <div class="chart-wrap">
+            <canvas id="macroChart"></canvas>
+          </div>
+          <div class="divider"></div>
+          <div class="section-label">Daily breakdown</div>
+          <div class="macro-grid">
+            <div class="macro-tile">
+              <div class="macro-num">2,323</div>
+              <div class="macro-name">Tue May 20</div>
+              <div class="macro-pct pct-yellow">best day</div>
+            </div>
+            <div class="macro-tile">
+              <div class="macro-num">1,717</div>
+              <div class="macro-name">Mon May 19</div>
+              <div class="macro-pct pct-yellow">57%</div>
+            </div>
+            <div class="macro-tile">
+              <div class="macro-num">1,341</div>
+              <div class="macro-name">Sun May 17</div>
+              <div class="macro-pct pct-red">45%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- BODY COMPOSITION                                   -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-header">
+      <h2>📏 Body Composition</h2>
+    </div>
+    <div class="card-body">
+      <div class="body-stat-row">
+        <div>
+          <div class="body-stat-label">Weight</div>
+        </div>
+        <div style="text-align:right">
+          <div class="body-stat-value">~155 lb</div>
+          <div class="body-stat-goal">Goal: 165 lb · +10 to go</div>
+        </div>
+      </div>
+      <div class="body-stat-row">
+        <div>
+          <div class="body-stat-label">Body Fat %</div>
+        </div>
+        <div style="text-align:right">
+          <div class="body-stat-value" style="color:var(--text-muted); font-size:13px;">TBD</div>
+          <div class="body-stat-goal">measure monthly via /body</div>
+        </div>
+      </div>
+      <div class="body-stat-row">
+        <div>
+          <div class="body-stat-label">Waist</div>
+        </div>
+        <div style="text-align:right">
+          <div class="body-stat-value" style="color:var(--text-muted); font-size:13px;">TBD</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Weight to goal</div>
+      <div class="progress-wrap">
+        <div class="progress-label-row">
+          <span>Current: <strong>155 lb</strong></span>
+          <span>Goal: <strong>165 lb</strong></span>
+        </div>
+        <div class="progress-bar-bg">
+          <!-- Assume starting weight ~140 lb baseline. 155 of 165 = progress from 140: 15/25 = 60% -->
+          <div class="progress-bar-fill fill-accent" style="width:60%"></div>
+        </div>
+      </div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:5px;">
+        Estimated from ~140 lb start point. Logging weight daily in Cronometer will improve accuracy.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- WEEKLY OVERVIEW / TRENDS                          -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-header">
+      <h2>📈 Trends &amp; Status</h2>
+    </div>
+    <div class="card-body">
+
+      <div class="section-label">Recovery baseline</div>
+      <div class="metric-row">
+        <span class="metric-label">Resting HR baseline</span>
+        <span class="metric-value">52 bpm <span class="metric-sub">W19–W20 avg</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Last night RHR</span>
+        <span class="metric-value">55 bpm <span class="metric-sub" style="color:var(--yellow);">+3 vs baseline</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Sleep score trend</span>
+        <span class="metric-value">77 → 78 → 73</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">HRV SDNN</span>
+        <span class="metric-value" style="color:var(--text-muted); font-size:13px;">66 ms <span class="metric-sub">(single baseline point)</span></span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">W21 targets</div>
+      <div class="metric-row">
+        <span class="metric-label">Sessions this week</span>
+        <span class="metric-value">1 logged <span class="metric-sub">/ 5 target</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Protein hit days</span>
+        <span class="metric-value">2 / 5 <span class="metric-sub">40% · target ≥70%</span></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Calorie hit days</span>
+        <span class="metric-value">0 / 5 <span class="metric-sub">target ≥70%</span></span>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">This week's priority adjustments</div>
+      <div style="font-size:12px; color:var(--text); line-height:1.7;">
+        1. 📝 Log all meals in Cronometer — partial days skew data severely<br>
+        2. 🏋️ Log weights/reps in Notion after every session to track PRs<br>
+        3. 🍗 Front-load protein — aim ≥40g per main meal<br>
+        4. 🌿 Add fiber sources (legumes, greens) to hit ≥30g/day<br>
+        5. 😴 Sleep score dipped to 73 — consider earlier bedtime (was 1:52 AM)
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<script>
+  // ── Macro Chart ──
+  const ctx = document.getElementById('macroChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['May 17', 'May 18', 'May 19', 'May 20', 'May 21'],
+      datasets: [
+        {
+          label: 'Calories',
+          data: [1341, 709, 1717, 2323, 792],
+          backgroundColor: 'rgba(27,58,92,0.65)',
+          borderRadius: 4,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Protein (g)',
+          data: [102, 62, 133, 140, 83],
+          backgroundColor: 'rgba(192,93,43,0.8)',
+          borderRadius: 4,
+          yAxisID: 'y2',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: {
+            font: { size: 10, family: 'Inter' },
+            color: '#5a5040',
+            boxWidth: 10,
+            padding: 8,
+          }
+        },
+        tooltip: {
+          callbacks: {
+            afterBody: function(items) {
+              return ['— Target: 2800–3200 kcal / 165g protein'];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 10, family: 'Inter' }, color: '#5a5040' },
+          grid: { display: false },
+        },
+        y: {
+          position: 'left',
+          ticks: { font: { size: 10 }, color: '#5a5040' },
+          grid: { color: 'rgba(27,58,92,0.08)' },
+          min: 0,
+          max: 3500,
+          title: { display: true, text: 'kcal', font: { size: 9 }, color: '#5a5040' }
+        },
+        y2: {
+          position: 'right',
+          ticks: { font: { size: 10 }, color: '#c05d2b' },
+          grid: { display: false },
+          min: 0,
+          max: 200,
+          title: { display: true, text: 'protein g', font: { size: 9 }, color: '#c05d2b' }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
