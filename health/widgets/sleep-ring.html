@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 210px; overflow: hidden;
+      background: #e4d9c4;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 0;
+    }
+
+    /* ── Left: Ring ── */
+    .ring-wrap {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      flex-shrink: 0;
+    }
+    .ring-wrap svg { width: 170px; height: 170px; }
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .score-num {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1b3a5c;
+      line-height: 1;
+    }
+    .score-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6a55;
+      margin-top: 2px;
+    }
+    .score-dur {
+      font-size: 12px;
+      font-weight: 600;
+      color: #3a3028;
+      margin-top: 5px;
+    }
+
+    /* ── Right: Stats ── */
+    .stats {
+      flex: 1;
+      padding-left: 18px;
+    }
+    .stats-heading {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #7a6a55;
+      margin-bottom: 10px;
+    }
+    .stage-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+    .stage-row:last-of-type { margin-bottom: 0; }
+    .stage-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .stage-name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #3a3028;
+      width: 34px;
+    }
+    .stage-bar-bg {
+      flex: 1;
+      height: 7px;
+      background: #c8b99a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .stage-bar { height: 100%; border-radius: 4px; }
+    .stage-val {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1b3a5c;
+      width: 44px;
+      text-align: right;
+    }
+    .divider { height: 1px; background: rgba(27,58,92,0.12); margin: 10px 0; }
+    .meta {
+      font-size: 11px;
+      color: #7a6a55;
+      line-height: 1.6;
+    }
+    .meta strong { color: #3a3028; }
+  </style>
+</head>
+<body>
+
+  <!-- Ring (r=72, C≈452.39) -->
+  <!-- Deep  52/490 = 10.61% → arc=48.00  dashoffset=0      -->
+  <!-- Light 292/490= 59.59% → arc=269.60 dashoffset=48.00  -->
+  <!-- REM   146/490= 29.80% → arc=134.81 dashoffset=317.60 -->
+  <!-- Wake  4/490  =  0.82% → arc=3.71  (left as ring gap) -->
+  <div class="ring-wrap">
+    <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background track -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#c8b99a" stroke-width="20"/>
+      <!-- Deep sleep -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#1b3a5c" stroke-width="20"
+        stroke-dasharray="48.00 404.39" stroke-dashoffset="0"
+        stroke-linecap="butt"
+        transform="rotate(-90 90 90)"/>
+      <!-- Light sleep -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#5a8ab0" stroke-width="20"
+        stroke-dasharray="269.60 182.79" stroke-dashoffset="-48.00"
+        stroke-linecap="butt"
+        transform="rotate(-90 90 90)"/>
+      <!-- REM sleep -->
+      <circle cx="90" cy="90" r="72" fill="none" stroke="#9ec3d9" stroke-width="20"
+        stroke-dasharray="134.81 317.58" stroke-dashoffset="-317.60"
+        stroke-linecap="butt"
+        transform="rotate(-90 90 90)"/>
+    </svg>
+    <div class="ring-center">
+      <span class="score-num">73</span>
+      <span class="score-label">Sleep Score</span>
+      <span class="score-dur">8 h 10 m</span>
+    </div>
+  </div>
+
+  <!-- Stats panel -->
+  <div class="stats">
+    <div class="stats-heading">May 22 — Last Night</div>
+
+    <div class="stage-row">
+      <div class="stage-swatch" style="background:#1b3a5c"></div>
+      <span class="stage-name">Deep</span>
+      <div class="stage-bar-bg"><div class="stage-bar" style="background:#1b3a5c; width:10.6%"></div></div>
+      <span class="stage-val">52 min</span>
+    </div>
+
+    <div class="stage-row">
+      <div class="stage-swatch" style="background:#5a8ab0"></div>
+      <span class="stage-name">Light</span>
+      <div class="stage-bar-bg"><div class="stage-bar" style="background:#5a8ab0; width:59.6%"></div></div>
+      <span class="stage-val">4 h 52 m</span>
+    </div>
+
+    <div class="stage-row">
+      <div class="stage-swatch" style="background:#9ec3d9"></div>
+      <span class="stage-name">REM</span>
+      <div class="stage-bar-bg"><div class="stage-bar" style="background:#9ec3d9; width:29.8%"></div></div>
+      <span class="stage-val">2 h 26 m</span>
+    </div>
+
+    <div class="stage-row">
+      <div class="stage-swatch" style="background:#d8cdb8; border:1px solid #bfb49a;"></div>
+      <span class="stage-name">Awake</span>
+      <div class="stage-bar-bg"><div class="stage-bar" style="background:#bfb49a; width:1%"></div></div>
+      <span class="stage-val">4 min</span>
+    </div>
+
+    <div class="divider"></div>
+    <div class="meta">
+      <strong>Bed</strong> 1:52 AM &nbsp;·&nbsp; <strong>Wake</strong> 10:06 AM<br>
+      <strong>RHR</strong> 55 bpm &nbsp;·&nbsp; <strong>Awakenings</strong> 3
+    </div>
+  </div>
+
+</body>
+</html>
