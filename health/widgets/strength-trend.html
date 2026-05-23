@@ -6,90 +6,81 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      width: 100%; height: 200px; overflow: hidden;
-      background: #191919;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    body { padding: 10px 16px 6px; display: flex; flex-direction: column; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .title {
-      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.5px; color: rgba(255,255,255,0.35);
-    }
-    .badge {
-      font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 10px;
-      background: rgba(255,183,77,0.15); color: rgba(255,183,77,0.8);
-      border: 1px solid rgba(255,183,77,0.2);
-    }
-    .chart-wrap { flex: 1; position: relative; min-height: 0; }
-    .unlock {
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.12);
-      border-radius: 5px; padding: 4px 10px; margin-top: 5px;
-      font-size: 10px; color: rgba(255,255,255,0.3);
-    }
+    html, body { width: 100%; height: 295px; overflow: hidden; background: #191919; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    body { padding: 10px 16px 8px; display: flex; flex-direction: column; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+    .title { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.35); }
+    .badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 10px; background: rgba(74,144,196,0.15); color: rgba(74,144,196,0.8); border: 1px solid rgba(74,144,196,0.2); }
+    .chart-wrap { flex: 0 0 148px; position: relative; }
+    .divider { height: 1px; background: rgba(255,255,255,0.07); margin: 7px 0 6px; }
+    .lifts-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(255,255,255,0.22); margin-bottom: 5px; }
+    .lifts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+    .lift-row { display: flex; justify-content: space-between; align-items: baseline; min-width: 0; }
+    .lift-name { font-size: 10px; color: rgba(255,255,255,0.48); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lift-right { font-size: 10px; color: rgba(255,255,255,0.82); font-weight: 700; white-space: nowrap; flex-shrink: 0; margin-left: 4px; }
+    .lift-tag { font-size: 8.5px; font-weight: 400; color: rgba(255,255,255,0.25); margin-left: 2px; }
+    .footer { font-size: 8.5px; color: rgba(255,183,77,0.45); margin-top: 5px; }
   </style>
 </head>
 <body>
   <div class="header">
-    <span class="title">W21 Training Sessions — May 18–24</span>
-    <span class="badge">5 session target</span>
+    <span class="title">W21 Weightlifting — May 18–24</span>
+    <span class="badge">2 of 5 sessions</span>
   </div>
   <div class="chart-wrap"><canvas id="chart"></canvas></div>
-  <div class="unlock">
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="1.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Log weights in Notion Workout Tracker to unlock progressive overload chart
+  <div class="divider"></div>
+  <div class="lifts-label">Key Lifts This Week</div>
+  <div class="lifts-grid">
+    <div class="lift-row">
+      <span class="lift-name">Incline DB Press</span>
+      <span class="lift-right">55 × 8<span class="lift-tag">×4 Mon</span></span>
+    </div>
+    <div class="lift-row">
+      <span class="lift-name">DB Rows</span>
+      <span class="lift-right">35 × 12<span class="lift-tag">×3 Wed</span></span>
+    </div>
+    <div class="lift-row">
+      <span class="lift-name">Overhead Press</span>
+      <span class="lift-right">35 × 12<span class="lift-tag">×3 Mon</span></span>
+    </div>
+    <div class="lift-row">
+      <span class="lift-name">Bicep Curls</span>
+      <span class="lift-right">15 × 12<span class="lift-tag">×3 Wed</span></span>
+    </div>
   </div>
-
+  <div class="footer">&#9888; Zepp re-auth needed to merge Thu/Fri sessions</div>
 <script>
 Chart.defaults.color = 'rgba(255,255,255,0.38)';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-
-// Mon=0,Tue=0,Wed=0,Thu=42min(May21),Fri=10min(May22),Sat=0(today),Sun=0
-const data = [0,0,0,42,10,0,0];
-const labels = ['Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23','Sun 5/24'];
-const colors = data.map((d,i) => {
-  if (i === 5) return 'rgba(232,148,58,0.55)';   // today
-  if (d > 0)  return 'rgba(74,144,196,0.75)';    // active
-  return 'rgba(255,255,255,0.08)';               // rest
+const labels   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const mins     = [80, 0, 80, 0, 0, 0, 0];
+const dayTypes = ['Push','','Pull','','','',''];
+const colors = mins.map((v,i) => {
+  if (i===5) return 'rgba(232,148,58,0.5)';
+  return v>0 ? 'rgba(74,144,196,0.82)' : 'rgba(255,255,255,0.055)';
 });
-
 new Chart(document.getElementById('chart').getContext('2d'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [{
-      label: 'Session (min)',
-      data,
-      backgroundColor: colors,
-      borderRadius: 4, borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false, animation: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#2a2a2a', titleColor: '#f0f0f0',
-        bodyColor: 'rgba(255,255,255,0.65)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
-        callbacks: {
-          label: ctx => ctx.raw === 0 ? ' Rest / no data' : ` ${ctx.raw} min session`,
-          afterLabel: ctx => ({ 3: '  262 cal  ·  avg HR 116  ·  TE 18', 4: '  53 cal  ·  avg HR 104' })[ctx.dataIndex] || ''
+  type:'bar',
+  data:{ labels, datasets:[{ data:mins, backgroundColor:colors, borderRadius:4, borderSkipped:false, barPercentage:0.62 }] },
+  options:{
+    responsive:true, maintainAspectRatio:false, animation:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#2a2a2a', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,0.65)',
+        borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        callbacks:{
+          label: ctx => ctx.raw===0 ? ' Rest / no data' : ' '+ctx.raw+' min  ·  '+dayTypes[ctx.dataIndex]+' Day',
+          afterLabel: ctx => ({0:'  Incline DB 55×8  ·  OHP 35×12', 2:'  DB Rows 35×12  ·  Curls 15×12'})[ctx.dataIndex]||''
         }
       }
     },
-    scales: {
-      x: {
-        ticks: { font: { size: 9 }, color: 'rgba(255,255,255,0.35)', maxRotation: 0 },
-        grid: { display: false }, border: { display: false }
-      },
-      y: {
-        min: 0, max: 60,
-        ticks: { font: { size: 9.5 }, stepSize: 15, color: 'rgba(255,255,255,0.35)',
-          callback: v => v === 0 ? '' : `${v}m` },
-        grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false },
-        title: { display: true, text: 'minutes', font: { size: 9 }, color: 'rgba(255,255,255,0.25)' }
+    scales:{
+      x:{ ticks:{font:{size:10.5},color:'rgba(255,255,255,0.42)',maxRotation:0}, grid:{display:false}, border:{display:false} },
+      y:{ min:0, max:100,
+        ticks:{font:{size:9},stepSize:20,color:'rgba(255,255,255,0.3)',callback:v=>v===0?'':v+'m'},
+        grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false},
+        title:{display:true,text:'min',font:{size:8.5},color:'rgba(255,255,255,0.22)'}
       }
     }
   }
