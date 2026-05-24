@@ -6,7 +6,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:100%;height:290px;overflow:hidden;background:#191919;
+  html,body{width:100%;height:310px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:12px 18px 8px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
@@ -49,8 +49,8 @@
     <div class="win-divider"></div>
     <div class="win">
       <div class="win-label">Physical Peak</div>
-      <div class="win-time" style="color:#6bda87">6 – 8 PM</div>
-      <div class="win-desc" style="color:rgba(107,218,135,.55)">Best for training · peak output</div>
+      <div class="win-time" style="color:#94cfe3">6 – 8 PM</div>
+      <div class="win-desc">Best for training · peak output</div>
     </div>
     <div class="win-divider"></div>
     <div class="win">
@@ -112,7 +112,7 @@ const peakShadePlugin = {
     const{ctx,chartArea,scales}=chart; if(!chartArea)return;
     const x1=scales.x.getPixelForValue(17.9), x2=scales.x.getPixelForValue(20.1);
     ctx.save();
-    ctx.fillStyle='rgba(107,218,135,.06)';
+    ctx.fillStyle='rgba(45,125,210,.10)';
     ctx.fillRect(x1,chartArea.top,x2-x1,chartArea.bottom-chartArea.top);
     ctx.restore();
   }
