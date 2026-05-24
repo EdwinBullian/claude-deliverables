@@ -32,12 +32,12 @@
 Chart.defaults.color = 'rgba(255,255,255,0.38)';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
 
-// W21 May 18(Mon)–24(Sun). Data from Cronometer.
-// Macro calories: protein=4cal/g  carbs=4cal/g  fat=9cal/g
+// W21 May 18(Mon)–24(Sun). Data from Cronometer (pulled 2026-05-23).
+// Thu updated by Eddie same day — reflects current diary.
 const labels   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const protG    = [ 62, 133, 140,  83, 0, 0, 0];
-const carbG    = [ 45,  98, 183,  16, 0, 0, 0];
-const fatG     = [ 33,  89, 116,  46, 0, 0, 0];
+const protG    = [  62, 133, 140, 162, 0, 0, 0];
+const carbG    = [  45,  98, 183,  39, 0, 0, 0];
+const fatG     = [  33,  89, 116,  75, 0, 0, 0];
 const protCal  = protG.map(g => g*4);
 const carbCal  = carbG.map(g => g*4);
 const fatCal   = fatG.map(g => Math.round(g*9));
