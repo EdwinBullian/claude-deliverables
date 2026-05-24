@@ -1,89 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 295px; overflow: hidden; background: #191919; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    body { padding: 10px 16px 8px; display: flex; flex-direction: column; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-    .title { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.35); }
-    .badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 10px; background: rgba(74,144,196,0.15); color: rgba(74,144,196,0.8); border: 1px solid rgba(74,144,196,0.2); }
-    .chart-wrap { flex: 0 0 148px; position: relative; }
-    .divider { height: 1px; background: rgba(255,255,255,0.07); margin: 7px 0 6px; }
-    .lifts-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(255,255,255,0.22); margin-bottom: 5px; }
-    .lifts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
-    .lift-row { display: flex; justify-content: space-between; align-items: baseline; min-width: 0; }
-    .lift-name { font-size: 10px; color: rgba(255,255,255,0.48); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .lift-right { font-size: 10px; color: rgba(255,255,255,0.82); font-weight: 700; white-space: nowrap; flex-shrink: 0; margin-left: 4px; }
-    .lift-tag { font-size: 8.5px; font-weight: 400; color: rgba(255,255,255,0.25); margin-left: 2px; }
-    .footer { font-size: 8.5px; color: rgba(255,183,77,0.45); margin-top: 5px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:220px;overflow:hidden;background:#191919;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
+  body{display:flex;flex-direction:column;padding:12px 18px 8px}
+  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:8px}
+  .chart-wrap{flex:1;position:relative;min-height:0}
+  .divider{height:1px;background:rgba(255,255,255,.08);margin:7px 0}
+  .lifts{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+  .lift-row{display:flex;align-items:center;gap:6px}
+  .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;
+             white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lift-val{font-size:10px;font-weight:700;color:#5aaed4;white-space:nowrap}
+  .lift-arrow{font-size:9px;color:#6bda87}
+</style>
 </head>
 <body>
-  <div class="header">
-    <span class="title">W21 Weightlifting — May 18–24</span>
-    <span class="badge">2 of 5 sessions</span>
-  </div>
-  <div class="chart-wrap"><canvas id="chart"></canvas></div>
-  <div class="divider"></div>
-  <div class="lifts-label">Key Lifts This Week</div>
-  <div class="lifts-grid">
-    <div class="lift-row">
-      <span class="lift-name">Incline DB Press</span>
-      <span class="lift-right">55 × 8<span class="lift-tag">×4 Mon</span></span>
-    </div>
-    <div class="lift-row">
-      <span class="lift-name">DB Rows</span>
-      <span class="lift-right">35 × 12<span class="lift-tag">×3 Wed</span></span>
-    </div>
-    <div class="lift-row">
-      <span class="lift-name">Overhead Press</span>
-      <span class="lift-right">35 × 12<span class="lift-tag">×3 Mon</span></span>
-    </div>
-    <div class="lift-row">
-      <span class="lift-name">Bicep Curls</span>
-      <span class="lift-right">15 × 12<span class="lift-tag">×3 Wed</span></span>
-    </div>
-  </div>
-  <div class="footer">&#9888; Zepp re-auth needed to merge Thu/Fri sessions</div>
+<div class="stats-heading">W21 Training — Weightlifting Sessions</div>
+<div class="chart-wrap"><canvas id="chart"></canvas></div>
+<div class="divider"></div>
+<div class="lifts" id="lifts"></div>
+
 <script>
-Chart.defaults.color = 'rgba(255,255,255,0.38)';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-const labels   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const mins     = [80, 0, 80, 0, 0, 0, 0];
-const dayTypes = ['Push','','Pull','','','',''];
-const colors = mins.map((v,i) => {
-  if (i===5) return 'rgba(232,148,58,0.5)';
-  return v>0 ? 'rgba(74,144,196,0.82)' : 'rgba(255,255,255,0.055)';
+Chart.defaults.color='rgba(255,255,255,.38)';
+Chart.defaults.borderColor='rgba(255,255,255,.05)';
+
+const labels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const mins  =[   0,  80,   0,  80,   0,   0,  47];
+const types =['','Push','','Pull','','','Strength'];
+
+const colors=mins.map((v,i)=>{
+  if(i===6) return 'rgba(90,174,212,.85)';
+  if(v>0)   return 'rgba(45,125,210,.72)';
+  return 'rgba(255,255,255,.04)';
 });
-new Chart(document.getElementById('chart').getContext('2d'), {
+
+new Chart(document.getElementById('chart').getContext('2d'),{
   type:'bar',
-  data:{ labels, datasets:[{ data:mins, backgroundColor:colors, borderRadius:4, borderSkipped:false, barPercentage:0.62 }] },
+  data:{
+    labels,
+    datasets:[{data:mins.map(v=>v||2),backgroundColor:colors,borderRadius:3,borderSkipped:false}]
+  },
   options:{
-    responsive:true, maintainAspectRatio:false, animation:false,
+    responsive:true,maintainAspectRatio:false,animation:false,
     plugins:{
       legend:{display:false},
       tooltip:{
-        backgroundColor:'#2a2a2a', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,0.65)',
-        borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+        backgroundColor:'#1e1e1e',titleColor:'#f0f0f0',bodyColor:'rgba(255,255,255,.65)',
+        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
         callbacks:{
-          label: ctx => ctx.raw===0 ? ' Rest / no data' : ' '+ctx.raw+' min  ·  '+dayTypes[ctx.dataIndex]+' Day',
-          afterLabel: ctx => ({0:'  Incline DB 55×8  ·  OHP 35×12', 2:'  DB Rows 35×12  ·  Curls 15×12'})[ctx.dataIndex]||''
+          title:ctx=>['Sun 5/17','Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23'][ctx[0].dataIndex],
+          label:ctx=>mins[ctx.dataIndex]?' '+types[ctx.dataIndex]+': '+mins[ctx.dataIndex]+' min':' Rest day'
         }
       }
     },
     scales:{
-      x:{ ticks:{font:{size:10.5},color:'rgba(255,255,255,0.42)',maxRotation:0}, grid:{display:false}, border:{display:false} },
-      y:{ min:0, max:100,
-        ticks:{font:{size:9},stepSize:20,color:'rgba(255,255,255,0.3)',callback:v=>v===0?'':v+'m'},
-        grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false},
-        title:{display:true,text:'min',font:{size:8.5},color:'rgba(255,255,255,0.22)'}
-      }
+      x:{ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
+      y:{min:0,max:100,
+         ticks:{font:{size:9},color:'rgba(255,255,255,.3)',callback:v=>v===0?'':v+'m'},
+         grid:{color:'rgba(255,255,255,.05)'},border:{display:false}}
     }
   }
+});
+
+const lifts=[
+  {name:'Incline DB Press',val:'55 lb × 8', arrow:'→ try 60'},
+  {name:'Overhead Press',  val:'35 lb × 12',arrow:'→ try 40'},
+  {name:'DB Rows',         val:'35 lb × 12',arrow:'→ try 40'},
+  {name:'Bicep Curls',     val:'15 lb × 12',arrow:'→ try 20'},
+];
+const container=document.getElementById('lifts');
+lifts.forEach(l=>{
+  const row=document.createElement('div');
+  row.className='lift-row';
+  row.innerHTML=`<span class="lift-name">${l.name}</span><span class="lift-val">${l.val}</span><span class="lift-arrow">${l.arrow}</span>`;
+  container.appendChild(row);
 });
 </script>
 </body>
