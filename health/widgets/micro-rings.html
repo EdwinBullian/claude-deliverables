@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:220px;overflow:hidden;background:#191919;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
+  body{display:flex;flex-direction:column;padding:12px 18px 8px}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+         color:rgba(255,255,255,.35)}
+  .score-badge{font-size:9px;font-weight:700;color:#e8c93a;letter-spacing:.3px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px 0;flex:1;min-height:0}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:1px;padding:2px 0}
+  .ring-lbl{font-size:7.5px;font-weight:700;text-transform:uppercase;
+            letter-spacing:.25px;color:rgba(255,255,255,.4);text-align:center;
+            white-space:nowrap}
+  .ring-sub{font-size:6.5px;color:rgba(255,255,255,.22);text-align:center}
+  .footer{font-size:7.5px;color:rgba(255,255,255,.2);margin-top:4px;padding-top:4px;
+          border-top:1px solid rgba(255,255,255,.06)}
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="title">Micronutrients — 6-day avg (W21)</span>
+  <span class="score-badge">Score 69%</span>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">6 of 7 days logged &nbsp;·&nbsp; RDI for adult males &nbsp;·&nbsp; ↓ = upper limit</div>
+
+<script>
+const C = 2 * Math.PI * 17; // r=17, C≈106.81
+
+function arcColor(pct, upperLimit) {
+  if (upperLimit) {
+    // Lower is better — show green if well below limit
+    if (pct <= 70) return '#6bda87';
+    if (pct <= 90) return '#5aaed4';
+    return '#e8943a';
+  }
+  if (pct >= 90) return '#6bda87';
+  if (pct >= 70) return '#5aaed4';
+  if (pct >= 50) return '#e8c93a';
+  return '#e8943a';
+}
+
+function ring(rawPct, label, sub, upperLimit) {
+  const capped   = Math.min(rawPct, 100);
+  const fill     = (capped / 100) * C;
+  const gap      = C - fill;
+  const col      = arcColor(rawPct, upperLimit);
+  const display  = rawPct >= 100 ? '✓' : capped + '%';
+  const fSize    = rawPct >= 100 ? 10 : 8.5;
+
+  return `<div class="cell">
+    <svg viewBox="0 0 40 40" width="46" height="46">
+      <circle cx="20" cy="20" r="17" fill="none"
+        stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+      <circle cx="20" cy="20" r="17" fill="none"
+        stroke="${col}" stroke-width="5"
+        stroke-dasharray="${fill.toFixed(2)} ${gap.toFixed(2)}"
+        transform="rotate(-90 20 20)"
+        stroke-linecap="butt"/>
+      <text x="20" y="20.5" text-anchor="middle" dominant-baseline="middle"
+        fill="${col}" font-size="${fSize}" font-weight="800"
+        font-family="-apple-system,BlinkMacSystemFont,sans-serif">${display}</text>
+    </svg>
+    <div class="ring-lbl">${label}${upperLimit ? ' ↓' : ''}</div>
+    <div class="ring-sub">${sub}</div>
+  </div>`;
+}
+
+// Row 1 — minerals
+// Row 2 — vitamins + fiber + iron
+const nutrients = [
+  { pct:36,  label:'Fiber',     sub:'14g/38g',   up:false },
+  { pct:40,  label:'Calcium',   sub:'401mg/1g',  up:false },
+  { pct:45,  label:'Magnesium', sub:'179mg/400', up:false },
+  { pct:51,  label:'Potassium', sub:'2.4g/4.7g', up:false },
+  { pct:78,  label:'Sodium',    sub:'1.8g/2.3g', up:true  },
+  { pct:145, label:'Iron',      sub:'11.6mg/8',  up:false },
+  { pct:105, label:'Vitamin A', sub:'945/900',   up:false },
+  { pct:253, label:'Vitamin C', sub:'228mg/90',  up:false },
+];
+
+document.getElementById('grid').innerHTML =
+  nutrients.map(n => ring(n.pct, n.label, n.sub, n.up)).join('');
+</script>
+</body>
+</html>
