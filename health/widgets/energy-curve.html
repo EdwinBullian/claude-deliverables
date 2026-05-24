@@ -6,39 +6,73 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:100%;height:280px;overflow:hidden;background:#191919;
+  html,body{width:100%;height:290px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:12px 18px 8px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
   .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
          color:rgba(255,255,255,.35)}
-  .peak-badge{font-size:9px;font-weight:700;color:#6bda87;letter-spacing:.3px}
+  .now-badge{font-size:9px;font-weight:700;color:#94cfe3;letter-spacing:.3px}
+  .body{display:flex;gap:14px;flex:1;min-height:0}
   .chart-wrap{flex:1;position:relative;min-height:0}
-  .footer{font-size:8px;color:rgba(74,144,196,.45);margin-top:3px;padding-top:3px;
+  .side{width:120px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;
+        justify-content:center}
+  .win{display:flex;flex-direction:column;gap:2px}
+  .win-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;
+              color:rgba(255,255,255,.32)}
+  .win-time{font-size:10px;font-weight:700;color:#5aaed4}
+  .win-desc{font-size:8px;color:rgba(255,255,255,.42);line-height:1.3}
+  .win-divider{height:1px;background:rgba(255,255,255,.06)}
+  .footer{font-size:7.5px;color:rgba(90,174,212,.40);margin-top:3px;padding-top:3px;
           border-top:1px solid rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
 <div class="header">
   <span class="title">Daily Energy — May 23</span>
-  <span class="peak-badge">Peak 6–8 PM</span>
+  <span class="now-badge" id="nowbadge">—</span>
 </div>
-<div class="chart-wrap"><canvas id="chart"></canvas></div>
+<div class="body">
+  <div class="chart-wrap"><canvas id="chart"></canvas></div>
+  <div class="side">
+    <div class="win">
+      <div class="win-label">Morning</div>
+      <div class="win-time">10 AM – 12 PM</div>
+      <div class="win-desc">Low start · light tasks, admin</div>
+    </div>
+    <div class="win-divider"></div>
+    <div class="win">
+      <div class="win-label">Cognitive Peak</div>
+      <div class="win-time">1 – 4 PM</div>
+      <div class="win-desc">Deep work · studying · finance</div>
+    </div>
+    <div class="win-divider"></div>
+    <div class="win">
+      <div class="win-label">Physical Peak</div>
+      <div class="win-time" style="color:#6bda87">6 – 8 PM</div>
+      <div class="win-desc" style="color:rgba(107,218,135,.55)">Best for training · peak output</div>
+    </div>
+    <div class="win-divider"></div>
+    <div class="win">
+      <div class="win-label">Wind Down</div>
+      <div class="win-time" style="color:#94cfe3">9 PM+</div>
+      <div class="win-desc">Light reading · avoid screens</div>
+    </div>
+  </div>
+</div>
 <div class="footer">Wake 10:06 AM &nbsp;·&nbsp; Strength 47 min &nbsp;·&nbsp; No stims &nbsp;·&nbsp; Natural curve</div>
 
 <script>
 Chart.defaults.color = 'rgba(255,255,255,.38)';
 Chart.defaults.borderColor = 'rgba(255,255,255,.05)';
 
-// Hourly energy 0–23, based on: wake 10:06 AM, strength session ~afternoon, no caffeine
-// Scale 0–100 representing subjective cognitive + physical energy
 const energyData = [
-  28, 18, 10, 6, 5, 5,    // 12AM–5AM (asleep)
-  6, 8, 10, 14,            // 6AM–9AM (still sleeping, light phase)
-  30, 52, 65, 60,          // 10AM–1PM (wake, ramp up)
-  68, 76, 72,              // 2PM–4PM (afternoon peak)
-  80, 82, 78,              // 5PM–7PM (post-workout glow, peak window)
-  66, 52, 38, 26           // 8PM–11PM (wind down)
+  28, 18, 10, 6, 5, 5,
+  6, 8, 10, 14,
+  30, 52, 65, 60,
+  68, 76, 72,
+  80, 82, 78,
+  66, 52, 38, 26
 ];
 
 const hours = Array.from({length:24},(_,i)=>i);
@@ -49,131 +83,104 @@ const labels = hours.map(h => {
   return (h-12)+'p';
 });
 
-// Dynamic NOW marker
 const nowHour = new Date().getHours() + new Date().getMinutes() / 60;
+const nowLabel = (() => {
+  const h = Math.floor(nowHour);
+  const m = Math.round((nowHour - h) * 60).toString().padStart(2,'0');
+  if (h === 0) return `12:${m} AM`;
+  if (h < 12)  return `${h}:${m} AM`;
+  if (h === 12) return `12:${m} PM`;
+  return `${h-12}:${m} PM`;
+})();
+document.getElementById('nowbadge').textContent = `Now ${nowLabel}`;
 
-// Plugins
 const sleepShadePlugin = {
-  id: 'sleepShade',
-  beforeDraw(chart) {
-    const {ctx, chartArea, scales} = chart;
-    if (!chartArea) return;
-    // Sleep window: ~2AM(2) to 10AM(10)
-    const x1 = scales.x.getPixelForValue(1.9);
-    const x2 = scales.x.getPixelForValue(10.1);
+  id:'sleepShade',
+  beforeDraw(chart){
+    const{ctx,chartArea,scales}=chart; if(!chartArea)return;
+    const x1=scales.x.getPixelForValue(1.9), x2=scales.x.getPixelForValue(10.1);
     ctx.save();
-    ctx.fillStyle = 'rgba(45,125,210,.07)';
-    ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+    ctx.fillStyle='rgba(45,125,210,.07)';
+    ctx.fillRect(x1,chartArea.top,x2-x1,chartArea.bottom-chartArea.top);
     ctx.restore();
   }
 };
 
 const peakShadePlugin = {
-  id: 'peakShade',
-  beforeDraw(chart) {
-    const {ctx, chartArea, scales} = chart;
-    if (!chartArea) return;
-    // Peak window: 6PM–8PM (18–20)
-    const x1 = scales.x.getPixelForValue(17.9);
-    const x2 = scales.x.getPixelForValue(20.1);
+  id:'peakShade',
+  beforeDraw(chart){
+    const{ctx,chartArea,scales}=chart; if(!chartArea)return;
+    const x1=scales.x.getPixelForValue(17.9), x2=scales.x.getPixelForValue(20.1);
     ctx.save();
-    ctx.fillStyle = 'rgba(107,218,135,.07)';
-    ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+    ctx.fillStyle='rgba(107,218,135,.06)';
+    ctx.fillRect(x1,chartArea.top,x2-x1,chartArea.bottom-chartArea.top);
     ctx.restore();
   }
 };
 
 const nowLinePlugin = {
-  id: 'nowLine',
-  afterDraw(chart) {
-    const {ctx, chartArea, scales} = chart;
-    if (!chartArea) return;
-    if (nowHour < 0 || nowHour > 23) return;
-    const x = scales.x.getPixelForValue(nowHour);
+  id:'nowLine',
+  afterDraw(chart){
+    const{ctx,chartArea,scales}=chart; if(!chartArea)return;
+    if(nowHour<0||nowHour>23)return;
+    const x=scales.x.getPixelForValue(nowHour);
     ctx.save();
-    ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = 'rgba(255,255,255,.25)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x, chartArea.top);
-    ctx.lineTo(x, chartArea.bottom);
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.35)';
-    ctx.font = '7.5px Inter,system-ui,sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('NOW', x, chartArea.top + 8);
+    ctx.setLineDash([3,3]);
+    ctx.strokeStyle='rgba(148,207,227,.40)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,chartArea.top);ctx.lineTo(x,chartArea.bottom);ctx.stroke();
     ctx.restore();
   }
 };
 
-// Gradient fill
-const canvas = document.getElementById('chart');
-const ctx = canvas.getContext('2d');
-const gradient = ctx.createLinearGradient(0, 0, 0, 220);
-gradient.addColorStop(0, 'rgba(90,174,212,.35)');
-gradient.addColorStop(1, 'rgba(90,174,212,.02)');
+const canvas=document.getElementById('chart');
+const ctx=canvas.getContext('2d');
+const gradient=ctx.createLinearGradient(0,0,0,200);
+gradient.addColorStop(0,'rgba(90,174,212,.30)');
+gradient.addColorStop(1,'rgba(90,174,212,.01)');
 
-new Chart(ctx, {
-  type: 'line',
-  plugins: [sleepShadePlugin, peakShadePlugin, nowLinePlugin],
-  data: {
+new Chart(ctx,{
+  type:'line',
+  plugins:[sleepShadePlugin,peakShadePlugin,nowLinePlugin],
+  data:{
     labels,
-    datasets: [{
-      data: energyData,
-      borderColor: '#5aaed4',
-      borderWidth: 2,
-      backgroundColor: gradient,
-      fill: true,
-      tension: 0.45,
-      pointRadius: 0,
-      pointHoverRadius: 4,
-      pointHoverBackgroundColor: '#5aaed4',
+    datasets:[{
+      data:energyData,
+      borderColor:'#5aaed4',
+      borderWidth:2,
+      backgroundColor:gradient,
+      fill:true,
+      tension:0.45,
+      pointRadius:0,
+      pointHoverRadius:4,
+      pointHoverBackgroundColor:'#5aaed4',
     }]
   },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    plugins: {
-      legend: {display: false},
-      tooltip: {
-        backgroundColor: '#1e1e1e',
-        titleColor: '#f0f0f0',
-        bodyColor: 'rgba(255,255,255,.65)',
-        borderColor: 'rgba(255,255,255,.1)',
-        borderWidth: 1,
-        callbacks: {
-          title: ctx => {
-            const h = ctx[0].dataIndex;
-            const label = h === 0 ? '12 AM' : h < 12 ? h+' AM' : h === 12 ? '12 PM' : (h-12)+' PM';
-            return label;
+  options:{
+    responsive:true,maintainAspectRatio:false,animation:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1e1e1e',titleColor:'#f0f0f0',bodyColor:'rgba(255,255,255,.65)',
+        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
+        callbacks:{
+          title:ctx=>{
+            const h=ctx[0].dataIndex;
+            return h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM';
           },
-          label: ctx => ' Energy: ' + ctx.raw + '%'
+          label:ctx=>' Energy: '+ctx.raw+'%'
         }
       }
     },
-    scales: {
-      x: {
-        ticks: {
-          font: {size: 9},
-          color: 'rgba(255,255,255,.35)',
-          maxRotation: 0,
-          maxTicksLimit: 12,
-        },
-        grid: {display: false},
-        border: {display: false}
+    scales:{
+      x:{
+        ticks:{font:{size:8.5},color:'rgba(255,255,255,.35)',maxRotation:0,maxTicksLimit:12},
+        grid:{display:false},border:{display:false}
       },
-      y: {
-        min: 0,
-        max: 100,
-        ticks: {
-          font: {size: 9},
-          color: 'rgba(255,255,255,.3)',
-          stepSize: 25,
-          callback: v => v === 0 ? '' : v + '%'
-        },
-        grid: {color: 'rgba(255,255,255,.04)'},
-        border: {display: false}
+      y:{
+        min:0,max:100,
+        ticks:{font:{size:8.5},color:'rgba(255,255,255,.28)',stepSize:25,callback:v=>v===0?'':v+'%'},
+        grid:{color:'rgba(255,255,255,.04)'},border:{display:false}
       }
     }
   }
