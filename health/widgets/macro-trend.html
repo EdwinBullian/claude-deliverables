@@ -13,12 +13,12 @@
   .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
          color:rgba(255,255,255,.35)}
   .header-right{display:flex;align-items:center;gap:10px}
-  .score-badge{font-size:9px;font-weight:700;color:#5aaed4;letter-spacing:.3px}
+  .score-badge{font-size:9px;font-weight:700;color:#6bda87;letter-spacing:.3px}
   .legend{display:flex;gap:10px}
   .leg{display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,.38)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
   .chart-wrap{flex:1;position:relative;min-height:0}
-  .footer{font-size:8.5px;color:rgba(74,144,196,.42);margin-top:3px;padding-top:3px;
+  .footer{font-size:8.5px;color:rgba(107,218,135,.42);margin-top:3px;padding-top:3px;
           border-top:1px solid rgba(255,255,255,.06)}
 </style>
 </head>
@@ -30,7 +30,7 @@
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:#6bda87"></div>Protein</div>
       <div class="leg"><div class="leg-dot" style="background:#5aaed4"></div>Carbs</div>
-      <div class="leg"><div class="leg-dot" style="background:#c4804a"></div>Fat</div>
+      <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Fat</div>
     </div>
   </div>
 </div>
@@ -40,7 +40,6 @@
 Chart.defaults.color='rgba(255,255,255,.38)';
 Chart.defaults.borderColor='rgba(255,255,255,.05)';
 
-// May 17(Sun)–23(Sat). From Cronometer (refreshed 2026-05-23).
 const labels  =['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const dates   =['May 17','May 18','May 19','May 20','May 21','May 22','May 23'];
 const protG   =[102,  62, 133, 140, 162, 164, 162];
@@ -52,9 +51,9 @@ const protCal = protG.map(g=>g*4);
 const carbCal = carbG.map(g=>g*4);
 const fatCal  = fatG.map(g=>Math.round(g*9));
 
-const pa = i=>hasData[i]?'rgba(107,218,135,.85)':'rgba(255,255,255,.04)';
+const pa = i=>hasData[i]?'rgba(107,218,135,.88)':'rgba(255,255,255,.04)';
 const ca = i=>hasData[i]?'rgba(90,174,212,.82)':'transparent';
-const fa = i=>hasData[i]?'rgba(196,128,74,.80)':'transparent';
+const fa = i=>hasData[i]?'rgba(232,148,58,.82)':'transparent';
 
 const targetPlugin={
   id:'target',
