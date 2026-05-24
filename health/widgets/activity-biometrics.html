@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Activity & Biometrics</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;
+       padding:14px 16px 10px;font-size:13px;min-height:0}
+
+  .top-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .stat-card{background:#16213e;border-radius:8px;padding:9px 10px;text-align:center}
+  .stat-card .val{font-size:19px;font-weight:700;color:#a8d8ea;line-height:1.1}
+  .stat-card .val.green{color:#6bda87}
+  .stat-card .val.orange{color:#e8943a}
+  .stat-card .lbl{font-size:10px;color:#778;margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
+
+  .section-title{font-size:10px;color:#556;letter-spacing:.8px;text-transform:uppercase;
+                 margin-bottom:6px;margin-top:10px}
+
+  /* Steps bar chart */
+  .bars{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;align-items:end;height:54px}
+  .bar-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;height:100%}
+  .bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height .3s}
+  .bar.today{background:#e8943a}
+  .bar.normal{background:#4a90c4}
+  .bar-day{font-size:9px;color:#667;text-align:center}
+  .bar-steps{font-size:8px;color:#889;text-align:center;margin-bottom:1px}
+
+  /* Biometrics grid */
+  .bio-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:2px}
+  .bio-cell{background:#16213e;border-radius:5px;padding:5px 3px;text-align:center}
+  .bio-cell .day{font-size:9px;color:#556;margin-bottom:2px}
+  .bio-cell .rhr{font-size:12px;font-weight:600}
+  .bio-cell .rhr.high{color:#e8943a}
+  .bio-cell .rhr.low{color:#6bda87}
+  .bio-cell .rhr.norm{color:#a8d8ea}
+  .bio-cell .slp{font-size:9px;color:#778;margin-top:1px}
+
+  /* Today workout */
+  .workout-row{display:flex;align-items:center;gap:10px;background:#16213e;
+               border-radius:8px;padding:8px 12px;margin-top:8px}
+  .workout-row .wlbl{font-size:10px;color:#a8d8ea;font-weight:700;text-transform:uppercase;
+                      letter-spacing:.5px;flex-shrink:0}
+  .workout-row .wval{font-size:12px;color:#e0e0e0}
+  .workout-row .wdot{color:#444;margin:0 4px}
+
+  .footer{margin-top:8px;font-size:9.5px;color:#556;text-align:center;padding-top:6px;
+          border-top:1px solid #222}
+</style>
+</head>
+<body>
+
+<!-- Today snapshot -->
+<div class="top-row">
+  <div class="stat-card">
+    <div class="val green">52</div>
+    <div class="lbl">RHR bpm</div>
+  </div>
+  <div class="stat-card">
+    <div class="val">5,369</div>
+    <div class="lbl">Steps today</div>
+  </div>
+  <div class="stat-card">
+    <div class="val">70</div>
+    <div class="lbl">Avg HR bpm</div>
+  </div>
+  <div class="stat-card">
+    <div class="val orange">81</div>
+    <div class="lbl">Sleep score</div>
+  </div>
+</div>
+
+<!-- Steps this week -->
+<div class="section-title">Steps — W21</div>
+<div class="bars" id="stepBars"></div>
+
+<!-- RHR + Sleep grid -->
+<div class="section-title" style="margin-top:12px">RHR &amp; Sleep Score — W21</div>
+<div class="bio-grid">
+  <!-- Mon -->
+  <div class="bio-cell">
+    <div class="day">Mon</div>
+    <div class="rhr norm">54</div>
+    <div class="slp">💤 75</div>
+  </div>
+  <!-- Tue -->
+  <div class="bio-cell">
+    <div class="day">Tue</div>
+    <div class="rhr norm">54</div>
+    <div class="slp">💤 72</div>
+  </div>
+  <!-- Wed -->
+  <div class="bio-cell">
+    <div class="day">Wed</div>
+    <div class="rhr norm">54</div>
+    <div class="slp">💤 74</div>
+  </div>
+  <!-- Thu -->
+  <div class="bio-cell">
+    <div class="day">Thu</div>
+    <div class="rhr high">60</div>
+    <div class="slp">💤 81</div>
+  </div>
+  <!-- Fri -->
+  <div class="bio-cell">
+    <div class="day">Fri</div>
+    <div class="rhr norm">55</div>
+    <div class="slp">💤 73</div>
+  </div>
+  <!-- Sat (today) -->
+  <div class="bio-cell" style="background:#1e2e4a;border:1px solid #e8943a33">
+    <div class="day" style="color:#e8943a">Sat</div>
+    <div class="rhr low">52</div>
+    <div class="slp">💤 81</div>
+  </div>
+</div>
+
+<!-- Today's workout -->
+<div class="workout-row">
+  <div class="wlbl">Today</div>
+  <div class="wval">💪 Strength<span class="wdot">·</span>47 min<span class="wdot">·</span>225 cal<span class="wdot">·</span>avg HR 98</div>
+</div>
+
+<div class="footer">
+  W21 avg: 6,934 steps/day · RHR 54.8 bpm · Sleep score 76 · HRV: not available (enable HealthKit export in Zepp app)
+</div>
+
+<script>
+const days   = ['Mon','Tue','Wed','Thu','Fri','Sat'];
+const steps  = [9666, 9757, 7815, 6200, 2797, 5369];
+const max    = Math.max(...steps);
+const container = document.getElementById('stepBars');
+
+days.forEach((d, i) => {
+  const pct = steps[i] / max;
+  const isToday = i === 5;
+  const wrap = document.createElement('div');
+  wrap.className = 'bar-wrap';
+  wrap.innerHTML = `
+    <div class="bar-steps">${steps[i].toLocaleString()}</div>
+    <div class="bar ${isToday ? 'today' : 'normal'}" style="height:${Math.max(pct*44,3).toFixed(1)}px"></div>
+    <div class="bar-day">${d}</div>
+  `;
+  container.appendChild(wrap);
+});
+</script>
+</body>
+</html>
