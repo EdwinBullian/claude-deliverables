@@ -30,7 +30,7 @@
   </div>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
-<div class="footer">&#128167; Hydration not tracked &nbsp;·&nbsp; Target: 3,000 kcal &nbsp;·&nbsp; 200g protein</div>
+<div class="footer">Target: 3,000 kcal &nbsp;·&nbsp; 200g protein &nbsp;·&nbsp; Fri from app screenshot</div>
 <script>
 Chart.defaults.color='rgba(255,255,255,.38)';
 Chart.defaults.borderColor='rgba(255,255,255,.05)';
@@ -38,10 +38,10 @@ Chart.defaults.borderColor='rgba(255,255,255,.05)';
 // May 17(Sun)–23(Sat). From Cronometer (refreshed 2026-05-23).
 const labels  =['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const dates   =['May 17','May 18','May 19','May 20','May 21','May 22','May 23'];
-const protG   =[102,  62, 133, 140, 162,   0, 162];
-const carbG   =[ 54,  45,  98, 183,  39,   0, 122];
-const fatG    =[ 80,  33,  89, 116,  75,   0, 109];
-const hasData = protG.map(g=>g>0);
+const protG   =[102,  62, 133, 140, 162, 164, 162];
+const carbG   =[ 54,  45,  98, 183,  39, 107, 122];
+const fatG    =[ 80,  33,  89, 116,  75,  82, 109];
+const hasData = [true, true, true, true, true, true, true];
 
 const protCal = protG.map(g=>g*4);
 const carbCal = carbG.map(g=>g*4);
