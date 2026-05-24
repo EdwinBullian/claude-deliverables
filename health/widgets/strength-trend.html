@@ -6,13 +6,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:100%;height:220px;overflow:hidden;background:#191919;
+  html,body{width:100%;height:290px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
-  body{display:flex;flex-direction:column;padding:12px 18px 8px}
+  body{display:flex;flex-direction:column;padding:14px 18px 10px}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:8px}
+    letter-spacing:.6px;color:rgba(255,255,255,.35)}
+  .legend{display:flex;gap:10px}
+  .leg{display:flex;align-items:center;gap:4px;font-size:8.5px;color:rgba(255,255,255,.38)}
+  .leg-dot{width:8px;height:8px;border-radius:2px}
   .chart-wrap{flex:1;position:relative;min-height:0}
-  .divider{height:1px;background:rgba(255,255,255,.08);margin:7px 0}
+  .divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
   .lifts{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
   .lift-row{display:flex;align-items:center;gap:6px}
   .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;
@@ -22,7 +26,14 @@
 </style>
 </head>
 <body>
-<div class="stats-heading">W21 Training — Weightlifting Sessions</div>
+<div class="header">
+  <div class="stats-heading">W21 Training — Weightlifting Sessions</div>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:rgba(45,125,210,.85)"></div>Push</div>
+    <div class="leg"><div class="leg-dot" style="background:rgba(107,218,135,.85)"></div>Pull</div>
+    <div class="leg"><div class="leg-dot" style="background:rgba(90,174,212,.90)"></div>Strength</div>
+  </div>
+</div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
 <div class="divider"></div>
 <div class="lifts" id="lifts"></div>
@@ -35,9 +46,15 @@ const labels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const mins  =[   0,  80,   0,  80,   0,   0,  47];
 const types =['','Push','','Pull','','','Strength'];
 
-const colors=mins.map((v,i)=>{
-  if(i===6) return 'rgba(90,174,212,.85)';
-  if(v>0)   return 'rgba(45,125,210,.72)';
+// Color by workout type
+const colorMap = {
+  'Push':     'rgba(45,125,210,.85)',
+  'Pull':     'rgba(107,218,135,.85)',
+  'Strength': 'rgba(90,174,212,.90)',
+};
+
+const colors = mins.map((v, i) => {
+  if (v > 0 && colorMap[types[i]]) return colorMap[types[i]];
   return 'rgba(255,255,255,.04)';
 });
 
