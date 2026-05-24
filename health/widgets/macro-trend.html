@@ -1,128 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 218px; overflow: hidden; background: #191919; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    body { padding: 10px 16px 6px; display: flex; flex-direction: column; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .title { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.35); }
-    .legend { display: flex; gap: 10px; }
-    .leg { display: flex; align-items: center; gap: 4px; font-size: 9px; color: rgba(255,255,255,0.38); }
-    .leg-dot { width: 8px; height: 8px; border-radius: 2px; }
-    .chart-wrap { flex: 1; position: relative; min-height: 0; }
-    .hydration { font-size: 8.5px; color: rgba(74,144,196,0.42); margin-top: 3px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:220px;overflow:hidden;background:#191919;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
+  body{display:flex;flex-direction:column;padding:12px 18px 8px}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+         color:rgba(255,255,255,.35)}
+  .legend{display:flex;gap:10px}
+  .leg{display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,.38)}
+  .leg-dot{width:8px;height:8px;border-radius:2px}
+  .chart-wrap{flex:1;position:relative;min-height:0}
+  .footer{font-size:8.5px;color:rgba(74,144,196,.42);margin-top:3px;padding-top:3px;
+          border-top:1px solid rgba(255,255,255,.06)}
+</style>
 </head>
 <body>
-  <div class="header">
-    <span class="title">W21 Macro Breakdown — May 18–24</span>
-    <div class="legend">
-      <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Protein</div>
-      <div class="leg"><div class="leg-dot" style="background:#4a90c4"></div>Carbs</div>
-      <div class="leg"><div class="leg-dot" style="background:#c45a5a"></div>Fat</div>
-    </div>
+<div class="header">
+  <span class="title">W21 Macros — May 17–23</span>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:#6bda87"></div>Protein</div>
+    <div class="leg"><div class="leg-dot" style="background:#5aaed4"></div>Carbs</div>
+    <div class="leg"><div class="leg-dot" style="background:#c4804a"></div>Fat</div>
   </div>
-  <div class="chart-wrap"><canvas id="chart"></canvas></div>
-  <div class="hydration">&#128167; Hydration not tracked — log water in Cronometer to see here</div>
+</div>
+<div class="chart-wrap"><canvas id="chart"></canvas></div>
+<div class="footer">&#128167; Hydration not tracked &nbsp;·&nbsp; Target: 3,000 kcal &nbsp;·&nbsp; 200g protein</div>
 <script>
-Chart.defaults.color = 'rgba(255,255,255,0.38)';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+Chart.defaults.color='rgba(255,255,255,.38)';
+Chart.defaults.borderColor='rgba(255,255,255,.05)';
 
-// W21 May 18(Mon)–24(Sun). Data from Cronometer (pulled 2026-05-23).
-// Thu updated by Eddie same day — reflects current diary.
-const labels   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const protG    = [  62, 133, 140, 162, 0, 0, 0];
-const carbG    = [  45,  98, 183,  39, 0, 0, 0];
-const fatG     = [  33,  89, 116,  75, 0, 0, 0];
-const protCal  = protG.map(g => g*4);
-const carbCal  = carbG.map(g => g*4);
-const fatCal   = fatG.map(g => Math.round(g*9));
-const hasData  = protG.map(g => g > 0);
+// May 17(Sun)–23(Sat). From Cronometer (refreshed 2026-05-23).
+const labels  =['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const dates   =['May 17','May 18','May 19','May 20','May 21','May 22','May 23'];
+const protG   =[102,  62, 133, 140, 162,   0, 162];
+const carbG   =[ 54,  45,  98, 183,  39,   0, 122];
+const fatG    =[ 80,  33,  89, 116,  75,   0, 109];
+const hasData = protG.map(g=>g>0);
 
-const targetPlugin = {
+const protCal = protG.map(g=>g*4);
+const carbCal = carbG.map(g=>g*4);
+const fatCal  = fatG.map(g=>Math.round(g*9));
+
+// Alpha per day
+const pa = i=>hasData[i]?'rgba(107,218,135,.85)':'rgba(255,255,255,.04)';
+const ca = i=>hasData[i]?'rgba(90,174,212,.82)':'transparent';
+const fa = i=>hasData[i]?'rgba(196,128,74,.80)':'transparent';
+
+const targetPlugin={
   id:'target',
   afterDraw(chart){
-    const {ctx,chartArea,scales} = chart;
-    if (!chartArea) return;
-    const y = scales.y.getPixelForValue(3000);
+    const{ctx,chartArea,scales}=chart; if(!chartArea)return;
+    const y=scales.y.getPixelForValue(3000);
     ctx.save();
     ctx.setLineDash([4,4]);
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(chartArea.left,y); ctx.lineTo(chartArea.right,y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.22)';
-    ctx.font = '8px Inter,system-ui,sans-serif';
-    ctx.fillText('3000 target', chartArea.right-58, y-3);
+    ctx.strokeStyle='rgba(255,255,255,.14)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(chartArea.left,y);ctx.lineTo(chartArea.right,y);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.2)';
+    ctx.font='8px Inter,system-ui,sans-serif';
+    ctx.fillText('3,000 target',chartArea.right-58,y-3);
     ctx.restore();
   }
 };
 
-new Chart(document.getElementById('chart').getContext('2d'), {
-  type:'bar',
-  plugins:[targetPlugin],
+new Chart(document.getElementById('chart').getContext('2d'),{
+  type:'bar', plugins:[targetPlugin],
   data:{
     labels,
     datasets:[
-      {
-        label:'Protein',
-        data: protCal,
-        backgroundColor: protCal.map((v,i) => hasData[i] ? 'rgba(232,148,58,0.85)' : 'rgba(255,255,255,0.045)'),
-        stack:'m', borderRadius:0, borderSkipped:false,
-      },
-      {
-        label:'Carbs',
-        data: carbCal,
-        backgroundColor: carbCal.map((v,i) => hasData[i] ? 'rgba(74,144,196,0.82)' : 'transparent'),
-        stack:'m', borderRadius:0, borderSkipped:false,
-      },
-      {
-        label:'Fat',
-        data: fatCal,
-        backgroundColor: fatCal.map((v,i) => hasData[i] ? 'rgba(196,90,90,0.78)' : 'transparent'),
-        stack:'m', borderRadius:[3,3,0,0], borderSkipped:false,
-      }
+      {label:'Protein',data:protCal,backgroundColor:protCal.map((_,i)=>pa(i)),stack:'m',borderRadius:0,borderSkipped:false},
+      {label:'Carbs',  data:carbCal,backgroundColor:carbCal.map((_,i)=>ca(i)),stack:'m',borderRadius:0,borderSkipped:false},
+      {label:'Fat',    data:fatCal, backgroundColor:fatCal.map((_,i)=>fa(i)), stack:'m',borderRadius:[3,3,0,0],borderSkipped:false}
     ]
   },
   options:{
-    responsive:true, maintainAspectRatio:false, animation:false,
+    responsive:true,maintainAspectRatio:false,animation:false,
     plugins:{
       legend:{display:false},
       tooltip:{
-        backgroundColor:'#2a2a2a', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,0.65)',
-        borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
-        mode:'index', intersect:false,
+        backgroundColor:'#1e1e1e',titleColor:'#f0f0f0',bodyColor:'rgba(255,255,255,.65)',
+        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
+        mode:'index',intersect:false,
         callbacks:{
-          title: ctx => {
-            const d=['Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23','Sun 5/24'];
-            return d[ctx[0].dataIndex];
+          title:ctx=>dates[ctx[0].dataIndex],
+          label:ctx=>{
+            if(!hasData[ctx.dataIndex])return null;
+            const g=[protG,carbG,fatG][ctx.datasetIndex][ctx.dataIndex];
+            const name=['Protein','Carbs','Fat'][ctx.datasetIndex];
+            return ' '+name+': '+g+'g  ('+ctx.raw+' cal)';
           },
-          label: ctx => {
-            if (!hasData[ctx.dataIndex]) return null;
-            const names=['Protein','Carbs','Fat'];
-            const grams=[protG,carbG,fatG];
-            return ' '+names[ctx.datasetIndex]+': '+grams[ctx.datasetIndex][ctx.dataIndex]+'g  ('+ctx.raw+' cal)';
-          },
-          afterBody: ctx => {
+          afterBody:ctx=>{
             const i=ctx[0].dataIndex;
-            if (!hasData[i]) return [' No log for this day'];
-            const total=protCal[i]+carbCal[i]+fatCal[i];
-            return [' Total: ~'+total+' kcal'];
+            if(!hasData[i])return[' No log — fasting day'];
+            return[' Total: ~'+(protCal[i]+carbCal[i]+fatCal[i])+' kcal'];
           }
         }
       }
     },
     scales:{
-      x:{ stacked:true,
-        ticks:{font:{size:10.5},color:'rgba(255,255,255,0.4)',maxRotation:0},
-        grid:{display:false}, border:{display:false}
+      x:{stacked:true,
+        ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},
+        grid:{display:false},border:{display:false}
       },
-      y:{ stacked:true, min:0, max:3600,
-        ticks:{font:{size:9},stepSize:900,color:'rgba(255,255,255,0.3)',callback:v=>v===0?'':Math.round(v/1000*10)/10+'k'},
-        grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false}
+      y:{stacked:true,min:0,max:3600,
+        ticks:{font:{size:9},stepSize:900,color:'rgba(255,255,255,.3)',
+               callback:v=>v===0?'':Math.round(v/1000*10)/10+'k'},
+        grid:{color:'rgba(255,255,255,.05)'},border:{display:false}
       }
     }
   }
