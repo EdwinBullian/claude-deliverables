@@ -8,14 +8,9 @@
   html,body{width:100%;height:380px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:12px 18px 8px}
-
-  /* Header */
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
-         color:rgba(255,255,255,.35)}
+  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
   .score-badge{font-size:9px;font-weight:700;color:#6bda87;letter-spacing:.3px}
-
-  /* Big macro ring row */
   .macro-ring-row{display:flex;align-items:center;gap:14px;
                   padding:6px 8px;margin-bottom:6px;
                   background:rgba(107,218,135,.05);border-radius:8px;
@@ -25,110 +20,117 @@
   .macro-ring-sub{font-size:8px;color:rgba(255,255,255,.35);margin-top:3px;line-height:1.4}
   .macro-pcts{display:flex;gap:10px;margin-top:4px}
   .mpct{font-size:8.5px;font-weight:700}
-
-  /* Section divider */
-  .section-label{font-size:8px;font-weight:700;text-transform:uppercase;
-                 letter-spacing:.4px;color:rgba(255,255,255,.22);margin-bottom:4px}
-
-  /* 2×4 micronutrient grid */
+  .section-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:rgba(255,255,255,.22);margin-bottom:4px}
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px 0;flex:1;min-height:0}
   .cell{display:flex;flex-direction:row;align-items:center;gap:8px;padding:2px 4px}
   .ring-info{display:flex;flex-direction:column;gap:1px}
-  .ring-lbl{font-size:8px;font-weight:700;text-transform:uppercase;
-            letter-spacing:.25px;color:rgba(255,255,255,.4);white-space:nowrap}
+  .ring-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.25px;color:rgba(255,255,255,.4);white-space:nowrap}
   .ring-sub{font-size:7px;color:rgba(255,255,255,.22)}
-
-  /* Footer */
-  .footer{font-size:7.5px;color:rgba(255,255,255,.2);margin-top:4px;padding-top:4px;
-          border-top:1px solid rgba(255,255,255,.06)}
+  .footer{font-size:7.5px;color:rgba(255,255,255,.2);margin-top:4px;padding-top:4px;border-top:1px solid rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
 <div class="header">
-  <span class="title">Nutrition — W21 Avg</span>
-  <span class="score-badge">Score 69%</span>
+  <span class="title" id="title">Nutrition</span>
+  <span class="score-badge" id="score">—</span>
 </div>
 
-<!-- Big macro score ring -->
 <div class="macro-ring-row" id="macroRow"></div>
 
-<div class="section-label">Micronutrients — 6-day average</div>
+<div class="section-label">Micronutrients — week average</div>
 
-<!-- 2×4 micro grid -->
 <div class="grid" id="grid"></div>
 
-<div class="footer">6 of 7 days logged &nbsp;·&nbsp; RDI for adult males &nbsp;·&nbsp; ↓ = upper limit</div>
+<div class="footer" id="footer">—</div>
 
 <script>
-// ---- Big macro ring (r=28) ----
-const MACRO_PCT = 72;
-const Cm = 2 * Math.PI * 28; // ≈175.93
-const macro_fill = (MACRO_PCT / 100) * Cm;
-const macro_gap  = Cm - macro_fill;
+const FALLBACK = {
+  week_label: 'Nutrition — W21 Avg', macro_score_pct: 72,
+  days_logged: 6, days_total: 7,
+  avg_protein_g: 132, avg_carbs_g: 93, avg_fat_g: 84,
+  target_kcal: 2500, target_protein_g: 200,
+  nutrients: [
+    {pct:36, label:'Fiber',     sub:'14g / 38g',     upper_limit:false},
+    {pct:40, label:'Calcium',   sub:'401mg / 1g',    upper_limit:false},
+    {pct:45, label:'Magnesium', sub:'179mg / 400mg', upper_limit:false},
+    {pct:51, label:'Potassium', sub:'2.4g / 4.7g',   upper_limit:false},
+    {pct:78, label:'Sodium',    sub:'1.8g / 2.3g',   upper_limit:true},
+    {pct:145,label:'Iron',      sub:'11.6mg / 8mg',  upper_limit:false},
+    {pct:105,label:'Vitamin A', sub:'945 / 900 mcg', upper_limit:false},
+    {pct:253,label:'Vitamin C', sub:'228mg / 90mg',  upper_limit:false}
+  ],
+  footer: '6 of 7 days logged · RDI for adult males · ↓ = upper limit'
+};
 
-document.getElementById('macroRow').innerHTML = `
-  <svg viewBox="0 0 68 68" width="68" height="68" style="flex-shrink:0">
-    <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7"/>
-    <circle cx="34" cy="34" r="28" fill="none" stroke="#6bda87" stroke-width="7"
-      stroke-dasharray="${macro_fill.toFixed(2)} ${macro_gap.toFixed(2)}"
-      transform="rotate(-90 34 34)" stroke-linecap="butt"/>
-    <text x="34" y="34.5" text-anchor="middle" dominant-baseline="middle"
-      fill="#6bda87" font-size="12" font-weight="800"
-      font-family="-apple-system,BlinkMacSystemFont,sans-serif">${MACRO_PCT}%</text>
-  </svg>
-  <div class="macro-ring-info">
-    <div class="macro-ring-title">Macro Score</div>
-    <div class="macro-ring-sub">Avg over 6 days &nbsp;·&nbsp; Target: 2,500 kcal · 200g protein</div>
-    <div class="macro-pcts">
-      <span class="mpct" style="color:#6bda87">Protein ~132g avg</span>
-      <span class="mpct" style="color:#5aaed4">Carbs ~93g avg</span>
-      <span class="mpct" style="color:#e8943a">Fat ~84g avg</span>
-    </div>
-  </div>`;
+function render(d) {
+  document.getElementById('title').textContent = d.week_label || 'Nutrition';
+  document.getElementById('score').textContent = 'Score ' + (d.macro_score_pct ?? '—') + '%';
+  document.getElementById('footer').textContent = d.footer || '';
 
-// ---- Small micro rings (r=15) ----
-const Cs = 2 * Math.PI * 15; // ≈94.25
-
-function ring(rawPct, label, sub, upperLimit) {
-  const capped = Math.min(rawPct, 100);
-  const fill   = (capped / 100) * Cs;
-  const gap    = Cs - fill;
-  // All arcs green, dimmer if partial
-  const col    = rawPct >= 100 ? '#6bda87' : 'rgba(107,218,135,.55)';
-  const track  = 'rgba(107,218,135,.10)';
-  const display = rawPct + '%';
-  const fSize  = rawPct >= 100 ? 7.5 : 8;
-
-  return `<div class="cell">
-    <svg viewBox="0 0 38 38" width="40" height="40" style="flex-shrink:0">
-      <circle cx="19" cy="19" r="15" fill="none" stroke="${track}" stroke-width="5"/>
-      <circle cx="19" cy="19" r="15" fill="none" stroke="${col}" stroke-width="5"
+  // Big macro ring
+  const pct = d.macro_score_pct ?? 0;
+  const Cm = 2 * Math.PI * 28;
+  const fill = (pct/100) * Cm, gap = Cm - fill;
+  document.getElementById('macroRow').innerHTML = `
+    <svg viewBox="0 0 68 68" width="68" height="68" style="flex-shrink:0">
+      <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7"/>
+      <circle cx="34" cy="34" r="28" fill="none" stroke="#6bda87" stroke-width="7"
         stroke-dasharray="${fill.toFixed(2)} ${gap.toFixed(2)}"
-        transform="rotate(-90 19 19)" stroke-linecap="butt"/>
-      <text x="19" y="19.5" text-anchor="middle" dominant-baseline="middle"
-        fill="${col}" font-size="${fSize}" font-weight="800"
-        font-family="-apple-system,BlinkMacSystemFont,sans-serif">${display}</text>
+        transform="rotate(-90 34 34)" stroke-linecap="butt"/>
+      <text x="34" y="34.5" text-anchor="middle" dominant-baseline="middle"
+        fill="#6bda87" font-size="12" font-weight="800"
+        font-family="-apple-system,BlinkMacSystemFont,sans-serif">${pct}%</text>
     </svg>
-    <div class="ring-info">
-      <div class="ring-lbl">${label}${upperLimit ? ' ↓' : ''}</div>
-      <div class="ring-sub">${sub}</div>
-    </div>
-  </div>`;
+    <div class="macro-ring-info">
+      <div class="macro-ring-title">Macro Score</div>
+      <div class="macro-ring-sub">Avg over ${d.days_logged ?? '?'} days &nbsp;·&nbsp; Target: ${(d.target_kcal||2500).toLocaleString()} kcal · ${d.target_protein_g||200}g protein</div>
+      <div class="macro-pcts">
+        <span class="mpct" style="color:#6bda87">Protein ~${d.avg_protein_g ?? '—'}g avg</span>
+        <span class="mpct" style="color:#5aaed4">Carbs ~${d.avg_carbs_g ?? '—'}g avg</span>
+        <span class="mpct" style="color:#e8943a">Fat ~${d.avg_fat_g ?? '—'}g avg</span>
+      </div>
+    </div>`;
+
+  // Small rings
+  const Cs = 2 * Math.PI * 15;
+  function ring(raw, label, sub, upper) {
+    const capped = Math.min(raw, 100);
+    const f = (capped/100) * Cs, g = Cs - f;
+    const col = raw >= 100 ? '#6bda87' : 'rgba(107,218,135,.55)';
+    const track = 'rgba(107,218,135,.10)';
+    const fSize = raw >= 100 ? 7.5 : 8;
+    return `<div class="cell">
+      <svg viewBox="0 0 38 38" width="40" height="40" style="flex-shrink:0">
+        <circle cx="19" cy="19" r="15" fill="none" stroke="${track}" stroke-width="5"/>
+        <circle cx="19" cy="19" r="15" fill="none" stroke="${col}" stroke-width="5"
+          stroke-dasharray="${f.toFixed(2)} ${g.toFixed(2)}"
+          transform="rotate(-90 19 19)" stroke-linecap="butt"/>
+        <text x="19" y="19.5" text-anchor="middle" dominant-baseline="middle"
+          fill="${col}" font-size="${fSize}" font-weight="800"
+          font-family="-apple-system,BlinkMacSystemFont,sans-serif">${raw}%</text>
+      </svg>
+      <div class="ring-info">
+        <div class="ring-lbl">${label}${upper ? ' ↓' : ''}</div>
+        <div class="ring-sub">${sub}</div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('grid').innerHTML =
+    (d.nutrients || []).map(n => ring(n.pct, n.label, n.sub, n.upper_limit)).join('');
 }
 
-const nutrients = [
-  { pct:36,  label:'Fiber',     sub:'14g / 38g',     up:false },
-  { pct:40,  label:'Calcium',   sub:'401mg / 1g',    up:false },
-  { pct:45,  label:'Magnesium', sub:'179mg / 400mg', up:false },
-  { pct:51,  label:'Potassium', sub:'2.4g / 4.7g',   up:false },
-  { pct:78,  label:'Sodium',    sub:'1.8g / 2.3g',   up:true  },
-  { pct:145, label:'Iron',      sub:'11.6mg / 8mg',  up:false },
-  { pct:105, label:'Vitamin A', sub:'945 / 900 mcg', up:false },
-  { pct:253, label:'Vitamin C', sub:'228mg / 90mg',  up:false },
-];
-
-document.getElementById('grid').innerHTML =
-  nutrients.map(n => ring(n.pct, n.label, n.sub, n.up)).join('');
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.micros_week) d = all.micros_week;
+    }
+  } catch (e) {}
+  render(d);
+})();
 </script>
 </body>
 </html>

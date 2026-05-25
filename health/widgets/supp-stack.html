@@ -27,52 +27,41 @@
 <div class="stack" id="stack"></div>
 
 <script>
-const supps = [
-  {
-    name: 'Creatine Monohydrate',
-    desc: 'Strength · power output · cell hydration',
-    dose: '5 g',
-    time: 'Post-workout or AM',
-  },
-  {
-    name: 'Vitamin D3 + K2',
-    desc: 'Bone health · immune · testosterone support',
-    dose: '5,000 IU',
-    time: 'With fat meal',
-  },
-  {
-    name: 'Magnesium Malate',
-    desc: 'Energy production · muscle function',
-    dose: '400 mg',
-    time: 'Morning',
-  },
-  {
-    name: 'Magnesium Glycinate',
-    desc: 'Sleep quality · recovery · nervous system',
-    dose: '400 mg',
-    time: 'Evening',
-  },
-  {
-    name: 'Dandelion Root',
-    desc: 'Digestion · bloat relief · liver support',
-    dose: '500 mg',
-    time: 'With meals',
-  },
+const FALLBACK = [
+  {name:'Creatine Monohydrate', desc:'Strength · power output · cell hydration', dose:'5 g',      time:'Post-workout or AM'},
+  {name:'Vitamin D3 + K2',      desc:'Bone health · immune · testosterone support', dose:'5,000 IU', time:'With fat meal'},
+  {name:'Magnesium Malate',     desc:'Energy production · muscle function',         dose:'400 mg',   time:'Morning'},
+  {name:'Magnesium Glycinate',  desc:'Sleep quality · recovery · nervous system',   dose:'400 mg',   time:'Evening'},
+  {name:'Dandelion Root',       desc:'Digestion · bloat relief · liver support',    dose:'500 mg',   time:'With meals'}
 ];
 
-const stack = document.getElementById('stack');
-stack.innerHTML = supps.map(s => `
-  <div class="row">
-    <div class="dot"></div>
-    <div class="info">
-      <div class="name">${s.name}</div>
-      <div class="desc">${s.desc}</div>
-    </div>
-    <div style="text-align:right;flex-shrink:0">
-      <div class="dose">${s.dose}</div>
-      <div class="timing">${s.time}</div>
-    </div>
-  </div>`).join('');
+function render(supps) {
+  const el = document.getElementById('stack');
+  el.innerHTML = (supps || []).map(s => `
+    <div class="row">
+      <div class="dot"></div>
+      <div class="info">
+        <div class="name">${s.name}</div>
+        <div class="desc">${s.desc || ''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="dose">${s.dose || ''}</div>
+        <div class="timing">${s.time || ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && Array.isArray(all.supplements) && all.supplements.length) d = all.supplements;
+    }
+  } catch (e) {}
+  render(d);
+})();
 </script>
 </body>
 </html>

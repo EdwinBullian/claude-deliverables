@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "last_updated_iso": "2026-05-24T06:00:00-07:00",
+    "last_updated_label": "May 24, 6:00 AM PST",
+    "sources": {
+      "zepp": {"ok": true, "last_ok_iso": "2026-05-24T06:00:00-07:00", "error": null},
+      "cronometer": {"ok": true, "last_ok_iso": "2026-05-24T06:00:00-07:00", "error": null},
+      "notion": {"ok": true, "last_ok_iso": "2026-05-24T06:00:00-07:00", "error": null}
+    },
+    "schema_version": 1
+  },
+
+  "sleep": {
+    "date_label": "May 23 — Last Night",
+    "score": 73,
+    "total_minutes": 490,
+    "total_label": "8 h 10 m",
+    "deep_minutes": 52,
+    "light_minutes": 292,
+    "rem_minutes": 146,
+    "awake_minutes": 4,
+    "bedtime_label": "1:52 AM",
+    "wake_label": "10:06 AM",
+    "resting_hr": 55,
+    "awakenings": 3
+  },
+
+  "activity": {
+    "date_label": "May 23 — Today",
+    "today": {
+      "rhr": 52,
+      "steps": 5369,
+      "avg_hr": 70,
+      "sleep_score": 81
+    },
+    "week": {
+      "labels": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "steps":  [null, 9666, 9757, 7815, 6200, 2797, 5369],
+      "rhr":    [null, 54,   54,   54,   60,   55,   52],
+      "today_index": 6
+    },
+    "today_workout": {
+      "type": "Strength",
+      "duration_min": 47,
+      "calories": 225,
+      "avg_hr": 98
+    }
+  },
+
+  "energy": {
+    "date_label": "May 23",
+    "curve_24h": [28,18,10,6,5,5,6,8,10,14,30,52,65,60,68,76,72,80,82,78,66,52,38,26],
+    "footer": "Wake 10:06 AM · Strength 47 min · No stims · Natural curve"
+  },
+
+  "macros_week": {
+    "week_label": "W21 Macros — May 17–23",
+    "macro_score_pct": 72,
+    "labels": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "dates":  ["May 17", "May 18", "May 19", "May 20", "May 21", "May 22", "May 23"],
+    "protein_g": [102, 62, 133, 140, 162, 164, 162],
+    "carbs_g":   [54, 45, 98, 183, 39, 107, 122],
+    "fat_g":     [80, 33, 89, 116, 75, 82, 109],
+    "has_data":  [true, true, true, true, true, true, true],
+    "target_kcal": 2500,
+    "target_protein_g": 200,
+    "footer": "Target: 2,500 kcal · 200g protein · Fri from app screenshot"
+  },
+
+  "micros_week": {
+    "week_label": "Nutrition — W21 Avg",
+    "macro_score_pct": 72,
+    "days_logged": 6,
+    "days_total": 7,
+    "avg_protein_g": 132,
+    "avg_carbs_g": 93,
+    "avg_fat_g": 84,
+    "target_kcal": 2500,
+    "target_protein_g": 200,
+    "nutrients": [
+      {"pct": 36,  "label": "Fiber",     "sub": "14g / 38g",     "upper_limit": false},
+      {"pct": 40,  "label": "Calcium",   "sub": "401mg / 1g",    "upper_limit": false},
+      {"pct": 45,  "label": "Magnesium", "sub": "179mg / 400mg", "upper_limit": false},
+      {"pct": 51,  "label": "Potassium", "sub": "2.4g / 4.7g",   "upper_limit": false},
+      {"pct": 78,  "label": "Sodium",    "sub": "1.8g / 2.3g",   "upper_limit": true},
+      {"pct": 145, "label": "Iron",      "sub": "11.6mg / 8mg",  "upper_limit": false},
+      {"pct": 105, "label": "Vitamin A", "sub": "945 / 900 mcg", "upper_limit": false},
+      {"pct": 253, "label": "Vitamin C", "sub": "228mg / 90mg",  "upper_limit": false}
+    ],
+    "footer": "6 of 7 days logged · RDI for adult males · ↓ = upper limit"
+  },
+
+  "strength_week": {
+    "week_label": "W21 Training — Weightlifting Sessions",
+    "labels": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "date_labels": ["Sun 5/17", "Mon 5/18", "Tue 5/19", "Wed 5/20", "Thu 5/21", "Fri 5/22", "Sat 5/23"],
+    "minutes": [0, 80, 0, 80, 0, 0, 47],
+    "types":   ["", "Push", "", "Pull", "", "", "Strength"],
+    "top_lifts": [
+      {"name": "Incline DB Press", "value": "55 lb × 8",  "next": "→ try 60"},
+      {"name": "Overhead Press",   "value": "35 lb × 12", "next": "→ try 40"},
+      {"name": "DB Rows",          "value": "35 lb × 12", "next": "→ try 40"},
+      {"name": "Bicep Curls",      "value": "15 lb × 12", "next": "→ try 20"}
+    ]
+  },
+
+  "supplements": [
+    {"name": "Creatine Monohydrate", "desc": "Strength · power output · cell hydration", "dose": "5 g",      "time": "Post-workout or AM"},
+    {"name": "Vitamin D3 + K2",      "desc": "Bone health · immune · testosterone support", "dose": "5,000 IU", "time": "With fat meal"},
+    {"name": "Magnesium Malate",     "desc": "Energy production · muscle function",          "dose": "400 mg",   "time": "Morning"},
+    {"name": "Magnesium Glycinate",  "desc": "Sleep quality · recovery · nervous system","dose": "400 mg",   "time": "Evening"},
+    {"name": "Dandelion Root",       "desc": "Digestion · bloat relief · liver support", "dose": "500 mg",   "time": "With meals"}
+  ]
+}

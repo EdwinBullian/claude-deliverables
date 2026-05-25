@@ -10,23 +10,21 @@
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:12px 18px 8px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
-         color:rgba(255,255,255,.35)}
+  .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
   .header-right{display:flex;align-items:center;gap:10px}
   .score-badge{font-size:9px;font-weight:700;color:#6bda87;letter-spacing:.3px}
   .legend{display:flex;gap:10px}
   .leg{display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,.38)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
   .chart-wrap{flex:1;position:relative;min-height:0}
-  .footer{font-size:8.5px;color:rgba(107,218,135,.42);margin-top:3px;padding-top:3px;
-          border-top:1px solid rgba(255,255,255,.06)}
+  .footer{font-size:8.5px;color:rgba(107,218,135,.42);margin-top:3px;padding-top:3px;border-top:1px solid rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
 <div class="header">
-  <span class="title">W21 Macros — May 17–23</span>
+  <span class="title" id="title">Macros</span>
   <div class="header-right">
-    <span class="score-badge">Macro Score 72%</span>
+    <span class="score-badge" id="score">—</span>
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:#6bda87"></div>Protein</div>
       <div class="leg"><div class="leg-dot" style="background:#5aaed4"></div>Carbs</div>
@@ -35,90 +33,95 @@
   </div>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
-<div class="footer">Target: 2,500 kcal &nbsp;·&nbsp; 200g protein &nbsp;·&nbsp; Fri from app screenshot</div>
+<div class="footer" id="footer">—</div>
+
 <script>
-Chart.defaults.color='rgba(255,255,255,.38)';
-Chart.defaults.borderColor='rgba(255,255,255,.05)';
-
-const labels  =['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const dates   =['May 17','May 18','May 19','May 20','May 21','May 22','May 23'];
-const protG   =[102,  62, 133, 140, 162, 164, 162];
-const carbG   =[ 54,  45,  98, 183,  39, 107, 122];
-const fatG    =[ 80,  33,  89, 116,  75,  82, 109];
-const hasData = [true, true, true, true, true, true, true];
-
-const protCal = protG.map(g=>g*4);
-const carbCal = carbG.map(g=>g*4);
-const fatCal  = fatG.map(g=>Math.round(g*9));
-
-const pa = i=>hasData[i]?'rgba(107,218,135,.88)':'rgba(255,255,255,.04)';
-const ca = i=>hasData[i]?'rgba(90,174,212,.82)':'transparent';
-const fa = i=>hasData[i]?'rgba(232,148,58,.82)':'transparent';
-
-const targetPlugin={
-  id:'target',
-  afterDraw(chart){
-    const{ctx,chartArea,scales}=chart; if(!chartArea)return;
-    const y=scales.y.getPixelForValue(2500);
-    ctx.save();
-    ctx.setLineDash([4,4]);
-    ctx.strokeStyle='rgba(255,255,255,.18)';
-    ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(chartArea.left,y);ctx.lineTo(chartArea.right,y);ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.25)';
-    ctx.font='8px Inter,system-ui,sans-serif';
-    ctx.fillText('2,500 target',chartArea.right-62,y-3);
-    ctx.restore();
-  }
+const FALLBACK = {
+  week_label: "W21 Macros — May 17–23", macro_score_pct: 72,
+  labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+  dates:  ['May 17','May 18','May 19','May 20','May 21','May 22','May 23'],
+  protein_g:[102,62,133,140,162,164,162],
+  carbs_g:  [54,45,98,183,39,107,122],
+  fat_g:    [80,33,89,116,75,82,109],
+  has_data: [true,true,true,true,true,true,true],
+  target_kcal: 2500, target_protein_g: 200,
+  footer: 'Target: 2,500 kcal · 200g protein · Fri from app screenshot'
 };
 
-new Chart(document.getElementById('chart').getContext('2d'),{
-  type:'bar', plugins:[targetPlugin],
-  data:{
-    labels,
-    datasets:[
+function render(d) {
+  Chart.defaults.color='rgba(255,255,255,.38)';
+  Chart.defaults.borderColor='rgba(255,255,255,.05)';
+
+  document.getElementById('title').textContent = d.week_label || 'Macros';
+  document.getElementById('score').textContent = 'Macro Score ' + (d.macro_score_pct ?? '—') + '%';
+  document.getElementById('footer').textContent = d.footer || '';
+
+  const protG = d.protein_g || [], carbG = d.carbs_g || [], fatG = d.fat_g || [];
+  const has = d.has_data || protG.map(() => true);
+  const dates = d.dates || d.labels;
+
+  const protCal = protG.map(g => g*4);
+  const carbCal = carbG.map(g => g*4);
+  const fatCal  = fatG.map(g => Math.round(g*9));
+
+  const pa = i => has[i] ? 'rgba(107,218,135,.88)' : 'rgba(255,255,255,.04)';
+  const ca = i => has[i] ? 'rgba(90,174,212,.82)'  : 'transparent';
+  const fa = i => has[i] ? 'rgba(232,148,58,.82)'  : 'transparent';
+
+  const target = d.target_kcal || 2500;
+  const targetPlugin = { id:'target', afterDraw(c){
+    const {ctx,chartArea,scales}=c; if(!chartArea)return;
+    const y = scales.y.getPixelForValue(target);
+    ctx.save(); ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(chartArea.left,y); ctx.lineTo(chartArea.right,y); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='8px Inter,system-ui,sans-serif';
+    ctx.fillText(target.toLocaleString()+' target', chartArea.right-62, y-3); ctx.restore();
+  }};
+
+  new Chart(document.getElementById('chart').getContext('2d'), {
+    type:'bar', plugins:[targetPlugin],
+    data:{ labels: d.labels, datasets:[
       {label:'Protein',data:protCal,backgroundColor:protCal.map((_,i)=>pa(i)),stack:'m',borderRadius:0,borderSkipped:false},
       {label:'Carbs',  data:carbCal,backgroundColor:carbCal.map((_,i)=>ca(i)),stack:'m',borderRadius:0,borderSkipped:false},
       {label:'Fat',    data:fatCal, backgroundColor:fatCal.map((_,i)=>fa(i)), stack:'m',borderRadius:[3,3,0,0],borderSkipped:false}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,animation:false,
-    plugins:{
-      legend:{display:false},
-      tooltip:{
-        backgroundColor:'#1e1e1e',titleColor:'#f0f0f0',bodyColor:'rgba(255,255,255,.65)',
-        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
-        mode:'index',intersect:false,
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{ legend:{display:false}, tooltip:{
+        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
+        borderColor:'rgba(255,255,255,.1)', borderWidth:1, mode:'index', intersect:false,
         callbacks:{
-          title:ctx=>dates[ctx[0].dataIndex],
-          label:ctx=>{
-            if(!hasData[ctx.dataIndex])return null;
-            const g=[protG,carbG,fatG][ctx.datasetIndex][ctx.dataIndex];
-            const name=['Protein','Carbs','Fat'][ctx.datasetIndex];
-            return ' '+name+': '+g+'g  ('+ctx.raw+' cal)';
+          title:(c)=>dates[c[0].dataIndex],
+          label:(c)=>{ if(!has[c.dataIndex]) return null;
+            const g=[protG,carbG,fatG][c.datasetIndex][c.dataIndex];
+            const n=['Protein','Carbs','Fat'][c.datasetIndex];
+            return ' '+n+': '+g+'g  ('+c.raw+' cal)';
           },
-          afterBody:ctx=>{
-            const i=ctx[0].dataIndex;
-            if(!hasData[i])return[' No log'];
-            return[' Total: ~'+(protCal[i]+carbCal[i]+fatCal[i])+' kcal'];
+          afterBody:(c)=>{ const i=c[0].dataIndex; if(!has[i]) return [' No log'];
+            return [' Total: ~'+(protCal[i]+carbCal[i]+fatCal[i])+' kcal'];
           }
-        }
-      }
-    },
-    scales:{
-      x:{stacked:true,
-        ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},
-        grid:{display:false},border:{display:false}
-      },
-      y:{stacked:true,min:0,max:3000,
-        ticks:{font:{size:9},stepSize:500,color:'rgba(255,255,255,.3)',
-               callback:v=>v===0?'':Math.round(v/1000*10)/10+'k'},
-        grid:{color:'rgba(255,255,255,.05)'},border:{display:false}
+        }}},
+      scales:{
+        x:{ stacked:true, ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0}, grid:{display:false}, border:{display:false}},
+        y:{ stacked:true, min:0, max:Math.max(3000, target+500),
+            ticks:{font:{size:9},stepSize:500,color:'rgba(255,255,255,.3)',
+                   callback:v=>v===0?'':Math.round(v/1000*10)/10+'k'},
+            grid:{color:'rgba(255,255,255,.05)'}, border:{display:false}}
       }
     }
-  }
-});
+  });
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.macros_week) d = all.macros_week;
+    }
+  } catch (e) {}
+  render(d);
+})();
 </script>
 </body>
 </html>

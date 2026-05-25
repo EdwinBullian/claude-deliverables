@@ -52,64 +52,94 @@
 </head>
 <body>
 
-<div class="stats-heading">May 23 — Today</div>
+<div class="stats-heading" id="date-label">—</div>
 
 <div class="today-row">
-  <div class="stat">
-    <span class="val orange">52</span>
-    <span class="lbl">RHR bpm</span>
-  </div>
-  <div class="stat">
-    <span class="val orange">5,369</span>
-    <span class="lbl">Steps</span>
-  </div>
-  <div class="stat">
-    <span class="val orange">70</span>
-    <span class="lbl">Avg HR</span>
-  </div>
-  <div class="stat">
-    <span class="val">81</span>
-    <span class="lbl">Sleep score</span>
-  </div>
+  <div class="stat"><span class="val orange" id="t-rhr">—</span>  <span class="lbl">RHR bpm</span></div>
+  <div class="stat"><span class="val orange" id="t-steps">—</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange" id="t-avg">—</span>  <span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val"        id="t-slp">—</span>  <span class="lbl">Sleep score</span></div>
 </div>
 
 <div class="divider"></div>
 
 <div class="week-grid" id="grid"></div>
 
-<div class="workout-strip">
+<div class="workout-strip" id="workout-strip" style="display:none">
   <span class="wlbl">Workout</span>
-  <span class="wval">Strength<span class="dot">·</span>47 min<span class="dot">·</span>225 cal<span class="dot">·</span>avg HR 98</span>
+  <span class="wval" id="workout-text">—</span>
 </div>
 
 <script>
-const days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const steps = [null, 9666, 9757, 7815, 6200, 2797, 5369];
-const rhr   = [null,   54,   54,   54,   60,   55,   52];
-const max   = Math.max(...steps.filter(Boolean));
+const FALLBACK = {
+  date_label: "May 23 — Today",
+  today: { rhr: 52, steps: 5369, avg_hr: 70, sleep_score: 81 },
+  week: {
+    labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    steps: [null,9666,9757,7815,6200,2797,5369],
+    rhr:   [null,54,54,54,60,55,52],
+    today_index: 6
+  },
+  today_workout: { type: 'Strength', duration_min: 47, calories: 225, avg_hr: 98 }
+};
 
-const grid = document.getElementById('grid');
-days.forEach((d, i) => {
-  const isToday = i === 6;
-  const hasData = steps[i] !== null;
-  const pct     = hasData ? (steps[i] / max * 100).toFixed(1) : 0;
+function render(d) {
+  document.getElementById('date-label').textContent = d.date_label || 'Today';
+  document.getElementById('t-rhr').textContent   = d.today?.rhr ?? '—';
+  document.getElementById('t-steps').textContent = d.today?.steps != null ? d.today.steps.toLocaleString() : '—';
+  document.getElementById('t-avg').textContent   = d.today?.avg_hr ?? '—';
+  document.getElementById('t-slp').textContent   = d.today?.sleep_score ?? '—';
 
-  let rhrClass = 'norm';
-  if (hasData) rhrClass = rhr[i] <= 53 ? 'low' : rhr[i] >= 58 ? 'high' : 'norm';
+  const days  = d.week?.labels || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const steps = d.week?.steps  || [];
+  const rhr   = d.week?.rhr    || [];
+  const todayIdx = d.week?.today_index ?? 6;
+  const maxSteps = Math.max(...steps.filter(v => v != null), 1);
 
-  const cell = document.createElement('div');
-  cell.className = 'day-cell';
-  cell.innerHTML = `
-    <div class="day-lbl${isToday?' today':''}">${d}</div>
-    <div class="bar-track">
-      <div class="bar-fill ${isToday?'today-bar':hasData?'normal-bar':'empty-bar'}"
-           style="height:${pct}%"></div>
-    </div>
-    <div class="step-val">${hasData ? (steps[i]/1000).toFixed(1)+'k' : '—'}</div>
-    <div class="rhr-val ${rhrClass}">${hasData ? rhr[i] : '—'}</div>
-  `;
-  grid.appendChild(cell);
-});
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  days.forEach((name, i) => {
+    const isToday = i === todayIdx;
+    const has = steps[i] != null;
+    const pct = has ? (steps[i] / maxSteps * 100).toFixed(1) : 0;
+    let rhrClass = 'norm';
+    if (has) rhrClass = rhr[i] <= 53 ? 'low' : rhr[i] >= 58 ? 'high' : 'norm';
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.innerHTML = `
+      <div class="day-lbl${isToday?' today':''}">${name}</div>
+      <div class="bar-track">
+        <div class="bar-fill ${isToday?'today-bar':has?'normal-bar':'empty-bar'}"
+             style="height:${pct}%"></div>
+      </div>
+      <div class="step-val">${has ? (steps[i]/1000).toFixed(1)+'k' : '—'}</div>
+      <div class="rhr-val ${rhrClass}">${has ? rhr[i] : '—'}</div>`;
+    grid.appendChild(cell);
+  });
+
+  const w = d.today_workout;
+  if (w && w.type) {
+    document.getElementById('workout-strip').style.display = 'flex';
+    document.getElementById('workout-text').innerHTML =
+      `${w.type}<span class="dot">·</span>${w.duration_min ?? '—'} min` +
+      `<span class="dot">·</span>${w.calories ?? '—'} cal` +
+      `<span class="dot">·</span>avg HR ${w.avg_hr ?? '—'}`;
+  } else {
+    document.getElementById('workout-strip').style.display = 'none';
+  }
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.activity) d = all.activity;
+    }
+  } catch (e) { /* fall back */ }
+  render(d);
+})();
 </script>
 </body>
 </html>

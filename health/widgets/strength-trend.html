@@ -10,8 +10,7 @@
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:14px 18px 10px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.6px;color:rgba(255,255,255,.35)}
+  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
   .legend{display:flex;gap:9px}
   .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.38)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
@@ -19,15 +18,14 @@
   .divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
   .lifts{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
   .lift-row{display:flex;align-items:center;gap:6px}
-  .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;
-             white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .lift-val{font-size:10px;font-weight:700;color:#e8943a;white-space:nowrap}
   .lift-arrow{font-size:9px;color:#6bda87}
 </style>
 </head>
 <body>
 <div class="header">
-  <div class="stats-heading">W21 Training — Weightlifting Sessions</div>
+  <div class="stats-heading" id="title">Training</div>
   <div class="legend">
     <div class="leg"><div class="leg-dot" style="background:#b85820"></div>Legs</div>
     <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Push</div>
@@ -40,69 +38,77 @@
 <div class="lifts" id="lifts"></div>
 
 <script>
-Chart.defaults.color='rgba(255,255,255,.38)';
-Chart.defaults.borderColor='rgba(255,255,255,.05)';
-
-const labels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const mins  =[   0,  80,   0,  80,   0,   0,  47];
-const types =['','Push','','Pull','','','Strength'];
-
-const colorMap = {
-  'Legs':       'rgba(184,88,32,.90)',
-  'Push':       'rgba(232,148,58,.90)',
-  'Pull':       'rgba(240,176,96,.85)',
-  'Strength':   'rgba(232,148,58,.85)',
-  'Basketball': 'rgba(245,208,144,.65)',
-  'Cardio':     'rgba(245,208,144,.65)',
+const FALLBACK = {
+  week_label: 'W21 Training — Weightlifting Sessions',
+  labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+  date_labels: ['Sun 5/17','Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23'],
+  minutes: [0,80,0,80,0,0,47],
+  types:   ['','Push','','Pull','','','Strength'],
+  top_lifts: [
+    {name:'Incline DB Press',value:'55 lb × 8', next:'→ try 60'},
+    {name:'Overhead Press',  value:'35 lb × 12',next:'→ try 40'},
+    {name:'DB Rows',         value:'35 lb × 12',next:'→ try 40'},
+    {name:'Bicep Curls',     value:'15 lb × 12',next:'→ try 20'}
+  ]
 };
 
-const colors = mins.map((v, i) => {
-  if (v > 0 && colorMap[types[i]]) return colorMap[types[i]];
-  if (v > 0) return 'rgba(232,148,58,.80)';
-  return 'rgba(255,255,255,.04)';
-});
+function render(d) {
+  Chart.defaults.color='rgba(255,255,255,.38)';
+  Chart.defaults.borderColor='rgba(255,255,255,.05)';
 
-new Chart(document.getElementById('chart').getContext('2d'),{
-  type:'bar',
-  data:{
-    labels,
-    datasets:[{data:mins.map(v=>v||2),backgroundColor:colors,borderRadius:3,borderSkipped:false}]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,animation:false,
-    plugins:{
-      legend:{display:false},
-      tooltip:{
-        backgroundColor:'#1e1e1e',titleColor:'#f0f0f0',bodyColor:'rgba(255,255,255,.65)',
-        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
+  document.getElementById('title').textContent = d.week_label || 'Training';
+
+  const labels = d.labels, mins = d.minutes, types = d.types, dateLbls = d.date_labels;
+  const colorMap = {
+    'Legs':'rgba(184,88,32,.90)','Push':'rgba(232,148,58,.90)',
+    'Pull':'rgba(240,176,96,.85)','Strength':'rgba(232,148,58,.85)',
+    'Basketball':'rgba(245,208,144,.65)','Cardio':'rgba(245,208,144,.65)'
+  };
+  const colors = mins.map((v,i)=> v>0 && colorMap[types[i]] ? colorMap[types[i]]
+                                : v>0 ? 'rgba(232,148,58,.80)' : 'rgba(255,255,255,.04)');
+
+  new Chart(document.getElementById('chart').getContext('2d'),{
+    type:'bar',
+    data:{ labels, datasets:[{data:mins.map(v=>v||2), backgroundColor:colors, borderRadius:3, borderSkipped:false}]},
+    options:{ responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{ legend:{display:false}, tooltip:{
+        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
+        borderColor:'rgba(255,255,255,.1)', borderWidth:1,
         callbacks:{
-          title:ctx=>['Sun 5/17','Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23'][ctx[0].dataIndex],
-          label:ctx=>mins[ctx.dataIndex]?' '+types[ctx.dataIndex]+': '+mins[ctx.dataIndex]+' min':' Rest day'
-        }
-      }
-    },
-    scales:{
-      x:{ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
-      y:{min:0,max:100,
-         ticks:{font:{size:9},color:'rgba(255,255,255,.3)',callback:v=>v===0?'':v+'m'},
-         grid:{color:'rgba(255,255,255,.05)'},border:{display:false}}
-    }
-  }
-});
+          title:(c)=>dateLbls[c[0].dataIndex],
+          label:(c)=>mins[c.dataIndex]?' '+types[c.dataIndex]+': '+mins[c.dataIndex]+' min':' Rest day'
+        }}},
+      scales:{
+        x:{ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
+        y:{min:0,max:Math.max(100, Math.max(...mins)+20),
+           ticks:{font:{size:9},color:'rgba(255,255,255,.3)',callback:v=>v===0?'':v+'m'},
+           grid:{color:'rgba(255,255,255,.05)'},border:{display:false}}
+      }}
+  });
 
-const lifts=[
-  {name:'Incline DB Press',val:'55 lb × 8', arrow:'→ try 60'},
-  {name:'Overhead Press',  val:'35 lb × 12',arrow:'→ try 40'},
-  {name:'DB Rows',         val:'35 lb × 12',arrow:'→ try 40'},
-  {name:'Bicep Curls',     val:'15 lb × 12',arrow:'→ try 20'},
-];
-const container=document.getElementById('lifts');
-lifts.forEach(l=>{
-  const row=document.createElement('div');
-  row.className='lift-row';
-  row.innerHTML=`<span class="lift-name">${l.name}</span><span class="lift-val">${l.val}</span><span class="lift-arrow">${l.arrow}</span>`;
-  container.appendChild(row);
-});
+  const liftsEl = document.getElementById('lifts');
+  liftsEl.innerHTML = '';
+  (d.top_lifts || []).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lift-row';
+    row.innerHTML = `<span class="lift-name">${l.name}</span>` +
+                    `<span class="lift-val">${l.value}</span>` +
+                    `<span class="lift-arrow">${l.next || ''}</span>`;
+    liftsEl.appendChild(row);
+  });
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.strength_week) d = all.strength_week;
+    }
+  } catch (e) {}
+  render(d);
+})();
 </script>
 </body>
 </html>

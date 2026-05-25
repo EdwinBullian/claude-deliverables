@@ -12,9 +12,7 @@
     }
     body { display: flex; align-items: center; padding: 0 18px; gap: 0; }
 
-    .ring-wrap {
-      position: relative; width: 200px; height: 200px; flex-shrink: 0;
-    }
+    .ring-wrap { position: relative; width: 200px; height: 200px; flex-shrink: 0; }
     .ring-wrap svg { width: 200px; height: 200px; }
     .ring-center {
       position: absolute; inset: 0;
@@ -46,61 +44,112 @@
   </style>
 </head>
 <body>
-  <!-- v2 · r=84, C=2π×84≈527.79 -->
-  <!-- Deep  52/490=10.6% → arc=55.95 offset=0       -->
-  <!-- Light 292/490=59.6% → arc=314.56 offset=-55.95  -->
-  <!-- REM   146/490=29.8% → arc=157.28 offset=-370.51 -->
   <div class="ring-wrap">
     <svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg">
       <circle cx="105" cy="105" r="84" fill="none" stroke="#252525" stroke-width="20"/>
-      <circle cx="105" cy="105" r="84" fill="none" stroke="#2d7dd2" stroke-width="20"
-        stroke-dasharray="55.95 471.84" stroke-dashoffset="0"
-        stroke-linecap="butt" transform="rotate(-90 105 105)"/>
-      <circle cx="105" cy="105" r="84" fill="none" stroke="#5aaed4" stroke-width="20"
-        stroke-dasharray="314.56 213.23" stroke-dashoffset="-55.95"
-        stroke-linecap="butt" transform="rotate(-90 105 105)"/>
-      <circle cx="105" cy="105" r="84" fill="none" stroke="#94cfe3" stroke-width="20"
-        stroke-dasharray="157.28 370.51" stroke-dashoffset="-370.51"
-        stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+      <circle id="arc-deep"  cx="105" cy="105" r="84" fill="none" stroke="#2d7dd2" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+      <circle id="arc-light" cx="105" cy="105" r="84" fill="none" stroke="#5aaed4" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+      <circle id="arc-rem"   cx="105" cy="105" r="84" fill="none" stroke="#94cfe3" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
     </svg>
     <div class="ring-center">
-      <span class="score-num">73</span>
+      <span class="score-num" id="score">—</span>
       <span class="score-label">Sleep Score</span>
-      <span class="score-dur">8 h 10 m</span>
+      <span class="score-dur" id="total">—</span>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stats-heading">May 22 — Last Night</div>
+    <div class="stats-heading" id="date-label">—</div>
     <div class="stage-row">
       <div class="swatch" style="background:#2d7dd2"></div>
       <span class="stage-name">Deep</span>
-      <div class="bar-bg"><div class="bar" style="background:#2d7dd2;width:10.6%"></div></div>
-      <span class="stage-val">52 min</span>
+      <div class="bar-bg"><div class="bar" id="bar-deep" style="background:#2d7dd2;width:0%"></div></div>
+      <span class="stage-val" id="val-deep">—</span>
     </div>
     <div class="stage-row">
       <div class="swatch" style="background:#5aaed4"></div>
       <span class="stage-name">Light</span>
-      <div class="bar-bg"><div class="bar" style="background:#5aaed4;width:59.6%"></div></div>
-      <span class="stage-val">4h 52m</span>
+      <div class="bar-bg"><div class="bar" id="bar-light" style="background:#5aaed4;width:0%"></div></div>
+      <span class="stage-val" id="val-light">—</span>
     </div>
     <div class="stage-row">
       <div class="swatch" style="background:#94cfe3"></div>
       <span class="stage-name">REM</span>
-      <div class="bar-bg"><div class="bar" style="background:#94cfe3;width:29.8%"></div></div>
-      <span class="stage-val">2h 26m</span>
+      <div class="bar-bg"><div class="bar" id="bar-rem" style="background:#94cfe3;width:0%"></div></div>
+      <span class="stage-val" id="val-rem">—</span>
     </div>
     <div class="stage-row">
       <div class="swatch" style="background:#2a2a2a;border:1px solid #444"></div>
       <span class="stage-name">Awake</span>
-      <div class="bar-bg"><div class="bar" style="background:#444;width:1%"></div></div>
-      <span class="stage-val">4 min</span>
+      <div class="bar-bg"><div class="bar" id="bar-awake" style="background:#444;width:0%"></div></div>
+      <span class="stage-val" id="val-awake">—</span>
     </div>
     <div class="divider"></div>
-    <div class="meta">
-      <strong>Bed</strong> 1:52 AM &nbsp;·&nbsp; <strong>Wake</strong> 10:06 AM<br>
-      <strong>RHR</strong> 55 bpm &nbsp;·&nbsp; <strong>Awakenings</strong> 3
-    </div>
+    <div class="meta" id="meta">—</div>
   </div>
+
+<script>
+const FALLBACK = {
+  date_label: "May 23 — Last Night",
+  score: 73, total_minutes: 490, total_label: "8 h 10 m",
+  deep_minutes: 52, light_minutes: 292, rem_minutes: 146, awake_minutes: 4,
+  bedtime_label: "1:52 AM", wake_label: "10:06 AM",
+  resting_hr: 55, awakenings: 3
+};
+
+function fmtHM(m) {
+  if (m == null) return "—";
+  const h = Math.floor(m / 60), mm = m % 60;
+  if (h === 0) return mm + " min";
+  return h + "h " + mm + "m";
+}
+
+function render(d) {
+  const total = d.total_minutes || (d.deep_minutes + d.light_minutes + d.rem_minutes + d.awake_minutes);
+  const pct = (v) => total ? (v / total) * 100 : 0;
+  const C = 2 * Math.PI * 84; // 527.79
+
+  const dp = pct(d.deep_minutes), lp = pct(d.light_minutes),
+        rp = pct(d.rem_minutes),  ap = pct(d.awake_minutes);
+  const dArc = (dp / 100) * C, lArc = (lp / 100) * C, rArc = (rp / 100) * C;
+
+  document.getElementById('arc-deep').setAttribute('stroke-dasharray',  dArc.toFixed(2) + ' ' + (C - dArc).toFixed(2));
+  document.getElementById('arc-deep').setAttribute('stroke-dashoffset', 0);
+  document.getElementById('arc-light').setAttribute('stroke-dasharray', lArc.toFixed(2) + ' ' + (C - lArc).toFixed(2));
+  document.getElementById('arc-light').setAttribute('stroke-dashoffset', (-dArc).toFixed(2));
+  document.getElementById('arc-rem').setAttribute('stroke-dasharray',   rArc.toFixed(2) + ' ' + (C - rArc).toFixed(2));
+  document.getElementById('arc-rem').setAttribute('stroke-dashoffset',  (-(dArc + lArc)).toFixed(2));
+
+  document.getElementById('score').textContent = d.score ?? '—';
+  document.getElementById('total').textContent = d.total_label || fmtHM(total);
+  document.getElementById('date-label').textContent = d.date_label || 'Last Night';
+
+  document.getElementById('bar-deep').style.width  = dp.toFixed(1) + '%';
+  document.getElementById('bar-light').style.width = lp.toFixed(1) + '%';
+  document.getElementById('bar-rem').style.width   = rp.toFixed(1) + '%';
+  document.getElementById('bar-awake').style.width = Math.max(ap, 1).toFixed(1) + '%';
+
+  document.getElementById('val-deep').textContent  = fmtHM(d.deep_minutes);
+  document.getElementById('val-light').textContent = fmtHM(d.light_minutes);
+  document.getElementById('val-rem').textContent   = fmtHM(d.rem_minutes);
+  document.getElementById('val-awake').textContent = fmtHM(d.awake_minutes);
+
+  document.getElementById('meta').innerHTML =
+    `<strong>Bed</strong> ${d.bedtime_label || '—'} &nbsp;·&nbsp; <strong>Wake</strong> ${d.wake_label || '—'}<br>` +
+    `<strong>RHR</strong> ${d.resting_hr ?? '—'} bpm &nbsp;·&nbsp; <strong>Awakenings</strong> ${d.awakenings ?? '—'}`;
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.sleep) d = all.sleep;
+    }
+  } catch (e) { /* use fallback */ }
+  render(d);
+})();
+</script>
 </body>
 </html>

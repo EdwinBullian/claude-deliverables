@@ -1,0 +1,80 @@
+name: Refresh Health Data
+
+# Runs every 6 hours. Pulls fresh data from Zepp / Cronometer / Notion,
+# commits the new data.json so GitHub Pages serves it to the Notion widgets.
+on:
+  schedule:
+    # 06:00, 12:00, 18:00, 00:00 PST  → 13, 19, 01, 07 UTC
+    - cron: '0 1,7,13,19 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build data.json but skip the commit'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # required so the job can commit back to main
+
+concurrency:
+  group: refresh-health-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+          # Extra deps required by the vendored MCP modules (kept out of
+          # requirements.txt because the local MCPs have their own install):
+          pip install pycryptodome mcp
+
+      - name: Build data.json
+        env:
+          ZEPP_EMAIL:               ${{ secrets.ZEPP_EMAIL }}
+          ZEPP_PASSWORD:            ${{ secrets.ZEPP_PASSWORD }}
+          ZEPP_APP_TOKEN:           ${{ secrets.ZEPP_APP_TOKEN }}
+          ZEPP_USER_ID:             ${{ secrets.ZEPP_USER_ID }}
+          CRONOMETER_EMAIL:         ${{ secrets.CRONOMETER_EMAIL }}
+          CRONOMETER_PASSWORD:      ${{ secrets.CRONOMETER_PASSWORD }}
+          CRONOMETER_TARGET_KCAL:   ${{ vars.CRONOMETER_TARGET_KCAL }}
+          CRONOMETER_TARGET_PROTEIN_G: ${{ vars.CRONOMETER_TARGET_PROTEIN_G }}
+          NOTION_TOKEN:             ${{ secrets.NOTION_TOKEN }}
+          NOTION_WORKOUT_DB_ID:     ${{ secrets.NOTION_WORKOUT_DB_ID }}
+          NOTION_SUPPLEMENT_DB_ID:  ${{ secrets.NOTION_SUPPLEMENT_DB_ID }}
+        run: |
+          python scripts/build_data.py health/widgets/data/data.json
+        continue-on-error: true   # let us commit a partial update if 1 source dies
+
+      - name: Show updated payload (head)
+        run: head -c 2000 health/widgets/data/data.json
+
+      - name: Commit & push
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          if [ -z "$(git status --porcelain health/widgets/data/data.json)" ]; then
+            echo "no changes to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add health/widgets/data/data.json
+          git commit -m "chore(health): refresh data.json [skip ci]"
+          git push
