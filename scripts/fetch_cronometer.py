@@ -13,7 +13,6 @@ import os
 import sys
 from pathlib import Path
 
-# Make the vendored MCPs importable
 sys.path.insert(0, str(Path(__file__).parent / "vendor"))
 
 import cronometer_mcp as cm  # noqa: E402
@@ -23,20 +22,20 @@ from common import (  # noqa: E402
     env,
     fail,
     ok,
+    short_day_labels,
     today_pst,
-    week_window_sun_to_sat,
+    trailing_7_days,
 )
 
 TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2500") or 2500)
 TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="200") or 200)
 
-# Adult-male RDIs the widget assumes
 RDI = {
     "Fiber (g)":        38,
     "Calcium (mg)":     1000,
     "Magnesium (mg)":   400,
     "Potassium (mg)":   4700,
-    "Sodium (mg)":      2300,           # upper limit
+    "Sodium (mg)":      2300,
     "Iron (mg)":        8,
     "Vitamin A (RAE) (mcg)": 900,
     "Vitamin C (mg)":   90,
@@ -44,7 +43,6 @@ RDI = {
 
 
 def _env_config() -> dict:
-    """Stand-in for cronometer_mcp._load_config that pulls from env vars."""
     return {
         "cronometer": {
             "email":    env("CRONOMETER_EMAIL")    or "",
@@ -87,25 +85,19 @@ def _sub_label(value: float, rdi: float, unit: str) -> str:
     return f"{_fmt_amount(value, unit)} / {_fmt_amount(rdi, unit)}"
 
 
-def _avg_nutrient(days: list[dict], name: str) -> float:
-    vals = [d["all_nutrients"].get(name, 0.0) for d in days if d and d.get("all_nutrients")]
-    return sum(vals) / max(len(vals), 1)
-
-
 def fetch() -> dict:
     try:
-        cm._get_state()  # forces login + GWT bootstrap up front
+        cm._get_state()
     except Exception as e:
         return fail(f"auth failed: {e}")
 
     try:
         today = today_pst()
-        week = week_window_sun_to_sat(today)
+        # Trailing 7-day window ending today, matching the activity + strength
+        # widgets. No future days to filter out.
+        week = trailing_7_days(today)
         days: list[dict] = []
         for d in week:
-            if d > today:
-                days.append({})
-                continue
             try:
                 days.append(cm._aggregate_day(d.isoformat()))
             except Exception:
@@ -125,7 +117,6 @@ def fetch() -> dict:
 
         score = _macro_score(avg_cals, avg_protein)
 
-        # Micros — average across days with data, using the named keys from cm.NUTRIENT_NAMES
         logged_days = [d for d, h in zip(days, has_data) if h]
 
         def avg(name: str) -> float:
@@ -161,13 +152,13 @@ def fetch() -> dict:
         ]
 
         date_labels = [d.strftime("%b %-d") for d in week]
-        iso_wk = week[0].isocalendar().week
         n_logged = sum(has_data)
+        day_labels = short_day_labels(week)
 
         macros_week = {
-            "week_label": f"W{iso_wk} Macros — {date_labels[0]}–{date_labels[-1].split(' ')[-1]}",
+            "week_label": f"Macros — {date_labels[0]}–{date_labels[-1].split(' ')[-1]}",
             "macro_score_pct": score,
-            "labels": DAYS_SHORT,
+            "labels": day_labels,
             "dates": date_labels,
             "protein_g": protein_g,
             "carbs_g": carbs_g,
@@ -178,7 +169,7 @@ def fetch() -> dict:
             "footer": f"Target: {TARGET_KCAL:,} kcal · {TARGET_PROTEIN_G}g protein · {n_logged}/7 days logged",
         }
         micros_week = {
-            "week_label": f"Nutrition — W{iso_wk} Avg",
+            "week_label": "Nutrition — 7-Day Avg",
             "macro_score_pct": score,
             "days_logged": n_logged,
             "days_total": 7,

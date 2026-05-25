@@ -29,8 +29,9 @@ from common import (  # noqa: E402
     fmt_clock,
     minutes_to_label,
     ok,
+    short_day_labels,
     today_pst,
-    week_window_sun_to_sat,
+    trailing_7_days,
 )
 
 
@@ -124,7 +125,6 @@ def _sport_type_label(code) -> str:
 def fetch() -> dict:
     """Return the {sleep, activity} sections of the widget payload."""
     try:
-        # Force a credential check up front so any auth failure has a clear error
         zm._get_token()
     except Exception as e:
         return fail(f"auth failed: {e}")
@@ -132,7 +132,9 @@ def fetch() -> dict:
     try:
         today = today_pst()
         yesterday = today - dt.timedelta(days=1)
-        week = week_window_sun_to_sat(today)
+        # Trailing 7-day window ending today, so the activity chart always
+        # shows the most-recent week regardless of where today falls.
+        week = trailing_7_days(today)
 
         # Last-night sleep is stored under yesterday's date
         slp = _summary_for(yesterday).get("slp", {}) or {}
@@ -166,18 +168,16 @@ def fetch() -> dict:
             "awakenings": slp.get("wc"),
         }
 
-        # Per-day steps + RHR for the week chart
+        # Per-day steps + RHR for the trailing-7-day chart. today is always
+        # the last cell (index 6); no future-day handling needed.
         steps_arr: list[int | None] = [None] * 7
         rhr_arr: list[int | None] = [None] * 7
-        today_idx = next((i for i, d in enumerate(week) if d == today), 6)
+        today_idx = 6
 
         for i, day in enumerate(week):
-            if day > today:
-                continue
             try:
                 s = _summary_for(day)
                 steps_arr[i] = (s.get("stp") or {}).get("ttl")
-                # RHR lives under slp in the post-2024 schema
                 rhr_arr[i] = (s.get("slp") or {}).get("rhr")
                 time.sleep(0.3)
             except Exception:
@@ -193,11 +193,11 @@ def fetch() -> dict:
             "today": {
                 "rhr": t_slp.get("rhr"),
                 "steps": t_stp.get("ttl"),
-                "avg_hr": None,  # the summary blob doesn't carry avg HR; left null
+                "avg_hr": None,
                 "sleep_score": sleep_payload["score"],
             },
             "week": {
-                "labels": DAYS_SHORT,
+                "labels": short_day_labels(week),
                 "steps": steps_arr,
                 "rhr": rhr_arr,
                 "today_index": today_idx,
