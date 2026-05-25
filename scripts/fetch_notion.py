@@ -31,7 +31,9 @@ from common import (
     env,
     fail,
     ok,
+    short_day_labels,
     today_pst,
+    trailing_7_days,
     week_window_sun_to_sat,
 )
 
@@ -113,7 +115,9 @@ def _date(node) -> dt.date | None:
 
 def _build_strength_week(workouts: list[dict]) -> dict:
     today = today_pst()
-    week = week_window_sun_to_sat(today)
+    # Trailing 7 days ending today, so the chart always shows recent activity
+    # regardless of where today falls in the calendar week.
+    week = trailing_7_days(today)
     iso_to_idx = {d.isoformat(): i for i, d in enumerate(week)}
 
     minutes = [0] * 7
@@ -154,12 +158,13 @@ def _build_strength_week(workouts: list[dict]) -> dict:
 
     top_lifts = _parse_top_lifts(most_recent_top_lifts_raw)
 
+    # Dynamic labels: Mon/Tue/etc. based on the trailing window
+    day_labels = short_day_labels(week)
     date_labels = [d.strftime("%a %-m/%-d") for d in week]
-    iso_wk = week[0].isocalendar().week
 
     return {
-        "week_label": f"W{iso_wk} Training — Weightlifting Sessions",
-        "labels": DAYS_SHORT,
+        "week_label": "Training — Last 7 Days",
+        "labels": day_labels,
         "date_labels": date_labels,
         "minutes": minutes,
         "types": types,
@@ -217,13 +222,13 @@ def fetch() -> dict:
     try:
         if workout_db:
             today = today_pst()
-            week = week_window_sun_to_sat(today)
+            window = trailing_7_days(today)
             # Filter by the Date property (not created_time) so workouts whose
             # session date was set independently of page creation are caught.
             # Property is named "Date" in the Workout Schedule DB.
             workouts = _query_db(workout_db, {
                 "property": "Date",
-                "date": {"on_or_after": week[0].isoformat()},
+                "date": {"on_or_after": window[0].isoformat()},
             })
             payload["strength_week"] = _build_strength_week(workouts)
     except Exception as e:

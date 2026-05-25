@@ -61,10 +61,25 @@ def fail(err: Exception | str) -> dict:
 def week_window_sun_to_sat(today: dt.date | None = None) -> list[dt.date]:
     """Return list[date] for the Sun..Sat week that contains ``today``."""
     today = today or today_pst()
-    # weekday(): Mon=0..Sun=6. We want Sun=0, so:
     sun_offset = (today.weekday() + 1) % 7
     sunday = today - dt.timedelta(days=sun_offset)
     return [sunday + dt.timedelta(days=i) for i in range(7)]
+
+
+def trailing_7_days(today: dt.date | None = None) -> list[dt.date]:
+    """Return list[date] for the 7 days ending on ``today``, inclusive.
+
+    e.g. on a Monday this returns last Tue..today's Mon. The trailing window
+    always has 7 days of recent activity regardless of where today sits in
+    the calendar week, so charts don't look empty on Sunday/Monday mornings.
+    """
+    today = today or today_pst()
+    return [today - dt.timedelta(days=6 - i) for i in range(7)]
+
+
+def short_day_labels(dates: list[dt.date]) -> list[str]:
+    """Return ['Tue', 'Wed', ...] for the given dates."""
+    return [d.strftime("%a") for d in dates]
 
 
 def minutes_to_label(mins: int | None) -> str:
