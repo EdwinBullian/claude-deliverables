@@ -218,12 +218,12 @@ def fetch() -> dict:
         if workout_db:
             today = today_pst()
             week = week_window_sun_to_sat(today)
+            # Filter by the Date property (not created_time) so workouts whose
+            # session date was set independently of page creation are caught.
+            # Property is named "Date" in the Workout Schedule DB.
             workouts = _query_db(workout_db, {
-                "and": [
-                    {"timestamp": "created_time", "created_time": {
-                        "on_or_after": week[0].isoformat()
-                    }}
-                ]
+                "property": "Date",
+                "date": {"on_or_after": week[0].isoformat()},
             })
             payload["strength_week"] = _build_strength_week(workouts)
     except Exception as e:
