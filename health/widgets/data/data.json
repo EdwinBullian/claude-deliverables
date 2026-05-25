@@ -55,7 +55,7 @@
   },
   "macros_week": {
     "week_label": "Macros — May 19–25",
-    "macro_score_pct": 41,
+    "macro_score_pct": 47,
     "labels": [
       "Tue",
       "Wed",
@@ -77,104 +77,104 @@
     "protein_g": [
       133,
       140,
+      166,
+      133,
       162,
-      0,
-      162,
-      106,
+      145,
       0
     ],
     "carbs_g": [
       98,
-      183,
-      39,
-      0,
+      184,
+      79,
+      77,
       122,
-      73,
+      129,
       0
     ],
     "fat_g": [
       89,
       116,
       75,
-      0,
+      81,
       109,
-      60,
+      68,
       0
     ],
     "has_data": [
       true,
       true,
       true,
-      false,
+      true,
       true,
       true,
       false
     ],
     "target_kcal": 2500,
     "target_protein_g": 200,
-    "footer": "Target: 2,500 kcal · 200g protein · 5/7 days logged"
+    "footer": "Target: 2,500 kcal · 200g protein · 6/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 41,
-    "days_logged": 5,
+    "macro_score_pct": 47,
+    "days_logged": 6,
     "days_total": 7,
-    "avg_protein_g": 140,
-    "avg_carbs_g": 103,
+    "avg_protein_g": 146,
+    "avg_carbs_g": 114,
     "avg_fat_g": 89,
     "target_kcal": 2500,
     "target_protein_g": 200,
     "nutrients": [
       {
-        "pct": 35,
+        "pct": 38,
         "label": "Fiber",
-        "sub": "13g / 38g",
+        "sub": "14g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 46,
+        "pct": 60,
         "label": "Calcium",
-        "sub": "465mg / 1.0g",
+        "sub": "606mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 49,
+        "pct": 55,
         "label": "Magnesium",
-        "sub": "196mg / 400mg",
+        "sub": "221mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 59,
+        "pct": 61,
         "label": "Potassium",
-        "sub": "2.8g / 4.7g",
+        "sub": "2.9g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 86,
+        "pct": 98,
         "label": "Sodium",
-        "sub": "2.0g / 2.3g",
+        "sub": "2.3g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 155,
+        "pct": 156,
         "label": "Iron",
         "sub": "12mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 105,
+        "pct": 151,
         "label": "Vitamin A",
-        "sub": "948mcg / 900mcg",
+        "sub": "1366mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 219,
+        "pct": 242,
         "label": "Vitamin C",
-        "sub": "198mg / 90mg",
+        "sub": "218mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "5 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "6 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
@@ -247,22 +247,22 @@
     "footer": "Wake 9:48 AM · No workout · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-25T16:26:10-07:00",
-    "last_updated_label": "May 25, 4:26 PM PST",
+    "last_updated_iso": "2026-05-25T16:27:33-07:00",
+    "last_updated_label": "May 25, 4:27 PM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T16:26:10-07:00",
+        "last_ok_iso": "2026-05-25T16:27:33-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T16:26:08-07:00",
+        "last_ok_iso": "2026-05-25T16:27:30-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T16:26:06-07:00",
+        "last_ok_iso": "2026-05-25T16:27:29-07:00",
         "error": null
       }
     },
