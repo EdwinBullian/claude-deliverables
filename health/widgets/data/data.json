@@ -1,0 +1,54 @@
+{
+  "energy": {
+    "date_label": "May 25",
+    "curve_24h": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      28,
+      18,
+      14,
+      20,
+      20,
+      20,
+      65,
+      72,
+      78,
+      72,
+      70,
+      78,
+      82,
+      78,
+      60,
+      46,
+      32
+    ],
+    "footer": "Wake — · No workout · Natural curve"
+  },
+  "_meta": {
+    "last_updated_iso": "2026-05-25T04:11:12-07:00",
+    "last_updated_label": "May 25, 4:11 AM PST",
+    "sources": {
+      "zepp": {
+        "ok": false,
+        "last_ok_iso": null,
+        "error": "auth failed: Zepp credential exchange failed: expected HTTP 303 redirect, got 400. Body: �\u0019:�\u0016_��HL���^qPф\u0011�VJ�\\����L}��Op��B���<x>��4~�"
+      },
+      "cronometer": {
+        "ok": false,
+        "last_ok_iso": null,
+        "error": "auth failed: Cronometer v2 login failed: Empty email. If rate-limited, wait a few minutes and retry."
+      },
+      "notion": {
+        "ok": false,
+        "last_ok_iso": null,
+        "error": "no NOTION_*_DB_ID env vars set"
+      }
+    },
+    "schema_version": 1
+  }
+}
