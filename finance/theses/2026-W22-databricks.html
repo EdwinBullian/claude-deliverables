@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Databricks — Investment Thesis (W22 2026)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+.summary, .section { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv { background: var(--card); border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv span { color: var(--subtle); font-size: 0.75rem; display: block; font-family: -apple-system, sans-serif; }
+.kv strong { color: var(--heading); font-size: 0.92rem; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<h1>Databricks — Investment Thesis</h1>
+<div class="meta">W22 2026 · May 25, 2026 · Finance Agent (AgentOS v2) · Pre-IPO, Series K reference ~$140/share ($73B post-money)</div>
+
+<div class="summary-grid">
+  <div class="kv"><span>SECTOR</span><strong>Tech / Data Infrastructure</strong></div>
+  <div class="kv"><span>CONVICTION</span><strong>Medium</strong></div>
+  <div class="kv"><span>PROB-WEIGHTED FV</span><strong>$85 / share (−39%)</strong></div>
+</div>
+
+<div class="summary">
+<strong>Recommendation:</strong> Build pre-IPO via secondary in the $50–110/share range; participate at IPO only if priced at ≤$80B EV. Avoid scaling in above the Series K mark.<br><br>
+<strong>Key insight:</strong> Fifth consecutive thesis showing the AI-era data/compute infra category being priced on platform optionality that strict DCF cannot capture (PLTR W18, CRWD W19, AMD W20, NET W21, now DBX W22). At $140 a buyer is paying a 30–40% premium to peer-median multiples on the assumption that Mosaic AI gives Databricks PLTR-type narrative power. That bet is reasonable, not crazy — but asymmetry only opens up at $80-100/share secondary or ≤$80B IPO EV.
+</div>
+
+<h2>1. Company Overview</h2>
+<p>Databricks runs the "lakehouse" — a unified platform that lets enterprises store, query, and train models on the same data without round-tripping between a data warehouse (Snowflake) and an object store (S3/ADLS). The company was founded in 2013 by the creators of Apache Spark; it now sits at the center of the enterprise AI stack alongside the Mosaic AI training stack (acquired 2023 for $1.3B) and Genie, its conversational analytics product.</p>
+
+<p>The business runs on AWS, Azure, and GCP, charges consumption-based pricing in DBUs (Databricks Units), and reports ~75% gross margins — typical for cloud-native SaaS. As of the Series K round in September 2025, ARR was ~$5.4B (up ~65% YoY), with management guiding to ~$8B exit ARR for FY26 (year ending January 2027). The implied secondary share price of ~$140 puts the company at ~$73B post-money — roughly 13x trailing ARR and ~19x forward GAAP revenue.</p>
+
+<p>S-1 filing is expected in Q3 2026, with the listing window targeted for Q4 2026 or Q1 2027. Bankers reportedly are guiding to an $80–100B IPO range. With ~$5B in cash post-Series K and $1.8B in secured debt, Databricks has more than enough runway to choose its timing — a defensible negotiating position with bookrunners.</p>
+
+<h2>2. Industry Position & Competitive Dynamics</h2>
+<p>The data infrastructure category sits in the crosshairs of three secular tailwinds: (1) data volume growth from sensors, applications, and AI-generated content; (2) consolidation of the modern data stack toward fewer, more vertically integrated platforms; and (3) the AI-training compute explosion, which forces data and model training onto the same substrate.</p>
+
+<h3>Direct Competitors</h3>
+<p>Snowflake (SNOW) is the closest comparable — same buyer (data engineering teams), same enterprise sales motion, same consumption pricing. Snowflake is larger by revenue ($3.6B FY25) but smaller by ARR growth rate (~22% vs. DBX's ~54%). The lakehouse-vs-warehouse architectural debate has been settled: both are viable, and large enterprises buy both. The question is which gets the next dollar of compute spend on AI workloads — and the architectural argument favors Databricks (single-platform training + serving without ETL).</p>
+
+<h3>Adjacent Threats</h3>
+<p>AWS Redshift, Google BigQuery, Microsoft Fabric — hyperscaler-native warehouses bundled with cloud commitments and pricable below Databricks at the gross-margin line. AWS launched SageMaker Lakehouse in late 2024 directly targeting the same workload. The hyperscalers have a structural distribution advantage; Databricks's defense is the cross-cloud abstraction layer (a customer running on AWS and Azure standardizes on Databricks rather than maintaining two stacks).</p>
+
+<h3>Platform Extension</h3>
+<p>Mosaic AI gives Databricks a credible AI-training narrative; this is what justifies a PLTR/NET-style multiple rather than a SNOW/MDB multiple. The execution question is whether Mosaic AI revenue is meaningful enough by S-1 to credibly market the company as an "AI platform" rather than a "data warehouse alternative." If yes, the IPO can price in the $90-100B range; if no, $70-80B is more likely.</p>
+
+<h2>3. Bull / Base / Bear Cases</h2>
+
+<div class="case bull">
+<h3>Bull Case — $213/share ($110B equity)</h3>
+<p>Full optionality scenario. Mosaic AI revenue scales fast enough by S-1 that the company credibly positions as an AI-platform competitor. FY31E revenue $23B (~36% CAGR), steady-state EBIT 30% (Datadog-level profitability at scale), WACC compresses to ~8.5% as public float emerges.</p>
+<p><strong>Catalysts:</strong> (1) Mosaic AI ARR ≥ $1B by IPO — converts the AI narrative from speculation to disclosed revenue line in S-1 (PLTR's AIP did this in 2024 and unlocked 7x multiple expansion). (2) Snowflake-style margin path — SNOW reached 25% non-GAAP at ~$3B scale; DBX hitting 30% at $15-20B is plausible if operating leverage shows in first 4 public quarters.</p>
+</div>
+
+<div class="case base">
+<h3>Base Case — $52 strict DCF / ~$100 at peer-median</h3>
+<p>The honest range. Strict DCF: FY31E revenue $15.7B (~31% CAGR), steady-state EBIT 25% (Snowflake's stated target), WACC 11.6% (Beta 1.4, 95% equity-weighted). PV of FCFs is only $4B EV; ~83% of value sits in terminal value, which is precisely the structural issue with all hyper-growth SaaS DCFs.</p>
+<p>At peer-median EV/Rev FY26E (13.3x), Databricks IPO at ~$50B equity / ~$100/share. The base case spans this DCF-to-comps gap honestly: somewhere between $52 (pure cash math) and $100 (peer-median benchmarking).</p>
+</div>
+
+<div class="case bear">
+<h3>Bear Case — $24/share</h3>
+<p>Margin disappointment scenario. FY31E revenue $12B (execution slippage years 3-5), steady-state EBIT only 18%, WACC 13% reflecting compression risk.</p>
+<p><strong>Catalysts:</strong> (1) Hyperscaler bundling pressure — Azure Fabric and AWS Lakehouse start winning competitive evals on price, forcing Databricks into gross-margin concessions. (2) Multiple compression in IPO window — if Q1 2027 macro conditions look anything like the SaaS rotation of mid-2022, DBX prices below private rounds (Series J $62B, Series K $73B both become "down rounds" in a reset). Bear is not "Databricks fails" — it's "Databricks is fine, but the multiple does not survive contact with a public market that no longer pays for growth."</p>
+</div>
+
+<h2>4. Valuation Summary</h2>
+
+<table>
+<thead>
+<tr><th>Lens</th><th>Implied $/share</th><th>Note</th></tr>
+</thead>
+<tbody>
+<tr><td>Strict DCF — Base</td><td>$52</td><td>31% CAGR, 25% steady EBIT, WACC 11.6%, g 3.5%</td></tr>
+<tr><td>Strict DCF — Bull</td><td>$213</td><td>36% CAGR, 30% margin, WACC 8.5%, g 4.5%</td></tr>
+<tr><td>Strict DCF — Bear</td><td>$24</td><td>Slower growth + 18% margin + WACC 13%</td></tr>
+<tr><td>Comps — Peer Median (13.3x FY26E rev)</td><td>$101</td><td>SNOW/MDB/CFLT/DDOG/ESTC/NET/PLTR/NOW set</td></tr>
+<tr><td>Comps — Peer 75th Pct (28.3x FY26E rev)</td><td>$208</td><td>Weighted toward PLTR/NET hyper-growth anchor</td></tr>
+<tr><td><strong>Series K Reference Mark</strong></td><td><strong>$140</strong></td><td><strong>September 2025 secondary, $73B post-money</strong></td></tr>
+<tr><td><strong>Probability-weighted FV (25/50/25)</strong></td><td><strong>$85</strong></td><td><strong>−39% vs. Series K mark</strong></td></tr>
+</tbody>
+</table>
+
+<p><strong>Reverse-DCF read.</strong> Series K $140 ($73B equity / ~$70B EV) requires the DCF inputs to look like the Bull case — ~36% CAGR through FY31 and ~30% steady-state margin. That is achievable but demands near-flawless execution. The Series K price effectively pre-paid for the bull case, leaving little margin of safety at entry.</p>
+
+<p>The cleanest read: at $140 a buyer is paying a 30-40% premium to peer-median multiples on the assumption that Mosaic AI gives Databricks PLTR-type narrative power. The pattern of DCF-vs-market gap is now 5 weeks running: PLTR (W18, −74%), CRWD (W19, −39%), AMD (W20, −38%), NET (W21, −17%), DBX (W22, −39%).</p>
+
+<h2>5. Key Risks (Ranked by Probability × Impact)</h2>
+
+<div class="risk"><strong>1. Hyperscaler bundling pressure (HIGH × MED).</strong> AWS, Azure, GCP all have native lakehouse offerings. Microsoft Fabric bundled with Azure E5 commitments is the biggest near-term threat — MSFT can effectively give the product away as part of an enterprise agreement.</div>
+
+<div class="risk"><strong>2. IPO timing / multiple risk (MED × HIGH).</strong> The IPO window is the moment when private-market reference marks meet public-market price discovery. If the SaaS multiple environment in Q4 2026/Q1 2027 looks like mid-2022, Series K could become a high-water mark for years.</div>
+
+<div class="risk"><strong>3. Mosaic AI monetization failure (MED × HIGH).</strong> The AI-platform narrative depends on Mosaic showing real revenue, not just gross-margin enhancement on top of existing lakehouse usage. If Mosaic shows up in S-1 as "embedded across our platform" without a discrete revenue line, the AI-platform multiple does not get unlocked.</div>
+
+<div class="risk"><strong>4. Concentration in top customers (MED × MED).</strong> Like Snowflake, revenue is concentrated in a few hundred largest enterprises. Any large customer migrating workloads to a native warehouse shows up immediately in consumption metrics.</div>
+
+<div class="risk"><strong>5. Founder/CEO transition risk (LOW × MED).</strong> Ali Ghodsi remains CEO; transition to public-company management is a real adjustment. Sales hires, CFO bench depth, board independence are S-1 disclosure items worth tracking.</div>
+
+<div class="risk"><strong>6. Multi-cloud arbitrage breakdown (LOW × HIGH).</strong> Cross-cloud abstraction is Databricks's biggest moat. If hyperscalers tighten egress pricing or enforce data-locality rules, the multi-cloud value prop weakens.</div>
+
+<h2>6. Sector Takeaway — What Databricks Teaches About Data Infrastructure</h2>
+
+<p>This is the fifth consecutive thesis showing the same structural pattern: a best-in-class business priced on platform optionality that strict DCF cannot capture. The lesson is becoming clearer with each iteration — the AI-era data and compute infrastructure category is being valued on a "Snowflake-of-the-AI-stack" framework where the price reflects (a) durable enterprise-software economics + (b) optionality on the company becoming a foundational layer for AI deployment.</p>
+
+<div class="rec"><strong>Pre-IPO Series-K-style secondaries are the wrong entry point.</strong> By definition, these rounds are priced to reflect the upper end of the public-market range bankers expect at IPO. A buyer at Series K is paying retail; a buyer at IPO is paying retail-minus-discount; a buyer 6 months post-IPO is paying market price. Only edge comes from (a) earlier secondaries at $50-100/share equivalent, or (b) tactical position-building during a post-IPO drawdown.</div>
+
+<div class="rec"><strong>The "platform optionality" premium is real but episodic.</strong> PLTR earned it through AIP rollout. Databricks may earn it through Mosaic AI. NET has it on edge-inference workloads. But the premium can disappear when the macro/multiple environment shifts. Position sizing should treat the optionality premium as a temporary multiplier, not a baseline.</div>
+
+<div class="rec"><strong>Best-in-class beats sector average by a lot.</strong> DDOG at 25% EBIT and PLTR at 38% FCF margin are the high benchmarks; DBX needs to be in this club to justify a top-decile multiple. The S-1 will reveal whether unit economics support that trajectory. Until then, the Series K $140 is a placeholder, not a price.</div>
+
+<p><strong>Operating context:</strong> This is a thesis worth re-running 90 days after the S-1 drops — assumptions on Mosaic ARR, customer concentration, and dollar-based net retention can be replaced with real numbers, and the optionality premium can be tested against disclosed margins rather than guessed.</p>
+
+<p class="meta" style="margin-top:2rem; padding-top:1rem; border-top:1px solid var(--border);">Files: <code>databricks_thesis.md</code>, <code>databricks_dcf.xlsx</code>, <code>databricks_comps.xlsx</code> · Quality caveats: This thesis uses public estimates and disclosed company metrics; private-company financials are inherently incomplete and Series K terms (preferred liquidation, anti-dilution provisions) are not modeled. The implied per-share prices treat all common-equivalent shares pari passu, which understates the value of preferred. Re-run post-S-1 for full diligence.</p>
+
+</body>
+</html>
