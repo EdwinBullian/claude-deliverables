@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Eddie's Weekly Review — 2026-05-24</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F4ECD8;
+      --parchment-card: #F8F1DF;
+      --parchment-soft: #EFE6CE;
+      --ink: #1A1A1A;
+      --warm-gray: #5C5853;
+      --faded-ink: #8B857C;
+      --pink: #F5D5CF;
+      --blue: #C9DDE6;
+      --sage: #CADBC4;
+      --yellow: #EFE5BD;
+      --forest: #4A6B45;
+      --terracotta: #C97B5C;
+      --sienna: #A0524D;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--parchment);
+      color: var(--ink);
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+      line-height: 1.55;
+    }
+    .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; }
+    h1 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 4px;
+      line-height: 1.05;
+    }
+    h1 .highlight {
+      background: var(--sage);
+      padding: 0 8px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--warm-gray);
+      letter-spacing: 0.03em;
+      margin-bottom: 36px;
+    }
+
+    /* Grade block */
+    .grade-block {
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 24px 28px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .grade-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+    .grade-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .grade-letter { font-size: 48px; font-weight: 700; line-height: 1; }
+    .grade-summary { color: var(--parchment); opacity: 0.92; font-size: 15px; line-height: 1.6; }
+
+    /* Top bar — 5 tiles */
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .tile {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 16px 16px 12px;
+    }
+    .tile-pink { background: var(--pink); }
+    .tile-blue { background: var(--blue); }
+    .tile-sage { background: var(--sage); }
+    .tile-yellow { background: var(--yellow); }
+    .tile-cream { background: var(--parchment-card); }
+    .tile-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .tile-number {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .tile-number.warn { color: var(--sienna); }
+    .tile-caption {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--warm-gray);
+      letter-spacing: 0.02em;
+    }
+
+    /* LifeOS levels block */
+    .levels-overall {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 10px;
+      background: var(--ink);
+      color: var(--parchment);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .levels-overall .ov-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      flex: 0 0 auto;
+    }
+    .levels-overall .ov-progression {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--parchment);
+      flex: 0 0 auto;
+    }
+    .levels-overall .ov-progression .arrow { color: var(--yellow); margin: 0 6px; }
+    .levels-overall .ov-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(244,236,216,0.15);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .levels-overall .ov-bar-fill {
+      height: 100%;
+      background: var(--yellow);
+      border-radius: 4px;
+    }
+    .levels-overall .ov-bar-mark {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: rgba(244,236,216,0.5);
+    }
+    .levels-overall .ov-xp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--yellow);
+      flex: 0 0 auto;
+    }
+    .grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .lvl-card {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 10px 12px 12px;
+      background: var(--parchment-card);
+    }
+    .lvl-card .lvl-icon { font-size: 18px; line-height: 1; margin-bottom: 4px; }
+    .lvl-card .lvl-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .lvl-card .lvl-bar {
+      height: 6px;
+      background: rgba(26,26,26,0.08);
+      border: 1px solid rgba(26,26,26,0.25);
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .lvl-card .lvl-bar-fill { height: 100%; background: var(--ink); border-radius: 3px; }
+    .lvl-card .lvl-bar-start {
+      position: absolute; top: 0; bottom: 0;
+      width: 1.5px; background: var(--terracotta);
+    }
+    .lvl-card .lvl-progression {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--warm-gray);
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+    .lvl-card .lvl-progression .arrow { color: var(--forest); margin: 0 2px; }
+    .lvl-card .lvl-progression .delta { color: var(--forest); font-weight: 600; }
+    .lvl-card.tint-pink   { background: var(--pink); }
+    .lvl-card.tint-sage   { background: var(--sage); }
+    .lvl-card.tint-yellow { background: var(--yellow); }
+    .lvl-card.tint-blue   { background: var(--blue); }
+    .lifeos-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--faded-ink);
+      background: var(--parchment-soft);
+      border: 1px dashed var(--faded-ink);
+      border-radius: 4px;
+      padding: 7px 12px;
+      margin-bottom: 10px;
+    }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 44px 0 14px;
+    }
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 5px 11px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .section-title { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; }
+    .section-rule { flex: 1; height: 1px; background: var(--faded-ink); opacity: 0.4; }
+
+    /* Cards */
+    .card {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 20px 24px;
+      background: var(--parchment-card);
+      margin-bottom: 14px;
+    }
+    .card p { margin: 4px 0; }
+
+    /* Health */
+    .health-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .health-cell .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 4px;
+    }
+    .health-cell .value { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
+    .health-cell .sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--faded-ink);
+    }
+    .health-alert {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--sienna);
+      margin-top: 2px;
+    }
+
+    /* Tasks & projects */
+    .area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .area-col {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 16px 18px 18px;
+      background: var(--parchment-card);
+    }
+    .area-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .area-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .area-count { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; line-height: 1; }
+    .area-list { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+    .area-list li {
+      padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px dashed rgba(26,26,26,0.12);
+    }
+    .area-list li:last-child { border-bottom: none; }
+    .area-list .name { flex: 1; min-width: 0; }
+    .area-list .progress {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--warm-gray);
+      white-space: nowrap;
+    }
+    .delta-up { color: var(--forest); }
+    .overdue-block {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1.5px dashed var(--sienna);
+    }
+    .overdue-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 6px;
+    }
+    .placeholder {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--faded-ink);
+      font-style: italic;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    /* Time spent */
+    .time-header-line {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--warm-gray);
+      margin-bottom: 12px;
+    }
+    .time-header-line strong { color: var(--ink); }
+    .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .time-col {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 14px 16px 16px;
+      background: var(--parchment-card);
+    }
+    .time-col.manual { border-style: dashed; }
+    .time-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .time-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .time-total { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+    .time-total .unit { font-size: 12px; color: var(--warm-gray); font-weight: 500; margin-left: 2px; }
+    .time-list { list-style: none; padding: 0; margin: 0; font-size: 12.5px; }
+    .time-list li { padding: 3px 0; display: flex; justify-content: space-between; gap: 6px; }
+    .time-list .hours { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--warm-gray); white-space: nowrap; }
+
+    /* Insight + contrast blocks */
+    .insight-block {
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 24px 28px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .insight-block .grade-summary { margin-bottom: 12px; }
+    .insight-block .grade-summary:last-child { margin-bottom: 0; }
+    .insight-block .grade-summary strong.tag { color: var(--yellow); }
+
+    ul.list-clean { padding-left: 18px; margin: 4px 0; }
+    ul.list-clean li { margin: 6px 0; }
+
+    .meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--faded-ink);
+      letter-spacing: 0.02em;
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(26,26,26,0.15);
+    }
+    .meta a { color: var(--forest); text-decoration: none; border-bottom: 1px solid var(--forest); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <h1>Weekly <span class="highlight">Review</span></h1>
+  <div class="subtitle">2026-05-24 &nbsp;·&nbsp; Week W21 &nbsp;·&nbsp; Generated 04:00 PST &nbsp;·&nbsp; AgentOS weekly-review</div>
+
+  <!-- GRADE BLOCK -->
+  <div class="grade-block">
+    <div class="grade-row">
+      <span class="grade-label">Overall Grade</span>
+      <span class="grade-letter">B−</span>
+    </div>
+    <div class="grade-summary">The autonomous pipeline ran flawlessly — fourth straight week of Finance + Research delivery, Phone Link bridge live, first successful push notifications. Eddie's personal task completion hit only 30% and seven tasks are now overdue. Senior Ball week is a legitimate bottleneck, but the real concern is what comes next: no tasks are scheduled for W22, no calendar blocks for the first post-high-school week, and the system has no scaffolding for summer. The infrastructure works; the human workload pipeline does not.</div>
+  </div>
+
+  <!-- TOP BAR: 5 TILES -->
+  <div class="grid-5">
+    <div class="tile tile-sage">
+      <div class="tile-label">Tasks Done</div>
+      <div class="tile-number">3</div>
+      <div class="tile-caption">this week (confirmed)</div>
+    </div>
+    <div class="tile tile-pink">
+      <div class="tile-label">Tasks Overdue</div>
+      <div class="tile-number warn">7</div>
+      <div class="tile-caption">all due May 16–17</div>
+    </div>
+    <div class="tile tile-blue">
+      <div class="tile-label">Projects Worked</div>
+      <div class="tile-number">3</div>
+      <div class="tile-caption">Finance · Research · AgentOS</div>
+    </div>
+    <div class="tile tile-yellow">
+      <div class="tile-label">Workouts Hit</div>
+      <div class="tile-number">~4</div>
+      <div class="tile-caption">est. from Zepp (W20 data)</div>
+    </div>
+    <div class="tile tile-cream">
+      <div class="tile-label">Habits Avg %</div>
+      <div class="tile-number warn">—</div>
+      <div class="tile-caption">0/7 days logged</div>
+    </div>
+  </div>
+
+  <!-- LIFEOS LEVELS -->
+  <div class="levels-overall">
+    <span class="ov-label">LifeOS Overall</span>
+    <span class="ov-progression">L16 30%<span class="arrow">→</span>L19 75%</span>
+    <div class="ov-bar">
+      <div class="ov-bar-fill" style="width:75%"></div>
+      <div class="ov-bar-mark" style="left:30%"></div>
+    </div>
+    <span class="ov-xp">+~285 XP est.</span>
+  </div>
+  <div class="lifeos-note">Formula properties unresolvable via MCP API — 4th consecutive week. Values estimated from Bonus XP baseline + confirmed task completions. Finance XP may be significantly higher if 500 XP Quant override resolved. Actual values visible in Notion.</div>
+  <div class="grid-6">
+    <div class="lvl-card tint-yellow">
+      <div class="lvl-icon">💪</div>
+      <div class="lvl-name">Fitness</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:20%"></div>
+        <div class="lvl-bar-fill" style="width:20%"></div>
+      </div>
+      <div class="lvl-progression">L5 20%<span class="arrow">→</span>L5 20% <span class="delta">~+0</span></div>
+    </div>
+    <div class="lvl-card tint-blue">
+      <div class="lvl-icon">🏀</div>
+      <div class="lvl-name">Sports</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:20%"></div>
+        <div class="lvl-bar-fill" style="width:20%"></div>
+      </div>
+      <div class="lvl-progression">L4 20%<span class="arrow">→</span>L4 20% <span class="delta">~+0</span></div>
+    </div>
+    <div class="lvl-card tint-sage">
+      <div class="lvl-icon">💰</div>
+      <div class="lvl-name">Finance</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:70%"></div>
+        <div class="lvl-bar-fill" style="width:70%"></div>
+      </div>
+      <div class="lvl-progression">L3 70%<span class="arrow">→</span>L5+ <span class="delta">~+200</span></div>
+    </div>
+    <div class="lvl-card">
+      <div class="lvl-icon">💻</div>
+      <div class="lvl-name">Programming</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:0%"></div>
+        <div class="lvl-bar-fill" style="width:35%"></div>
+      </div>
+      <div class="lvl-progression">L4 0%<span class="arrow">→</span>L4 35% <span class="delta">+35</span></div>
+    </div>
+    <div class="lvl-card tint-pink">
+      <div class="lvl-icon">🍳</div>
+      <div class="lvl-name">Hobbies</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:80%"></div>
+        <div class="lvl-bar-fill" style="width:80%"></div>
+      </div>
+      <div class="lvl-progression">L2 80%<span class="arrow">→</span>L2 80% <span class="delta">~+0</span></div>
+    </div>
+    <div class="lvl-card">
+      <div class="lvl-icon">🎓</div>
+      <div class="lvl-name">School</div>
+      <div class="lvl-bar">
+        <div class="lvl-bar-start" style="left:0%"></div>
+        <div class="lvl-bar-fill" style="width:50%"></div>
+      </div>
+      <div class="lvl-progression">L2 0%<span class="arrow">→</span>L2 50% <span class="delta">+50</span></div>
+    </div>
+  </div>
+
+  <!-- 01 HEALTH -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Health</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <div class="health-grid">
+      <div class="health-cell">
+        <div class="label">Training</div>
+        <div class="value">~4/5 sessions</div>
+        <div class="sub">~80% adherence</div>
+        <div class="sub">Est. from Zepp active cal</div>
+        <div class="health-alert">⚠ W21 review unavailable (Sat review did not run). Using W20 data.</div>
+        <div class="health-alert">⚠ Notion workout logs missing — 3rd consecutive week.</div>
+      </div>
+      <div class="health-cell">
+        <div class="label">Sleep</div>
+        <div class="value">7.63 hr avg</div>
+        <div class="sub">Avg score: 78.3 / 100</div>
+        <div class="sub">RHR: 52.8 bpm (+0.2 WoW)</div>
+        <div class="health-alert">⚠ HRV unavailable — 4th consecutive week. iOS Shortcut not running.</div>
+      </div>
+      <div class="health-cell">
+        <div class="label">Nutrition</div>
+        <div class="value">Off</div>
+        <div class="sub">1/7 days logged (4th week)</div>
+        <div class="sub">Sample: 2,159 kcal · 168g protein</div>
+        <div class="sub">Fiber: 10.9g (target 35g)</div>
+        <div class="health-alert">⚠ Cronometer logging gap persists. Data largely blind.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 TASKS & PROJECTS -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Tasks &amp; Projects</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="area-grid">
+
+    <!-- Finance -->
+    <div class="area-col">
+      <div class="area-head">
+        <span class="area-name">Finance</span>
+        <span class="area-count">0</span>
+      </div>
+      <ul class="area-list">
+        <li><span class="name">NET thesis (agent)</span><span class="progress delta-up">✓ done</span></li>
+        <li><span class="name">W21 market scan (agent)</span><span class="progress delta-up">✓ done</span></li>
+        <li><span class="name">Quant: read model code</span><span class="progress delta-up">✓ 500 XP</span></li>
+      </ul>
+      <div class="overdue-block">
+        <div class="overdue-label">Overdue (3)</div>
+        <ul class="area-list">
+          <li><span class="name">Moat analysis</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+          <li><span class="name">Earnings quality</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+          <li><span class="name">Quant: trace stock pipeline</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- School -->
+    <div class="area-col">
+      <div class="area-head">
+        <span class="area-name">School</span>
+        <span class="area-count">✓</span>
+      </div>
+      <ul class="area-list">
+        <li><span class="name">All AP exams complete</span><span class="progress delta-up">May 13</span></li>
+        <li><span class="name">Last day of classes</span><span class="progress delta-up">May 19</span></li>
+        <li><span class="name">Senior Ball</span><span class="progress delta-up">May 22</span></li>
+      </ul>
+      <div style="margin-top:12px;">
+        <div class="overdue-label" style="color:var(--warm-gray)">Upcoming</div>
+        <ul class="area-list">
+          <li><span class="name">Grad Rehearsal ×3</span><span class="progress">May 27–29</span></li>
+          <li><span class="name">Grad party (Guelfi)</span><span class="progress">May 30</span></li>
+          <li><span class="name">Scholarships deadline</span><span class="progress" style="color:var(--terracotta)">Jun 30</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Programming -->
+    <div class="area-col">
+      <div class="area-head">
+        <span class="area-name">Programming</span>
+        <span class="area-count">2</span>
+      </div>
+      <ul class="area-list">
+        <li><span class="name">CS50 Wk5 Lecture</span><span class="progress delta-up">✓ done</span></li>
+        <li><span class="name">CS50 Wk5 Shorts</span><span class="progress delta-up">✓ done</span></li>
+      </ul>
+      <div class="overdue-block">
+        <div class="overdue-label">Overdue (4)</div>
+        <ul class="area-list">
+          <li><span class="name">PS5 Speller (spec + impl.)</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+          <li><span class="name">PS5 Speller (test + submit)</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+          <li><span class="name">PS6 test + submit</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+          <li><span class="name">CS50 Wk6 Python shorts</span><span class="progress" style="color:var(--sienna)">7d late</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Research -->
+    <div class="area-col">
+      <div class="area-head">
+        <span class="area-name">Research</span>
+        <span class="area-count">1</span>
+      </div>
+      <ul class="area-list">
+        <li><span class="name">SaaS metrics (ARR, NRR, Rule of 40)</span><span class="progress delta-up">✓ done</span></li>
+        <li><span class="name">Queue: 6 items</span><span class="progress">below threshold</span></li>
+        <li><span class="name">Next: VC fund economics</span><span class="progress">W22</span></li>
+      </ul>
+      <div style="margin-top:12px; padding-top:10px; border-top:1.5px dashed rgba(26,26,26,0.15);">
+        <div class="overdue-label" style="color:var(--warm-gray)">Stalled Projects</div>
+        <ul class="area-list">
+          <li><span class="name">Finance Interview Prep</span><span class="progress">created Apr 17</span></li>
+          <li><span class="name">Full-Stack Finance App</span><span class="progress">created Apr 17</span></li>
+          <li><span class="name">Scholarships 2026</span><span class="progress" style="color:var(--terracotta)">Jun 30 deadline</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 03 TIME SPENT -->
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">Time Spent</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="time-header-line">
+    <strong>~52 hrs tracked</strong> / 112 waking hrs &nbsp;·&nbsp; 0 hrs manual self-reported &nbsp;·&nbsp; all estimates from calendar + activity log + task defaults &nbsp;·&nbsp; Time Log DB has 0 entries this week
+  </div>
+  <div class="time-grid">
+    <div class="time-col">
+      <div class="time-head">
+        <span class="time-name">School / Ceremonies</span>
+        <span class="time-total">~18<span class="unit">h</span></span>
+      </div>
+      <ul class="time-list">
+        <li><span>Mon–Tue classes</span><span class="hours">~10h</span></li>
+        <li><span>Community Day (Wed)</span><span class="hours">~4.5h</span></li>
+        <li><span>Honors Assembly (Thu)</span><span class="hours">~2h</span></li>
+        <li><span>Senior Ball (Thu eve)</span><span class="hours">~4h</span></li>
+      </ul>
+    </div>
+    <div class="time-col">
+      <div class="time-head">
+        <span class="time-name">Finance</span>
+        <span class="time-total">~12<span class="unit">h</span></span>
+      </div>
+      <ul class="time-list">
+        <li><span>NET thesis (agent)</span><span class="hours">~10h</span></li>
+        <li><span>W21 market scan</span><span class="hours">~1.5h</span></li>
+        <li><span>Quant model read</span><span class="hours">~1.5h</span></li>
+      </ul>
+    </div>
+    <div class="time-col">
+      <div class="time-head">
+        <span class="time-name">Research</span>
+        <span class="time-total">~8<span class="unit">h</span></span>
+      </div>
+      <ul class="time-list">
+        <li><span>SaaS metrics deep-dive</span><span class="hours">~8h</span></li>
+      </ul>
+    </div>
+    <div class="time-col">
+      <div class="time-head">
+        <span class="time-name">Health / Other</span>
+        <span class="time-total">~14<span class="unit">h</span></span>
+      </div>
+      <ul class="time-list">
+        <li><span>Workouts est. ~4×60min</span><span class="hours">~4h</span></li>
+        <li><span>Social / Personal</span><span class="hours">~6h</span></li>
+        <li><span>CS50 Wk5 tasks</span><span class="hours">~1h</span></li>
+        <li><span>Untracked / sleep prep</span><span class="hours">~3h</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 04 INSIGHT -->
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">Insight</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="insight-block">
+    <div class="grade-summary"><strong class="tag">Post-school dead zone (highest risk).</strong> High school ended May 19. Eddie is now 5 days into the post-school period with no tasks scheduled, no calendar blocks, and no structural scaffold for summer. Fri–Sun had zero self-directed work. The AgentOS autonomous system ran perfectly — but the human side of the system has no next-week curriculum. W22 starts blank.</div>
+    <div class="grade-summary"><strong class="tag">Senior Ball week was legitimately pre-empted.</strong> Mon–Thu were consumed by ceremonies (Community Day, Honors Assembly, Senior Ball). The 30% task completion rate is contextually valid. The 7 overdue tasks all pre-date the ball week — they were slipping before the crunch, not because of it.</div>
+    <div class="grade-summary"><strong class="tag">Finance thesis engine is methodologically stuck.</strong> 4 consecutive theses (PLTR, CRWD, AMD, NET) all used the same DCF+comps framework and arrived at the same conclusion: "best-in-class, DCF undervalues it, hold for weakness." No LBO. No 3-statement. No IB deal process. The roadmap says IB skills are priority #1 — they have zero coverage across 4 weeks.</div>
+    <div class="grade-summary"><strong class="tag">Health data is 3 systems blind.</strong> HRV (4 weeks), Cronometer (4 weeks), Notion workout logs (3 weeks). The W21 Saturday health review did not run. Recovery and nutrition assessments are made on partial data. Fixing the iOS HRV Shortcut is ~5 minutes of work and unlocks the highest-value blind data gap immediately.</div>
+    <div class="grade-summary"><strong class="tag">Calendar adaptation — W22 capacity.</strong> Graduation rehearsals May 27–29 (10am–12pm each day) protect mornings but leave afternoons free. May 25–26 (Mon–Tue) are fully open — the highest-priority windows. May 30 graduation party (1:30–4:30pm) costs one afternoon. Realistic productive capacity W22: ~22–26 hrs. Full summer rhythm starts June 1.</div>
+  </div>
+
+  <!-- 05 WINS -->
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">Wins</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <ul class="list-clean">
+      <li><strong>Phone Link bridge is working.</strong> First successful iMessage push notifications since AgentOS went live. Finance and Research both delivered notify_ok on May 18–19. The Telegram-to-Phone-Link migration is complete and functional.</li>
+      <li><strong>High school is over with zero academic debt.</strong> All AP exams done by May 13. No overdue school assignments. The School area is clean and can be archived. 100% of the school runway was used.</li>
+      <li><strong>W21 Finance + Research deliverables are the strongest set yet.</strong> NET thesis (DCF + comps + 202/75 verified formulas), W21 market scan (Moody's downgrade, 30Y context, SpaceX S-1 watch), SaaS metrics deep-dive (8 hrs, cross-applicable to every future tech thesis). Three high-quality deliverables in three days.</li>
+      <li><strong>Quant Finance model engagement.</strong> Eddie personally completed the high-value model review task (500 XP override). This is the kind of hands-on engagement with the trading infrastructure that has been absent from the task log for weeks.</li>
+    </ul>
+  </div>
+
+  <!-- 06 GAPS -->
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <span class="section-title">Gaps</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <ul class="list-clean">
+      <li><strong>No tasks scheduled for W22 — post-school pipeline is empty.</strong> Zero tasks with future due dates in Notion. The scheduler has no flags to act on, no curriculum to enforce, and no time blocks to protect. Without active scaffolding, summer drift is the default outcome.</li>
+      <li><strong>CS50 backlog is at 4 overdue tasks.</strong> PS5 Speller (2 tasks), PS6, and CS50 Week 6 Python are all 7+ days late. The Speller tasks block the Week 6 Python pathway, which blocks the quant pipeline (Python needed for quant finance work). This is a compounding bottleneck.</li>
+      <li><strong>Zero LBO, 3-statement, or IB deal-process work in 4 weeks.</strong> The Finance CLAUDE.md roadmap lists IB as priority #1 and LBO/3-statement as core technical skills. The weekly thesis engine has been running DCF+comps exclusively. This is the largest skills gap relative to the stated career goal.</li>
+      <li><strong>Habit + health tracking at 0% this week.</strong> No habit log entries, no Cronometer days logged, no Notion workout logs. The Saturday health review did not run. The data pipeline for the most-recurring health metrics is effectively broken week after week.</li>
+    </ul>
+  </div>
+
+  <!-- 07 RECOMMENDATIONS -->
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <span class="section-title">Recommendations</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <ul class="list-clean">
+      <li><strong>Finance — Break the pattern on W22 thesis.</strong> SpaceX S-1 is imminent (filed at ~$1.75T target). This breaks the AI-infra pattern, uses a primary source (S-1), requires a different valuation framework (no public comps, pre-revenue segments), and is time-sensitive. Alternatively: build a simple LBO model this week on any company — the LBO skill has been absent for 4 weeks and is an IB interview requirement.</li>
+      <li><strong>Programming — Clear CS50 PS5 + PS6 on Monday.</strong> Block 3 hours Monday May 25. Complete PS5 Speller test/submit and PS6 submit. These are the most time-limited tasks currently and unblock the Week 6 Python pathway needed for quant work.</li>
+      <li><strong>Health — Fix iOS HRV Shortcut this week.</strong> One action, ~5 minutes, eliminates 4 weeks of blind recovery data. The Shortcut needs to be re-enabled in iOS Shortcuts app. This is the highest ROI health fix available right now.</li>
+      <li><strong>School/Transition — Create W22–W33 summer curriculum in Notion today.</strong> School is over. The next 10 weeks before Notre Dame move-in need a structured plan: Finance skill sequence, CS50 completion schedule, physical conditioning targets, scholarship deadlines. Scheduler cannot function without a task queue.</li>
+      <li><strong>Scholarships — Start this week, not later.</strong> Scholarships 2026 project has a Jun 30 finish target and zero tasks started (profile creation, applications). Block 2 hours this week. Create Bold.org and Niche.com profiles. The window is closing.</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="meta">
+    Generated by AgentOS weekly-review · 2026-05-24 04:00 PST<br>
+    HTML: <a href="computer://C:\Users\edwin\OneDrive\Desktop\Claude\Misc\WeeklyReviews\2026-05-24_weekly_review.html">Misc/WeeklyReviews/2026-05-24_weekly_review.html</a> &nbsp;·&nbsp;
+    Health W20: <a href="computer://C:\Users\edwin\OneDrive\Desktop\Claude\Health\weekly_reviews\2026-W20.md">Health/weekly_reviews/2026-W20.md</a> (W21 unavailable) &nbsp;·&nbsp;
+    Notion · <a href="https://www.notion.so/40afee182dcb4447bd69e10d95b9c681">Task Manager</a> &nbsp;·&nbsp; <a href="https://www.notion.so/3421d256d5a249b485cfe15e420216b5">Time Log DB</a>
+  </div>
+
+</body>
+</html>
