@@ -177,28 +177,28 @@
     "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
-    "week_label": "W21 Training — Weightlifting Sessions",
+    "week_label": "Training — Last 7 Days",
     "labels": [
-      "Sun",
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
-      "Sat"
+      "Sat",
+      "Sun",
+      "Mon"
     ],
     "date_labels": [
+      "Tue 5/19",
+      "Wed 5/20",
+      "Thu 5/21",
+      "Fri 5/22",
+      "Sat 5/23",
       "Sun 5/24",
-      "Mon 5/25",
-      "Tue 5/26",
-      "Wed 5/27",
-      "Thu 5/28",
-      "Fri 5/29",
-      "Sat 5/30"
+      "Mon 5/25"
     ],
     "minutes": [
       0,
-      0,
+      80,
       0,
       0,
       0,
@@ -207,7 +207,7 @@
     ],
     "types": [
       "",
-      "",
+      "Pull",
       "",
       "",
       "",
@@ -247,22 +247,22 @@
     "footer": "Wake 9:48 AM · No workout · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-25T09:14:32-07:00",
-    "last_updated_label": "May 25, 9:14 AM PST",
+    "last_updated_iso": "2026-05-25T09:19:47-07:00",
+    "last_updated_label": "May 25, 9:19 AM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:14:32-07:00",
+        "last_ok_iso": "2026-05-25T09:19:47-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:14:29-07:00",
+        "last_ok_iso": "2026-05-25T09:19:44-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:14:28-07:00",
+        "last_ok_iso": "2026-05-25T09:19:44-07:00",
         "error": null
       }
     },
