@@ -120,12 +120,21 @@ def _build_strength_week(workouts: list[dict]) -> dict:
     types: list[str] = [""] * 7
     most_recent_top_lifts_raw = ""
 
+    # Per-type duration estimates (minutes). The "Workout Schedule" DB doesn't
+    # log actual session duration, so we use the weekly schedule's published
+    # estimates. If a Duration / Minutes column is added later, it takes
+    # precedence over the estimate.
+    DURATION_ESTIMATES = {
+        "Upper": 85, "Lower": 75, "Push": 80, "Pull": 80, "Legs": 70,
+        "Basketball": 45, "Running": 35, "Walking": 45, "Rest": 0,
+    }
+
     # Sort newest first so the latest session wins same-day ties
     workouts.sort(key=lambda w: (w.get("created_time") or ""), reverse=True)
 
     for page in workouts:
         d_node = _prop(page, "Date", "Workout Date", "Day")
-        type_node = _prop(page, "Type", "Category", "Split")
+        type_node = _prop(page, "Day Type", "Type", "Category", "Split")
         dur_node = _prop(page, "Duration", "Min", "Minutes", "Length")
         lifts_node = _prop(page, "Top Lifts", "Lifts", "Notes")
 
@@ -134,8 +143,12 @@ def _build_strength_week(workouts: list[dict]) -> dict:
             continue
         idx = iso_to_idx[d.isoformat()]
 
-        minutes[idx] = int(_num(dur_node) or minutes[idx] or 0)
-        types[idx] = _select(type_node) or types[idx] or ""
+        type_name = _select(type_node) or types[idx] or ""
+        types[idx] = type_name
+        actual_dur = _num(dur_node)
+        minutes[idx] = int(actual_dur) if actual_dur else (
+            minutes[idx] or DURATION_ESTIMATES.get(type_name, 0)
+        )
         if not most_recent_top_lifts_raw:
             most_recent_top_lifts_raw = _text(lifts_node)
 
