@@ -207,23 +207,23 @@
     "footer": "Wake 9:48 AM · No workout · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-25T09:06:09-07:00",
+    "last_updated_iso": "2026-05-25T09:06:53-07:00",
     "last_updated_label": "May 25, 9:06 AM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:06:09-07:00",
+        "last_ok_iso": "2026-05-25T09:06:53-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:06:06-07:00",
+        "last_ok_iso": "2026-05-25T09:06:50-07:00",
         "error": null
       },
       "notion": {
         "ok": false,
         "last_ok_iso": null,
-        "error": "no NOTION_*_DB_ID env vars set"
+        "error": "workout pull failed: 404 Client Error: Not Found for url: https://api.notion.com/v1/databases/b69b8ae8-ad5d-4636-85b5-39eda976573a/query"
       }
     },
     "schema_version": 1
