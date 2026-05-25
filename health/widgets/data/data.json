@@ -23,158 +23,158 @@
     },
     "week": {
       "labels": [
-        "Sun",
-        "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun",
+        "Mon"
       ],
       "steps": [
+        9757,
+        7815,
+        6200,
+        2797,
+        5661,
         2266,
-        null,
-        null,
-        null,
-        null,
-        null,
         null
       ],
       "rhr": [
+        54,
+        54,
+        60,
         55,
-        null,
-        null,
-        null,
-        null,
-        null,
+        52,
+        55,
         null
       ],
-      "today_index": 1
+      "today_index": 6
     },
     "today_workout": null
   },
   "macros_week": {
-    "week_label": "W21 Macros — May 24–30",
-    "macro_score_pct": 3,
+    "week_label": "Macros — May 19–25",
+    "macro_score_pct": 41,
     "labels": [
-      "Sun",
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
-      "Sat"
+      "Sat",
+      "Sun",
+      "Mon"
     ],
     "dates": [
+      "May 19",
+      "May 20",
+      "May 21",
+      "May 22",
+      "May 23",
       "May 24",
-      "May 25",
-      "May 26",
-      "May 27",
-      "May 28",
-      "May 29",
-      "May 30"
+      "May 25"
     ],
     "protein_g": [
+      133,
+      140,
+      162,
+      0,
+      162,
       106,
-      0,
-      0,
-      0,
-      0,
-      0,
       0
     ],
     "carbs_g": [
+      98,
+      183,
+      39,
+      0,
+      122,
       73,
-      0,
-      0,
-      0,
-      0,
-      0,
       0
     ],
     "fat_g": [
+      89,
+      116,
+      75,
+      0,
+      109,
       60,
-      0,
-      0,
-      0,
-      0,
-      0,
       0
     ],
     "has_data": [
       true,
+      true,
+      true,
       false,
-      false,
-      false,
-      false,
-      false,
+      true,
+      true,
       false
     ],
     "target_kcal": 2500,
     "target_protein_g": 200,
-    "footer": "Target: 2,500 kcal · 200g protein · 1/7 days logged"
+    "footer": "Target: 2,500 kcal · 200g protein · 5/7 days logged"
   },
   "micros_week": {
-    "week_label": "Nutrition — W21 Avg",
-    "macro_score_pct": 3,
-    "days_logged": 1,
+    "week_label": "Nutrition — 7-Day Avg",
+    "macro_score_pct": 41,
+    "days_logged": 5,
     "days_total": 7,
-    "avg_protein_g": 106,
-    "avg_carbs_g": 73,
-    "avg_fat_g": 60,
+    "avg_protein_g": 140,
+    "avg_carbs_g": 103,
+    "avg_fat_g": 89,
     "target_kcal": 2500,
     "target_protein_g": 200,
     "nutrients": [
       {
-        "pct": 14,
+        "pct": 35,
         "label": "Fiber",
-        "sub": "6g / 38g",
+        "sub": "13g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 18,
+        "pct": 46,
         "label": "Calcium",
-        "sub": "182mg / 1.0g",
+        "sub": "465mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 41,
+        "pct": 49,
         "label": "Magnesium",
-        "sub": "168mg / 400mg",
+        "sub": "196mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 65,
+        "pct": 59,
         "label": "Potassium",
-        "sub": "3.1g / 4.7g",
+        "sub": "2.8g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 45,
+        "pct": 86,
         "label": "Sodium",
-        "sub": "1.0g / 2.3g",
+        "sub": "2.0g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 73,
+        "pct": 155,
         "label": "Iron",
-        "sub": "6mg / 8mg",
+        "sub": "12mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 53,
+        "pct": 105,
         "label": "Vitamin A",
-        "sub": "481mcg / 900mcg",
+        "sub": "948mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 6,
+        "pct": 219,
         "label": "Vitamin C",
-        "sub": "5mg / 90mg",
+        "sub": "198mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "5 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
@@ -247,22 +247,22 @@
     "footer": "Wake 9:48 AM · No workout · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-25T09:19:47-07:00",
-    "last_updated_label": "May 25, 9:19 AM PST",
+    "last_updated_iso": "2026-05-25T09:27:08-07:00",
+    "last_updated_label": "May 25, 9:27 AM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:19:47-07:00",
+        "last_ok_iso": "2026-05-25T09:27:08-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:19:44-07:00",
+        "last_ok_iso": "2026-05-25T09:27:06-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-25T09:19:44-07:00",
+        "last_ok_iso": "2026-05-25T09:27:04-07:00",
         "error": null
       }
     },
