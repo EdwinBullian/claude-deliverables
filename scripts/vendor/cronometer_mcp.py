@@ -307,14 +307,28 @@ def _build_day_info_body(token: str, day: int, month: int, year: int,
     )
 
 
-# Each Serving record in the response carries 14+ fields, anchored on a
-# 5-7 char base62 UUID (e.g. "EK8HTC", "ELNZiy"). The Serving class ref
-# appears at the end (varies per response — 9, 4, etc. depending on the
-# type-table layout), so we tolerate any positive int there. meal_id can
-# be 1 (Uncategorized) or 65537+ (Breakfast/Lunch/Dinner/Snacks).
+# Each Serving record in the response carries 14-19+ fields, anchored on a
+# 4-12 char base62-ish UUID. The char set includes $ (Cronometer's encoding
+# isn't pure base62), so the UUID class must allow it. Updated May 2026
+# after Cronometer started returning two record shapes interleaved:
+#
+#   OLD shape (14 fields): "uuid",food_id,grams,uid,0,meal_id,0,1,1,Y,M,D,X,X
+#   NEW shape (19 fields): "uuid",food_id,grams,uid,0,hh,mm,ss,meal_id,-N,1,1,Y,M,D,X,X
+#
+# The new shape adds time-of-day (hh,mm,ss) and an offset field (-N) between
+# meal_id and the constant tail. The regex below uses a lazy variable-length
+# middle (1-8 ints) so it matches both shapes, anchoring on `,1,1,Y,M,D`
+# because that constant trailer is stable across both layouts.
 _SERVING_RE = re.compile(
-    r'"([A-Za-z0-9_]{4,8})",(\d+),(\d+(?:\.\d+)?),(\d+),0,(\d+),'
-    r'0,1,1,(\d+),(\d+),(\d+),\d+,\d+'
+    r'"([A-Za-z0-9_$]{4,12})"'        # uuid (allows $, up to 12 chars)
+    r',(\d+)'                          # food_id
+    r',(\d+(?:\.\d+)?)'                # grams
+    r',(\d+)'                          # uid
+    r'(?:,\d+){1,8}?'                  # variable middle (1 old / 4 new), lazy
+    r',(\d+)'                          # meal_id
+    r',-?\d+'                          # 0 (old) or -N (new)
+    r',1,1'                            # stable constants
+    r',(\d+),(\d+),(\d+)'              # year, month, day
 )
 
 
