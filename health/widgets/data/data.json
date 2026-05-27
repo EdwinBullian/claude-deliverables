@@ -16,8 +16,8 @@
   "activity": {
     "date_label": "May 26 — Today",
     "today": {
-      "rhr": null,
-      "steps": null,
+      "rhr": 55,
+      "steps": 3780,
       "avg_hr": null,
       "sleep_score": 82
     },
@@ -37,8 +37,8 @@
         2797,
         5661,
         2466,
-        5168,
-        null
+        5216,
+        3780
       ],
       "rhr": [
         54,
@@ -47,11 +47,16 @@
         52,
         55,
         55,
-        null
+        55
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Workout",
+      "duration_min": 22,
+      "calories": 183,
+      "avg_hr": 127
+    }
   },
   "macros_week": {
     "week_label": "Macros — May 20–26",
@@ -203,7 +208,7 @@
       0,
       0,
       80,
-      0
+      80
     ],
     "types": [
       "Pull",
@@ -212,7 +217,7 @@
       "",
       "",
       "Push",
-      ""
+      "Pull"
     ],
     "top_lifts": []
   },
@@ -244,25 +249,25 @@
       46,
       32
     ],
-    "footer": "Wake 8:33 AM · No workout · Natural curve"
+    "footer": "Wake 8:33 AM · Workout 22 min · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-26T13:50:17-07:00",
-    "last_updated_label": "May 26, 1:50 PM PST",
+    "last_updated_iso": "2026-05-26T22:08:30-07:00",
+    "last_updated_label": "May 26, 10:08 PM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-26T13:50:17-07:00",
+        "last_ok_iso": "2026-05-26T22:08:30-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-26T13:50:10-07:00",
+        "last_ok_iso": "2026-05-26T22:08:24-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-26T13:50:09-07:00",
+        "last_ok_iso": "2026-05-26T22:08:23-07:00",
         "error": null
       }
     },
