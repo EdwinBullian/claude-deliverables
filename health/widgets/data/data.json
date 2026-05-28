@@ -247,22 +247,22 @@
     "footer": "Wake 8:47 AM · No workout · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-28T03:43:51-07:00",
-    "last_updated_label": "May 28, 3:43 AM PST",
+    "last_updated_iso": "2026-05-28T09:46:58-07:00",
+    "last_updated_label": "May 28, 9:46 AM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-28T03:43:51-07:00",
+        "last_ok_iso": "2026-05-28T09:46:58-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-28T03:43:47-07:00",
+        "last_ok_iso": "2026-05-28T09:46:55-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-28T03:43:46-07:00",
+        "last_ok_iso": "2026-05-28T09:46:54-07:00",
         "error": null
       }
     },
