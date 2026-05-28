@@ -17,7 +17,7 @@
     "date_label": "May 27 — Today",
     "today": {
       "rhr": 56,
-      "steps": 2244,
+      "steps": 3828,
       "avg_hr": null,
       "sleep_score": 86
     },
@@ -38,7 +38,7 @@
         2466,
         5216,
         4406,
-        2244
+        3828
       ],
       "rhr": [
         60,
@@ -52,10 +52,10 @@
       "today_index": 6
     },
     "today_workout": {
-      "type": "Strength",
-      "duration_min": 5,
-      "calories": 31,
-      "avg_hr": 117
+      "type": "Workout",
+      "duration_min": 36,
+      "calories": 254,
+      "avg_hr": 116
     }
   },
   "macros_week": {
@@ -249,25 +249,25 @@
       46,
       32
     ],
-    "footer": "Wake 8:31 AM · Strength 5 min · Natural curve"
+    "footer": "Wake 8:31 AM · Workout 36 min · Natural curve"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-27T13:57:39-07:00",
-    "last_updated_label": "May 27, 1:57 PM PST",
+    "last_updated_iso": "2026-05-27T22:03:07-07:00",
+    "last_updated_label": "May 27, 10:03 PM PST",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-27T13:57:39-07:00",
+        "last_ok_iso": "2026-05-27T22:03:07-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-27T13:57:32-07:00",
+        "last_ok_iso": "2026-05-27T22:03:00-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-27T13:57:32-07:00",
+        "last_ok_iso": "2026-05-27T22:03:00-07:00",
         "error": null
       }
     },
