@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — Architecture &amp; Tech Stack</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link home">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 3.</span> Architecture &amp; Tech Stack</h1>
+  <p class="subtitle">How a real app fits together. Once you see this, you can read any project's structure.</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#client-server">The client–server model (the one diagram to rule them all)</a></li>
+      <li><a href="#frontend-backend">Frontend vs Backend vs Database</a></li>
+      <li><a href="#apis">APIs — REST, GraphQL, HTTP verbs</a></li>
+      <li><a href="#databases">Databases — SQL vs NoSQL</a></li>
+      <li><a href="#frameworks">Frameworks and what they actually save you</a></li>
+      <li><a href="#languages">Languages — when to reach for which</a></li>
+      <li><a href="#hosting">Hosting, deployment, and the cloud</a></li>
+      <li><a href="#dns">Domains, DNS, HTTPS</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="client-server">The client–server model</h2>
+
+  <p>Almost every web app you'll ever build follows this pattern. Internalize this and 80% of architecture conversations become legible.</p>
+
+  <pre class="diagram">
+   ┌─────────────┐                         ┌─────────────┐                ┌─────────────┐
+   │             │      HTTP requests       │             │   queries     │             │
+   │   CLIENT    │ ──────────────────────▶ │   SERVER    │ ────────────▶ │  DATABASE   │
+   │  (browser,  │                          │  (backend   │                │  (Postgres, │
+   │   mobile    │ ◀────────────────────── │   API)      │ ◀──────────── │   etc.)     │
+   │   app)      │      JSON responses     │             │   results     │             │
+   └─────────────┘                         └─────────────┘                └─────────────┘
+   "what you see"                       "what does the work"            "where data lives"
+  </pre>
+
+  <ul>
+    <li>The <strong>client</strong> runs on the user's device. It draws the UI and handles interactions.</li>
+    <li>The <strong>server</strong> runs in the cloud. It does the secret/expensive/authoritative work — talking to the database, checking permissions, calling AI models, etc.</li>
+    <li>The <strong>database</strong> stores the data persistently. Servers query it; clients usually don't talk to it directly (for security).</li>
+  </ul>
+
+  <p>Communication goes over <strong>HTTP</strong>: client sends a request, server sends a response. Usually the response is JSON. That's an API call.</p>
+
+  <h2 id="frontend-backend">Frontend, Backend, Database — three different jobs</h2>
+
+  <h3>Frontend</h3>
+  <p>Everything the user sees and clicks. Runs in the browser (or as a mobile app). Built with HTML + CSS + JavaScript, almost always inside a <strong>framework</strong> like React, Vue, Svelte, or Next.js. Lives on the client's device after it's downloaded.</p>
+  <p>What it's responsible for: layout, animations, form input, fetching data from your API, displaying it. Cannot be trusted with secrets — anyone can open DevTools and read your code.</p>
+
+  <h3>Backend</h3>
+  <p>The server you control. Runs on a machine somewhere (your laptop in dev, a cloud server in prod). Built with Node.js (Express, Next.js API routes), Python (FastAPI, Django, Flask), Go, Rust, Ruby, Java, etc.</p>
+  <p>What it's responsible for: authentication, business logic, talking to the database, calling external APIs (Stripe, OpenAI, Anthropic), enforcing permissions. <strong>This is where your secrets live</strong> — never put API keys in the frontend.</p>
+
+  <h3>Database</h3>
+  <p>Where data is stored such that it survives a server restart. Two big families covered below.</p>
+
+  <h3>"Full-stack"</h3>
+  <p>Just means one person (or one framework) handles both frontend and backend. Next.js is the dominant full-stack framework right now — you write frontend pages in the same project as backend API routes.</p>
+
+  <h2 id="apis">APIs</h2>
+
+  <p>An <strong>API (Application Programming Interface)</strong> is a contract: "here are the operations I expose, here's what to send, here's what you'll get back." In web context, it usually means a set of HTTP endpoints.</p>
+
+  <h3>Anatomy of an HTTP request</h3>
+
+  <pre><code>POST https://api.myapp.com/v1/users
+Content-Type: application/json
+Authorization: Bearer sk-abc123...
+
+{
+  "email": "eddie@example.com",
+  "name": "Eddie"
+}</code></pre>
+
+  <ul>
+    <li><strong>Method (verb):</strong> POST, GET, PUT, PATCH, DELETE</li>
+    <li><strong>URL (endpoint):</strong> what resource you're hitting</li>
+    <li><strong>Headers:</strong> metadata (auth, content type, etc.)</li>
+    <li><strong>Body:</strong> the data you're sending (usually JSON)</li>
+  </ul>
+
+  <h3>HTTP verbs (the convention)</h3>
+  <table>
+    <thead><tr><th>Verb</th><th>Means</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>GET</td><td>Read data, no side effects</td><td><code>GET /users/42</code></td></tr>
+      <tr><td>POST</td><td>Create something new</td><td><code>POST /users</code></td></tr>
+      <tr><td>PUT</td><td>Replace something entirely</td><td><code>PUT /users/42</code></td></tr>
+      <tr><td>PATCH</td><td>Modify part of something</td><td><code>PATCH /users/42</code></td></tr>
+      <tr><td>DELETE</td><td>Delete it</td><td><code>DELETE /users/42</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Status codes (the response part)</h3>
+  <table>
+    <thead><tr><th>Range</th><th>Meaning</th><th>Common examples</th></tr></thead>
+    <tbody>
+      <tr><td>2xx</td><td>Success</td><td>200 OK, 201 Created, 204 No Content</td></tr>
+      <tr><td>3xx</td><td>Redirect</td><td>301 Moved, 304 Not Modified</td></tr>
+      <tr><td>4xx</td><td>You messed up</td><td>400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 429 Rate Limited</td></tr>
+      <tr><td>5xx</td><td>Server messed up</td><td>500 Internal Error, 502 Bad Gateway, 503 Unavailable</td></tr>
+    </tbody>
+  </table>
+
+  <h3>REST vs GraphQL vs RPC</h3>
+  <ul>
+    <li><strong>REST</strong> — the convention above. URLs are resources, verbs are actions. Everyone knows it. Default choice.</li>
+    <li><strong>GraphQL</strong> — one endpoint where the client says exactly what fields it wants. Trade: more flexible queries, more complex setup. Used at scale (Facebook, GitHub).</li>
+    <li><strong>RPC / gRPC</strong> — call functions over the network like you would locally. High performance, less common in consumer products.</li>
+  </ul>
+
+  <p>For 95% of what you'll build, REST + JSON is the right answer until something specific pushes you elsewhere.</p>
+
+  <h2 id="databases">Databases — SQL vs NoSQL</h2>
+
+  <h3>SQL (relational) databases</h3>
+  <p>Data in tables with strict schemas, related by foreign keys. Query with SQL (Structured Query Language).</p>
+  <p>Examples: <strong>PostgreSQL</strong> (the default these days), <strong>MySQL</strong>, <strong>SQLite</strong> (one file, no server — great for small apps).</p>
+  <pre><code>SELECT users.name, orders.total
+FROM users
+JOIN orders ON orders.user_id = users.id
+WHERE orders.status = 'paid'
+ORDER BY orders.total DESC;</code></pre>
+
+  <h3>NoSQL databases</h3>
+  <p>Various non-relational stores. Different shapes for different jobs:</p>
+  <ul>
+    <li><strong>Document stores</strong> (MongoDB, Firestore) — store JSON-like blobs.</li>
+    <li><strong>Key-value stores</strong> (Redis, DynamoDB) — fast lookups by key. Often used as a cache.</li>
+    <li><strong>Vector databases</strong> (Pinecone, Weaviate, pgvector) — store embeddings for AI. Covered in Module 4.</li>
+    <li><strong>Graph databases</strong> (Neo4j) — store relationships first-class.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>The honest advice</strong>
+    Default to <strong>Postgres</strong> for almost everything. It has JSON support, full-text search, vector extensions (pgvector), and the entire industry's tooling. Don't pick MongoDB because it "sounds modern" — pick it if you have a real reason. SQLite is perfect for small/local apps.
+  </div>
+
+  <h3>ORMs (Object-Relational Mappers)</h3>
+  <p>Libraries that let you query the database using your programming language's objects instead of writing raw SQL. Examples: Prisma (TypeScript), SQLAlchemy (Python), Drizzle (TypeScript), Django ORM. Useful for productivity. Don't lose sight of the SQL underneath — sometimes raw SQL is the right answer.</p>
+
+  <h2 id="frameworks">Frameworks — what they actually save you</h2>
+
+  <p>A <strong>framework</strong> is a pre-built skeleton for an app. It makes a lot of decisions for you (folder structure, routing, conventions) in exchange for letting you skip the boring parts.</p>
+
+  <h3>Frontend frameworks</h3>
+  <table>
+    <thead><tr><th>Framework</th><th>What it is</th><th>Use it when</th></tr></thead>
+    <tbody>
+      <tr><td><strong>React</strong></td><td>The dominant component library</td><td>You're building anything beyond a simple page</td></tr>
+      <tr><td><strong>Next.js</strong></td><td>React + routing + server-side rendering + API routes</td><td>Default choice for new full-stack web apps</td></tr>
+      <tr><td><strong>Vue / Nuxt</strong></td><td>Alternative to React/Next</td><td>You prefer the syntax</td></tr>
+      <tr><td><strong>Svelte / SvelteKit</strong></td><td>Compiled, less overhead</td><td>Performance matters or you like the cleaner code</td></tr>
+      <tr><td><strong>Astro</strong></td><td>Mostly-static sites with interactive islands</td><td>Content sites, blogs, marketing</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Backend frameworks</h3>
+  <table>
+    <thead><tr><th>Framework</th><th>Language</th><th>Use it when</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Next.js API routes</strong></td><td>TypeScript</td><td>Already using Next.js — don't add another backend</td></tr>
+      <tr><td><strong>FastAPI</strong></td><td>Python</td><td>You're building AI features (Python has the ML ecosystem)</td></tr>
+      <tr><td><strong>Express / Hono</strong></td><td>Node.js</td><td>Lightweight Node API</td></tr>
+      <tr><td><strong>Django</strong></td><td>Python</td><td>"Batteries-included" — admin panel, auth, ORM all bundled</td></tr>
+      <tr><td><strong>Rails</strong></td><td>Ruby</td><td>You inherited a Rails project</td></tr>
+      <tr><td><strong>Go (stdlib + Gin/Echo)</strong></td><td>Go</td><td>Performance, simplicity</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <strong>The opinionated default for an AI app in 2026</strong>
+    Frontend: Next.js. Backend: either Next.js API routes (if simple) or FastAPI in Python (if you need real ML libraries). Database: Postgres on Supabase or Neon. Deploy: Vercel for the Next side, Railway/Fly for the Python side. This stack will not bottleneck you for a long time.
+  </div>
+
+  <h2 id="languages">Languages — when to reach for which</h2>
+
+  <table>
+    <thead><tr><th>Language</th><th>What it's actually for</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Python</strong></td><td>AI/ML, data science, scripting, backends. The default for anything AI. Slow per-line, but most heavy lifting is in C libraries.</td></tr>
+      <tr><td><strong>JavaScript / TypeScript</strong></td><td>Anything browser-related. Also backends via Node. TypeScript = JavaScript + type checking (use it, always).</td></tr>
+      <tr><td><strong>HTML / CSS</strong></td><td>Not "programming" but you need to read both. CSS is harder than people admit.</td></tr>
+      <tr><td><strong>SQL</strong></td><td>Talking to databases. You'll touch it even as an AI engineer.</td></tr>
+      <tr><td><strong>Go</strong></td><td>Backend services that need to be fast and simple. Docker, Kubernetes, lots of infra is written in Go.</td></tr>
+      <tr><td><strong>Rust</strong></td><td>Performance + safety. Tooling (e.g., <code>uv</code>, <code>ruff</code>, <code>biome</code>) is increasingly written in Rust.</td></tr>
+      <tr><td><strong>C / C++</strong></td><td>Game engines, OS, embedded, hot performance kernels. You probably won't write it; you'll consume libraries built in it.</td></tr>
+      <tr><td><strong>Swift / Kotlin</strong></td><td>Native iOS / Android apps respectively.</td></tr>
+    </tbody>
+  </table>
+
+  <p>How to tell what a project is written in: look at the file extensions in the repo. <code>.py</code> → Python. <code>.ts</code>/<code>.tsx</code> → TypeScript. <code>.go</code> → Go. Also look at the lockfile: <code>package.json</code> → Node, <code>requirements.txt</code> or <code>pyproject.toml</code> → Python, <code>Cargo.toml</code> → Rust, <code>go.mod</code> → Go.</p>
+
+  <h2 id="hosting">Hosting, deployment, and the cloud</h2>
+
+  <p>"Deploying" = putting your app on a computer with a public address so other people can use it. The spectrum of options, easy to complex:</p>
+
+  <ol>
+    <li><strong>Platform-as-a-Service (PaaS)</strong> — you push code, they run it. <em>Vercel</em> (great for Next.js), <em>Netlify</em>, <em>Railway</em>, <em>Render</em>, <em>Fly.io</em>. Start here. Cost a bit more but save days of work.</li>
+    <li><strong>Serverless functions</strong> — your code runs only when called, scales to zero. AWS Lambda, Vercel Functions, Cloudflare Workers. Great for APIs with spiky traffic.</li>
+    <li><strong>Containers (Docker)</strong> — package your app + all its dependencies into a portable image, run it anywhere. The lingua franca of deployment. Used everywhere from Kubernetes clusters to single-VM hosts.</li>
+    <li><strong>Raw cloud (IaaS)</strong> — you rent a virtual server (AWS EC2, GCP Compute, DigitalOcean droplet) and do everything yourself. Maximum control, maximum work.</li>
+  </ol>
+
+  <h3>The big three clouds</h3>
+  <p>AWS (Amazon), GCP (Google), Azure (Microsoft). They all offer roughly the same services with different names and pricing. AWS is most common, most complex, and most likely to surprise you on the bill. For your projects, you probably don't need to touch any of them — use Vercel/Railway. Learn AWS when an internship forces you to.</p>
+
+  <h2 id="dns">Domains, DNS, HTTPS — in plain English</h2>
+
+  <p>How <code>eddie.dev</code> turns into "my browser loads your site":</p>
+
+  <ol>
+    <li>You buy <code>eddie.dev</code> from a <strong>registrar</strong> (Namecheap, Cloudflare, Porkbun).</li>
+    <li>You configure <strong>DNS records</strong> pointing the domain at your server's IP address. Common record types:
+      <ul>
+        <li><strong>A record</strong> — domain → IP address (<code>eddie.dev → 76.76.21.21</code>)</li>
+        <li><strong>CNAME</strong> — domain → another domain (<code>www.eddie.dev → eddie.dev</code>)</li>
+        <li><strong>MX</strong> — for email</li>
+        <li><strong>TXT</strong> — verification, SPF, DKIM (email security)</li>
+      </ul>
+    </li>
+    <li>Someone types <code>eddie.dev</code>. Their computer asks DNS "what's the IP?", gets the answer, sends an HTTP request to that IP.</li>
+    <li>Your server responds with HTML. Browser renders it.</li>
+  </ol>
+
+  <h3>HTTPS vs HTTP</h3>
+  <p>HTTPS is HTTP encrypted with TLS. Padlock in the address bar. Required for everything modern (browsers will warn or block plain HTTP). Used to be hard to set up; now <strong>Let's Encrypt</strong> issues free certificates and most hosts (Vercel, Cloudflare) handle it automatically.</p>
+
+  <h2 id="do">What to actually do</h2>
+
+  <ol>
+    <li><strong>Look at one of your existing projects and draw the diagram.</strong> Where's the client, where's the server, where's the data, what API calls happen? If you can't draw it, you don't understand it yet.</li>
+    <li><strong>Open the Network tab in DevTools while using any web app.</strong> Watch the actual HTTP requests fly. Look at the URLs, methods, status codes, response payloads. This is the only way to make APIs feel real instead of theoretical.</li>
+    <li><strong>Build a tiny FastAPI + Next.js app.</strong> One endpoint, one page that calls it. Doesn't matter what it does. You'll learn more in two hours of this than a week of reading.</li>
+    <li><strong>Deploy something to Vercel.</strong> Free, takes 5 minutes, demystifies the whole "how does code get on the internet" question.</li>
+  </ol>
+
+  <h2>Worth watching</h2>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/c/ByteByteGo">ByteByteGo channel</a>
+      <div class="meta">Alex Xu's channel — visual explainers for system design and architecture. Almost every video is worth your time. Bookmark and watch one when you're bored.</div>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="module-2-git.html">
+      <span class="label">← Previous</span>
+      Git &amp; GitHub
+    </a>
+    <a href="module-4-ai-engineering.html" class="next">
+      <span class="label">Next module →</span>
+      AI Engineering
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 3 of 6 · Vibe → Engineer</footer>
+
+</body>
+</html>
