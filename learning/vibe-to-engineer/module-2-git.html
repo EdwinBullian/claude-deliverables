@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 — Git &amp; GitHub</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link home">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 2.</span> Git &amp; GitHub</h1>
+  <p class="subtitle">The mental model that makes everything click — and the commands that follow from it.</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#git-vs-github">Git vs GitHub — they are not the same thing</a></li>
+      <li><a href="#four-places">The four places code lives</a></li>
+      <li><a href="#commits">Commits and what makes a good one</a></li>
+      <li><a href="#branches">Branches and main</a></li>
+      <li><a href="#push-pull">Push, pull, fetch</a></li>
+      <li><a href="#prs">Pull Requests</a></li>
+      <li><a href="#merge-rebase">Merge vs rebase vs squash</a></li>
+      <li><a href="#conflicts">Merge conflicts</a></li>
+      <li><a href="#worktrees">Worktrees</a></li>
+      <li><a href="#fork">Forks</a></li>
+      <li><a href="#gitignore">.gitignore and the stuff you must never commit</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="git-vs-github">Git vs GitHub — they are not the same thing</h2>
+
+  <p>This is the single most common confusion and clearing it up makes the rest of this module easier.</p>
+
+  <dl>
+    <dt>Git</dt>
+    <dd>A <strong>program</strong> that runs on your computer. It tracks changes to files in a folder — every save, every edit, every history-rewrite — locally. Invented by Linus Torvalds (yes, the Linux guy) in 2005. You can use Git with no internet, no account, no GitHub.</dd>
+
+    <dt>GitHub (and GitLab, Bitbucket, etc.)</dt>
+    <dd>A <strong>website</strong> that hosts copies of Git repositories online so multiple people can sync. It also adds features Git doesn't have natively: Pull Requests, Issues, code review UI, Actions (CI/CD), wikis. Owned by Microsoft. Free for most use.</dd>
+  </dl>
+
+  <p>So when you <code>git push</code>, you're using the Git program on your computer to send your changes to a copy stored on GitHub. The "push" is Git; the "place you're pushing to" is GitHub. Once you internalize this split, everything else makes more sense.</p>
+
+  <h2 id="four-places">The four places your code lives</h2>
+
+  <p>This is the model that unlocks Git. Code exists in <strong>four locations</strong>, and every Git command moves it between them.</p>
+
+  <pre class="diagram">
+  ┌─────────────────┐  edit files   ┌─────────────────┐  git add    ┌─────────────────┐  git commit  ┌─────────────────┐  git push  ┌─────────────────┐
+  │  YOU TYPING     │ ────────────▶ │   WORKING       │ ──────────▶ │   STAGING       │ ───────────▶ │   LOCAL REPO    │ ─────────▶ │   REMOTE REPO   │
+  │   (editor)      │               │   DIRECTORY     │             │   AREA (index)  │              │   (.git folder) │            │   (GitHub)      │
+  └─────────────────┘               └─────────────────┘             └─────────────────┘              └─────────────────┘            └─────────────────┘
+                                                                                                                   ◀────── git pull / git fetch ───────
+  </pre>
+
+  <ol>
+    <li><strong>Working directory.</strong> The actual files on your disk that you edit in your IDE.</li>
+    <li><strong>Staging area</strong> (a.k.a. "the index"). A holding pen for changes you want in your next commit. You don't commit everything you changed — you commit a curated set.</li>
+    <li><strong>Local repo.</strong> The full history of every commit ever made, stored in a hidden <code>.git</code> folder at the root of your project. This is the actual database.</li>
+    <li><strong>Remote repo.</strong> A copy of the local repo hosted somewhere others can reach — usually GitHub.</li>
+  </ol>
+
+  <p>Every Git command you'll learn is moving things between those four boxes:</p>
+
+  <pre><code>git add file.py        # working dir → staging
+git commit -m "..."    # staging → local repo
+git push               # local repo → remote
+git pull               # remote → local repo (and working dir)
+git status             # show what's where</code></pre>
+
+  <div class="callout tip">
+    <strong>Why staging exists</strong>
+    Because you'll often change three files but only want two of them in this commit. Staging is the "ok, <em>these specific changes</em> are what I'm saving" step. If you don't care, <code>git add .</code> stages everything.
+  </div>
+
+  <h2 id="commits">Commits and what makes a good one</h2>
+
+  <p>A <strong>commit</strong> is a snapshot of your project at a moment in time, with a message describing what changed and why. Every commit has:</p>
+
+  <ul>
+    <li>A unique ID (a long SHA hash like <code>a3f8b1c</code>)</li>
+    <li>An author and timestamp</li>
+    <li>A pointer to the previous commit (forming a chain — the "history")</li>
+    <li>A message you wrote</li>
+  </ul>
+
+  <p>Good commits are small and focused. One logical change per commit. Bad commits are "fixed stuff" containing 40 file changes across 5 unrelated features.</p>
+
+  <h3>Writing good commit messages</h3>
+  <p>The widely-cited convention:</p>
+  <pre><code>Add user avatar to profile dropdown
+
+Avatars are now pulled from /api/users/me and cached for
+the session. Falls back to initials if no avatar exists.
+
+Closes #142</code></pre>
+
+  <ul>
+    <li>First line: short summary (~50 chars), imperative mood ("Add" not "Added"), no period.</li>
+    <li>Blank line.</li>
+    <li>Body: <em>why</em> and any context the diff doesn't show.</li>
+  </ul>
+
+  <p>For solo projects you can be looser. But "fix" as a commit message is a thing you'll regret in six months.</p>
+
+  <h2 id="branches">Branches and main</h2>
+
+  <p>A <strong>branch</strong> is just a movable pointer to a commit. That's it. Despite all the diagrams and analogies, it's literally a 40-character text file that says "this branch points to commit a3f8b1c."</p>
+
+  <p><code>main</code> (formerly called <code>master</code>) is the default branch in every repo. It's not special — it's just a convention for "the version we trust."</p>
+
+  <p>Why branches matter: you don't want to do experimental work directly on <code>main</code>. If it breaks, prod breaks (or other people pulling from main get your broken code). So you <strong>branch off</strong>, do your work, get it reviewed, and merge back.</p>
+
+  <pre><code># Make a new branch off your current one and switch to it
+git checkout -b add-user-avatars
+# (modern syntax: git switch -c add-user-avatars)
+
+# See all branches; the * shows where you are
+git branch
+
+# Switch back to main
+git checkout main
+# (or: git switch main)
+
+# Delete a branch you no longer need
+git branch -d add-user-avatars</code></pre>
+
+  <h3>HEAD</h3>
+  <p>HEAD is "where you currently are" — a pointer to the branch you have checked out. When you make a new commit, HEAD (and the branch it's pointing at) move forward to the new commit. That's the whole mystery.</p>
+
+  <h2 id="push-pull">Push, pull, fetch</h2>
+
+  <dl>
+    <dt><code>git push</code></dt>
+    <dd>Send your local commits up to the remote (GitHub). "Publish my work."</dd>
+
+    <dt><code>git fetch</code></dt>
+    <dd>Download commits from the remote into your local repo, but <strong>don't merge them into your working files yet</strong>. Read-only update. Useful for "what's new on main without disturbing my current work."</dd>
+
+    <dt><code>git pull</code></dt>
+    <dd>= <code>git fetch</code> + <code>git merge</code>. Download new commits AND apply them to your current branch. The everyday "sync me up" command.</dd>
+  </dl>
+
+  <div class="callout warn">
+    <strong>The classic mistake</strong>
+    You make local commits, then run <code>git pull</code>, and Git creates a weird "merge commit" you didn't expect. That's because someone else pushed to the same branch and Git had to merge their work with yours. Fix: use <code>git pull --rebase</code> or set <code>git config --global pull.rebase true</code> once. This keeps history linear instead of creating ugly merge bubbles.
+  </div>
+
+  <h2 id="prs">Pull Requests (PRs)</h2>
+
+  <p>A <strong>Pull Request</strong> is a GitHub feature, not a Git feature. It's a request to merge a branch into another (usually <em>your branch into main</em>), with a UI for review and discussion before it happens.</p>
+
+  <p>Typical flow on a real project:</p>
+  <ol>
+    <li>You branch off main: <code>git checkout -b add-feature</code></li>
+    <li>You commit a few times, push the branch: <code>git push -u origin add-feature</code></li>
+    <li>On GitHub, you click "Open Pull Request"</li>
+    <li>Teammates review, leave comments, you push fixes (PRs auto-update)</li>
+    <li>Once approved + CI passes, you click "Merge" — your branch's commits become part of main</li>
+    <li>Delete the branch</li>
+  </ol>
+
+  <p>Solo devs use PRs too, because:</p>
+  <ul>
+    <li>It forces you to <em>look at your diff before shipping</em>. You catch dumb stuff.</li>
+    <li>You can run CI (tests, linting) on the PR before merging.</li>
+    <li>It gives you a record of "why was this change made?" linked to issues.</li>
+    <li>You can ask Claude to review the PR.</li>
+  </ul>
+
+  <h2 id="merge-rebase">Merge vs rebase vs squash</h2>
+
+  <p>Three ways to combine the work of two branches. The difference is what your history looks like afterward.</p>
+
+  <h3>Merge</h3>
+  <p>Creates a new "merge commit" that has two parents — one from each branch. History looks like a railroad with switches.</p>
+  <pre class="diagram">
+  main      A ─── B ─── C ───────── M
+                       \           /
+  feature               D ─── E ──┘
+  </pre>
+  <p><strong>Pros:</strong> preserves the actual history. <strong>Cons:</strong> can get messy on busy repos.</p>
+
+  <h3>Rebase</h3>
+  <p>Picks up your branch's commits and replays them on top of the latest main, rewriting history so it looks like you started from there.</p>
+  <pre class="diagram">
+  Before:
+  main      A ─── B ─── C
+                  \
+  feature          D ─── E
+
+  After rebase:
+  main      A ─── B ─── C
+                        \
+  feature                D' ─── E'
+  </pre>
+  <p><strong>Pros:</strong> clean linear history. <strong>Cons:</strong> rewrites commit IDs (the <code>D'</code> not <code>D</code>), which is bad if other people have pulled your branch.</p>
+
+  <h3>Squash</h3>
+  <p>Collapses all your branch's commits into one commit before merging. Common GitHub setting — "Squash and merge" button.</p>
+  <p><strong>Pros:</strong> main history reads as one commit per feature. <strong>Cons:</strong> you lose the granular history of how the feature evolved.</p>
+
+  <div class="callout">
+    <strong>The honest advice</strong>
+    For solo or small-team projects, pick <strong>squash merge</strong> as your default and stop thinking about it. Use rebase only when you understand why you want it. Don't rebase commits you've already pushed and shared.
+  </div>
+
+  <h2 id="conflicts">Merge conflicts</h2>
+
+  <p>When two branches change the same lines of the same file, Git can't auto-merge. It marks the file with conflict markers and tells you to fix it by hand:</p>
+
+  <pre><code>function greeting() {
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+  return "Hello!";
+=======
+  return "Hi there!";
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-branch
+}</code></pre>
+
+  <p>Everything between <code>&lt;&lt;&lt; HEAD</code> and <code>===</code> is the version you currently have. Everything between <code>===</code> and <code>&gt;&gt;&gt; feature-branch</code> is the incoming version. You edit the file to be what you want (delete the markers), then:</p>
+
+  <pre><code>git add conflicted-file.js
+git commit            # finishes the merge</code></pre>
+
+  <p>Modern editors (VS Code, Cursor) show conflict markers as inline buttons: "Accept Current," "Accept Incoming," "Accept Both." Click and move on.</p>
+
+  <h2 id="worktrees">Worktrees</h2>
+
+  <p>You asked about worktrees specifically. They're great and underused.</p>
+
+  <p>Normally a Git repo can only have one branch checked out at a time. If you're working on <code>add-feature</code> and you need to switch to <code>fix-bug</code>, you have to commit (or stash) your work, switch branches, and the working files all change.</p>
+
+  <p>A <strong>worktree</strong> lets you have <em>multiple branches checked out at the same time, in different folders, sharing the same Git history.</em></p>
+
+  <pre><code># In your main repo folder, on main branch
+git worktree add ../my-project-bugfix fix-bug
+
+# Now you have:
+#   ./my-project           ← on main, your normal folder
+#   ../my-project-bugfix   ← on fix-bug, totally separate working files
+# Both share the same .git database, so commits/branches/etc. are visible across them.</code></pre>
+
+  <p>Why this is huge for agentic coding: you can let Claude run on the bugfix in one worktree while you keep working on the feature in the other. <strong>Superpowers uses worktrees by default</strong> precisely for this reason — each parallel agent gets its own isolated workspace so they don't step on each other.</p>
+
+  <pre><code># See your worktrees
+git worktree list
+
+# Remove a worktree when done
+git worktree remove ../my-project-bugfix</code></pre>
+
+  <h2 id="fork">Forks</h2>
+
+  <p>A <strong>fork</strong> is your own personal copy of someone else's GitHub repo, under your account. You'd fork when:</p>
+  <ul>
+    <li>You want to contribute to an open-source project you don't have write access to. You fork, push to your fork, open a PR from your fork back to theirs.</li>
+    <li>You want to take an existing project as a starting point and make it your own.</li>
+  </ul>
+
+  <p>Fork vs clone vs branch — easy way to remember:</p>
+  <ul>
+    <li><strong>Fork:</strong> copy on GitHub (their account → your account).</li>
+    <li><strong>Clone:</strong> copy from GitHub to your local machine.</li>
+    <li><strong>Branch:</strong> a parallel line of work <em>inside</em> a repo.</li>
+  </ul>
+
+  <h2 id="gitignore">.gitignore and what you must never commit</h2>
+
+  <p><code>.gitignore</code> is a file at the root of your repo listing patterns Git should pretend don't exist. Examples:</p>
+
+  <pre><code># Secrets — never commit
+.env
+.env.*
+*.key
+*.pem
+
+# Dependencies — rebuild from package.json instead
+node_modules/
+venv/
+__pycache__/
+
+# Build output
+dist/
+build/
+.next/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor configs (sometimes)
+.vscode/
+.idea/</code></pre>
+
+  <div class="callout danger">
+    <strong>The "I committed an API key" disaster</strong>
+    If you push a secret to a public repo, <strong>even for 30 seconds</strong>, treat it as leaked. Bots scrape new commits within minutes. Rotate the key immediately (regenerate it on the provider's site), then remove it from history with <code>git filter-repo</code> or BFG. Don't just delete the file and commit — the secret still lives in your history.
+  </div>
+
+  <h2 id="do">What to actually do</h2>
+
+  <ol>
+    <li><strong>Set your global config once.</strong>
+      <pre><code>git config --global user.name "Eddie Bullian"
+git config --global user.email "edwinbullian@gmail.com"
+git config --global pull.rebase true
+git config --global init.defaultBranch main</code></pre>
+    </li>
+    <li><strong>For one of your existing projects, do a real PR workflow.</strong> Even though you're solo: branch off main, make changes, push the branch, open a PR on GitHub, read your own diff in the GitHub UI, then merge. You'll catch things you wouldn't have on the command line.</li>
+    <li><strong>Try a worktree.</strong> On any repo, run <code>git worktree add ../same-project-experiment main</code>. Open the new folder in a separate window. Realize you now have two parallel Claude sessions you can run simultaneously without them fighting.</li>
+    <li><strong>Read your reflog once.</strong> Run <code>git reflog</code>. This is Git's "undo" record. Almost nothing in Git is truly lost — you can recover from "I just nuked my branch" 99% of the time using this. Knowing it exists is the whole win.</li>
+  </ol>
+
+  <h2>Watch these (if you watch nothing else)</h2>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/watch?v=aolI_Rz0ZqY">Scott Chacon — "So You Think You Know Git" (FOSDEM 2024)</a>
+      <div class="meta">~50 min · From a Git co-founder. The single best Git talk on the internet. Worth watching twice.</div>
+    </div>
+  </div>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://missing.csail.mit.edu/2020/version-control/">MIT Missing Semester — "Version Control (Git)"</a>
+      <div class="meta">~80 min lecture · Builds the mental model from first principles. Free CS course MIT didn't teach.</div>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="module-1-vocab.html">
+      <span class="label">← Previous</span>
+      Foundational Vocab
+    </a>
+    <a href="module-3-architecture.html" class="next">
+      <span class="label">Next module →</span>
+      Architecture &amp; Tech Stack
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 2 of 6 · Vibe → Engineer</footer>
+
+</body>
+</html>
