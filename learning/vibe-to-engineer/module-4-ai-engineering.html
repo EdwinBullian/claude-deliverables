@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 — AI Engineering</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link home">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 4.</span> AI Engineering</h1>
+  <p class="subtitle">The actual job. What an AI engineer does that distinguishes them from a generalist dev.</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#what-is">What "AI engineering" actually means</a></li>
+      <li><a href="#llm-apis">LLM APIs and how the bill works</a></li>
+      <li><a href="#tokens">Tokens, context windows, the cost math</a></li>
+      <li><a href="#prompting">Prompting as a real discipline</a></li>
+      <li><a href="#tool-use">Tool use / function calling</a></li>
+      <li><a href="#rag">RAG — retrieval-augmented generation</a></li>
+      <li><a href="#embeddings">Embeddings and vector databases</a></li>
+      <li><a href="#agents">Agents and agent loops</a></li>
+      <li><a href="#mcp">MCP — what the protocol is, why it matters</a></li>
+      <li><a href="#evals">Evals — the part nobody talks about</a></li>
+      <li><a href="#decisions">Fine-tune vs RAG vs prompt — the decision tree</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="what-is">What "AI engineering" actually means</h2>
+
+  <p>There are three jobs that get conflated:</p>
+  <ul>
+    <li><strong>ML researcher</strong> — invents new models. Reads papers, trains things from scratch. Probably a PhD.</li>
+    <li><strong>ML engineer</strong> — trains, fine-tunes, deploys models. Knows PyTorch, data pipelines, GPU clusters.</li>
+    <li><strong>AI engineer</strong> — builds products on top of existing foundation models. Writes glue code, designs prompts, sets up RAG, evaluates outputs. This is the one growing fastest and the one most relevant to you.</li>
+  </ul>
+
+  <p>The AI engineer's core mental shift: <strong>the model is a component, not a feature</strong>. Your job is to wire it into a system that actually solves the user's problem — give it the right context, the right tools, the right guardrails, and measure whether it's working.</p>
+
+  <h2 id="llm-apis">LLM APIs and how the bill works</h2>
+
+  <p>The big providers expose their models behind HTTP APIs. You send a prompt, you get a response. The major ones:</p>
+
+  <ul>
+    <li><strong>Anthropic</strong> — Claude (Opus, Sonnet, Haiku). What's powering this app.</li>
+    <li><strong>OpenAI</strong> — GPT-4, GPT-5, o-series reasoning models.</li>
+    <li><strong>Google</strong> — Gemini.</li>
+    <li><strong>Open-source via providers</strong> — Llama, Mistral, DeepSeek via Together, Groq, Replicate, etc.</li>
+  </ul>
+
+  <p>A minimal Anthropic call in Python looks like this:</p>
+
+  <pre><code>from anthropic import Anthropic
+
+client = Anthropic()  # reads ANTHROPIC_API_KEY from env
+
+msg = client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "What's the capital of France?"}
+    ],
+)
+
+print(msg.content[0].text)</code></pre>
+
+  <p>That's it. Everything else — agents, RAG, tool use — is just sophistication added on top of "send a message, get a response."</p>
+
+  <h2 id="tokens">Tokens, context windows, and how the bill works</h2>
+
+  <p>Models don't see characters. They see <strong>tokens</strong>. A token is roughly 3-4 characters or about ¾ of a word.</p>
+  <ul>
+    <li>"Hello" = 1 token</li>
+    <li>"Hello, world!" = 4 tokens</li>
+    <li>A page of text ≈ 500 tokens</li>
+  </ul>
+
+  <p>Two numbers control your life:</p>
+
+  <dl>
+    <dt>Context window</dt>
+    <dd>The maximum tokens the model can see in one call. Claude Sonnet 4.6 = 200K tokens. Long enough for ~150 pages of text. If you exceed it, the API errors or silently drops earlier content.</dd>
+
+    <dt>Pricing — input vs output tokens</dt>
+    <dd>You pay separately for input (what you send) and output (what the model generates). Output is usually 3-5x more expensive than input. Example pricing (check current rates): Sonnet might be $3 per million input tokens, $15 per million output tokens.</dd>
+  </dl>
+
+  <div class="callout warn">
+    <strong>The cost trap</strong>
+    Long conversations + autonomous agents = giant context windows that grow each turn. A poorly-built agent loop can burn through $100 of tokens overnight. Always log token usage; set hard limits per call; use cheaper models (Haiku) for the steps that don't need the big brain.
+  </div>
+
+  <h2 id="prompting">Prompting as a real discipline</h2>
+
+  <p>The intuition you've built doing vibe coding is real prompting skill. The formal version just adds structure.</p>
+
+  <h3>The 5 levers</h3>
+  <ol>
+    <li><strong>System prompt</strong> — sets the model's persona, role, and standing rules. Sent once.</li>
+    <li><strong>User message</strong> — the actual request.</li>
+    <li><strong>Examples (few-shot)</strong> — show 2-3 input/output pairs of what you want before the real request. Massive quality jump for structured tasks.</li>
+    <li><strong>Constraints</strong> — explicit do's and don'ts. "Output only JSON." "Cite your sources." "If unsure, say so."</li>
+    <li><strong>Chain of thought</strong> — ask the model to think step by step before answering. For tough problems, this just works.</li>
+  </ol>
+
+  <h3>Anthropic's prompt engineering style</h3>
+  <p>Anthropic recommends using <strong>XML tags</strong> to separate sections of a complex prompt:</p>
+
+  <pre><code>&lt;instructions&gt;
+Classify the sentiment of the following review as positive, negative, or neutral.
+Output only the word.
+&lt;/instructions&gt;
+
+&lt;example&gt;
+Review: "This was the best meal of my life."
+Sentiment: positive
+&lt;/example&gt;
+
+&lt;review&gt;
+The pasta was overcooked but the service was friendly.
+&lt;/review&gt;</code></pre>
+
+  <p>Why XML and not Markdown? It's unambiguous — no "is this a heading or a code block" parsing. Models trained with it perform meaningfully better on structured tasks.</p>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/watch?v=T9aRN5JkmL8">Anthropic — "AI prompt engineering: A deep dive"</a>
+      <div class="meta">~80 min · Anthropic's own prompt engineering team. Best material on the topic, period.</div>
+    </div>
+  </div>
+
+  <h2 id="tool-use">Tool use / function calling</h2>
+
+  <p>By default an LLM can only output text. <strong>Tool use</strong> (a.k.a. function calling) is how it interacts with the outside world.</p>
+
+  <p>You give the model a list of functions it's allowed to call, with their parameter schemas. When the model decides one would help, it returns a structured "I want to call <code>get_weather(city='Paris')</code>" instead of text. Your code executes the function, returns the result back to the model, and it continues.</p>
+
+  <pre><code>tools = [{
+    "name": "get_weather",
+    "description": "Get current weather for a city",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "city": {"type": "string"}
+        },
+        "required": ["city"]
+    }
+}]
+
+response = client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=1024,
+    tools=tools,
+    messages=[{"role": "user", "content": "Should I bring an umbrella in Paris?"}]
+)
+
+# Model responds with a tool_use block. Your code runs get_weather("Paris"),
+# sends the result back, and the model uses it to answer.</code></pre>
+
+  <p>This is the foundation of everything agentic. Cowork's connectors, Claude Code's file editing — all tool use under the hood.</p>
+
+  <h2 id="rag">RAG — Retrieval-Augmented Generation</h2>
+
+  <p>Models don't know your private data. They don't know what's in your Notion, your codebase, your company wiki. RAG is the standard pattern for fixing that.</p>
+
+  <p>Standard RAG flow:</p>
+  <ol>
+    <li><strong>Ingest:</strong> Take your documents (PDFs, web pages, code), split them into chunks (~500 tokens each), turn each chunk into a vector (embedding), store the vectors in a vector database.</li>
+    <li><strong>Retrieve:</strong> When the user asks a question, embed the question into a vector, find the chunks whose vectors are most similar (cosine similarity), return the top 5–10.</li>
+    <li><strong>Augment:</strong> Prepend those chunks to the user's prompt as context.</li>
+    <li><strong>Generate:</strong> Ask the LLM to answer using the provided context.</li>
+  </ol>
+
+  <pre class="diagram">
+  User question
+       │
+       ▼
+   ┌──────────┐                ┌──────────────┐
+   │ Embed Q  │ ─── vector ──▶ │ Vector DB    │
+   └──────────┘                │ similarity   │
+                                │ search       │
+                                └──────┬───────┘
+                                       │ top-K chunks
+                                       ▼
+                                ┌──────────────┐       ┌──────────┐
+                                │  Combine Q + │ ────▶ │   LLM    │ ──▶ Answer
+                                │  chunks      │       │          │
+                                └──────────────┘       └──────────┘
+  </pre>
+
+  <p>When NOT to use RAG: if your data fits in the context window, just stuff it in directly. With 200K-token Claude, that's a lot more than people realize.</p>
+
+  <h2 id="embeddings">Embeddings and vector databases</h2>
+
+  <p>An <strong>embedding</strong> is a fixed-size list of numbers (a vector) that represents the meaning of a piece of text. The trick: texts with similar meaning have vectors that are close to each other in vector space. This is how "semantic search" works.</p>
+
+  <pre><code>embed("dog") ≈ embed("puppy")      # close
+embed("dog") ≠ embed("calculator")  # far apart</code></pre>
+
+  <p>You generate embeddings via an embedding model (OpenAI's <code>text-embedding-3-small</code>, Voyage AI, Cohere, etc.) — much cheaper than calling an LLM.</p>
+
+  <h3>Vector databases</h3>
+  <p>Specialized stores designed for "given a query vector, find the K nearest neighbors fast." Without one, comparing one vector against millions takes forever.</p>
+  <ul>
+    <li><strong>Pinecone</strong> — managed, easy.</li>
+    <li><strong>Weaviate, Qdrant, Chroma</strong> — open-source.</li>
+    <li><strong>pgvector</strong> — Postgres extension. If you already use Postgres, this is often the right answer (one less service).</li>
+  </ul>
+
+  <h2 id="agents">Agents and agent loops</h2>
+
+  <p>An <strong>agent</strong> is an LLM in a loop with tools and a goal. Pseudocode:</p>
+
+  <pre><code>def agent_loop(goal, tools, max_steps=20):
+    messages = [{"role": "user", "content": goal}]
+    for _ in range(max_steps):
+        response = llm.call(messages, tools=tools)
+        if response.is_done:
+            return response.text
+        if response.wants_tool:
+            result = run_tool(response.tool_name, response.tool_args)
+            messages.append(response)
+            messages.append({"role": "tool", "content": result})
+    return "Hit step limit"</code></pre>
+
+  <p>That's the entire architecture of every agent system, from Cowork to Claude Code to Devin to ChatGPT's web browsing. Everything else is detail — what tools, what prompts, how it handles errors, what guardrails. (Read Anthropic's <a href="https://www.anthropic.com/engineering/building-effective-agents">"Building effective agents"</a> — the canonical reference.)</p>
+
+  <h3>Multi-agent / subagent patterns</h3>
+  <p>Modern systems often have one "orchestrator" agent that spawns specialized "subagents" for subtasks. Each subagent has its own context window and tool list. Why: cleaner context, parallelizable, lets a small expert do its job without polluting the main thread. Superpowers and Claude Code both lean heavily on this. More in Module 6.</p>
+
+  <h2 id="mcp">MCP — Model Context Protocol</h2>
+
+  <p><strong>MCP</strong> is an open protocol (designed by Anthropic, now broadly adopted) for connecting AI models to external systems — tools, data sources, prompts. Think of it as <strong>"USB-C for AI tools."</strong></p>
+
+  <p>Before MCP: every app that wanted to give an LLM access to, say, Slack had to write a custom Slack integration. Every app re-implemented the same thing.</p>
+
+  <p>With MCP: someone writes an <strong>MCP server</strong> for Slack (exposing tools like <code>send_message</code>, <code>list_channels</code>). Any MCP-compatible client (Claude Desktop, Cowork, Cursor, etc.) can connect to that server and instantly gain Slack abilities. The integration is written once.</p>
+
+  <p>Architecture:</p>
+  <pre class="diagram">
+   ┌─────────────┐       MCP        ┌──────────────┐
+   │  Claude     │ ◀──── stdio  ──▶ │ MCP Server   │ ──▶ Slack API
+   │  Desktop    │       or         │ (for Slack)  │
+   │  (client)   │       HTTP       └──────────────┘
+   │             │
+   │             │       MCP        ┌──────────────┐
+   │             │ ◀────────────── ▶│ MCP Server   │ ──▶ Local files
+   │             │                  │ (filesystem) │
+   └─────────────┘                  └──────────────┘
+  </pre>
+
+  <p>Every connector you have in Cowork — Notion, Gmail, Google Calendar, Spotify, Cronometer, TradingView — is an MCP server. The same servers work in Claude Code, Cursor, OpenAI's Codex. Write once, use everywhere.</p>
+
+  <div class="callout tip">
+    <strong>Why this matters for you</strong>
+    You're already using MCP heavily without thinking about it. Once you understand the protocol, building your own MCP server for any private API or tool you care about is a weekend project. Suddenly your AI tools can talk to systems no one's built integrations for. Anthropic has good docs: <a href="https://modelcontextprotocol.io/">modelcontextprotocol.io</a>.
+  </div>
+
+  <h2 id="evals">Evals — the part nobody talks about</h2>
+
+  <p>The single thing that separates serious AI engineering from prompt-and-pray: <strong>you measure whether your output is actually good.</strong></p>
+
+  <p>An <strong>eval</strong> is a test for AI output. Examples:</p>
+  <ul>
+    <li>"For these 50 customer questions, does my support bot's answer match the human-written gold answer at least 80% of the time?"</li>
+    <li>"For these 100 code-review tasks, does Claude catch the planted bug?"</li>
+    <li>"On this set of meeting transcripts, does the summary include all action items?"</li>
+  </ul>
+
+  <p>The eval can be:</p>
+  <ul>
+    <li><strong>Exact match</strong> — when there's a single correct answer (classification tasks).</li>
+    <li><strong>Substring / regex</strong> — answer must contain certain things.</li>
+    <li><strong>LLM-as-judge</strong> — another LLM scores the output against criteria. Surprisingly good, with caveats.</li>
+    <li><strong>Human review</strong> — gold standard, slow.</li>
+  </ul>
+
+  <p>Without evals, you tweak your prompt, it seems better, but you don't actually know if you fixed 3 cases and broke 7. With evals, you know.</p>
+
+  <h2 id="decisions">Fine-tune vs RAG vs prompt — the decision tree</h2>
+
+  <p>The flowchart that saves you months:</p>
+
+  <ol>
+    <li><strong>First: can you fix it with a better prompt?</strong> Usually yes. Try few-shot examples, clearer constraints, chain-of-thought. <em>Almost everyone underuses this.</em></li>
+    <li><strong>Does the model need access to information it doesn't have?</strong> RAG. Private docs, recent data, your codebase.</li>
+    <li><strong>Does the model need to take actions in the world?</strong> Tool use / agents.</li>
+    <li><strong>Does the model need to behave in a very specific style or format that's hard to specify in a prompt?</strong> Maybe fine-tuning. But try lots of few-shot examples first.</li>
+    <li><strong>Does the model fundamentally not know your domain?</strong> Fine-tuning, or maybe a base model swap.</li>
+  </ol>
+
+  <p>Fine-tuning is what people reach for too early. It's expensive, slow, and the resulting model is frozen — you can't easily update it when your data changes. RAG + good prompting handles 90%+ of real use cases.</p>
+
+  <h2 id="do">What to actually do</h2>
+
+  <ol>
+    <li><strong>Get an Anthropic API key</strong> and write a 20-line Python script that makes a real API call. Read the response object structure. This makes the abstraction concrete.</li>
+    <li><strong>Build a tiny tool-use loop.</strong> Give Claude one tool (a calculator, a weather function, anything), put it in a loop, watch it choose to call the tool. Two hours, max.</li>
+    <li><strong>Build a toy RAG system.</strong> Take 5 PDFs, chunk them, embed them with OpenAI embeddings, store in pgvector or Chroma, retrieve + answer. The full loop in one weekend project beats reading about it for a month.</li>
+    <li><strong>Write your first eval.</strong> Pick any AI feature you've built. Make a list of 20 inputs with the answers you'd want. Run your system on all 20. Score the output. Welcome to AI engineering.</li>
+    <li><strong>Read Anthropic's "Building effective agents."</strong> Short, opinionated, by the team that built Claude. <a href="https://www.anthropic.com/engineering/building-effective-agents">anthropic.com/engineering/building-effective-agents</a></li>
+  </ol>
+
+  <h2>Must-watch</h2>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g">Andrej Karpathy — "[1hr Talk] Intro to Large Language Models"</a>
+      <div class="meta">~60 min · The single best explainer on what LLMs actually are. From an OpenAI co-founder. Watch this twice.</div>
+    </div>
+  </div>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/watch?v=7xTGNNLPyMI">Andrej Karpathy — "Deep Dive into LLMs like ChatGPT"</a>
+      <div class="meta">~3.5 hours · Long, but the most comprehensive single resource on how modern LLMs work end-to-end. Pair with the intro.</div>
+    </div>
+  </div>
+
+  <div class="video">
+    <div class="icon">▶️</div>
+    <div>
+      <a href="https://www.youtube.com/watch?v=yMQPQuz5WpA">3Blue1Brown — "But what is a GPT? Visual intro to Transformers"</a>
+      <div class="meta">~28 min · The most beautiful visualization of how a transformer works. Worth it just for the animations.</div>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="module-3-architecture.html">
+      <span class="label">← Previous</span>
+      Architecture &amp; Tech Stack
+    </a>
+    <a href="module-5-engineer-mindset.html" class="next">
+      <span class="label">Next module →</span>
+      Engineer Mindset
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 4 of 6 · Vibe → Engineer</footer>
+
+</body>
+</html>
