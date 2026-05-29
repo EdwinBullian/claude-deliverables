@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 — Foundational Vocab</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link home">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 1.</span> Foundational Vocab</h1>
+  <p class="subtitle">The words everyone uses, nobody defines, and you've been nodding through.</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#shells">Terminal vs Command Prompt vs Shell vs Bash</a></li>
+      <li><a href="#processes">Processes, daemons, background services</a></li>
+      <li><a href="#ssh">SSH, keys, and remote machines</a></li>
+      <li><a href="#paths">File paths, ~, ., ..</a></li>
+      <li><a href="#env">Environment variables and PATH</a></li>
+      <li><a href="#pkg">Package managers</a></li>
+      <li><a href="#ports">Ports, localhost, and "what's on 3000"</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="shells">Terminal vs Command Prompt vs Shell vs Bash</h2>
+
+  <p>These get jumbled because <em>they're related but they're not the same thing</em>. The cleanest way to think about it:</p>
+
+  <dl>
+    <dt>Terminal (or "terminal emulator")</dt>
+    <dd>The <strong>window</strong> on your screen that shows text and accepts typing. It's a display device. macOS Terminal, iTerm2, Windows Terminal, Warp — all terminals. They don't do anything themselves; they just draw characters.</dd>
+
+    <dt>Shell</dt>
+    <dd>The <strong>program running inside the terminal</strong> that actually interprets what you type. When you type <code>ls</code> and press Enter, the shell is what reads "ls", figures out what command to run, and shows you the output. The terminal is the TV; the shell is the channel.</dd>
+
+    <dt>Bash, Zsh, Fish, PowerShell, cmd.exe</dt>
+    <dd>Different <strong>shells</strong>. Same idea, slightly different syntax and features.
+      <ul>
+        <li><code>bash</code> — the old reliable on Linux. You'll see scripts written in it everywhere.</li>
+        <li><code>zsh</code> — default on modern macOS. Bash-compatible, nicer features.</li>
+        <li><code>fish</code> — fancier, friendlier, but <em>not</em> bash-compatible (scripts won't run).</li>
+        <li><code>powershell</code> — Windows' modern shell. More powerful than cmd, totally different syntax.</li>
+        <li><code>cmd.exe</code> ("Command Prompt") — the old Windows shell. Avoid unless something forces you.</li>
+      </ul>
+    </dd>
+
+    <dt>"Command line" / "CLI"</dt>
+    <dd>An umbrella term for "you're typing commands at a shell prompt." Not a specific thing.</dd>
+  </dl>
+
+  <p>On Windows, your best bet is <strong>Windows Terminal</strong> (the app) running <strong>PowerShell</strong> or <strong>WSL</strong> (Windows Subsystem for Linux, which gives you real bash). On Mac, just open <strong>Terminal.app</strong> or <strong>iTerm2</strong> — it runs zsh by default.</p>
+
+  <div class="callout">
+    <strong>Why it matters</strong>
+    When a tutorial says "run this in your terminal," they mean the window. When it says "this is a bash script," they're telling you which shell can run it. When it says "command not found," your shell looked for that command and couldn't find it — usually a PATH issue (see below).
+  </div>
+
+  <h2 id="processes">Processes, daemons, and background services</h2>
+
+  <p>A <strong>process</strong> is just a running program. Open Chrome — that's a process. Run <code>python script.py</code> — that spawns a process. Your OS keeps a list of every process running and gives each one an ID (PID).</p>
+
+  <p>Useful commands:</p>
+  <pre><code># Mac/Linux — see top resource hogs
+top
+htop      # nicer version, may need to install
+
+# Linux/Mac — list all processes
+ps aux
+
+# Kill a process by PID
+kill 12345
+kill -9 12345   # force kill (don't ask politely)
+
+# Windows
+Get-Process       # PowerShell
+tasklist          # cmd</code></pre>
+
+  <dl>
+    <dt>Foreground process</dt>
+    <dd>Hooked up to your terminal — output goes to the screen, Ctrl+C kills it. Anything you launch normally.</dd>
+
+    <dt>Background process</dt>
+    <dd>Still running, but detached from your terminal. On Unix you put <code>&amp;</code> at the end of a command to launch it in the background: <code>npm run dev &amp;</code>.</dd>
+
+    <dt>Daemon</dt>
+    <dd>A process designed to run forever in the background, with no user interface, usually started when your computer boots. Examples: the thing that listens for SSH connections (<code>sshd</code>), the print spooler, the Docker engine. On macOS they're called "launch agents/daemons"; on Windows, "services." The "d" in <code>sshd</code> literally stands for daemon.</dd>
+
+    <dt>Service</dt>
+    <dd>Same idea as a daemon, usually the term used on Windows or when talking about software like databases ("the Postgres service is running").</dd>
+  </dl>
+
+  <h2 id="ssh">SSH, keys, and remote machines</h2>
+
+  <p><strong>SSH (Secure Shell)</strong> is how you get a shell on a computer that isn't physically in front of you. You type a command, it runs on a server in another building (or another continent), output comes back to your screen.</p>
+
+  <pre><code>ssh eddie@my-server.com
+# now you're in a shell on that server, as user "eddie"</code></pre>
+
+  <h3>Password vs key authentication</h3>
+
+  <p>You can SSH with a password (typed every time, easy to brute force), or with <strong>SSH keys</strong> (cryptographic, way more secure, also more convenient because you stop typing passwords).</p>
+
+  <p>How keys work: you generate a pair — a <strong>private key</strong> (stays on your laptop, never share) and a <strong>public key</strong> (you copy this to the server). When you connect, the server challenges your laptop to prove it has the matching private key without sending it over the wire.</p>
+
+  <pre><code># Generate a key pair (do this once per machine)
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# This creates two files in ~/.ssh:
+#   id_ed25519       (private — never share)
+#   id_ed25519.pub   (public — paste into GitHub, servers, etc.)
+
+# Copy your public key to a server
+ssh-copy-id eddie@my-server.com</code></pre>
+
+  <p>This is also how GitHub authenticates you when you push code. When you set up "SSH access" to GitHub, you paste your <em>public</em> key into your GitHub settings.</p>
+
+  <div class="callout warn">
+    <strong>Never share your private key</strong>
+    Anyone with your private key file can log in as you, anywhere it's authorized. Don't commit it to a repo, don't email it, don't paste it in Discord. The <code>.pub</code> file is fine to share; the one without the extension is not.
+  </div>
+
+  <h2 id="paths">File paths and the symbols you keep seeing</h2>
+
+  <dl>
+    <dt>Absolute path</dt>
+    <dd>Starts from the root of the filesystem. On Mac/Linux: <code>/Users/eddie/code/project</code>. On Windows: <code>C:\Users\eddie\code\project</code>. Works from anywhere.</dd>
+
+    <dt>Relative path</dt>
+    <dd>Starts from wherever you currently are. <code>code/project</code> means "the <em>code</em> folder inside my current directory."</dd>
+
+    <dt><code>~</code> (tilde)</dt>
+    <dd>Shortcut for your home folder. <code>~/Desktop</code> = <code>/Users/eddie/Desktop</code>.</dd>
+
+    <dt><code>.</code> (single dot)</dt>
+    <dd>"The current directory." <code>./script.sh</code> means "run the <code>script.sh</code> in this folder, not some other one on PATH."</dd>
+
+    <dt><code>..</code> (double dot)</dt>
+    <dd>"The parent directory." <code>cd ..</code> goes up one level.</dd>
+
+    <dt><code>/</code> on Unix, <code>\</code> on Windows</dt>
+    <dd>Path separators. Why they differ is a 40-year-old historical accident. Most modern tools accept both on Windows.</dd>
+  </dl>
+
+  <h2 id="env">Environment variables and PATH</h2>
+
+  <p><strong>Environment variables</strong> are named values your shell hands to every program it launches. They're how you configure things without hard-coding them.</p>
+
+  <pre><code># See them all
+printenv          # Mac/Linux
+Get-ChildItem Env: # PowerShell
+
+# Set one for the current shell
+export OPENAI_API_KEY="sk-..."     # bash/zsh
+$env:OPENAI_API_KEY = "sk-..."     # PowerShell
+
+# Use it in code
+import os
+key = os.environ["OPENAI_API_KEY"]</code></pre>
+
+  <p>The most important environment variable is <strong>PATH</strong>. It's a list of folders your shell searches whenever you type a command. When you type <code>python</code>, the shell walks through every folder in PATH looking for a file called <code>python</code> and runs the first one it finds.</p>
+
+  <pre><code># See your PATH
+echo $PATH
+# /usr/local/bin:/usr/bin:/bin:/Users/eddie/.local/bin
+
+# "command not found" usually means: the thing you installed isn't on PATH</code></pre>
+
+  <div class="callout tip">
+    <strong>The 90% case for "command not found"</strong>
+    You installed a tool, but its install folder isn't on PATH. Fix is usually one line added to your shell's config file (<code>~/.zshrc</code>, <code>~/.bashrc</code>, or PowerShell's profile) like <code>export PATH="$PATH:/new/folder"</code>, then restart your terminal.
+  </div>
+
+  <h3>.env files</h3>
+  <p>For projects, you usually don't <code>export</code> secrets manually. You put them in a file called <code>.env</code> at the project root:</p>
+  <pre><code>OPENAI_API_KEY=sk-...
+DATABASE_URL=postgres://...</code></pre>
+
+  <p>Libraries like <code>python-dotenv</code> or Next.js read this file automatically. <strong>Critical:</strong> add <code>.env</code> to your <code>.gitignore</code> so you never commit secrets. (More on that in Module 2.)</p>
+
+  <h2 id="pkg">Package managers</h2>
+
+  <p>Tools that install and manage software. Why one matters: instead of downloading <code>.zip</code> files from sketchy sites, you run one command, the tool fetches it from an official registry, and you can update or uninstall just as cleanly.</p>
+
+  <table>
+    <thead><tr><th>Manager</th><th>For</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>brew</code></td><td>Mac apps &amp; CLI tools</td><td><code>brew install ffmpeg</code></td></tr>
+      <tr><td><code>winget</code> / <code>choco</code> / <code>scoop</code></td><td>Windows apps</td><td><code>winget install --id=Git.Git</code></td></tr>
+      <tr><td><code>apt</code> / <code>dnf</code> / <code>pacman</code></td><td>Linux system packages</td><td><code>sudo apt install postgresql</code></td></tr>
+      <tr><td><code>npm</code> / <code>pnpm</code> / <code>yarn</code></td><td>JavaScript libraries</td><td><code>npm install react</code></td></tr>
+      <tr><td><code>pip</code> / <code>uv</code></td><td>Python libraries</td><td><code>pip install fastapi</code></td></tr>
+      <tr><td><code>cargo</code></td><td>Rust libraries</td><td><code>cargo add tokio</code></td></tr>
+      <tr><td><code>go get</code></td><td>Go libraries</td><td><code>go get gorm.io/gorm</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Each language has a package manager that ships with it. <strong>You install one tool, that tool installs everything else.</strong> When a tutorial says <code>npm install something</code>, they're using the JavaScript package manager.</p>
+
+  <h2 id="ports">Ports, localhost, and "what's on 3000"</h2>
+
+  <p>Every networked program on your computer listens on a numbered <strong>port</strong>. Ports are like apartment numbers — your IP address gets traffic to the building, the port number gets it to the right apartment.</p>
+
+  <dl>
+    <dt><code>localhost</code> / <code>127.0.0.1</code></dt>
+    <dd>"This computer, talking to itself." When you visit <code>http://localhost:3000</code> in your browser, you're connecting to a program <em>running on your own laptop</em> that's listening on port 3000.</dd>
+
+    <dt>Common ports you'll see</dt>
+    <dd>
+      <ul>
+        <li><strong>3000</strong> — React, Next.js dev servers</li>
+        <li><strong>5173</strong> — Vite</li>
+        <li><strong>8000</strong> / <strong>8080</strong> — Python/Django/FastAPI dev</li>
+        <li><strong>5432</strong> — PostgreSQL</li>
+        <li><strong>3306</strong> — MySQL</li>
+        <li><strong>6379</strong> — Redis</li>
+        <li><strong>80</strong> / <strong>443</strong> — HTTP / HTTPS in production</li>
+      </ul>
+    </dd>
+
+    <dt>"Port already in use"</dt>
+    <dd>You tried to start a server on a port, but something else is already there. Either kill the other thing, or use a different port.
+      <pre><code># Find what's on port 3000
+lsof -i :3000          # Mac/Linux
+netstat -ano | findstr :3000   # Windows
+
+# Kill it (use the PID from above)
+kill -9 12345</code></pre>
+    </dd>
+  </dl>
+
+  <h2 id="do">What to actually do with this</h2>
+
+  <p>You don't need to memorize this stuff. You need to <em>recognize</em> it so when an error message or tutorial uses the word "daemon" or "PATH" or "process," you're not lost. Three things to actually try:</p>
+
+  <ol>
+    <li><strong>Generate an SSH key</strong> and add it to GitHub. Run <code>ssh-keygen -t ed25519</code>, then paste the contents of <code>~/.ssh/id_ed25519.pub</code> into GitHub Settings → SSH and GPG keys. Test with <code>ssh -T git@github.com</code>.</li>
+    <li><strong>Look at your PATH.</strong> Run <code>echo $PATH</code> (Mac/Linux) or <code>$env:Path</code> (PowerShell). See what's in there. Notice that the order matters — earlier folders win ties.</li>
+    <li><strong>Make a <code>.env</code> file.</strong> Take one of your existing projects, move a hard-coded API key out into a <code>.env</code> file, add <code>.env</code> to <code>.gitignore</code>, and use <code>os.environ</code> (Python) or <code>process.env</code> (Node) to read it.</li>
+  </ol>
+
+  <div class="module-nav">
+    <a href="index.html">
+      <span class="label">← Back to</span>
+      Course Index
+    </a>
+    <a href="module-2-git.html" class="next">
+      <span class="label">Next module →</span>
+      Git &amp; GitHub
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 1 of 6 · Vibe → Engineer</footer>
+
+</body>
+</html>
