@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 6 — Claude Code Mastery</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link home">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 6.</span> Claude Code Mastery</h1>
+  <p class="subtitle">Subagents, headless mode, project structure, and a deep-dive on Superpowers + the Deep Trilogy.</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#what-cc-is">What Claude Code actually is</a></li>
+      <li><a href="#agents-headless">Subagents, headless mode, and "agentic coding"</a></li>
+      <li><a href="#scraping-clarify">Quick clarification: headless browsers vs headless servers</a></li>
+      <li><a href="#project-structure">Structuring big projects for agentic coding</a></li>
+      <li><a href="#superpowers">Superpowers — what it is and how to use it</a></li>
+      <li><a href="#deep-trio">The Deep Trilogy — /deep-project, /deep-plan, /deep-implement</a></li>
+      <li><a href="#combining">Combining Superpowers + Deep Trio (or picking one)</a></li>
+      <li><a href="#workflows">Practical workflows by project size</a></li>
+      <li><a href="#tips">Operating tips that actually move the needle</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="what-cc-is">What Claude Code actually is</h2>
+
+  <p>Claude Code is a <strong>terminal-based agentic coding tool</strong>. You launch it in a project directory, type what you want, and it can read files, edit files, run shell commands, search the codebase, run tests — all the things you'd do, in a loop. The agent loop pattern from Module 4, applied specifically to software engineering, with the right tools and prompts wired in.</p>
+
+  <p>Three things differentiate Claude Code from "the chat with code blocks" experience:</p>
+  <ol>
+    <li><strong>It runs in your filesystem.</strong> Real file edits, real diffs, real test runs.</li>
+    <li><strong>It can spawn subagents.</strong> One main thread orchestrates; specialized subagents handle defined tasks in their own contexts.</li>
+    <li><strong>It's extensible.</strong> Plugins (skills, slash commands, MCP servers, hooks) let you reshape its behavior for your workflow. Superpowers and Deep Trio are the two most influential examples.</li>
+  </ol>
+
+  <h2 id="agents-headless">Subagents, headless mode, and "agentic coding"</h2>
+
+  <h3>Subagents</h3>
+  <p>A <strong>subagent</strong> is a sub-instance of Claude that the main agent launches to do a specific job. It gets:</p>
+  <ul>
+    <li>Its own fresh context window (no pollution from your chat history)</li>
+    <li>A specific instruction set (e.g., "review this diff for security issues")</li>
+    <li>Optionally, a limited set of tools</li>
+    <li>A scope — it runs, returns one result message, and goes away</li>
+  </ul>
+
+  <p>Why this is powerful:</p>
+  <ul>
+    <li><strong>Context discipline.</strong> The main agent doesn't have to dedicate context window to the details of how a particular file was tested — the subagent did that, summarized, and exited.</li>
+    <li><strong>Parallelism.</strong> You can dispatch 5 subagents at once on independent subtasks. 5x speedup on the work.</li>
+    <li><strong>Specialization.</strong> A "code reviewer" subagent with adversarial instructions gives different (often better) output than asking the main agent to also review its own work.</li>
+  </ul>
+
+  <p>You can launch a subagent yourself in any Claude Code session by asking the main agent to "spawn a subagent to do X." Modern plugins like Superpowers and Deep Trio do this automatically when their workflows demand it.</p>
+
+  <h3>Headless mode</h3>
+  <p><strong>Headless mode</strong> means Claude Code runs without the interactive UI — non-interactively, scripted, no human in the loop for each step. You give it a task as input, it works to completion, returns the result, exits.</p>
+
+  <pre><code># Headless invocation (one-shot, no chat)
+claude -p "Fix all the lint errors in this repo"</code></pre>
+
+  <p>This is what lets Claude Code be used as a building block in larger automation — CI/CD pipelines, scheduled jobs, agent armies kicking off other agents.</p>
+
+  <h2 id="scraping-clarify">Quick clarification: "headless" — browsers vs servers</h2>
+
+  <p>You mentioned "headless servers" and web scraping, so let me untangle the term, because it gets used for two different things:</p>
+
+  <dl>
+    <dt>Headless browser</dt>
+    <dd>A real web browser (Chrome, Firefox) running without a visible window. Used for web scraping, automated testing, screenshot generation. The browser still executes JavaScript and renders pages — it just doesn't draw to a screen. Tools: <strong>Puppeteer</strong>, <strong>Playwright</strong>, <strong>Selenium</strong>. <em>This is the one used in scraping.</em></dd>
+
+    <dt>Headless server / headless mode (generally)</dt>
+    <dd>Any program running without an interactive interface — no GUI, no chat, no human stepping through. Driven entirely by inputs/config and outputs to logs or files. Claude Code's headless mode is this kind.</dd>
+  </dl>
+
+  <p>Same word, different domains. <em>Headless = "no visible UI."</em></p>
+
+  <h2 id="project-structure">Structuring big projects for agentic coding</h2>
+
+  <p>Agents work better in well-structured projects. The single biggest lever:</p>
+
+  <h3>The <code>CLAUDE.md</code> file</h3>
+  <p>Drop a <code>CLAUDE.md</code> at the root of your project. Claude Code reads it automatically every session. Put in it:</p>
+  <ul>
+    <li>What the project does (1–3 sentences)</li>
+    <li>The tech stack (so it doesn't have to infer)</li>
+    <li>Folder layout and what lives where</li>
+    <li>How to run, test, lint, build</li>
+    <li>Conventions you care about ("we don't use default exports", "all API routes return a standard error envelope")</li>
+    <li>Things to AVOID ("never edit files in <code>vendor/</code>", "don't add new dependencies without asking")</li>
+  </ul>
+
+  <p>A good CLAUDE.md saves the agent (and you) from re-learning the project every session. Keep it under ~200 lines or it stops being read carefully.</p>
+
+  <h3>Folder conventions that help agents</h3>
+  <ul>
+    <li><strong>Clear, descriptive folder names</strong> over clever ones. <code>api/</code>, <code>db/</code>, <code>components/</code> beats <code>core/</code>.</li>
+    <li><strong>Keep related stuff together.</strong> Colocate the test next to the file it tests. Colocate styles next to components. Agents (and humans) find things faster.</li>
+    <li><strong>Smaller files over giant ones.</strong> A 3,000-line file forces the agent to ingest everything to make one tweak. Twenty 150-line files let it focus.</li>
+    <li><strong>Strong types.</strong> Module 5 said this; saying it again. Types are the agent's map.</li>
+  </ul>
+
+  <h3>Use plans and worktrees for anything non-trivial</h3>
+  <p>For features bigger than ~30 minutes of work, don't just say "build feature X." Have the agent <em>plan first</em> (write down the steps, the files to touch, the tests), then execute on the plan with subagents. Use a Git worktree so the work is isolated. This is exactly the philosophy Superpowers and Deep Trio embody.</p>
+
+  <h2 id="superpowers">Superpowers — what it is and how to use it</h2>
+
+  <p>Built by Jesse Vincent. The repo: <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a>. The official Claude marketplace install: <code>/plugin install superpowers@claude-plugins-official</code>.</p>
+
+  <h3>What it actually is</h3>
+  <p>Superpowers is a <strong>skill framework</strong>: a curated set of skills (small SKILL.md files with instructions) and hooks that automatically trigger at the right moments, plus a methodology the whole system embodies. The methodology is roughly: <em>brainstorm → plan → worktree → subagent-driven implementation with TDD → code review → finish.</em></p>
+
+  <p>The key word is <strong>auto-triggering</strong>. You don't have to remember to invoke a skill. Once installed, the system watches what you're doing and pulls in the right skill at the right moment.</p>
+
+  <h3>The skills inside</h3>
+  <p>From the official repo, the skills library covers:</p>
+
+  <h4>Workflow skills (the spine)</h4>
+  <ul>
+    <li><strong>brainstorming</strong> — Activates before you write code. Refines vague requests through Socratic questions, explores alternatives, presents a design doc in sections for your sign-off.</li>
+    <li><strong>using-git-worktrees</strong> — Activates after design approval. Creates an isolated worktree on a new branch, runs setup, verifies clean test baseline.</li>
+    <li><strong>writing-plans</strong> — Activates with approved design. Breaks work into 2–5 minute tasks with exact file paths, complete code, verification steps.</li>
+    <li><strong>subagent-driven-development</strong> / <strong>executing-plans</strong> — Activates with plan in hand. Dispatches a fresh subagent per task, with two-stage review (spec compliance, then code quality), or batch execution with human checkpoints.</li>
+    <li><strong>test-driven-development</strong> — Enforces RED → GREEN → REFACTOR. Write the failing test, watch it fail, write minimum code, watch it pass, commit.</li>
+    <li><strong>requesting-code-review</strong> — Between tasks, runs a code review (often via subagent), reports issues by severity. Critical ones block progress.</li>
+    <li><strong>finishing-a-development-branch</strong> — Verifies tests, presents options (merge / PR / keep / discard), cleans up worktree.</li>
+  </ul>
+
+  <h4>Quality / debugging skills</h4>
+  <ul>
+    <li><strong>systematic-debugging</strong> — 4-phase root-cause process. Includes specific techniques like root-cause-tracing, defense-in-depth, condition-based-waiting.</li>
+    <li><strong>verification-before-completion</strong> — Don't declare done without proof it actually works.</li>
+    <li><strong>dispatching-parallel-agents</strong> — Concurrent subagent workflows.</li>
+  </ul>
+
+  <h4>Philosophy (embedded in every skill)</h4>
+  <ul>
+    <li>Test-Driven Development always</li>
+    <li>Systematic over ad-hoc</li>
+    <li>Simplicity over cleverness</li>
+    <li>Evidence over claims (verify before saying "done")</li>
+  </ul>
+
+  <div class="callout tip">
+    <strong>How to actually feel Superpowers working</strong>
+    Start a session in a Superpowers-equipped repo and ask for something vaguely defined, like "I want to add user avatars." Watch what happens: instead of jumping into code, the brainstorming skill activates and asks clarifying questions. Then the planning skill produces a plan. Then a worktree gets made. Then subagents execute. Each step is the right skill firing at the right time. You can override or skip steps, but the default flow is the value.
+  </div>
+
+  <h2 id="deep-trio">The Deep Trilogy — /deep-project, /deep-plan, /deep-implement</h2>
+
+  <p>Built by Pierce Lamb. Three separate plugins. The Medium write-up: <a href="https://pierce-lamb.medium.com/the-deep-trilogy-claude-code-plugins-for-writing-good-software-fast-33b76f2a022d">"The Deep Trilogy"</a>.</p>
+
+  <p>Unlike Superpowers' auto-triggering skills, these are <strong>explicit slash commands</strong>. You invoke them manually, on the artifacts you've decided you want to work with.</p>
+
+  <h3>The pipeline</h3>
+  <pre class="diagram">
+   "I want to build a SaaS platform"
+                │
+                ▼
+        ┌─────────────────┐
+        │  /deep-project  │   Decompose vague idea → components
+        └─────────────────┘
+           │      │      │
+           ▼      ▼      ▼
+        01-auth  02-bill  03-dash      (each gets its own spec.md)
+           │      │      │
+           ▼      ▼      ▼
+        ┌─────────────────┐
+        │   /deep-plan    │   Research → Interview → External LLM Review → TDD Plan → Sections
+        └─────────────────┘
+           │      │      │
+           ▼      ▼      ▼
+        ┌─────────────────┐
+        │ /deep-implement │   Per section: TDD → Subagent Code Review → Commit
+        └─────────────────┘
+                │
+                ▼
+        Working codebase
+  </pre>
+
+  <h3>/deep-project</h3>
+  <p>Input: vague requirements. Output: a folder of focused spec files, each scoped right for planning.</p>
+  <p>What it does: interviews you about your mental model, identifies logical component boundaries, maps dependencies, generates a <code>spec.md</code> for each component.</p>
+  <p>Skip this if your idea is already narrowly scoped — go straight to /deep-plan.</p>
+
+  <h3>/deep-plan</h3>
+  <p>Input: a single spec file. Output: a comprehensive implementation plan with TDD structure, split into self-contained sections, validated by external LLMs.</p>
+  <p>The phases:</p>
+  <ol>
+    <li><strong>Research</strong> — explores your codebase for patterns, searches the web for best practices.</li>
+    <li><strong>Interview</strong> — asks 5–10 clarifying questions to surface hidden requirements.</li>
+    <li><strong>External LLM review</strong> — sends the plan to Gemini and/or ChatGPT for a second opinion (or uses a subagent if no API key).</li>
+    <li><strong>Integration</strong> — Claude reviews external feedback, accepts or rejects suggestions, notes decisions.</li>
+    <li><strong>TDD structuring</strong> — defines test stubs before any implementation.</li>
+    <li><strong>Section splitting</strong> — produces a <code>sections/</code> folder of self-contained implementation units.</li>
+  </ol>
+
+  <p>The killer feature: <strong>the external LLM review consistently catches blind spots a single model misses.</strong> Different context windows surface different issues.</p>
+
+  <h3>/deep-implement</h3>
+  <p>Input: section files from /deep-plan. Output: working, committed code, one section at a time.</p>
+  <p>Per section, the cycle is:</p>
+  <ol>
+    <li><strong>TDD implementation</strong> — write tests first, then implementation.</li>
+    <li><strong>Code review</strong> — a subagent reviews the staged diff <em>adversarially</em>, looking for edge cases, security issues, logic errors.</li>
+    <li><strong>Interview</strong> — Claude presents findings, you pick which fixes to apply.</li>
+    <li><strong>Documentation update</strong> — section file is updated with "What Was Built."</li>
+    <li><strong>Atomic commit</strong> — one commit per section, clear message, traceable back to the section doc.</li>
+  </ol>
+
+  <p>Recovery is built in. All three plugins resume from interruption — context limit hit, you stepped away, whatever. Re-run the command on the same artifacts and it picks up where it left off.</p>
+
+  <h2 id="combining">Combining Superpowers + Deep Trio (or picking one)</h2>
+
+  <p>You said you use both at the same time and aren't sure if they conflict. Honest answer: <strong>they overlap in places but aren't fundamentally incompatible</strong>, and there's a sensible way to think about combining them.</p>
+
+  <h3>The overlap</h3>
+  <table>
+    <thead><tr><th>Concern</th><th>Superpowers</th><th>Deep Trio</th></tr></thead>
+    <tbody>
+      <tr><td>Brainstorm vague idea</td><td><code>brainstorming</code> skill (auto)</td><td><code>/deep-project</code> (explicit)</td></tr>
+      <tr><td>Plan implementation</td><td><code>writing-plans</code> skill (auto)</td><td><code>/deep-plan</code> (explicit, more elaborate)</td></tr>
+      <tr><td>Execute plan</td><td><code>subagent-driven-development</code></td><td><code>/deep-implement</code></td></tr>
+      <tr><td>TDD enforcement</td><td><code>test-driven-development</code></td><td>Built into /deep-implement</td></tr>
+      <tr><td>Code review</td><td><code>requesting-code-review</code></td><td>Subagent in /deep-implement</td></tr>
+      <tr><td>Worktrees</td><td><code>using-git-worktrees</code></td><td>Not opinionated about this</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The key philosophical difference</h3>
+  <ul>
+    <li><strong>Superpowers</strong> is invisible and continuous. You don't think about it; skills fire as you work, lifting the whole baseline.</li>
+    <li><strong>Deep Trio</strong> is explicit and ceremonial. You decide to invoke /deep-plan; it's a deliberate, multi-phase commitment for that one thing.</li>
+  </ul>
+
+  <p>Superpowers' planning is solid but lighter than /deep-plan. /deep-plan's external LLM review is the standout feature you don't get elsewhere — Gemini and GPT independently reviewing Claude's plan catches blind spots that "the model reviewing itself" never will.</p>
+
+  <h3>The recommendation</h3>
+  <div class="callout good">
+    <strong>What I'd do in your shoes</strong>
+    Keep both installed. Let Superpowers be your default — it gives you TDD, code review, worktrees, debugging, and the brainstorming skill automatically on everything. When you have something that genuinely deserves a heavy planning investment (a multi-component project, a complex feature, something with non-obvious requirements), explicitly invoke <code>/deep-project</code> or <code>/deep-plan</code> — the external LLM review and the more elaborate planning pipeline are the unique value.<br><br>
+    <strong>Don't run /deep-implement on a plan that Superpowers also wants to manage</strong> — pick one to drive execution per task, or you'll get conflicting skill firings (e.g., both trying to manage commits or run code review). Easiest rule: when you've invoked a /deep- command, follow it through; when you haven't, Superpowers is your default.
+  </div>
+
+  <h2 id="workflows">Practical workflows by project size</h2>
+
+  <h3>Tiny — a script, a fix, a one-file change (&lt; 30 min)</h3>
+  <p>Just ask. Superpowers' light-touch skills will engage; that's enough. Don't invoke /deep-anything.</p>
+
+  <h3>Small — one focused feature (1–3 hours)</h3>
+  <p>Let Superpowers' default flow drive: it'll brainstorm → plan → worktree → subagent execution → review → finish. You're along for the ride, approving at checkpoints.</p>
+
+  <h3>Medium — a feature with multiple parts (a day)</h3>
+  <p>Either let Superpowers drive end-to-end, OR explicitly run <code>/deep-plan @some-spec.md</code> for a deeper plan with external LLM review, then let Superpowers' subagent-driven-development execute. The external review on a medium-complexity feature has saved me from architectural mistakes more than once.</p>
+
+  <h3>Large — a new multi-component project (multi-day to weeks)</h3>
+  <p>Full Deep Trilogy on day one: <code>/deep-project</code> to decompose, then <code>/deep-plan</code> on each component, then <code>/deep-implement</code> per component. Worktree per component so you can have multiple agents working in parallel. Superpowers skills still fire underneath (TDD, debugging) and that's fine; just don't let Superpowers' planning duplicate /deep-plan's.</p>
+
+  <h2 id="tips">Operating tips that actually move the needle</h2>
+
+  <ol>
+    <li><strong>Write a real CLAUDE.md.</strong> 30 minutes of work pays for itself within 3 sessions.</li>
+    <li><strong>Use worktrees as your default for non-trivial work.</strong> One per feature/bug. Lets you have multiple agents running without them fighting over the same files. Superpowers does this for you; do it manually otherwise.</li>
+    <li><strong>Approve plans deliberately.</strong> When Superpowers or /deep-plan shows you the plan, actually read it. A 60-second skim catches "you're about to spend 2 hours on the wrong solution."</li>
+    <li><strong>Use subagents for review.</strong> Even outside of plugins, you can ask "spawn a subagent to review this diff adversarially for security and logic bugs." Costs little, catches a lot.</li>
+    <li><strong>Use cheaper models for routine subagent work.</strong> Haiku is fast and cheap; reserve Opus/Sonnet for the planning and complex steps.</li>
+    <li><strong>Commit small and often.</strong> Even with agentic workflows. Atomic commits = recoverable history when something goes sideways.</li>
+    <li><strong>Don't trust "I'm done."</strong> Always verify by running the thing yourself before believing the agent's "all green." This is the verification-before-completion skill made manual.</li>
+    <li><strong>When stuck, reset context.</strong> Long sessions accumulate cruft. Sometimes the right move is "/compact" or starting fresh with a clear restatement of where you are.</li>
+  </ol>
+
+  <h2 id="do">What to actually do</h2>
+
+  <ol>
+    <li><strong>Write a CLAUDE.md</strong> for your most-used project. Use the structure above. Notice the next few sessions feel sharper.</li>
+    <li><strong>Run a side-by-side test.</strong> Take one feature idea. Build it once with just Superpowers (let auto-skills do their thing). Build a similar one with <code>/deep-plan</code> + <code>/deep-implement</code> driving. Notice the differences in what you got at each phase. You'll quickly form your own opinion about which to reach for when.</li>
+    <li><strong>Try the worktree workflow manually.</strong> <code>git worktree add ../same-project-experiment main</code>. Open both folders in separate windows. Run Claude in both. Realize you can do twice the work without merge pain.</li>
+    <li><strong>Read Pierce Lamb's "What I Learned Building the Deep Trilogy."</strong> Even if you don't write plugins, the insights about why each phase exists will deepen your usage of them. <a href="https://pierce-lamb.medium.com/what-i-learned-while-building-a-trilogy-of-claude-code-plugins-72121823172b">Link.</a></li>
+    <li><strong>Read Jesse Vincent's Superpowers release post.</strong> Short, opinionated, explains the philosophy. <a href="https://blog.fsck.com/2025/10/09/superpowers/">blog.fsck.com/2025/10/09/superpowers</a></li>
+    <li><strong>Try writing your own skill or slash command.</strong> Both ecosystems make it easy. Once you build one, you understand the whole layer. Anthropic's official skill-creator can help.</li>
+  </ol>
+
+  <h2>Reference links</h2>
+  <ul>
+    <li><a href="https://github.com/obra/superpowers">Superpowers repo</a> (Jesse Vincent / obra)</li>
+    <li><a href="https://blog.fsck.com/2025/10/09/superpowers/">Original Superpowers announcement</a></li>
+    <li><a href="https://pierce-lamb.medium.com/the-deep-trilogy-claude-code-plugins-for-writing-good-software-fast-33b76f2a022d">Deep Trilogy overview (Pierce Lamb)</a></li>
+    <li><a href="https://github.com/piercelamb/deep-project">/deep-project repo</a></li>
+    <li><a href="https://github.com/piercelamb/deep-plan">/deep-plan repo</a></li>
+    <li><a href="https://github.com/piercelamb/deep-implement">/deep-implement repo</a></li>
+    <li><a href="https://docs.claude.com/en/docs/claude-code/overview">Official Claude Code docs</a></li>
+    <li><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic — "Building effective agents"</a> (best canonical writing on agent design)</li>
+    <li><a href="https://modelcontextprotocol.io/">MCP — Model Context Protocol</a></li>
+  </ul>
+
+  <div class="module-nav">
+    <a href="module-5-engineer-mindset.html">
+      <span class="label">← Previous</span>
+      Engineer Mindset
+    </a>
+    <a href="index.html" class="next">
+      <span class="label">Done →</span>
+      Back to course index
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 6 of 6 · Vibe → Engineer · You made it. Now go build something.</footer>
+
+</body>
+</html>
