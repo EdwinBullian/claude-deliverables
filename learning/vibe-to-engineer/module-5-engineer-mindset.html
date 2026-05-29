@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 5 — Engineer Mindset</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="index.html" class="brand">Vibe <span>→</span> Engineer</a>
+    <a href="module-1-vocab.html" class="module-link">1. Vocab</a>
+    <a href="module-2-git.html" class="module-link">2. Git</a>
+    <a href="module-3-architecture.html" class="module-link">3. Architecture</a>
+    <a href="module-4-ai-engineering.html" class="module-link">4. AI Engineering</a>
+    <a href="module-5-engineer-mindset.html" class="module-link home">5. Mindset</a>
+    <a href="module-6-claude-code.html" class="module-link">6. Claude Code</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <h1><span class="num">Module 5.</span> Engineer Mindset</h1>
+  <p class="subtitle">The habits that separate "I prompted my way to it" from "I built this and I'd bet on it in production."</p>
+
+  <div class="toc">
+    <h4>In this module</h4>
+    <ul>
+      <li><a href="#reading">Reading code &gt; writing code</a></li>
+      <li><a href="#review">How to actually review what Claude writes</a></li>
+      <li><a href="#refactor">Refactoring without breaking things</a></li>
+      <li><a href="#types">Types — why TypeScript and type hints matter</a></li>
+      <li><a href="#errors">Error handling and the "happy path" trap</a></li>
+      <li><a href="#logging">Logging, observability, and "why is it slow"</a></li>
+      <li><a href="#security">Security basics — never commit, never trust input</a></li>
+      <li><a href="#perf">Performance — when to care</a></li>
+      <li><a href="#do">What to actually do</a></li>
+    </ul>
+  </div>
+
+  <h2 id="reading">Reading code &gt; writing code</h2>
+
+  <p>The biggest unlock between an enthusiastic beginner and an engineer is this: senior engineers read way more code than they write. They read library source when docs are vague. They read past commits to understand why something is the way it is. They read their own diff before pushing.</p>
+
+  <p>For you, reading skill is going to be the lever. The model can write code at superhuman speed. The bottleneck is your ability to verify it's correct.</p>
+
+  <h3>How to read unfamiliar code, fast</h3>
+  <ol>
+    <li><strong>Start at the entry point.</strong> Find <code>main.py</code>, <code>index.js</code>, <code>app.tsx</code>, or whatever the app boots from.</li>
+    <li><strong>Read the directory layout first.</strong> The folder names tell you the architecture. <code>/api</code>, <code>/components</code>, <code>/lib</code>, <code>/db</code> — already you know a lot.</li>
+    <li><strong>Read <code>package.json</code> or <code>pyproject.toml</code>.</strong> What libraries are in use tells you the tech stack and the assumptions.</li>
+    <li><strong>Trace one feature end-to-end.</strong> Pick one button on the UI, follow it from the click handler all the way to the database. This is the single best exercise.</li>
+    <li><strong>Don't try to understand everything.</strong> Build a fuzzy mental map first, sharp details second.</li>
+  </ol>
+
+  <h2 id="review">How to actually review what Claude writes</h2>
+
+  <p>You said you sometimes don't know what you're doing. This is how to know:</p>
+
+  <ol>
+    <li><strong>Read the diff before you accept it.</strong> Sounds dumb. It's the #1 differentiator. If you don't understand what changed, you can't fix it when it breaks.</li>
+    <li><strong>Ask "why these specific changes?"</strong> Make the model explain each meaningful choice. Why this library? Why this pattern? Why these names?</li>
+    <li><strong>Watch for over-engineering.</strong> AI tools love to add abstraction, configuration, error handling no one needs. If the new code is 3x the size of the problem, ask why.</li>
+    <li><strong>Run it.</strong> Click through the actual feature. Test the edge cases. AI-generated code passes the happy path 95% of the time and the empty-array case 40% of the time.</li>
+    <li><strong>Read the tests, if any.</strong> Tests are the most honest description of what the code is supposed to do.</li>
+    <li><strong>Run the linter and type checker.</strong> Free quality check. Errors mean something.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>The "wait, why?" muscle</strong>
+    Every time Claude makes a non-obvious choice, ask "why?" Often the answer reveals the choice was actually bad or arbitrary. Sometimes the answer teaches you a real principle. Both are wins.
+  </div>
+
+  <h2 id="refactor">Refactoring without breaking things</h2>
+
+  <p><strong>Refactoring</strong> = changing the shape of code without changing what it does. Renaming things, extracting functions, restructuring folders, replacing one library with another.</p>
+
+  <p>The safety rules:</p>
+  <ol>
+    <li><strong>Tests first.</strong> If you don't have tests covering the thing you're about to refactor, write them — at least for the public interface — before changing anything. Otherwise you have no idea if you broke it.</li>
+    <li><strong>One change at a time.</strong> Don't rename, restructure, and rewrite simultaneously. Commit between each step.</li>
+    <li><strong>Refactor in small, reviewable PRs.</strong> A 2000-line "cleanup" PR is unreviewable and high-risk. Three 200-line PRs are tractable.</li>
+    <li><strong>Don't refactor while adding features.</strong> Do one or the other. Mixing them makes both harder to review.</li>
+  </ol>
+
+  <h2 id="types">Types — why TypeScript and type hints matter</h2>
+
+  <p>JavaScript and Python are <strong>dynamically typed</strong> — variables can hold any type, errors only surface at runtime. TypeScript and Python type hints add an optional layer where you describe what types things should be, and a checker yells before runtime if something's off.</p>
+
+  <pre><code>// JavaScript — types are vibes
+function add(a, b) {
+  return a + b;
+}
+add(2, "3")  // returns "23". Hope you wanted that.
+
+// TypeScript — checker catches it
+function add(a: number, b: number): number {
+  return a + b;
+}
+add(2, "3")  // ❌ Argument of type 'string' is not assignable to parameter of type 'number'</code></pre>
+
+  <pre><code># Python without hints
+def get_user(user_id):
+    ...
+
+# Python with hints (mypy/pyright check them)
+def get_user(user_id: int) -> User | None:
+    ...</code></pre>
+
+  <p>Why this matters way more for AI-assisted coding: <strong>types are your contract with the model</strong>. When Claude reads typed code, it knows the shape of every value and generates correct code. When it reads untyped code, it has to guess and guesses wrong. Adding types pays for itself in fewer "why doesn't this work" loops.</p>
+
+  <h2 id="errors">Error handling and the "happy path" trap</h2>
+
+  <p>Beginner code follows the path where everything works. Engineer code asks: what if the network is down? What if the file doesn't exist? What if the API returns an empty list? What if the user types nothing?</p>
+
+  <p>The patterns:</p>
+
+  <pre><code># Bad — silently swallow errors. You will regret this.
+try:
+    do_thing()
+except:
+    pass
+
+# Bad — catch too broadly. Hides bugs.
+try:
+    do_thing()
+except Exception:
+    print("oops")
+
+# Better — catch what you expect, let the rest propagate
+try:
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+except requests.Timeout:
+    logger.warning("API timed out, falling back to cache")
+    return cache.get(key)
+except requests.HTTPError as e:
+    logger.error(f"API error: {e}")
+    raise  # let it bubble up to the caller</code></pre>
+
+  <p>Two rules:</p>
+  <ul>
+    <li><strong>Only catch errors you have a plan for.</strong> Otherwise let them crash — at least you'll know.</li>
+    <li><strong>Log enough to debug.</strong> "Error" tells you nothing. "Failed to fetch user 42 from /api/users: 503 Service Unavailable" tells you everything.</li>
+  </ul>
+
+  <h2 id="logging">Logging, observability, "why is it slow"</h2>
+
+  <p><code>print()</code> works until it doesn't. Real apps use logging libraries (Python's <code>logging</code> module, JavaScript's <code>pino</code> or <code>winston</code>) that let you:</p>
+  <ul>
+    <li>Set log levels (debug, info, warn, error) and filter at runtime.</li>
+    <li>Include structured fields (user_id, request_id) for searching later.</li>
+    <li>Ship logs to a service like Datadog, Honeycomb, or Logflare in production.</li>
+  </ul>
+
+  <h3>Observability — the three pillars</h3>
+  <ul>
+    <li><strong>Logs</strong> — text events. "User 42 logged in." Searchable.</li>
+    <li><strong>Metrics</strong> — numbers over time. Requests per second, latency, error rate.</li>
+    <li><strong>Traces</strong> — the path a single request took through your system. Which DB query was slow.</li>
+  </ul>
+
+  <p>For AI apps, add <strong>token usage and cost</strong> as first-class metrics. You will be very glad you logged this when the bill arrives.</p>
+
+  <h2 id="security">Security basics — the rules you must internalize</h2>
+
+  <div class="callout danger">
+    <strong>The "I leaked an API key" Hall of Shame</strong>
+    <ol>
+      <li><strong>Never commit secrets.</strong> API keys, passwords, tokens, private keys. Always go in <code>.env</code>, always in <code>.gitignore</code>.</li>
+      <li><strong>If you commit a secret, rotate immediately.</strong> Bots scrape new GitHub commits within minutes. Removing the file doesn't help — it's still in git history.</li>
+      <li><strong>Use a secrets manager in prod.</strong> Vercel/Railway env vars, AWS Secrets Manager, Doppler. Not <code>.env</code> files on the server.</li>
+    </ol>
+  </div>
+
+  <h3>The other rules</h3>
+  <ul>
+    <li><strong>Never trust user input.</strong> Validate everything coming from the client. Assume someone will send "; DROP TABLE users; --</li>
+    <li><strong>Use parameterized queries.</strong> Never build SQL by string concatenation. ORMs handle this for you. Raw queries should use <code>?</code> placeholders.</li>
+    <li><strong>Hash passwords with bcrypt/argon2.</strong> Never store plain text. Better: use an auth provider (Clerk, Auth0, Supabase Auth) and don't write auth yourself.</li>
+    <li><strong>HTTPS everywhere.</strong> Plain HTTP is dead.</li>
+    <li><strong>Principle of least privilege.</strong> Don't run your app as root. Don't give your service account "Owner" permissions. Give the minimum.</li>
+    <li><strong>Keep dependencies updated.</strong> <code>npm audit</code>, GitHub Dependabot. Old libraries have known vulnerabilities.</li>
+  </ul>
+
+  <h3>OWASP Top 10</h3>
+  <p>OWASP publishes the top web application security risks. You don't have to memorize it, but skim it once. The categories that bite hobby projects most: injection (SQL/command), broken authentication, exposing sensitive data, insecure direct object references. <a href="https://owasp.org/www-project-top-ten/">owasp.org/www-project-top-ten</a></p>
+
+  <h2 id="perf">Performance — when to care</h2>
+
+  <p>Donald Knuth's quote: "premature optimization is the root of all evil." Translation: don't speed-optimize code before you know it's slow.</p>
+
+  <p>The actual workflow:</p>
+  <ol>
+    <li><strong>Make it work.</strong></li>
+    <li><strong>Make it right</strong> (clean, well-tested).</li>
+    <li><strong>Make it fast</strong> — only if needed, only after measuring.</li>
+  </ol>
+
+  <p>When something is slow, <strong>measure first</strong>. Don't guess. The bottleneck is almost never where you think.</p>
+
+  <h3>The hierarchy of slow</h3>
+  <p>If you ever wonder "what's likely slow here," this is the rough order of magnitude:</p>
+  <table>
+    <thead><tr><th>Operation</th><th>Time</th></tr></thead>
+    <tbody>
+      <tr><td>CPU instruction</td><td>~1 nanosecond</td></tr>
+      <tr><td>L1 cache hit</td><td>~1 ns</td></tr>
+      <tr><td>RAM access</td><td>~100 ns</td></tr>
+      <tr><td>SSD read</td><td>~100,000 ns (0.1 ms)</td></tr>
+      <tr><td>Network within data center</td><td>~500,000 ns (0.5 ms)</td></tr>
+      <tr><td>DB query (simple)</td><td>~1–10 ms</td></tr>
+      <tr><td>API call across the internet</td><td>~50–500 ms</td></tr>
+      <tr><td>LLM call</td><td>~500 ms – 30 seconds</td></tr>
+    </tbody>
+  </table>
+
+  <p>That's why slow apps are almost always slow because of network calls — especially LLM calls. Database queries that hit indexes are fast. The 200ms API call you make in a loop 100 times is what kills you.</p>
+
+  <h3>Big-O at a hand-wavy level</h3>
+  <p>You don't need formal CS. You need to recognize:</p>
+  <ul>
+    <li><strong>Loop inside a loop on a big list</strong> = trouble. <code>O(n²)</code>. Look for a way to use a dictionary/set lookup instead.</li>
+    <li><strong>Calling an API inside a loop</strong> = batch it or parallelize it. Don't make 1,000 sequential network requests if you can make one batched one.</li>
+    <li><strong>Database query inside a loop</strong> ("N+1 query problem") = batch with a single query, or eager-load.</li>
+  </ul>
+
+  <h2 id="do">What to actually do</h2>
+
+  <ol>
+    <li><strong>Add type hints to one Python project</strong> (or convert one JS file to TypeScript). Notice how many bugs the type checker catches without running anything.</li>
+    <li><strong>Set up structured logging</strong> on a project. Switch every <code>print()</code> to a logger with levels. Future you will be grateful.</li>
+    <li><strong>Set up Dependabot</strong> on one of your GitHub repos. Free security wins by just merging the PRs.</li>
+    <li><strong>Read your own diff</strong> before merging a PR. Even when no one else will. Catch one dumb thing per PR — that's a habit that pays for life.</li>
+    <li><strong>Profile something slow.</strong> Pick the slowest thing in one of your apps. Add timing logs around each step. Find where the time actually goes. Almost never where you guess.</li>
+  </ol>
+
+  <div class="module-nav">
+    <a href="module-4-ai-engineering.html">
+      <span class="label">← Previous</span>
+      AI Engineering
+    </a>
+    <a href="module-6-claude-code.html" class="next">
+      <span class="label">Next module →</span>
+      Claude Code Mastery
+    </a>
+  </div>
+
+</main>
+
+<footer>Module 5 of 6 · Vibe → Engineer</footer>
+
+</body>
+</html>
