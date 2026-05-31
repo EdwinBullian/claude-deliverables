@@ -11,8 +11,8 @@
   body{display:flex;flex-direction:column;padding:14px 18px 10px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
-  .legend{display:flex;gap:9px}
-  .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.38)}
+  .legend{display:flex;gap:10px}
+  .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.42)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
   .chart-wrap{flex:1;position:relative;min-height:0}
   .divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
@@ -21,16 +21,16 @@
   .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .lift-val{font-size:10px;font-weight:700;color:#e8943a;white-space:nowrap}
   .lift-arrow{font-size:9px;color:#6bda87}
+  .empty{font-size:10px;color:rgba(255,255,255,.3);padding:2px 0}
 </style>
 </head>
 <body>
 <div class="header">
   <div class="stats-heading" id="title">Training</div>
   <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:#b85820"></div>Legs</div>
-    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Push</div>
-    <div class="leg"><div class="leg-dot" style="background:#f0b060"></div>Pull</div>
-    <div class="leg"><div class="leg-dot" style="background:#f5d090"></div>Cardio</div>
+    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Lift</div>
+    <div class="leg"><div class="leg-dot" style="background:#5aa9e6"></div>Basketball</div>
+    <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,.32)"></div>Walk</div>
   </div>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
@@ -39,11 +39,16 @@
 
 <script>
 const FALLBACK = {
-  week_label: 'W21 Training — Weightlifting Sessions',
+  week_label: 'Training — Last 7 Days',
   labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-  date_labels: ['Sun 5/17','Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23'],
-  minutes: [0,80,0,80,0,0,47],
-  types:   ['','Push','','Pull','','','Strength'],
+  date_labels: ['Sun 5/24','Mon 5/25','Tue 5/26','Wed 5/27','Thu 5/28','Fri 5/29','Sat 5/30'],
+  lift_min:  [23, 38, 22, 0, 14, 0, 0],
+  lift_cal:  [185,412,183, 0, 95, 0, 0],
+  lift_type: ['Push','Push','Pull','','Push','',''],
+  bball_min: [0, 120, 7, 5, 0, 0, 0],
+  bball_cal: [0, 720, 29, 31, 0, 0, 0],
+  walk_min:  [0, 3, 0, 24, 24, 0, 0],
+  walk_cal:  [0, 16, 0, 159, 153, 0, 0],
   top_lifts: [
     {name:'Incline DB Press',value:'55 lb × 8', next:'→ try 60'},
     {name:'Overhead Press',  value:'35 lb × 12',next:'→ try 40'},
@@ -52,35 +57,59 @@ const FALLBACK = {
   ]
 };
 
+const LIFT_COLORS = {
+  'Legs':'rgba(184,88,32,.92)','Lower':'rgba(184,88,32,.92)',
+  'Push':'rgba(232,148,58,.92)','Upper':'rgba(232,148,58,.92)',
+  'Pull':'rgba(240,176,96,.90)','Strength':'rgba(232,148,58,.88)'
+};
+const BBALL_COLOR = 'rgba(90,169,230,.88)';
+const WALK_COLOR  = 'rgba(255,255,255,.30)';
+
 function render(d) {
   Chart.defaults.color='rgba(255,255,255,.38)';
   Chart.defaults.borderColor='rgba(255,255,255,.05)';
-
   document.getElementById('title').textContent = d.week_label || 'Training';
 
-  const labels = d.labels, mins = d.minutes, types = d.types, dateLbls = d.date_labels;
-  const colorMap = {
-    'Legs':'rgba(184,88,32,.90)','Push':'rgba(232,148,58,.90)',
-    'Pull':'rgba(240,176,96,.85)','Strength':'rgba(232,148,58,.85)',
-    'Basketball':'rgba(245,208,144,.65)','Cardio':'rgba(245,208,144,.65)'
-  };
-  const colors = mins.map((v,i)=> v>0 && colorMap[types[i]] ? colorMap[types[i]]
-                                : v>0 ? 'rgba(232,148,58,.80)' : 'rgba(255,255,255,.04)');
+  const labels = d.labels || [];
+  const liftMin = d.lift_min || [], liftCal = d.lift_cal || [], liftType = d.lift_type || [];
+  const bballMin = d.bball_min || [], bballCal = d.bball_cal || [];
+  const walkMin = d.walk_min || [], walkCal = d.walk_cal || [];
+  const dateLbls = d.date_labels || labels;
+
+  const liftColors = liftMin.map((v,i)=> LIFT_COLORS[liftType[i]] || 'rgba(232,148,58,.88)');
+
+  const totals = labels.map((_,i)=> (liftMin[i]||0)+(bballMin[i]||0)+(walkMin[i]||0));
+  const yMax = Math.max(60, Math.ceil(Math.max(...totals)/30)*30);
 
   new Chart(document.getElementById('chart').getContext('2d'),{
     type:'bar',
-    data:{ labels, datasets:[{data:mins.map(v=>v||2), backgroundColor:colors, borderRadius:3, borderSkipped:false}]},
+    data:{ labels, datasets:[
+      {label:'Lift', data:liftMin, backgroundColor:liftColors, stack:'s', borderRadius:2, borderSkipped:false},
+      {label:'Basketball', data:bballMin, backgroundColor:BBALL_COLOR, stack:'s', borderRadius:2, borderSkipped:false},
+      {label:'Walk', data:walkMin, backgroundColor:WALK_COLOR, stack:'s', borderRadius:2, borderSkipped:false}
+    ]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
+        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.72)',
         borderColor:'rgba(255,255,255,.1)', borderWidth:1,
         callbacks:{
           title:(c)=>dateLbls[c[0].dataIndex],
-          label:(c)=>mins[c.dataIndex]?' '+types[c.dataIndex]+': '+mins[c.dataIndex]+' min':' Rest day'
+          label:(c)=>{
+            const i=c.dataIndex, ds=c.dataset.label;
+            if(ds==='Lift'){ if(!liftMin[i]) return null;
+              const t=liftType[i]?(' '+liftType[i]):''; return ` Lift${t}: ${liftMin[i]} min · ${liftCal[i]||0} cal`; }
+            if(ds==='Basketball'){ if(!bballMin[i]) return null;
+              return ` Basketball: ${bballMin[i]} min · ${bballCal[i]||0} cal`; }
+            if(ds==='Walk'){ if(!walkMin[i]) return null;
+              return ` Walk: ${walkMin[i]} min · ${walkCal[i]||0} cal`; }
+            return null;
+          },
+          footer:(c)=>{ const i=c[0].dataIndex; const cal=(liftCal[i]||0)+(bballCal[i]||0)+(walkCal[i]||0);
+            return cal? `Total ${cal} cal` : 'Rest day'; }
         }}},
       scales:{
-        x:{ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
-        y:{min:0,max:Math.max(100, Math.max(...mins)+20),
+        x:{stacked:true, ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
+        y:{stacked:true, min:0, max:yMax,
            ticks:{font:{size:9},color:'rgba(255,255,255,.3)',callback:v=>v===0?'':v+'m'},
            grid:{color:'rgba(255,255,255,.05)'},border:{display:false}}
       }}
@@ -88,14 +117,19 @@ function render(d) {
 
   const liftsEl = document.getElementById('lifts');
   liftsEl.innerHTML = '';
-  (d.top_lifts || []).forEach(l => {
-    const row = document.createElement('div');
-    row.className = 'lift-row';
-    row.innerHTML = `<span class="lift-name">${l.name}</span>` +
-                    `<span class="lift-val">${l.value}</span>` +
-                    `<span class="lift-arrow">${l.next || ''}</span>`;
-    liftsEl.appendChild(row);
-  });
+  const lifts = d.top_lifts || [];
+  if(!lifts.length){
+    liftsEl.innerHTML = '<div class="empty">No top lifts logged in Notion yet</div>';
+  } else {
+    lifts.forEach(l => {
+      const row = document.createElement('div');
+      row.className = 'lift-row';
+      row.innerHTML = `<span class="lift-name">${l.name}</span>` +
+                      `<span class="lift-val">${l.value}</span>` +
+                      `<span class="lift-arrow">${l.next || ''}</span>`;
+      liftsEl.appendChild(row);
+    });
+  }
 }
 
 (async function () {
