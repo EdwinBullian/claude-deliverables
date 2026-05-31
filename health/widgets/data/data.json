@@ -16,9 +16,9 @@
   "activity": {
     "date_label": "May 30 — Today",
     "today": {
-      "rhr": null,
-      "steps": null,
-      "avg_hr": null,
+      "rhr": 54,
+      "steps": 4986,
+      "avg_hr": 82,
       "sleep_score": 84
     },
     "week": {
@@ -37,8 +37,8 @@
         4406,
         3930,
         6070,
-        3810,
-        null
+        4467,
+        4986
       ],
       "rhr": [
         55,
@@ -47,11 +47,16 @@
         56,
         54,
         54,
-        null
+        54
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Walk",
+      "duration_min": 68,
+      "calories": 471,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — May 24–30",
@@ -196,16 +201,25 @@
       "Fri 5/29",
       "Sat 5/30"
     ],
-    "minutes": [
+    "lift_min": [
       0,
-      80,
-      80,
+      38,
+      22,
       0,
       0,
       0,
       0
     ],
-    "types": [
+    "lift_cal": [
+      0,
+      412,
+      183,
+      0,
+      0,
+      0,
+      0
+    ],
+    "lift_type": [
       "",
       "Push",
       "Pull",
@@ -213,6 +227,42 @@
       "",
       "",
       ""
+    ],
+    "bball_min": [
+      23.1,
+      120.3,
+      0,
+      36.7,
+      14.3,
+      0,
+      0
+    ],
+    "bball_cal": [
+      185,
+      720,
+      0,
+      254,
+      95,
+      0,
+      0
+    ],
+    "walk_min": [
+      0,
+      3.0,
+      7.0,
+      25.3,
+      23.8,
+      0,
+      100.3
+    ],
+    "walk_cal": [
+      0,
+      16,
+      29,
+      159,
+      153,
+      0,
+      692
     ],
     "top_lifts": []
   },
@@ -244,28 +294,66 @@
       46,
       32
     ],
-    "footer": "Wake 7:38 AM · No workout · Natural curve"
+    "footer": "Wake 7:38 AM · Walk 68 min · Natural curve"
+  },
+  "hydration": {
+    "date_label": "May 30 — Today",
+    "today_oz": 0.0,
+    "target_oz": 130,
+    "pct": 0,
+    "week": {
+      "labels": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "oz": [
+        30,
+        70,
+        8,
+        17,
+        25,
+        70,
+        0
+      ],
+      "today_index": 6
+    },
+    "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-30T13:01:52-07:00",
-    "last_updated_label": "May 30, 1:01 PM PST",
+    "last_updated_iso": "2026-05-30T19:09:16-07:00",
+    "last_updated_label": "May 30, 7:09 PM PST",
+    "refreshed_sections": [
+      "sleep",
+      "activity",
+      "energy",
+      "strength_week",
+      "supplements",
+      "macros_week",
+      "micros_week",
+      "hydration"
+    ],
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T13:01:52-07:00",
+        "last_ok_iso": "2026-05-30T19:09:16-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T13:01:48-07:00",
+        "last_ok_iso": "2026-05-30T19:09:16-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T13:01:47-07:00",
+        "last_ok_iso": "2026-05-30T19:09:14-07:00",
         "error": null
       }
     },
-    "schema_version": 1
+    "schema_version": 2
   }
 }
