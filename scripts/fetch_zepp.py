@@ -1,28 +1,35 @@
-"""Pull sleep + activity from Zepp via Eddie's vendored Zepp MCP.
+"""Pull sleep + activity + weekly workouts from Zepp via Eddie's vendored MCP.
 
-Strategy: import the MCP module as-is, then monkey-patch ``_load_config`` to
-read credentials from environment variables (GitHub Secrets) instead of
-``mcp/config.json``. This way the GitHub Action shares the exact same
-hard-won auth flow (AES-encrypted credential exchange against the new
-*.zepp.com endpoint) that's already working locally — no duplicate auth
-code, no risk of drift.
+Strategy unchanged from before: import the vendored Zepp MCP and patch its
+``_load_config`` to read GitHub-Secret env vars, so the GitHub Action reuses
+the exact AES-encrypted *.zepp.com auth flow that already works locally.
+
+Three fixes/additions in this version:
+  1. ``today`` biometrics now fall back to the most-recent *synced* day.
+     Zepp's cloud often has no data for the current partial day (the watch
+     hasn't synced yet), which left RHR / steps / avg-HR blank on the widget.
+     We now show the latest day that actually has data, labelled honestly.
+  2. ``avg_hr`` is actually computed (decoded from the HR detail blob) instead
+     of being hard-coded to None.
+  3. ``workouts_week`` exposes every Zepp workout in the trailing-7-day window,
+     classified (basketball / walking / training) with real duration + calories,
+     bucketed per day. build_data.py merges this with the Notion lift log to
+     drive the stacked strength chart (so basketball finally shows up).
 """
 
 from __future__ import annotations
 
 import datetime as dt
-import os
 import sys
-import time
 from pathlib import Path
 
 # Make the vendored MCPs importable
 sys.path.insert(0, str(Path(__file__).parent / "vendor"))
 
+import requests  # noqa: E402
 import zepp_mcp as zm  # noqa: E402
 
 from common import (  # noqa: E402
-    DAYS_SHORT,
     PST,
     env,
     fail,
@@ -51,6 +58,33 @@ def _env_config() -> dict:
 zm._load_config = _env_config
 
 
+# --------------------------------------------------------------------------
+# Workout type classification
+# --------------------------------------------------------------------------
+# Zepp logs activities as numeric type codes with no label. Eddie's codes
+# (confirmed 2026-05-30): 52 = Basketball (long sessions), 223 = Walking,
+# 85 = a generic "training" mode he uses for BOTH lifting and pickup hoops.
+# Type 85 is therefore resolved against the Notion lift log in build_data.py
+# (a same-day Notion lift claims one 85 session; the rest become basketball).
+BASKETBALL_TYPES = {14, 52}
+WALKING_TYPES = {6, 16, 223}
+TRAINING_TYPES = {9, 50, 85}  # lift-or-ball, resolved downstream
+
+
+def _classify(type_code) -> str:
+    try:
+        c = int(type_code)
+    except (TypeError, ValueError):
+        return "other"
+    if c in BASKETBALL_TYPES:
+        return "basketball"
+    if c in WALKING_TYPES:
+        return "walking"
+    if c in TRAINING_TYPES:
+        return "training"
+    return "other"
+
+
 def _date_label(d: dt.date) -> str:
     return d.strftime("%b %-d")
 
@@ -70,60 +104,89 @@ def _estimate_sleep_score(deep: int, light: int, rem: int, awakenings: int | Non
 
 def _summary_for(day: dt.date) -> dict:
     """Return the decoded summary dict for a given day, or {} on no-data."""
-    rows = zm._band_data(day.isoformat(), "summary")
+    try:
+        rows = zm._band_data(day.isoformat(), "summary")
+    except Exception:
+        return {}
     if not rows:
         return {}
     return zm._decode_summary(rows[0]) or {}
 
 
-def _today_workout() -> dict | None:
-    """Most recent workout that ended today (PST), or None."""
-    token, _uid = zm._get_token()
-    import requests
-    r = requests.get(
-        f"{zm.API_BASE}/v1/sport/run/history.json",
-        params={"source": "run.mifit.huami.com"},
-        headers={"apptoken": token},
-        timeout=15,
-    )
-    if r.status_code != 200:
+def _avg_hr_for(day: dt.date) -> int | None:
+    """Decode the HR detail blob for ``day`` and return the mean bpm, or None."""
+    import base64
+    try:
+        rows = zm._band_data(day.isoformat(), "detail")
+    except Exception:
         return None
-    items = (r.json() or {}).get("data", {}).get("summary", []) or []
-    if not items:
+    all_bpm: list[int] = []
+    for entry in rows or []:
+        raw = entry.get("data_hr", "")
+        if not raw:
+            continue
+        try:
+            readings, _fmt = zm._decode_hr_blob(base64.b64decode(raw))
+        except Exception:
+            continue
+        all_bpm.extend(bpm for _minute, bpm in readings)
+    if not all_bpm:
         return None
-    today = today_pst()
-    today_start = int(dt.datetime.combine(today, dt.time(0, 0), tzinfo=PST).timestamp())
-    today_end = today_start + 86400
+    return int(round(sum(all_bpm) / len(all_bpm)))
+
+
+def _all_workouts() -> list[dict]:
+    """Raw Zepp workout history (most recent first)."""
+    try:
+        token, _uid = zm._get_token()
+        r = requests.get(
+            f"{zm.API_BASE}/v1/sport/run/history.json",
+            params={"source": "run.mifit.huami.com"},
+            headers={"apptoken": token},
+            timeout=15,
+        )
+        if r.status_code != 200:
+            return []
+        return (r.json() or {}).get("data", {}).get("summary", []) or []
+    except Exception:
+        return []
+
+
+def _workouts_week(week: list[dt.date], items: list[dict]) -> list[list[dict]]:
+    """Bucket Zepp workouts into a per-day list over the trailing-7-day window.
+
+    Returns a length-7 list; each element is a list of session dicts:
+        {"cat": "basketball|walking|training|other", "type": <code>,
+         "min": <float>, "cal": <int>}
+    Tiny sessions (<2 min and <10 cal) are dropped as noise.
+    """
+    by_day: list[list[dict]] = [[] for _ in range(7)]
+    idx_of = {d: i for i, d in enumerate(week)}
     for w in items:
         try:
-            end_ts = int(w.get("end_time") or w.get("trackid") or 0)
+            tid = int(w.get("trackid") or 0)
         except (TypeError, ValueError):
             continue
-        if today_start <= end_ts < today_end:
-            return {
-                "type": _sport_type_label(w.get("type")),
-                "duration_min": int(w.get("run_time", 0) or 0) // 60 or None,
-                "calories": int(float(w.get("calorie", 0) or 0)),
-                "avg_hr": int(float(w.get("avg_heart_rate", 0) or 0)) or None,
-            }
-    return None
-
-
-def _sport_type_label(code) -> str:
-    mapping = {
-        1: "Run", 6: "Walk", 8: "Cycling", 9: "Strength",
-        10: "Yoga", 12: "Elliptical", 14: "Basketball", 16: "Hike",
-        50: "Strength", 52: "Yoga", 60: "Elliptical", 92: "HIIT",
-        223: "Strength",
-    }
-    try:
-        return mapping.get(int(code), "Workout")
-    except (TypeError, ValueError):
-        return "Workout"
+        if not tid:
+            continue
+        start = dt.datetime.fromtimestamp(tid, tz=PST).date()
+        if start not in idx_of:
+            continue
+        minutes = round(int(w.get("run_time", 0) or 0) / 60, 1)
+        cal = int(float(w.get("calorie", 0) or 0))
+        if minutes < 2 and cal < 10:
+            continue
+        by_day[idx_of[start]].append({
+            "cat": _classify(w.get("type")),
+            "type": w.get("type"),
+            "min": minutes,
+            "cal": cal,
+        })
+    return by_day
 
 
 def fetch() -> dict:
-    """Return the {sleep, activity} sections of the widget payload."""
+    """Return {sleep, activity, workouts_week} sections of the widget payload."""
     try:
         zm._get_token()
     except Exception as e:
@@ -132,11 +195,9 @@ def fetch() -> dict:
     try:
         today = today_pst()
         yesterday = today - dt.timedelta(days=1)
-        # Trailing 7-day window ending today, so the activity chart always
-        # shows the most-recent week regardless of where today falls.
-        week = trailing_7_days(today)
+        week = trailing_7_days(today)  # today is always index 6
 
-        # Last-night sleep is stored under yesterday's date
+        # ---- Last night's sleep (stored under yesterday's date) ----
         slp = _summary_for(yesterday).get("slp", {}) or {}
         deep = slp.get("dp", 0)
         light = slp.get("lt", 0)
@@ -144,14 +205,8 @@ def fetch() -> dict:
         wake = slp.get("wk", 0)
         total = deep + light + rem
         score = slp.get("ss") or _estimate_sleep_score(deep, light, rem, slp.get("wc"))
-        bed_dt = (
-            dt.datetime.fromtimestamp(slp["st"], tz=PST)
-            if slp.get("st") else None
-        )
-        wake_dt = (
-            dt.datetime.fromtimestamp(slp["ed"], tz=PST)
-            if slp.get("ed") else None
-        )
+        bed_dt = dt.datetime.fromtimestamp(slp["st"], tz=PST) if slp.get("st") else None
+        wake_dt = dt.datetime.fromtimestamp(slp["ed"], tz=PST) if slp.get("ed") else None
 
         sleep_payload = {
             "date_label": _date_label(yesterday) + " — Last Night",
@@ -168,44 +223,77 @@ def fetch() -> dict:
             "awakenings": slp.get("wc"),
         }
 
-        # Per-day steps + RHR for the trailing-7-day chart. today is always
-        # the last cell (index 6); no future-day handling needed.
+        # ---- Per-day steps + RHR for the trailing-7-day chart ----
         steps_arr: list[int | None] = [None] * 7
         rhr_arr: list[int | None] = [None] * 7
-        today_idx = 6
-
         for i, day in enumerate(week):
-            try:
-                s = _summary_for(day)
-                steps_arr[i] = (s.get("stp") or {}).get("ttl")
-                rhr_arr[i] = (s.get("slp") or {}).get("rhr")
-                time.sleep(0.3)
-            except Exception:
-                continue
+            s = _summary_for(day)
+            steps_arr[i] = (s.get("stp") or {}).get("ttl")
+            rhr_arr[i] = (s.get("slp") or {}).get("rhr")
 
-        # Today's totals + workout
-        today_summary = _summary_for(today)
-        t_stp = today_summary.get("stp") or {}
-        t_slp = today_summary.get("slp") or {}
+        # ---- "Today" biometrics: fall back to the most-recent synced day ----
+        # Zepp cloud frequently has no data for the current partial day, which
+        # used to blank the whole top row. Find the latest day WITH steps and
+        # show that, labelled with its real date.
+        snap_idx = next((i for i in range(6, -1, -1) if steps_arr[i] is not None), None)
+        if snap_idx is None:
+            snap_idx = 6
+        snap_day = week[snap_idx]
+        is_today = snap_day == today
+
+        # RHR: prefer last night's sleep RHR (most current), else snapshot day's
+        today_rhr = sleep_payload["resting_hr"] or rhr_arr[snap_idx]
+        today_avg_hr = _avg_hr_for(snap_day)
+
+        if is_today:
+            activity_label = _date_label(today) + " — Today"
+        else:
+            activity_label = snap_day.strftime("%a %b %-d") + " — Latest"
+
+        # ---- Weekly workouts (classified) ----
+        workouts_raw = _all_workouts()
+        by_day = _workouts_week(week, workouts_raw)
+
+        # Activity strip = the longest of today's sessions, if any
+        today_workout = None
+        if by_day[6]:
+            longest = max(by_day[6], key=lambda s: s["min"])
+            today_workout = {
+                "type": {"basketball": "Basketball", "walking": "Walk",
+                         "training": "Training"}.get(longest["cat"], "Workout"),
+                "duration_min": int(round(longest["min"])) or None,
+                "calories": longest["cal"] or None,
+                "avg_hr": None,
+            }
 
         activity_payload = {
-            "date_label": _date_label(today) + " — Today",
+            "date_label": activity_label,
             "today": {
-                "rhr": t_slp.get("rhr"),
-                "steps": t_stp.get("ttl"),
-                "avg_hr": None,
+                "rhr": today_rhr,
+                "steps": steps_arr[snap_idx],
+                "avg_hr": today_avg_hr,
                 "sleep_score": sleep_payload["score"],
             },
             "week": {
                 "labels": short_day_labels(week),
                 "steps": steps_arr,
                 "rhr": rhr_arr,
-                "today_index": today_idx,
+                "today_index": 6,
             },
-            "today_workout": _today_workout(),
+            "today_workout": today_workout,
         }
 
-        return ok({"sleep": sleep_payload, "activity": activity_payload})
+        workouts_week = {
+            "labels": short_day_labels(week),
+            "date_labels": [d.strftime("%a %-m/%-d") for d in week],
+            "by_day": by_day,
+        }
+
+        return ok({
+            "sleep": sleep_payload,
+            "activity": activity_payload,
+            "workouts_week": workouts_week,
+        })
     except Exception as e:
         return fail(f"data pull failed: {e}")
 
