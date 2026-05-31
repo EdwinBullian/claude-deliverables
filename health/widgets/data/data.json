@@ -17,8 +17,8 @@
     "date_label": "May 30 — Today",
     "today": {
       "rhr": 54,
-      "steps": 4986,
-      "avg_hr": 82,
+      "steps": 6808,
+      "avg_hr": 84,
       "sleep_score": 84
     },
     "week": {
@@ -38,7 +38,7 @@
         3930,
         6070,
         4467,
-        4986
+        6808
       ],
       "rhr": [
         55,
@@ -235,7 +235,7 @@
       36.7,
       14.3,
       0,
-      0
+      30.1
     ],
     "bball_cal": [
       185,
@@ -244,7 +244,7 @@
       254,
       95,
       0,
-      0
+      233
     ],
     "walk_min": [
       0,
@@ -253,7 +253,7 @@
       25.3,
       23.8,
       0,
-      100.3
+      107.6
     ],
     "walk_cal": [
       0,
@@ -262,7 +262,7 @@
       159,
       153,
       0,
-      692
+      738
     ],
     "top_lifts": []
   },
@@ -325,8 +325,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-30T19:09:16-07:00",
-    "last_updated_label": "May 30, 7:09 PM PST",
+    "last_updated_iso": "2026-05-30T19:58:46-07:00",
+    "last_updated_label": "May 30, 7:58 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -340,17 +340,17 @@
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T19:09:16-07:00",
+        "last_ok_iso": "2026-05-30T19:58:46-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T19:09:16-07:00",
+        "last_ok_iso": "2026-05-30T19:58:43-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-30T19:09:14-07:00",
+        "last_ok_iso": "2026-05-30T19:58:42-07:00",
         "error": null
       }
     },
