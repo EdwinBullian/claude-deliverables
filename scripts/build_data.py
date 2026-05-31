@@ -33,7 +33,7 @@ from pathlib import Path
 import fetch_cronometer
 import fetch_notion
 import fetch_zepp
-from common import load_previous, now_pst
+from common import env, load_previous, now_pst
 
 # Which top-level sections each source produces.
 SOURCE_SECTIONS = {
@@ -231,6 +231,23 @@ def main(out_path: Path, sections_spec: str) -> int:
         if any(s in needed for s in secs)
     ]
 
+    # Rate-limit Zepp to ~once/day. Each Zepp pull does a fresh login, and
+    # Huami allows ~one active session per account, so every automation login
+    # evicts Eddie's phone. Pulling only when >20h since the last SUCCESSFUL
+    # Zepp data (or when activity is empty) holds phone logouts to ~1/day
+    # instead of every run. Cronometer + Notion don't have this conflict and
+    # keep refreshing every run. Set env FORCE_ZEPP=1 to override.
+    now = now_pst()
+    last_zepp_data = (previous.get("_meta") or {}).get("last_zepp_data_iso")
+    zepp_due = True
+    if last_zepp_data and not env("FORCE_ZEPP"):
+        try:
+            zepp_due = (now - dt.datetime.fromisoformat(last_zepp_data)) >= dt.timedelta(hours=20)
+        except Exception:
+            zepp_due = True
+    if "zepp" in sources_to_run and not zepp_due:
+        sources_to_run.remove("zepp")
+
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures = {}
         if "zepp" in sources_to_run:
@@ -266,9 +283,10 @@ def main(out_path: Path, sections_spec: str) -> int:
                 elif key in allowed:
                     payload[key] = val
 
-    # Merge strength only when it was requested and an input was refreshed;
-    # otherwise the previous strength_week is preserved untouched.
-    if "strength_week" in requested and ("_strength_notion" in raw or "_workouts_week" in raw):
+    # Merge strength only when Zepp actually ran this pass (it owns the
+    # basketball/walking/duration data); otherwise keep the previous chart so a
+    # Zepp-skipped run doesn't flatten it to Notion-only lifts.
+    if "strength_week" in requested and "_workouts_week" in raw:
         merged = _merge_strength(
             raw.get("_strength_notion"),
             raw.get("_workouts_week"),
@@ -282,11 +300,18 @@ def main(out_path: Path, sections_spec: str) -> int:
             payload.get("sleep"), payload.get("activity")
         )
 
-    now = now_pst()
+    # Only treat Zepp as "fresh" (resetting the once/day timer) if it actually
+    # returned step data this run — a successful login that read nothing
+    # shouldn't suppress the next attempt.
+    act_steps = ((payload.get("activity") or {}).get("week") or {}).get("steps") or []
+    zepp_got_data = ("zepp" in results) and any(s is not None for s in act_steps)
+    new_last_zepp = now.isoformat(timespec="seconds") if zepp_got_data else last_zepp_data
+
     payload["_meta"] = {
         "last_updated_iso": now.isoformat(timespec="seconds"),
         "last_updated_label": now.strftime("%b %-d, %-I:%M %p PST"),
         "refreshed_sections": requested,
+        "last_zepp_data_iso": new_last_zepp,
         "sources": meta_sources,
         "schema_version": 2,
     }
