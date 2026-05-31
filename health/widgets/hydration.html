@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:290px;overflow:hidden;background:#191919;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
+  body{display:flex;flex-direction:column;padding:16px 18px 12px}
+  .heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:10px}
+  .top{display:flex;align-items:center;gap:18px}
+  .ring-wrap{position:relative;width:108px;height:108px;flex-shrink:0}
+  .ring-wrap svg{transform:rotate(-90deg)}
+  .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:1px}
+  .ring-center .oz{font-size:26px;font-weight:800;color:#7cc0f0;line-height:1}
+  .ring-center .unit{font-size:8.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.3px;color:rgba(255,255,255,.35)}
+  .meta{flex:1;display:flex;flex-direction:column;gap:8px}
+  .meta .pct{font-size:30px;font-weight:800;color:#f0f0f0;line-height:1}
+  .meta .goal{font-size:10px;color:rgba(255,255,255,.4)}
+  .meta .rem{font-size:11px;font-weight:600;color:#7cc0f0}
+  .divider{height:1px;background:rgba(255,255,255,.08);margin:12px 0 10px}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .day-cell{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .day-lbl{font-size:8.5px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase}
+  .day-lbl.today{color:#7cc0f0}
+  .bar-track{width:100%;height:40px;background:rgba(255,255,255,.05);border-radius:4px;
+             display:flex;align-items:flex-end;overflow:hidden}
+  .bar-fill{width:100%;border-radius:4px 4px 0 0;background:rgba(90,169,230,.65)}
+  .bar-fill.today-bar{background:rgba(124,192,240,.95)}
+  .oz-val{font-size:8px;color:rgba(255,255,255,.4);text-align:center}
+  .footer{margin-top:auto;font-size:8px;color:rgba(255,255,255,.28);padding-top:8px}
+</style>
+</head>
+<body>
+<div class="heading" id="heading">Hydration — Today</div>
+
+<div class="top">
+  <div class="ring-wrap">
+    <svg width="108" height="108" viewBox="0 0 108 108">
+      <circle cx="54" cy="54" r="47" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="9"/>
+      <circle id="ring" cx="54" cy="54" r="47" fill="none" stroke="#5aa9e6" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3"/>
+    </svg>
+    <div class="ring-center">
+      <span class="oz" id="oz">—</span>
+      <span class="unit">fl oz</span>
+    </div>
+  </div>
+  <div class="meta">
+    <div class="pct" id="pct">—</div>
+    <div class="goal" id="goal">Goal — oz</div>
+    <div class="rem" id="rem"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="week-grid" id="grid"></div>
+<div class="footer" id="footer"></div>
+
+<script>
+const FALLBACK = {
+  date_label: 'Today',
+  today_oz: 0,
+  target_oz: 130,
+  pct: 0,
+  week: { labels:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], oz:[null,null,null,null,null,null,0], today_index:6 },
+  footer: 'Goal 130 oz · total water (drinks + food) from Cronometer'
+};
+
+function render(d) {
+  const target = d.target_oz || 130;
+  const today = d.today_oz || 0;
+  const pct = d.pct != null ? d.pct : Math.round(today / target * 100);
+
+  document.getElementById('heading').textContent = 'Hydration — ' + (d.date_label || 'Today');
+  document.getElementById('oz').textContent = Math.round(today);
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('goal').textContent = 'Goal ' + target + ' oz';
+  const rem = Math.max(0, Math.round(target - today));
+  document.getElementById('rem').textContent = rem > 0 ? (rem + ' oz to go') : 'Goal met ✓';
+
+  const circ = 295.3;
+  const frac = Math.max(0, Math.min(1, pct / 100));
+  document.getElementById('ring').setAttribute('stroke-dashoffset', circ * (1 - frac));
+
+  const days = d.week?.labels || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const oz = d.week?.oz || [];
+  const todayIdx = d.week?.today_index ?? 6;
+  const maxOz = Math.max(target, ...oz.filter(v => v != null), 1);
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  days.forEach((name, i) => {
+    const isToday = i === todayIdx;
+    const has = oz[i] != null && oz[i] > 0;
+    const h = has ? Math.min(100, oz[i] / maxOz * 100).toFixed(1) : 0;
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.innerHTML = `
+      <div class="day-lbl${isToday?' today':''}">${name}</div>
+      <div class="bar-track"><div class="bar-fill ${isToday?'today-bar':''}" style="height:${h}%"></div></div>
+      <div class="oz-val">${has ? Math.round(oz[i]) : '—'}</div>`;
+    grid.appendChild(cell);
+  });
+
+  document.getElementById('footer').textContent = d.footer || '';
+}
+
+(async function () {
+  let d = FALLBACK;
+  try {
+    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const all = await r.json();
+      if (all && all.hydration) d = all.hydration;
+    }
+  } catch (e) {}
+  render(d);
+})();
+</script>
+</body>
+</html>
