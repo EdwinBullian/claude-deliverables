@@ -10,8 +10,8 @@
   body{display:flex;flex-direction:column;padding:14px 18px 12px}
   .header{font-size:9.5px;font-weight:700;text-transform:uppercase;
     letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:12px}
-  .stack{display:flex;flex-direction:column;gap:8px;flex:1}
-  .row{display:flex;align-items:center;gap:10px;padding:7px 10px;
+  .stack{display:flex;flex-direction:column;gap:7px;flex:1}
+  .row{display:flex;align-items:center;gap:10px;padding:6px 10px;
        background:rgba(107,218,135,.06);border-radius:7px;
        border-left:3px solid rgba(107,218,135,.35)}
   .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#6bda87}
@@ -31,8 +31,10 @@ const FALLBACK = [
   {name:'Creatine Monohydrate', desc:'Strength · power output · cell hydration', dose:'5 g',      time:'Post-workout or AM'},
   {name:'Vitamin D3 + K2',      desc:'Bone health · immune · testosterone support', dose:'5,000 IU', time:'With fat meal'},
   {name:'Magnesium Malate',     desc:'Energy production · muscle function',         dose:'400 mg',   time:'Morning'},
-  {name:'Magnesium Glycinate',  desc:'Sleep quality · recovery · nervous system',   dose:'400 mg',   time:'Evening'},
-  {name:'Dandelion Root',       desc:'Digestion · bloat relief · liver support',    dose:'500 mg',   time:'With meals'}
+  {name:'Omega-3 Fish Oil',     desc:'Anti-inflammatory · joint · recovery',        dose:'1–2 g',    time:'With meal'},
+  {name:'Dandelion Root',       desc:'Digestion · bloat relief · liver support',    dose:'1,040 mg', time:'Before breakfast'},
+  {name:'Magnesium Glycinate',  desc:'Sleep quality · recovery · nervous system',   dose:'350 mg',   time:'Before bed'},
+  {name:'Antihistamine (Zyrtec)', desc:'Allergy relief · cetirizine',               dose:'10 mg',    time:'Nightly'}
 ];
 
 function render(supps) {
