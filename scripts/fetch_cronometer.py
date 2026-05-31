@@ -1,15 +1,18 @@
-"""Pull nutrition from Cronometer via Eddie's vendored Cronometer MCP.
+"""Pull nutrition + hydration from Cronometer via Eddie's vendored MCP.
 
 Same strategy as fetch_zepp.py: vendor the MCP module, patch its config loader
-to read env vars (GitHub Secrets), then call its existing _aggregate_day
+to read env vars (GitHub Secrets), then call its existing ``_aggregate_day``
 function — which already handles login, GWT-RPC bootstrap, food caching, and
-nutrient aggregation. Single source of truth for the auth + parsing logic.
+nutrient aggregation.
+
+Adds a ``hydration`` section: Cronometer tracks total water as nutrient 255,
+exposed by the MCP as ``all_nutrients["Water (g)"]`` (grams; includes both
+logged drinks and food moisture, which is how Cronometer's own water target
+works). We convert to fl oz against Eddie's ~130 oz goal.
 """
 
 from __future__ import annotations
 
-import datetime as dt
-import os
 import sys
 from pathlib import Path
 
@@ -18,7 +21,6 @@ sys.path.insert(0, str(Path(__file__).parent / "vendor"))
 import cronometer_mcp as cm  # noqa: E402
 
 from common import (  # noqa: E402
-    DAYS_SHORT,
     env,
     fail,
     ok,
@@ -29,6 +31,10 @@ from common import (  # noqa: E402
 
 TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2500") or 2500)
 TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="200") or 200)
+WATER_TARGET_OZ = int(env("CRONOMETER_TARGET_WATER_OZ", default="130") or 130)
+
+WATER_KEY = "Water (g)"
+G_PER_FL_OZ = 29.5735
 
 RDI = {
     "Fiber (g)":        38,
@@ -61,6 +67,11 @@ def _has_data(day: dict) -> bool:
     return cals > 50
 
 
+def _water_oz(day: dict) -> float:
+    g = (day.get("all_nutrients") or {}).get(WATER_KEY, 0.0) or 0.0
+    return round(g / G_PER_FL_OZ, 1)
+
+
 def _macro_score(avg_cal: float, avg_prot: float) -> int:
     cal_score = 50 if abs(avg_cal - TARGET_KCAL) / max(TARGET_KCAL, 1) <= 0.10 else int(
         max(0, 50 - abs(avg_cal - TARGET_KCAL) / max(TARGET_KCAL, 1) * 100)
@@ -76,13 +87,30 @@ def _fmt_amount(v: float | None, unit: str) -> str:
         return "—"
     if unit == "mg" and v >= 1000:
         return f"{v/1000:.1f}g"
-    if unit in ("g", "mcg"):
-        return f"{int(round(v))}{unit}"
     return f"{int(round(v))}{unit}"
 
 
 def _sub_label(value: float, rdi: float, unit: str) -> str:
     return f"{_fmt_amount(value, unit)} / {_fmt_amount(rdi, unit)}"
+
+
+def _build_hydration(days: list[dict], week) -> dict:
+    oz = [_water_oz(d) for d in days]
+    today_oz = oz[6]
+    pct = int(round(today_oz / WATER_TARGET_OZ * 100)) if WATER_TARGET_OZ else 0
+    logged = [round(o) for o in oz]
+    return {
+        "date_label": week[6].strftime("%b %-d") + " — Today",
+        "today_oz": today_oz,
+        "target_oz": WATER_TARGET_OZ,
+        "pct": pct,
+        "week": {
+            "labels": short_day_labels(week),
+            "oz": logged,
+            "today_index": 6,
+        },
+        "footer": f"Goal {WATER_TARGET_OZ} oz · total water (drinks + food) from Cronometer",
+    }
 
 
 def fetch() -> dict:
@@ -93,8 +121,6 @@ def fetch() -> dict:
 
     try:
         today = today_pst()
-        # Trailing 7-day window ending today, matching the activity + strength
-        # widgets. No future days to filter out.
         week = trailing_7_days(today)
         days: list[dict] = []
         for d in week:
@@ -116,7 +142,6 @@ def fetch() -> dict:
         avg_cals = sum(cals_arr) / n
 
         score = _macro_score(avg_cals, avg_protein)
-
         logged_days = [d for d, h in zip(days, has_data) if h]
 
         def avg(name: str) -> float:
@@ -181,8 +206,13 @@ def fetch() -> dict:
             "nutrients": nutrients,
             "footer": f"{n_logged} of 7 days logged · RDI for adult males · ↓ = upper limit",
         }
+        hydration = _build_hydration(days, week)
 
-        return ok({"macros_week": macros_week, "micros_week": micros_week})
+        return ok({
+            "macros_week": macros_week,
+            "micros_week": micros_week,
+            "hydration": hydration,
+        })
     except Exception as e:
         return fail(f"data pull failed: {e}")
 
