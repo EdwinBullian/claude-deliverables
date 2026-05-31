@@ -1,25 +1,25 @@
 {
   "sleep": {
     "date_label": "May 30 — Last Night",
-    "score": null,
-    "total_minutes": null,
-    "total_label": "—",
-    "deep_minutes": 0,
-    "light_minutes": 0,
-    "rem_minutes": 0,
-    "awake_minutes": 0,
-    "bedtime_label": "—",
-    "wake_label": "—",
-    "resting_hr": null,
-    "awakenings": null
+    "score": 84,
+    "total_minutes": 477,
+    "total_label": "7 h 57 m",
+    "deep_minutes": 71,
+    "light_minutes": 252,
+    "rem_minutes": 154,
+    "awake_minutes": 5,
+    "bedtime_label": "11:38 PM",
+    "wake_label": "7:40 AM",
+    "resting_hr": 54,
+    "awakenings": 3
   },
   "activity": {
     "date_label": "May 31 — Today",
     "today": {
-      "rhr": null,
-      "steps": null,
-      "avg_hr": null,
-      "sleep_score": null
+      "rhr": 54,
+      "steps": 9032,
+      "avg_hr": 126,
+      "sleep_score": 84
     },
     "week": {
       "labels": [
@@ -32,26 +32,31 @@
         "Sun"
       ],
       "steps": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        5216,
+        4406,
+        3930,
+        6070,
+        4467,
+        12667,
+        9032
       ],
       "rhr": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        55,
+        55,
+        56,
+        54,
+        54,
+        54,
+        0
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Walk",
+      "duration_min": 79,
+      "calories": 712,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — May 25–31",
@@ -197,8 +202,8 @@
       "Sun 5/31"
     ],
     "lift_min": [
-      80,
-      80,
+      38,
+      22,
       0,
       0,
       0,
@@ -206,8 +211,8 @@
       0
     ],
     "lift_cal": [
-      0,
-      0,
+      412,
+      183,
       0,
       0,
       0,
@@ -224,40 +229,40 @@
       ""
     ],
     "bball_min": [
+      120.3,
       0,
+      36.7,
+      14.3,
       0,
-      0,
-      0,
-      0,
-      0,
+      30.1,
       0
     ],
     "bball_cal": [
+      720,
       0,
+      254,
+      95,
       0,
-      0,
-      0,
-      0,
-      0,
+      233,
       0
     ],
     "walk_min": [
+      3.0,
+      7.0,
+      25.3,
+      23.8,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
+      282.9,
+      81.8
     ],
     "walk_cal": [
+      16,
+      29,
+      159,
+      153,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
+      2747,
+      726
     ],
     "top_lifts": []
   },
@@ -289,7 +294,7 @@
       46,
       32
     ],
-    "footer": "Wake — · No workout · Natural curve"
+    "footer": "Wake 7:40 AM · Walk 79 min · Natural curve"
   },
   "hydration": {
     "date_label": "May 31 — Today",
@@ -320,8 +325,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-05-31T07:25:28-07:00",
-    "last_updated_label": "May 31, 7:25 AM PST",
+    "last_updated_iso": "2026-05-31T10:06:30-07:00",
+    "last_updated_label": "May 31, 10:06 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,20 +337,21 @@
       "micros_week",
       "hydration"
     ],
+    "last_zepp_data_iso": "2026-05-31T10:06:30-07:00",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-31T07:25:28-07:00",
+        "last_ok_iso": "2026-05-31T10:06:32-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-05-31T07:25:26-07:00",
+        "last_ok_iso": "2026-05-31T10:06:32-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-05-31T07:25:26-07:00",
+        "last_ok_iso": "2026-05-31T10:06:30-07:00",
         "error": null
       }
     },
