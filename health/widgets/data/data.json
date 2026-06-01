@@ -1,66 +1,61 @@
 {
   "sleep": {
-    "date_label": "May 30 — Last Night",
-    "score": 84,
-    "total_minutes": 477,
-    "total_label": "7 h 57 m",
-    "deep_minutes": 71,
-    "light_minutes": 252,
-    "rem_minutes": 154,
-    "awake_minutes": 5,
-    "bedtime_label": "11:38 PM",
-    "wake_label": "7:40 AM",
-    "resting_hr": 54,
-    "awakenings": 3
+    "date_label": "May 31 — Last Night",
+    "score": 50,
+    "total_minutes": 270,
+    "total_label": "4 h 30 m",
+    "deep_minutes": 49,
+    "light_minutes": 150,
+    "rem_minutes": 71,
+    "awake_minutes": 9,
+    "bedtime_label": "4:23 AM",
+    "wake_label": "9:02 AM",
+    "resting_hr": 69,
+    "awakenings": 4
   },
   "activity": {
-    "date_label": "May 31 — Today",
+    "date_label": "Sun May 31 — Latest",
     "today": {
-      "rhr": 54,
-      "steps": 9032,
-      "avg_hr": 126,
-      "sleep_score": 84
+      "rhr": 69,
+      "steps": 10866,
+      "avg_hr": 86,
+      "sleep_score": 50
     },
     "week": {
       "labels": [
-        "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
-        "Sun"
+        "Sun",
+        "Mon"
       ],
       "steps": [
-        5216,
         4406,
         3930,
         6070,
         4467,
         12667,
-        9032
+        10866,
+        null
       ],
       "rhr": [
-        55,
         55,
         56,
         54,
         54,
         54,
-        0
+        69,
+        null
       ],
       "today_index": 6
     },
-    "today_workout": {
-      "type": "Walk",
-      "duration_min": 79,
-      "calories": 712,
-      "avg_hr": null
-    }
+    "today_workout": null
   },
   "macros_week": {
     "week_label": "Macros — May 26–1",
-    "macro_score_pct": 0,
+    "macro_score_pct": 15,
     "labels": [
       "Tue",
       "Wed",
@@ -80,130 +75,130 @@
       "Jun 1"
     ],
     "protein_g": [
-      33,
+      49,
       123,
       132,
-      69,
-      0,
-      0,
-      0
+      126,
+      159,
+      143,
+      3
     ],
     "carbs_g": [
-      41,
+      53,
       136,
       136,
-      13,
-      0,
-      0,
-      0
+      198,
+      102,
+      113,
+      51
     ],
     "fat_g": [
-      27,
+      47,
       126,
       98,
-      16,
-      0,
-      0,
-      0
+      108,
+      112,
+      82,
+      1
     ],
     "has_data": [
       true,
       true,
       true,
       true,
-      false,
-      false,
-      false
+      true,
+      true,
+      true
     ],
     "target_kcal": 2500,
     "target_protein_g": 200,
-    "footer": "Target: 2,500 kcal · 200g protein · 4/7 days logged"
+    "footer": "Target: 2,500 kcal · 200g protein · 7/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 0,
-    "days_logged": 4,
+    "macro_score_pct": 15,
+    "days_logged": 7,
     "days_total": 7,
-    "avg_protein_g": 89,
-    "avg_carbs_g": 81,
-    "avg_fat_g": 66,
+    "avg_protein_g": 105,
+    "avg_carbs_g": 112,
+    "avg_fat_g": 82,
     "target_kcal": 2500,
     "target_protein_g": 200,
     "nutrients": [
       {
-        "pct": 33,
+        "pct": 41,
         "label": "Fiber",
-        "sub": "13g / 38g",
+        "sub": "16g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 55,
+        "pct": 68,
         "label": "Calcium",
-        "sub": "555mg / 1.0g",
+        "sub": "686mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 32,
+        "pct": 39,
         "label": "Magnesium",
-        "sub": "131mg / 400mg",
+        "sub": "160mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 46,
+        "pct": 56,
         "label": "Potassium",
-        "sub": "2.2g / 4.7g",
+        "sub": "2.6g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 96,
+        "pct": 109,
         "label": "Sodium",
-        "sub": "2.2g / 2.3g",
+        "sub": "2.5g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 105,
+        "pct": 142,
         "label": "Iron",
-        "sub": "8mg / 8mg",
+        "sub": "11mg / 8mg",
         "upper_limit": false
       },
       {
         "pct": 102,
         "label": "Vitamin A",
-        "sub": "919mcg / 900mcg",
+        "sub": "923mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 106,
+        "pct": 140,
         "label": "Vitamin C",
-        "sub": "96mg / 90mg",
+        "sub": "126mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "4 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "7 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
-      "Sun"
+      "Sun",
+      "Mon"
     ],
     "date_labels": [
-      "Mon 5/25",
       "Tue 5/26",
       "Wed 5/27",
       "Thu 5/28",
       "Fri 5/29",
       "Sat 5/30",
-      "Sun 5/31"
+      "Sun 5/31",
+      "Mon 6/1"
     ],
     "lift_min": [
-      38,
       22,
+      0,
       0,
       0,
       0,
@@ -211,8 +206,8 @@
       0
     ],
     "lift_cal": [
-      412,
       183,
+      0,
       0,
       0,
       0,
@@ -220,8 +215,8 @@
       0
     ],
     "lift_type": [
-      "Push",
       "Pull",
+      "",
       "",
       "",
       "",
@@ -229,40 +224,40 @@
       ""
     ],
     "bball_min": [
-      120.3,
       0,
       36.7,
       14.3,
       0,
       30.1,
+      0,
       0
     ],
     "bball_cal": [
-      720,
       0,
       254,
       95,
       0,
       233,
+      0,
       0
     ],
     "walk_min": [
-      3.0,
       7.0,
       25.3,
       23.8,
       0,
       282.9,
-      81.8
+      81.8,
+      0
     ],
     "walk_cal": [
-      16,
       29,
       159,
       153,
       0,
       2747,
-      726
+      726,
+      0
     ],
     "top_lifts": []
   },
@@ -276,12 +271,12 @@
       5,
       5,
       5,
+      5,
+      5,
       28,
       18,
-      14,
-      20,
-      20,
-      20,
+      18,
+      18,
       65,
       72,
       78,
@@ -294,13 +289,13 @@
       46,
       32
     ],
-    "footer": "Wake 7:40 AM · Walk 79 min · Natural curve"
+    "footer": "Wake 9:02 AM · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 1 — Today",
-    "today_oz": 0.0,
+    "today_oz": 9.5,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 7,
     "week": {
       "labels": [
         "Tue",
@@ -312,21 +307,21 @@
         "Mon"
       ],
       "oz": [
-        8,
+        11,
         17,
         25,
-        70,
-        0,
-        0,
-        0
+        82,
+        24,
+        17,
+        10
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-01T05:28:30-07:00",
-    "last_updated_label": "Jun 1, 5:28 AM PST",
+    "last_updated_iso": "2026-06-01T11:32:51-07:00",
+    "last_updated_label": "Jun 1, 11:32 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -337,21 +332,21 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-05-31T10:06:30-07:00",
+    "last_zepp_data_iso": "2026-06-01T11:32:51-07:00",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-05-31T10:06:32-07:00",
+        "last_ok_iso": "2026-06-01T11:32:54-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-01T05:28:32-07:00",
+        "last_ok_iso": "2026-06-01T11:32:55-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-01T05:28:31-07:00",
+        "last_ok_iso": "2026-06-01T11:32:52-07:00",
         "error": null
       }
     },
