@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Scan — Week 23, 2026</title>
+<style>
+  :root {
+    --bg: #e4d9c4;
+    --card: #dbd0ba;
+    --accent: #1b3a5c;
+    --accent2: #2e6b4f;
+    --warn: #8b3a1a;
+    --text: #1a1a1a;
+    --subtext: #555;
+    --border: #c2b8a3;
+    --tag-bg: #1b3a5c;
+    --tag-text: #fff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 32px 16px 64px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .header-meta {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtext);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: var(--subtext);
+    font-style: italic;
+  }
+
+  /* Section headings */
+  h2 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin: 36px 0 18px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .card.warn { border-left-color: var(--warn); }
+  .card.green { border-left-color: var(--accent2); }
+  .card-title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .card.warn .card-title { color: var(--warn); }
+  .card.green .card-title { color: var(--accent2); }
+  .card p { font-size: 14px; color: var(--text); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    padding: 2px 7px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+  }
+  .tag.green { background: var(--accent2); }
+  .tag.warn { background: var(--warn); }
+  .tag.neutral { background: #666; }
+
+  /* Earnings grid */
+  .earnings-grid { display: flex; flex-direction: column; gap: 10px; }
+  .earnings-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .earnings-ticker {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent);
+    min-width: 60px;
+  }
+  .earnings-body { flex: 1; font-size: 13.5px; }
+  .earnings-body strong { display: block; font-family: 'Helvetica Neue', Arial, sans-serif; margin-bottom: 4px; }
+  .earnings-note {
+    margin-top: 6px;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--subtext);
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+  }
+
+  /* Table */
+  .watchlist-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .watchlist-table th {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  .watchlist-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .watchlist-table tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+  .action-up { color: var(--accent2); font-weight: 700; }
+  .action-new { color: var(--accent); font-weight: 700; }
+  .action-watch { color: var(--subtext); }
+  .action-acquired { color: var(--warn); font-weight: 700; }
+
+  /* Counter-intuitive box */
+  .cit-box {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-top: 8px;
+  }
+  .cit-box h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a8c4d8;
+    margin-bottom: 10px;
+  }
+  .cit-box p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: #edf2f7;
+    margin-bottom: 12px;
+  }
+  .cit-box p:last-child { margin-bottom: 0; }
+
+  /* Next week banner */
+  .next-week {
+    margin-top: 36px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--subtext);
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 10px 48px; }
+    .header h1 { font-size: 22px; }
+    .earnings-item { flex-direction: column; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-meta">Finance Agent · AgentOS v2 · Auto-generated</div>
+    <h1>Market Scan — Week 23, 2026</h1>
+    <div class="subtitle">Generated: Wednesday, June 3, 2026 &nbsp;|&nbsp; Coverage: June 1–3, 2026</div>
+  </div>
+
+  <!-- TOP MOVES -->
+  <h2>Top Moves This Week</h2>
+
+  <div class="card">
+    <div class="card-title"><span class="tag neutral">INDEX</span> S&amp;P 500 Breaks 7,600 — Then Pulls Back</div>
+    <p>The S&amp;P 500 crossed 7,600 for the first time in history on Tuesday (June 2), closing at 7,609.78, with the Dow adding 228 points. Wednesday brought a reversal — Dow -0.89%, Russell 2000 -1.33% — as tech sold off. The divergence between Tuesday's euphoria and Wednesday's retreat reflects a market broadly bullish on AI but increasingly sensitive to execution risk at individual companies.</p>
+  </div>
+
+  <div class="card green">
+    <div class="card-title"><span class="tag green">SEMI</span> Marvell (MRVL) +25% — Jensen's "Next Trillion-Dollar Company" Endorsement</div>
+    <p>Jensen Huang publicly singled out Marvell CEO Matt Murphy at a June 2 event: "The next trillion-dollar company, ladies and gentlemen." MRVL surged 25%+ following strong Q1 FY27 results (revenue $2.42B, +28% YoY). This is the Nvidia CEO putting his credibility behind a specific supply-chain partner — a public custom-silicon endorsement. In AI infrastructure, Jensen's words move markets more than most earnings prints.</p>
+  </div>
+
+  <div class="card warn">
+    <div class="card-title"><span class="tag warn">MEGA-CAP</span> Alphabet -4% on $80B Equity Raise</div>
+    <p>Alphabet announced it will raise $80B in equity to fund AI infrastructure buildout: $40B via at-the-market sales, $30B in underwritten offerings, and $10B direct to Berkshire Hathaway. Stock dropped ~4% on dilution concerns. See Counter-Intuitive Take below for why this reaction is wrong.</p>
+  </div>
+
+  <div class="card warn">
+    <div class="card-title"><span class="tag warn">REGULATORY</span> Exchange Stocks Crushed — CFTC Approves Kalshi Bitcoin Perpetual Futures</div>
+    <p>CBOE -16%, ICE -5%, CME lower — all hit after the CFTC approved Kalshi to offer Bitcoin perpetual futures on regulated U.S. markets. The fear: perpetual futures could extend to other asset classes, eating into the traditional exchange oligopoly. TD Cowen sees real risk to valuation multiples; RBC calls it "manageable." The speed and severity of the move signals how brittle exchange earnings multiples are when a structural competitor enters.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag neutral">CRYPTO</span> Bitcoin Below $70K for First Time Since April</div>
+    <p>Bitcoin dropped to ~$67,700 mid-week (down ~5%), snapping a period of relative strength. Likely pressure from the CFTC/perpetual futures narrative plus macro risk-off as the S&amp;P pulled back. Not a structural break, but shows crypto's tight short-term correlation with risk sentiment.</p>
+  </div>
+
+  <!-- EARNINGS -->
+  <h2>Earnings &amp; Financials</h2>
+  <div class="earnings-grid">
+
+    <div class="earnings-item">
+      <div class="earnings-ticker">MRVL</div>
+      <div class="earnings-body">
+        <strong>Marvell Technology — Q1 FY27 <span class="tag green">BEAT</span></strong>
+        Revenue $2.42B (+28% YoY), EPS $0.80 vs $0.75 est (+6.7% beat). Q2 guidance: $2.7B (+35% YoY). Raised FY27 &amp; FY28 outlook. Jensen's public endorsement followed the print. AI custom silicon (ASICs for hyperscalers) is inflecting.
+        <div class="earnings-note">Not on watchlist yet — worth screening for future thesis.</div>
+      </div>
+    </div>
+
+    <div class="earnings-item">
+      <div class="earnings-ticker">SNOW</div>
+      <div class="earnings-body">
+        <strong>Snowflake — Q1 FY27 (reported May 27) <span class="tag green">BEAT + RAISE</span></strong>
+        Product revenue $1.33B (+34%), RPO $9.21B (+38% YoY), NRR 126%. FY27 guidance raised to $5.84B (+31%). Strongest sequential dollar growth in company history.
+        <div class="earnings-note">RPO +38% cleared the ≥30% watchlist threshold → Bumped to High. Thesis candidate W24/W25.</div>
+      </div>
+    </div>
+
+    <div class="earnings-item">
+      <div class="earnings-ticker">HPE</div>
+      <div class="earnings-body">
+        <strong>Hewlett Packard Enterprise — Q2 FY26 <span class="tag green">MASSIVE BEAT</span></strong>
+        Revenue $10.7B vs $9.77B estimate (+$930M beat), EPS $0.79 vs $0.53 (+$0.26 beat). Signals AI infrastructure spending is broad-based — not just hyperscaler capex.
+        <div class="earnings-note">Not on watchlist. Enterprise AI infrastructure demand is strong across the supply chain.</div>
+      </div>
+    </div>
+
+    <div class="earnings-item">
+      <div class="earnings-ticker">AVGO</div>
+      <div class="earnings-body">
+        <strong>Broadcom — Q2 FY26 (reports tonight) <span class="tag neutral">WATCH</span></strong>
+        Guided: $22B revenue (+47% YoY), AI semiconductor revenue $10.7B (+140% YoY). Consensus EPS: $2.40.
+        <div class="earnings-note">A miss could reprice NVDA, MRVL, and the entire AI semiconductor group tomorrow.</div>
+      </div>
+    </div>
+
+    <div class="earnings-item">
+      <div class="earnings-ticker">CRWD</div>
+      <div class="earnings-body">
+        <strong>CrowdStrike — Q1 FY27 (reports tonight) <span class="tag neutral">WATCH</span></strong>
+        Guided: $1.363B revenue (+23.5% YoY), EPS $1.06–$1.07. ARR guidance $5.50B (+24% YoY).
+        <div class="earnings-note">W19 thesis still filtered (eligible W31). Watch for ARR surprise — significant beat/miss would update thesis assumptions.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DEALS -->
+  <h2>Deals &amp; Transactions</h2>
+
+  <div class="card green">
+    <div class="card-title"><span class="tag green">MEGA ROUND</span> Anthropic — $65B Series H at $965B + IPO S-1 Filed</div>
+    <p>Anthropic closed a $65B Series H led by Altimeter, Sequoia, Dragoneer, and Greenoaks, at a $965B post-money valuation — nearly tripling from its $380B February mark. The company simultaneously filed a confidential S-1 with the SEC, targeting an IPO in October 2026. Run-rate revenue crossed $47B. Anthropic overtook OpenAI ($852B) as the most valuable private AI company in the world. Eddie uses Claude daily — this is a direct case study. S-1 public filing expected ~September 2026.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag">IPO</span> SpaceX — Roadshow Starts June 4, Listing June 12 on Nasdaq (SPCX)</div>
+    <p>SpaceX confirmed a fixed IPO price of $135/share ($1.75T valuation). Roadshow June 4–11, Nasdaq debut June 12. $75B offering — the largest IPO in history, more than 3x Alibaba. Morningstar values SpaceX at $780B (55% below IPO ask). W23 thesis conviction: do not chase at $1.75T. Reassess post-lockup.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag warn">M&amp;A</span> Capital One / Brex — $5.15B Acquisition</div>
+    <p>Capital One is acquiring Brex (watchlist #30) for $5.15B. Brex had pivoted from startup-focused cards to enterprise spend management. Classic VC exit — early investors (Ribbit Capital, Greenoaks, TCV) receiving $5B+ liquidity from an incumbent acquirer. Good case study in fintech M&amp;A dynamics: enterprise-pivot startups become acquisition targets when they hit distribution limits.</p>
+  </div>
+
+  <!-- WATCHLIST IMPACT -->
+  <h2>Watchlist Impact</h2>
+  <table class="watchlist-table">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Event</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Snowflake (SNOW)</strong></td>
+        <td>Q1 FY27: RPO +38% cleared the ≥30% threshold</td>
+        <td class="action-up">⬆ Bumped Medium → High. Thesis W24 or W25.</td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic (Private)</strong></td>
+        <td>$65B Series H at $965B + IPO S-1 filed June 2</td>
+        <td class="action-new">★ Updated watchlist notes. Monitor S-1 public filing (~Sep). IPO Oct 2026.</td>
+      </tr>
+      <tr>
+        <td><strong>SpaceX (→ SPCX)</strong></td>
+        <td>Roadshow June 4–11, listing June 12 at $1.75T</td>
+        <td class="action-watch">Hold W23 conviction: do not chase IPO. Reassess post-lockup.</td>
+      </tr>
+      <tr>
+        <td><strong>CrowdStrike (CRWD)</strong></td>
+        <td>Q1 FY27 reporting tonight</td>
+        <td class="action-watch">Still filtered (W31 eligible). Watch for ARR surprise.</td>
+      </tr>
+      <tr>
+        <td><strong>Brex (Private)</strong></td>
+        <td>Capital One acquiring for $5.15B</td>
+        <td class="action-acquired">✕ Mark as acquired. Remove from active queue. File as fintech M&amp;A case study.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- COUNTER-INTUITIVE TAKE -->
+  <h2>Counter-Intuitive Take</h2>
+  <div class="cit-box">
+    <h3>The Alphabet $80B Equity Raise Is Bullish, Not Bearish</h3>
+    <p>The market read Alphabet's $80B stock offering as a negative: dilution signal, evidence that AI capex is spiraling, proof that even the most profitable tech company can't fund AI without tapping equity markets.</p>
+    <p>The actual read is the opposite. Alphabet has a $4.5T market cap. An $80B raise is 1.8% dilution. If Alphabet's AI infrastructure earns 25%+ ROIC — plausible given cloud economics and the proprietary compute moat being built — then $80B of dilutive equity is among the most value-accretive capital allocation decisions in corporate history. You'd need to assume ~0% return on the capital for the dilution concern to be valid.</p>
+    <p>What the raise actually signals: Alphabet's management believes the marginal return on AI infrastructure is so high that they'd rather dilute 1.8% today than slow their buildout by a quarter. That's a statement of confidence in AI ROI, not distress. The $10B Berkshire participation — at scale, in a single placement — co-signs the thesis.</p>
+    <p><strong>Broader implication:</strong> In VC/PE, when a company signals willingness to dilute at current market prices for a specific use of proceeds, it's almost always a bullish signal on that use of proceeds. The companies to worry about are the ones that can't raise $80B — that don't have the balance sheet credibility or investor confidence to fund their AI buildout.</p>
+    <p><em>Bonus:</em> The Anthropic/$965B + SpaceX/$1.75T double-IPO coming this summer will be the largest single-period VC liquidity event in history. The compression of private-to-public timelines (from 10+ years to 5–7 years) is fundamentally changing how VC returns get captured. Watch this structural shift carefully.</p>
+  </div>
+
+  <div class="next-week">
+    <strong>Next week (W24):</strong> AVGO + CRWD earnings results will be in. SpaceX (SPCX) will have priced and debuted — first read on post-IPO price action. May jobs report drops Friday June 5 — watch for payroll surprise. Thesis candidate for W24: Snowflake (SNOW) or Stripe (Private).
+  </div>
+
+</div>
+</body>
+</html>
