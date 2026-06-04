@@ -8,108 +8,156 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:290px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
-  body{display:flex;flex-direction:column;padding:14px 18px 10px}
+  body{display:flex;flex-direction:column;padding:14px 18px 10px;position:relative}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
-  .legend{display:flex;gap:10px}
-  .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.42)}
+  .legend{display:flex;gap:9px;align-items:center}
+  .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.38)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
-  .chart-wrap{flex:1;position:relative;min-height:0}
+  .tap-hint{font-size:7.5px;color:rgba(255,255,255,.28);font-style:italic}
+  .chart-wrap{flex:1;position:relative;min-height:0;cursor:pointer}
   .divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
   .lifts{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
   .lift-row{display:flex;align-items:center;gap:6px}
   .lift-name{font-size:10px;font-weight:600;color:rgba(255,255,255,.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .lift-val{font-size:10px;font-weight:700;color:#e8943a;white-space:nowrap}
   .lift-arrow{font-size:9px;color:#6bda87}
-  .empty{font-size:10px;color:rgba(255,255,255,.3);padding:2px 0}
+
+  /* Day-detail overlay */
+  .panel{position:absolute;inset:0;background:#1c1c1c;padding:13px 18px 12px;
+    display:flex;flex-direction:column;opacity:0;pointer-events:none;
+    transform:translateY(8px);transition:opacity .16s ease,transform .16s ease;z-index:5}
+  .panel.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-shrink:0}
+  .panel-date{font-size:12px;font-weight:700;color:#fff;letter-spacing:.2px}
+  .panel-back{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);cursor:pointer;
+    border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:3px 9px;background:rgba(255,255,255,.03)}
+  .panel-back:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+  .panel-body{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px}
+  .panel-body::-webkit-scrollbar{width:5px}
+  .panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+  .sess{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:9px 11px}
+  .sess-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .chip{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;
+    padding:2px 8px;border-radius:5px;color:#191919}
+  .sess-meta{font-size:9px;color:rgba(255,255,255,.45);font-weight:600}
+  .ex-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:2.5px 0}
+  .ex-name{font-size:11px;color:rgba(255,255,255,.78);font-weight:600}
+  .ex-set{font-size:10px;color:#e8943a;font-weight:700;white-space:nowrap}
+  .rest-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;
+    color:rgba(255,255,255,.4);font-size:12px;gap:4px}
 </style>
 </head>
 <body>
 <div class="header">
   <div class="stats-heading" id="title">Training</div>
   <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Lift</div>
-    <div class="leg"><div class="leg-dot" style="background:#5aa9e6"></div>Basketball</div>
-    <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,.32)"></div>Walk</div>
+    <div class="leg"><div class="leg-dot" style="background:#b85820"></div>Legs</div>
+    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Push</div>
+    <div class="leg"><div class="leg-dot" style="background:#f0b060"></div>Pull</div>
+    <div class="leg"><div class="leg-dot" style="background:#f5d090"></div>Cardio</div>
   </div>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
 <div class="divider"></div>
 <div class="lifts" id="lifts"></div>
+<div style="text-align:center;margin-top:5px"><span class="tap-hint">Tap any day for the full session breakdown</span></div>
+
+<!-- Day-detail overlay -->
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <span class="panel-date" id="panelDate">—</span>
+    <span class="panel-back" id="panelBack">← Back</span>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
 
 <script>
+const TYPE_COLORS = {
+  'Legs':'#b85820','Lower':'#b85820','Push':'#e8943a','Strength':'#e8943a','Upper':'#e8943a',
+  'Pull':'#f0b060','Basketball':'#f5d090','Cardio':'#f5d090','Running':'#f5d090','Walking':'#9fb5c0'
+};
+
 const FALLBACK = {
-  week_label: 'Training — Last 7 Days',
+  week_label: 'W21 Training — Weightlifting Sessions',
   labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-  date_labels: ['Sun 5/24','Mon 5/25','Tue 5/26','Wed 5/27','Thu 5/28','Fri 5/29','Sat 5/30'],
-  lift_min:  [23, 38, 22, 0, 14, 0, 0],
-  lift_cal:  [185,412,183, 0, 95, 0, 0],
-  lift_type: ['Push','Push','Pull','','Push','',''],
-  bball_min: [0, 120, 7, 5, 0, 0, 0],
-  bball_cal: [0, 720, 29, 31, 0, 0, 0],
-  walk_min:  [0, 3, 0, 24, 24, 0, 0],
-  walk_cal:  [0, 16, 0, 159, 153, 0, 0],
+  date_labels: ['Sun 5/17','Mon 5/18','Tue 5/19','Wed 5/20','Thu 5/21','Fri 5/22','Sat 5/23'],
+  minutes: [0,80,0,80,0,0,47],
+  types:   ['','Push','','Pull','','','Strength'],
   top_lifts: [
     {name:'Incline DB Press',value:'55 lb × 8', next:'→ try 60'},
     {name:'Overhead Press',  value:'35 lb × 12',next:'→ try 40'},
     {name:'DB Rows',         value:'35 lb × 12',next:'→ try 40'},
     {name:'Bicep Curls',     value:'15 lb × 12',next:'→ try 20'}
+  ],
+  // Per-day breakdown. null = rest day. A day can hold multiple sessions
+  // (e.g. a Push lift + a Basketball run on the same day).
+  day_details: [
+    null,
+    { sessions: [
+        { type:'Push', duration_min:50, calories:225, exercises:[
+            {name:'Incline DB Press', set:'55 lb · 3×8'},
+            {name:'Overhead Press',   set:'35 lb · 3×12'},
+            {name:'Bench Press',      set:'135 lb · 3×8'},
+            {name:'Lateral Raises',   set:'15 lb · 3×15'},
+            {name:'Tricep Pushdowns', set:'40 lb · 3×12'}
+          ]},
+        { type:'Basketball', duration_min:30, calories:180, exercises:[
+            {name:'Shooting + pickup run', set:'30 min'}
+          ]}
+      ]},
+    null,
+    { sessions: [
+        { type:'Pull', duration_min:80, calories:240, exercises:[
+            {name:'Pull-ups',      set:'BW · 4×8'},
+            {name:'Dumbbell Rows', set:'35 lb · 3×12'},
+            {name:'Lat Rows',      set:'90 lb · 3×12'},
+            {name:'Curls',         set:'15 lb · 3×12'},
+            {name:'Face Pulls',    set:'25 lb · 3×15'}
+          ]}
+      ]},
+    null,
+    null,
+    { sessions: [
+        { type:'Upper', duration_min:47, calories:225, exercises:[
+            {name:'Incline DB Press', set:'55 lb · 3×8'},
+            {name:'Overhead Press',   set:'35 lb · 3×12'},
+            {name:'DB Rows',          set:'35 lb · 3×12'},
+            {name:'Bicep Curls',      set:'15 lb · 3×12'}
+          ]}
+      ]}
   ]
 };
 
-const LIFT_COLORS = {
-  'Legs':'rgba(184,88,32,.92)','Lower':'rgba(184,88,32,.92)',
-  'Push':'rgba(232,148,58,.92)','Upper':'rgba(232,148,58,.92)',
-  'Pull':'rgba(240,176,96,.90)','Strength':'rgba(232,148,58,.88)'
-};
-const BBALL_COLOR = 'rgba(90,169,230,.88)';
-const WALK_COLOR  = 'rgba(255,255,255,.30)';
+let DATA = FALLBACK;
 
 function render(d) {
+  DATA = d;
   Chart.defaults.color='rgba(255,255,255,.38)';
   Chart.defaults.borderColor='rgba(255,255,255,.05)';
+
   document.getElementById('title').textContent = d.week_label || 'Training';
 
-  const labels = d.labels || [];
-  const liftMin = d.lift_min || [], liftCal = d.lift_cal || [], liftType = d.lift_type || [];
-  const bballMin = d.bball_min || [], bballCal = d.bball_cal || [];
-  const walkMin = d.walk_min || [], walkCal = d.walk_cal || [];
-  const dateLbls = d.date_labels || labels;
+  const labels = d.labels, mins = d.minutes, types = d.types;
+  const colors = mins.map((v,i)=> v>0 ? (TYPE_COLORS[types[i]] || '#e8943a') + 'e6'
+                                      : 'rgba(255,255,255,.04)');
 
-  const liftColors = liftMin.map((v,i)=> LIFT_COLORS[liftType[i]] || 'rgba(232,148,58,.88)');
-
-  const totals = labels.map((_,i)=> (liftMin[i]||0)+(bballMin[i]||0)+(walkMin[i]||0));
-  const yMax = Math.max(60, Math.ceil(Math.max(...totals)/30)*30);
-
-  new Chart(document.getElementById('chart').getContext('2d'),{
+  const chart = new Chart(document.getElementById('chart').getContext('2d'),{
     type:'bar',
-    data:{ labels, datasets:[
-      {label:'Lift', data:liftMin, backgroundColor:liftColors, stack:'s', borderRadius:2, borderSkipped:false},
-      {label:'Basketball', data:bballMin, backgroundColor:BBALL_COLOR, stack:'s', borderRadius:2, borderSkipped:false},
-      {label:'Walk', data:walkMin, backgroundColor:WALK_COLOR, stack:'s', borderRadius:2, borderSkipped:false}
-    ]},
+    data:{ labels, datasets:[{data:mins.map(v=>v||2), backgroundColor:colors, borderRadius:3, borderSkipped:false}]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
+      onHover:(e,els)=>{ e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+      onClick:(e,els)=>{ if(els.length) openPanel(els[0].index); },
       plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.72)',
+        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
         borderColor:'rgba(255,255,255,.1)', borderWidth:1,
         callbacks:{
-          title:(c)=>dateLbls[c[0].dataIndex],
-          label:(c)=>{
-            const i=c.dataIndex, ds=c.dataset.label;
-            if(ds==='Lift'){ if(!liftMin[i]) return null;
-              const t=liftType[i]?(' '+liftType[i]):''; return ` Lift${t}: ${liftMin[i]} min · ${liftCal[i]||0} cal`; }
-            if(ds==='Basketball'){ if(!bballMin[i]) return null;
-              return ` Basketball: ${bballMin[i]} min · ${bballCal[i]||0} cal`; }
-            if(ds==='Walk'){ if(!walkMin[i]) return null;
-              return ` Walk: ${walkMin[i]} min · ${walkCal[i]||0} cal`; }
-            return null;
-          },
-          footer:(c)=>{ const i=c[0].dataIndex; const cal=(liftCal[i]||0)+(bballCal[i]||0)+(walkCal[i]||0);
-            return cal? `Total ${cal} cal` : 'Rest day'; }
+          title:(c)=>d.date_labels[c[0].dataIndex],
+          label:(c)=>mins[c.dataIndex]?' '+(types[c.dataIndex]||'Session')+': '+mins[c.dataIndex]+' min  ·  tap for detail':' Rest day'
         }}},
       scales:{
-        x:{stacked:true, ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
-        y:{stacked:true, min:0, max:yMax,
+        x:{ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
+        y:{min:0,max:Math.max(100, Math.max(...mins)+20),
            ticks:{font:{size:9},color:'rgba(255,255,255,.3)',callback:v=>v===0?'':v+'m'},
            grid:{color:'rgba(255,255,255,.05)'},border:{display:false}}
       }}
@@ -117,20 +165,65 @@ function render(d) {
 
   const liftsEl = document.getElementById('lifts');
   liftsEl.innerHTML = '';
-  const lifts = d.top_lifts || [];
-  if(!lifts.length){
-    liftsEl.innerHTML = '<div class="empty">No top lifts logged in Notion yet</div>';
+  (d.top_lifts || []).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lift-row';
+    row.innerHTML = `<span class="lift-name">${l.name}</span>` +
+                    `<span class="lift-val">${l.value}</span>` +
+                    `<span class="lift-arrow">${l.next || ''}</span>`;
+    liftsEl.appendChild(row);
+  });
+}
+
+function openPanel(i){
+  const d = DATA;
+  const dateLbl = (d.date_labels && d.date_labels[i]) || (d.labels && d.labels[i]) || 'Day';
+  document.getElementById('panelDate').textContent = dateLbl;
+  const body = document.getElementById('panelBody');
+  body.innerHTML = '';
+
+  const detail = (d.day_details || [])[i];
+  const sessions = detail && detail.sessions ? detail.sessions : null;
+
+  if (!sessions || !sessions.length) {
+    // Fall back to a light summary if detail isn't in the data yet.
+    if (d.minutes && d.minutes[i] > 0) {
+      const note = document.createElement('div');
+      note.className = 'rest-msg';
+      note.innerHTML = `<div style="font-size:22px">🏋️</div>`+
+        `<div>${(d.types && d.types[i]) || 'Session'} · ${d.minutes[i]} min</div>`+
+        `<div style="font-size:9px;color:rgba(255,255,255,.3)">Exercise detail syncs on next refresh</div>`;
+      body.appendChild(note);
+    } else {
+      const rest = document.createElement('div');
+      rest.className = 'rest-msg';
+      rest.innerHTML = `<div style="font-size:22px">🌙</div><div>Rest day</div>`+
+        `<div style="font-size:9px;color:rgba(255,255,255,.3)">Recovery — no session logged</div>`;
+      body.appendChild(rest);
+    }
   } else {
-    lifts.forEach(l => {
-      const row = document.createElement('div');
-      row.className = 'lift-row';
-      row.innerHTML = `<span class="lift-name">${l.name}</span>` +
-                      `<span class="lift-val">${l.value}</span>` +
-                      `<span class="lift-arrow">${l.next || ''}</span>`;
-      liftsEl.appendChild(row);
+    sessions.forEach(s => {
+      const color = TYPE_COLORS[s.type] || '#e8943a';
+      const card = document.createElement('div');
+      card.className = 'sess';
+      const meta = [s.duration_min ? s.duration_min+' min' : null,
+                    s.calories ? s.calories+' cal' : null,
+                    s.avg_hr ? s.avg_hr+' bpm' : null].filter(Boolean).join('  ·  ');
+      const exHtml = (s.exercises || []).map(ex =>
+        `<div class="ex-row"><span class="ex-name">${ex.name}</span>`+
+        `<span class="ex-set">${ex.set || ''}</span></div>`).join('');
+      card.innerHTML =
+        `<div class="sess-top"><span class="chip" style="background:${color}">${s.type||'Session'}</span>`+
+        `<span class="sess-meta">${meta}</span></div>${exHtml}`;
+      body.appendChild(card);
     });
   }
+  document.getElementById('panel').classList.add('open');
 }
+
+function closePanel(){ document.getElementById('panel').classList.remove('open'); }
+
+document.getElementById('panelBack').addEventListener('click', closePanel);
 
 (async function () {
   let d = FALLBACK;
@@ -138,7 +231,10 @@ function render(d) {
     const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
     if (r.ok) {
       const all = await r.json();
-      if (all && all.strength_week) d = all.strength_week;
+      if (all && all.strength_week) {
+        d = all.strength_week;
+        if (!d.day_details) d.day_details = FALLBACK.day_details; // graceful until pipeline carries it
+      }
     }
   } catch (e) {}
   render(d);
