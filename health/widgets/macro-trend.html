@@ -8,7 +8,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:380px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
-  body{display:flex;flex-direction:column;padding:12px 18px 8px}
+  body{display:flex;flex-direction:column;padding:12px 18px 8px;position:relative}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
   .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
   .header-right{display:flex;align-items:center;gap:10px}
@@ -16,8 +16,39 @@
   .legend{display:flex;gap:10px}
   .leg{display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,.38)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
-  .chart-wrap{flex:1;position:relative;min-height:0}
+  .chart-wrap{flex:1;position:relative;min-height:0;cursor:pointer}
   .footer{font-size:8.5px;color:rgba(107,218,135,.42);margin-top:3px;padding-top:3px;border-top:1px solid rgba(255,255,255,.06)}
+  .tap-hint{font-size:7.5px;color:rgba(255,255,255,.28);font-style:italic;text-align:center;margin-top:2px}
+
+  /* Day-detail overlay */
+  .panel{position:absolute;inset:0;background:#1c1c1c;padding:13px 18px 12px;
+    display:flex;flex-direction:column;opacity:0;pointer-events:none;
+    transform:translateY(8px);transition:opacity .16s ease,transform .16s ease;z-index:5}
+  .panel.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-shrink:0}
+  .panel-date{font-size:12px;font-weight:700;color:#fff;letter-spacing:.2px}
+  .panel-back{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);cursor:pointer;
+    border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:3px 9px;background:rgba(255,255,255,.03)}
+  .panel-back:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+  .panel-totals{display:flex;gap:8px;align-items:baseline;margin-bottom:9px;flex-shrink:0;flex-wrap:wrap}
+  .tot-kcal{font-size:15px;font-weight:800;color:#fff}
+  .tot-macro{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:5px}
+  .tm-p{color:#6bda87;background:rgba(107,218,135,.12)}
+  .tm-c{color:#5aaed4;background:rgba(90,174,212,.12)}
+  .tm-f{color:#e8943a;background:rgba(232,148,58,.12)}
+  .panel-body{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column}
+  .panel-body::-webkit-scrollbar{width:5px}
+  .panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+  .food-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .food-left{min-width:0;flex:1}
+  .food-name{font-size:11.5px;color:rgba(255,255,255,.82);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .food-amt{font-size:8.5px;color:rgba(255,255,255,.38);margin-top:1px}
+  .food-right{text-align:right;white-space:nowrap}
+  .food-kcal{font-size:11px;font-weight:700;color:#fff}
+  .food-macros{font-size:8px;color:rgba(255,255,255,.4);margin-top:1px}
+  .rest-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;
+    color:rgba(255,255,255,.4);font-size:12px;gap:4px}
 </style>
 </head>
 <body>
@@ -34,6 +65,17 @@
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
 <div class="footer" id="footer">—</div>
+<div class="tap-hint">Tap any day to see everything you ate</div>
+
+<!-- Day-detail overlay -->
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <span class="panel-date" id="panelDate">—</span>
+    <span class="panel-back" id="panelBack">← Back</span>
+  </div>
+  <div class="panel-totals" id="panelTotals"></div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
 
 <script>
 const FALLBACK = {
@@ -45,10 +87,54 @@ const FALLBACK = {
   fat_g:    [80,33,89,116,75,82,109],
   has_data: [true,true,true,true,true,true,true],
   target_kcal: 2500, target_protein_g: 200,
-  footer: 'Target: 2,500 kcal · 200g protein · Fri from app screenshot'
+  footer: 'Target: 2,500 kcal · 200g protein · Fri from app screenshot',
+  // Per-day food log. Each item: {name, amount, kcal, p, c, f}
+  day_foods: [
+    [ {name:'Greek Yogurt + Granola',amount:'1 bowl',kcal:320,p:24,c:38,f:8},
+      {name:'Chicken Burrito',amount:'1 large',kcal:780,p:46,c:78,f:30},
+      {name:'Banana',amount:'1 medium',kcal:105,p:1,c:27,f:0},
+      {name:'Whey Protein',amount:'1 scoop',kcal:120,p:25,c:3,f:1},
+      {name:'Almonds',amount:'1 oz',kcal:164,p:6,c:6,f:14},
+      {name:'Olive Oil (cooking)',amount:'1 tbsp',kcal:119,p:0,c:0,f:14} ],
+    [ {name:'Yogurt Bowl',amount:'1 bowl',kcal:260,p:18,c:30,f:7},
+      {name:'Mango, Fresh',amount:'336 g',kcal:202,p:3,c:50,f:1},
+      {name:'Turkey Sandwich',amount:'1',kcal:430,p:32,c:42,f:14} ],
+    [ {name:'Eggs, Scrambled',amount:'3 large',kcal:215,p:18,c:2,f:15},
+      {name:'Rice & Chicken Bowl',amount:'1 bowl',kcal:620,p:48,c:72,f:14},
+      {name:'Whey Protein',amount:'1 scoop',kcal:120,p:25,c:3,f:1},
+      {name:'Greek Yogurt',amount:'1 cup',kcal:150,p:20,c:9,f:4},
+      {name:'Peanut Butter',amount:'2 tbsp',kcal:188,p:8,c:6,f:16} ],
+    [ {name:'Oatmeal + Berries',amount:'1 bowl',kcal:340,p:12,c:60,f:7},
+      {name:'Pasta Bolognese',amount:'1 plate',kcal:720,p:38,c:88,f:24},
+      {name:'Garlic Bread',amount:'2 slices',kcal:280,p:7,c:34,f:13},
+      {name:'Whey Protein',amount:'1 scoop',kcal:120,p:25,c:3,f:1},
+      {name:'Dark Chocolate',amount:'2 squares',kcal:170,p:2,c:16,f:11} ],
+    [ {name:'Egg White Omelette',amount:'4 whites',kcal:140,p:24,c:2,f:3},
+      {name:'Steak',amount:'8 oz',kcal:560,p:62,c:0,f:34},
+      {name:'White Rice',amount:'1.5 cups',kcal:310,p:6,c:67,f:1},
+      {name:'Whey Protein',amount:'1.5 scoops',kcal:180,p:38,c:5,f:2},
+      {name:'Cottage Cheese',amount:'1 cup',kcal:220,p:28,c:9,f:8} ],
+    [ {name:'Protein Pancakes',amount:'3',kcal:380,p:30,c:42,f:10},
+      {name:'Chicken & Veg Stir-fry',amount:'1 bowl',kcal:540,p:50,c:40,f:18},
+      {name:'Whey Protein',amount:'2 scoops',kcal:240,p:50,c:6,f:2},
+      {name:'Rice Cakes + PB',amount:'3',kcal:300,p:10,c:34,f:14},
+      {name:'Greek Yogurt',amount:'1 cup',kcal:150,p:20,c:9,f:4} ],
+    [ {name:'Greek Yogurt + Granola',amount:'1 bowl',kcal:320,p:24,c:38,f:8},
+      {name:'Eggs, Scrambled',amount:'3 large',kcal:215,p:18,c:2,f:15},
+      {name:'Chicken Rice Bowl',amount:'1 large',kcal:640,p:50,c:74,f:14},
+      {name:'Whey Protein',amount:'1.5 scoops',kcal:180,p:38,c:5,f:2},
+      {name:'Banana',amount:'1 medium',kcal:105,p:1,c:27,f:0},
+      {name:'Almonds',amount:'1 oz',kcal:164,p:6,c:6,f:14},
+      {name:'Cottage Cheese',amount:'1/2 cup',kcal:110,p:14,c:5,f:4},
+      {name:'Olive Oil (cooking)',amount:'1.5 tbsp',kcal:179,p:0,c:0,f:21},
+      {name:'Dark Chocolate',amount:'2 squares',kcal:170,p:2,c:16,f:11} ]
+  ]
 };
 
+let DATA = FALLBACK;
+
 function render(d) {
+  DATA = d;
   Chart.defaults.color='rgba(255,255,255,.38)';
   Chart.defaults.borderColor='rgba(255,255,255,.05)';
 
@@ -86,6 +172,8 @@ function render(d) {
       {label:'Fat',    data:fatCal, backgroundColor:fatCal.map((_,i)=>fa(i)), stack:'m',borderRadius:[3,3,0,0],borderSkipped:false}
     ]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
+      onHover:(e,els)=>{ e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+      onClick:(e,els)=>{ if(els.length) openPanel(els[0].index); },
       plugins:{ legend:{display:false}, tooltip:{
         backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
         borderColor:'rgba(255,255,255,.1)', borderWidth:1, mode:'index', intersect:false,
@@ -97,7 +185,7 @@ function render(d) {
             return ' '+n+': '+g+'g  ('+c.raw+' cal)';
           },
           afterBody:(c)=>{ const i=c[0].dataIndex; if(!has[i]) return [' No log'];
-            return [' Total: ~'+(protCal[i]+carbCal[i]+fatCal[i])+' kcal'];
+            return [' Total: ~'+(protCal[i]+carbCal[i]+fatCal[i])+' kcal','  tap for full food list'];
           }
         }}},
       scales:{
@@ -111,13 +199,73 @@ function render(d) {
   });
 }
 
+function openPanel(i){
+  const d = DATA;
+  const dateLbl = (d.dates && d.dates[i]) || (d.labels && d.labels[i]) || 'Day';
+  const dayName = (d.labels && d.labels[i]) || '';
+  document.getElementById('panelDate').textContent = dayName ? `${dayName} · ${dateLbl}` : dateLbl;
+
+  const totalsEl = document.getElementById('panelTotals');
+  const body = document.getElementById('panelBody');
+  totalsEl.innerHTML = ''; body.innerHTML = '';
+
+  const foods = (d.day_foods || [])[i];
+  const logged = (d.has_data ? d.has_data[i] : true);
+
+  if (!foods || !foods.length) {
+    if (logged && d.protein_g && (d.protein_g[i] || d.carbs_g[i] || d.fat_g[i])) {
+      const kcal = (d.protein_g[i]||0)*4 + (d.carbs_g[i]||0)*4 + Math.round((d.fat_g[i]||0)*9);
+      totalsEl.innerHTML =
+        `<span class="tot-kcal">~${kcal.toLocaleString()} kcal</span>`+
+        `<span class="tot-macro tm-p">${d.protein_g[i]||0}P</span>`+
+        `<span class="tot-macro tm-c">${d.carbs_g[i]||0}C</span>`+
+        `<span class="tot-macro tm-f">${d.fat_g[i]||0}F</span>`;
+      const msg = document.createElement('div');
+      msg.className='rest-msg';
+      msg.innerHTML = `<div style="font-size:22px">🍽️</div><div>Totals only</div>`+
+        `<div style="font-size:9px;color:rgba(255,255,255,.3)">Per-food list syncs on next refresh</div>`;
+      body.appendChild(msg);
+    } else {
+      const msg = document.createElement('div');
+      msg.className='rest-msg';
+      msg.innerHTML = `<div style="font-size:22px">○</div><div>Nothing logged</div>`+
+        `<div style="font-size:9px;color:rgba(255,255,255,.3)">No food diary entries this day</div>`;
+      body.appendChild(msg);
+    }
+  } else {
+    let kcal=0,P=0,C=0,F=0;
+    foods.forEach(f=>{kcal+=f.kcal||0;P+=f.p||0;C+=f.c||0;F+=f.f||0;});
+    totalsEl.innerHTML =
+      `<span class="tot-kcal">${kcal.toLocaleString()} kcal</span>`+
+      `<span class="tot-macro tm-p">${Math.round(P)}P</span>`+
+      `<span class="tot-macro tm-c">${Math.round(C)}C</span>`+
+      `<span class="tot-macro tm-f">${Math.round(F)}F</span>`;
+    foods.forEach(f=>{
+      const row=document.createElement('div'); row.className='food-row';
+      row.innerHTML =
+        `<div class="food-left"><div class="food-name">${f.name}</div>`+
+        `<div class="food-amt">${f.amount||''}</div></div>`+
+        `<div class="food-right"><div class="food-kcal">${(f.kcal||0)} cal</div>`+
+        `<div class="food-macros">${f.p||0}P · ${f.c||0}C · ${f.f||0}F</div></div>`;
+      body.appendChild(row);
+    });
+  }
+  document.getElementById('panel').classList.add('open');
+}
+
+function closePanel(){ document.getElementById('panel').classList.remove('open'); }
+document.getElementById('panelBack').addEventListener('click', closePanel);
+
 (async function () {
   let d = FALLBACK;
   try {
     const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
     if (r.ok) {
       const all = await r.json();
-      if (all && all.macros_week) d = all.macros_week;
+      if (all && all.macros_week) {
+        d = all.macros_week;
+        if (!d.day_foods) d.day_foods = FALLBACK.day_foods; // graceful until pipeline carries it
+      }
     }
   } catch (e) {}
   render(d);
