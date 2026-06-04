@@ -31,9 +31,7 @@ from common import (
     env,
     fail,
     ok,
-    short_day_labels,
     today_pst,
-    trailing_7_days,
     week_window_sun_to_sat,
 )
 
@@ -104,6 +102,13 @@ def _select(node) -> str | None:
     return sel.get("name") if sel else None
 
 
+def _multi(node) -> list[str]:
+    """Pull option names from a multi_select property (e.g. the Exercise slots)."""
+    if not node or node.get("type") != "multi_select":
+        return []
+    return [o.get("name", "") for o in (node.get("multi_select") or []) if o.get("name")]
+
+
 def _date(node) -> dt.date | None:
     if not node or node.get("type") != "date":
         return None
@@ -115,23 +120,14 @@ def _date(node) -> dt.date | None:
 
 def _build_strength_week(workouts: list[dict]) -> dict:
     today = today_pst()
-    # Trailing 7 days ending today, so the chart always shows recent activity
-    # regardless of where today falls in the calendar week.
-    week = trailing_7_days(today)
+    week = week_window_sun_to_sat(today)
     iso_to_idx = {d.isoformat(): i for i, d in enumerate(week)}
 
     minutes = [0] * 7
     types: list[str] = [""] * 7
     most_recent_top_lifts_raw = ""
-
-    # Per-type duration estimates (minutes). The "Workout Schedule" DB doesn't
-    # log actual session duration, so we use the weekly schedule's published
-    # estimates. If a Duration / Minutes column is added later, it takes
-    # precedence over the estimate.
-    DURATION_ESTIMATES = {
-        "Upper": 85, "Lower": 75, "Push": 80, "Pull": 80, "Legs": 70,
-        "Basketball": 45, "Running": 35, "Walking": 45, "Rest": 0,
-    }
+    # Per-day session detail for the tap-to-expand panel in the widget.
+    day_sessions: list[list[dict]] = [[] for _ in range(7)]
 
     # Sort newest first so the latest session wins same-day ties
     workouts.sort(key=lambda w: (w.get("created_time") or ""), reverse=True)
@@ -140,6 +136,7 @@ def _build_strength_week(workouts: list[dict]) -> dict:
         d_node = _prop(page, "Date", "Workout Date", "Day")
         type_node = _prop(page, "Day Type", "Type", "Category", "Split")
         dur_node = _prop(page, "Duration", "Min", "Minutes", "Length")
+        cal_node = _prop(page, "Calories Burned", "Calories", "Cals")
         lifts_node = _prop(page, "Top Lifts", "Lifts", "Notes")
 
         d = _date(d_node)
@@ -147,28 +144,49 @@ def _build_strength_week(workouts: list[dict]) -> dict:
             continue
         idx = iso_to_idx[d.isoformat()]
 
-        type_name = _select(type_node) or types[idx] or ""
-        types[idx] = type_name
-        actual_dur = _num(dur_node)
-        minutes[idx] = int(actual_dur) if actual_dur else (
-            minutes[idx] or DURATION_ESTIMATES.get(type_name, 0)
-        )
+        day_type = _select(type_node) or ""
+        cals = _num(cal_node)
+
+        # Gather exercises across the Exercise / Exercise (1..6) multi-selects.
+        exercises: list[dict] = []
+        for slot in ["Exercise", "Exercise (1)", "Exercise (2)", "Exercise (3)",
+                     "Exercise (4)", "Exercise (5)", "Exercise (6)"]:
+            for name in _multi(_prop(page, slot)):
+                if name not in [e["name"] for e in exercises]:
+                    exercises.append({"name": name, "set": ""})
+
+        dur = _num(dur_node)
+        minutes[idx] = int(dur or minutes[idx] or 0)
+        if day_type and not types[idx]:
+            types[idx] = day_type
         if not most_recent_top_lifts_raw:
             most_recent_top_lifts_raw = _text(lifts_node)
 
-    top_lifts = _parse_top_lifts(most_recent_top_lifts_raw)
+        # Skip pure Rest entries from the detail panel sessions list.
+        if day_type.lower() != "rest" and (exercises or dur or cals):
+            session: dict[str, Any] = {"type": day_type or "Session"}
+            if dur:
+                session["duration_min"] = int(dur)
+            if cals:
+                session["calories"] = int(cals)
+            if exercises:
+                session["exercises"] = exercises
+            day_sessions[idx].append(session)
 
-    # Dynamic labels: Mon/Tue/etc. based on the trailing window
-    day_labels = short_day_labels(week)
+    top_lifts = _parse_top_lifts(most_recent_top_lifts_raw)
+    day_details = [{"sessions": s} if s else None for s in day_sessions]
+
     date_labels = [d.strftime("%a %-m/%-d") for d in week]
+    iso_wk = week[0].isocalendar().week
 
     return {
-        "week_label": "Training — Last 7 Days",
-        "labels": day_labels,
+        "week_label": f"W{iso_wk} Training — Weightlifting Sessions",
+        "labels": DAYS_SHORT,
         "date_labels": date_labels,
         "minutes": minutes,
         "types": types,
         "top_lifts": top_lifts,
+        "day_details": day_details,
     }
 
 
@@ -222,13 +240,13 @@ def fetch() -> dict:
     try:
         if workout_db:
             today = today_pst()
-            window = trailing_7_days(today)
-            # Filter by the Date property (not created_time) so workouts whose
-            # session date was set independently of page creation are caught.
-            # Property is named "Date" in the Workout Schedule DB.
+            week = week_window_sun_to_sat(today)
             workouts = _query_db(workout_db, {
-                "property": "Date",
-                "date": {"on_or_after": window[0].isoformat()},
+                "and": [
+                    {"timestamp": "created_time", "created_time": {
+                        "on_or_after": week[0].isoformat()
+                    }}
+                ]
             })
             payload["strength_week"] = _build_strength_week(workouts)
     except Exception as e:
