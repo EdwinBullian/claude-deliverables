@@ -11,9 +11,12 @@
   body{display:flex;flex-direction:column;padding:12px 18px 8px}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
   .title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
-  .now-badge{font-size:9px;font-weight:700;color:#94cfe3;letter-spacing:.3px}
+  .readout{font-size:9px;font-weight:700;color:#94cfe3;letter-spacing:.3px;white-space:nowrap;
+    transition:color .12s ease}
+  .readout.scrubbing{color:#bfe6f4}
+  .readout .val{color:#fff}
   .body{display:flex;gap:14px;flex:1;min-height:0}
-  .chart-wrap{flex:1;position:relative;min-height:0}
+  .chart-wrap{flex:1;position:relative;min-height:0;cursor:crosshair;touch-action:none}
   .side{width:120px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;justify-content:center}
   .win{display:flex;flex-direction:column;gap:2px}
   .win-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:rgba(255,255,255,.32)}
@@ -26,7 +29,7 @@
 <body>
 <div class="header">
   <span class="title" id="title">Daily Energy</span>
-  <span class="now-badge" id="nowbadge">—</span>
+  <span class="readout" id="readout">—</span>
 </div>
 <div class="body">
   <div class="chart-wrap"><canvas id="chart"></canvas></div>
@@ -49,6 +52,21 @@ const FALLBACK = {
   footer: 'Wake 10:06 AM · Strength 47 min · No stims · Natural curve'
 };
 
+// Scrubber state shared between the pointer handlers and the crosshair plugin.
+const scrub = { active:false, idx:0, val:0 };
+let NOW_TEXT = '—';
+
+function hourLabel(idxFloat){
+  const h = Math.floor(idxFloat);
+  const m = Math.round((idxFloat - h) * 60);
+  const hh = ((h % 24) + 24) % 24;
+  const mm = String(Math.min(59, Math.max(0, m))).padStart(2,'0');
+  if (hh === 0)  return `12:${mm} AM`;
+  if (hh < 12)   return `${hh}:${mm} AM`;
+  if (hh === 12) return `12:${mm} PM`;
+  return `${hh-12}:${mm} PM`;
+}
+
 function render(d) {
   Chart.defaults.color = 'rgba(255,255,255,.38)';
   Chart.defaults.borderColor = 'rgba(255,255,255,.05)';
@@ -62,12 +80,9 @@ function render(d) {
 
   const now = new Date();
   const nowHour = now.getHours() + now.getMinutes()/60;
-  const nl = (() => {
-    const h = Math.floor(nowHour), m = Math.round((nowHour - h)*60).toString().padStart(2,'0');
-    if (h===0) return `12:${m} AM`; if (h<12) return `${h}:${m} AM`;
-    if (h===12) return `12:${m} PM`; return `${h-12}:${m} PM`;
-  })();
-  document.getElementById('nowbadge').textContent = `Now ${nl}`;
+  NOW_TEXT = `Now ${hourLabel(nowHour)}`;
+  const readoutEl = document.getElementById('readout');
+  readoutEl.textContent = NOW_TEXT;
 
   const sleepShade = { id:'sleepShade', beforeDraw(c){
     const {ctx,chartArea,scales}=c; if(!chartArea)return;
@@ -83,29 +98,36 @@ function render(d) {
   }};
   const nowLine = { id:'nowLine', afterDraw(c){
     const {ctx,chartArea,scales}=c; if(!chartArea)return;
-    if (nowHour<0||nowHour>23) return;
+    if (nowHour<0||nowHour>23||scrub.active) return;
     const x = scales.x.getPixelForValue(nowHour);
     ctx.save(); ctx.setLineDash([3,3]); ctx.strokeStyle='rgba(148,207,227,.40)'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(x,chartArea.top); ctx.lineTo(x,chartArea.bottom); ctx.stroke(); ctx.restore();
+  }};
+  // The "stalk": a vertical line that tracks the finger/cursor with a glowing
+  // dot snapped to the energy value at that moment.
+  const crosshair = { id:'crosshair', afterDraw(c){
+    const {ctx,chartArea,scales}=c; if(!chartArea||!scrub.active)return;
+    const x = scales.x.getPixelForValue(scrub.idx);
+    const y = scales.y.getPixelForValue(scrub.val);
+    ctx.save();
+    ctx.strokeStyle='rgba(148,207,227,.55)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x,chartArea.top); ctx.lineTo(x,chartArea.bottom); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x,y,7,0,Math.PI*2); ctx.fillStyle='rgba(148,207,227,.18)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fillStyle='#bfe6f4';
+    ctx.shadowColor='rgba(148,207,227,.9)'; ctx.shadowBlur=8; ctx.fill();
+    ctx.restore();
   }};
 
   const ctx = document.getElementById('chart').getContext('2d');
   const grad = ctx.createLinearGradient(0,0,0,200);
   grad.addColorStop(0,'rgba(90,174,212,.30)'); grad.addColorStop(1,'rgba(90,174,212,.01)');
 
-  new Chart(ctx, {
-    type:'line', plugins:[sleepShade,peakShade,nowLine],
+  const chart = new Chart(ctx, {
+    type:'line', plugins:[sleepShade,peakShade,nowLine,crosshair],
     data:{ labels, datasets:[{ data:energyData, borderColor:'#5aaed4', borderWidth:2,
-      backgroundColor:grad, fill:true, tension:0.45, pointRadius:0, pointHoverRadius:4,
-      pointHoverBackgroundColor:'#5aaed4' }]},
+      backgroundColor:grad, fill:true, tension:0.45, pointRadius:0, pointHoverRadius:0 }]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
-      plugins:{ legend:{display:false}, tooltip:{
-        backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.65)',
-        borderColor:'rgba(255,255,255,.1)', borderWidth:1,
-        callbacks:{
-          title:(c)=>{const h=c[0].dataIndex; return h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM';},
-          label:(c)=>' Energy: '+c.raw+'%'
-        }}},
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
       scales:{
         x:{ ticks:{font:{size:8.5},color:'rgba(255,255,255,.35)',maxRotation:0,maxTicksLimit:12},
             grid:{display:false}, border:{display:false}},
@@ -115,6 +137,45 @@ function render(d) {
       }
     }
   });
+
+  // ---- Scrubber wiring -------------------------------------------------
+  const wrap = document.querySelector('.chart-wrap');
+
+  function valueAt(idxFloat){
+    const i = Math.max(0, Math.min(23, idxFloat));
+    const lo = Math.floor(i), hi = Math.min(23, lo+1), f = i - lo;
+    return energyData[lo] + (energyData[hi] - energyData[lo]) * f;
+  }
+
+  function moveTo(clientX){
+    const area = chart.chartArea; if(!area) return;
+    const rect = chart.canvas.getBoundingClientRect();
+    let px = clientX - rect.left;
+    px = Math.max(area.left, Math.min(area.right, px));
+    let idx = chart.scales.x.getValueForPixel(px);
+    idx = Math.max(0, Math.min(23, idx));
+    scrub.active = true;
+    scrub.idx = idx;
+    scrub.val = valueAt(idx);
+    readoutEl.classList.add('scrubbing');
+    readoutEl.innerHTML = `${hourLabel(idx)} &nbsp;<span class="val">${Math.round(scrub.val)}%</span>`;
+    chart.draw();
+  }
+
+  function endScrub(){
+    if(!scrub.active) return;
+    scrub.active = false;
+    readoutEl.classList.remove('scrubbing');
+    readoutEl.textContent = NOW_TEXT;
+    chart.draw();
+  }
+
+  wrap.addEventListener('mousemove', e => moveTo(e.clientX));
+  wrap.addEventListener('mouseleave', endScrub);
+  wrap.addEventListener('touchstart', e => { moveTo(e.touches[0].clientX); }, {passive:true});
+  wrap.addEventListener('touchmove',  e => { moveTo(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  wrap.addEventListener('touchend', endScrub);
+  wrap.addEventListener('touchcancel', endScrub);
 }
 
 (async function () {
