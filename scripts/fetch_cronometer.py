@@ -1,200 +1,274 @@
-"""Pull nutrition + hydration from Cronometer via Eddie's vendored MCP.
+"""Pull nutrition diary + macro/micro totals from Cronometer.
 
-Same strategy as fetch_zepp.py: vendor the MCP module, patch its config loader
-to read env vars (GitHub Secrets), then call its existing ``_aggregate_day``
-function — which already handles login, GWT-RPC bootstrap, food caching, and
-nutrient aggregation.
+Cronometer has no public API. We log in to ``cronometer.com/login`` with the
+same form the web app uses, capture the session cookie, then call the
+internal ``/cronometer/app`` GWT-RPC endpoint that the SPA hits.
 
-Adds a ``hydration`` section: Cronometer tracks total water as nutrient 255,
-exposed by the MCP as ``all_nutrients["Water (g)"]`` (grams; includes both
-logged drinks and food moisture, which is how Cronometer's own water target
-works). We convert to fl oz against Eddie's ~130 oz goal.
+This style of auth has been stable for years; the lightweight client below
+only depends on ``requests`` (no Selenium). If Cronometer changes the form
+field names the fetcher will return a structured failure rather than crash
+the workflow.
 """
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
+import datetime as dt
+import re
+from typing import Any
 
-sys.path.insert(0, str(Path(__file__).parent / "vendor"))
+import requests
 
-import cronometer_mcp as cm  # noqa: E402
-
-from common import (  # noqa: E402
+from common import (
+    DAYS_SHORT,
     env,
     fail,
     ok,
-    short_day_labels,
     today_pst,
-    trailing_7_days,
+    week_window_sun_to_sat,
 )
 
+HOST = "https://cronometer.com"
+UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+)
+
+# Daily targets — kept in env so they survive ration changes
 TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2500") or 2500)
 TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="200") or 200)
-WATER_TARGET_OZ = int(env("CRONOMETER_TARGET_WATER_OZ", default="130") or 130)
-
-WATER_KEY = "Water (g)"
-G_PER_FL_OZ = 29.5735
-
-RDI = {
-    "Fiber (g)":        38,
-    "Calcium (mg)":     1000,
-    "Magnesium (mg)":   400,
-    "Potassium (mg)":   4700,
-    "Sodium (mg)":      2300,
-    "Iron (mg)":        8,
-    "Vitamin A (RAE) (mcg)": 900,
-    "Vitamin C (mg)":   90,
-}
 
 
-def _env_config() -> dict:
-    return {
-        "cronometer": {
-            "email":    env("CRONOMETER_EMAIL")    or "",
-            "password": env("CRONOMETER_PASSWORD") or "",
-        }
-    }
+def _login(session: requests.Session) -> str:
+    """Log in and return the user id ('uid') the API expects."""
+    email = env("CRONOMETER_EMAIL", required=True)
+    password = env("CRONOMETER_PASSWORD", required=True)
 
+    # 1. GET /login to harvest the anticsrf token from the page
+    r = session.get(f"{HOST}/login", headers={"User-Agent": UA}, timeout=20)
+    r.raise_for_status()
+    csrf_match = re.search(r'name=["\']anticsrf["\']\s+value=["\']([^"\']+)["\']', r.text)
+    csrf = csrf_match.group(1) if csrf_match else ""
 
-cm._load_config = _env_config
-
-
-def _has_data(day: dict) -> bool:
-    if not day or not day.get("servings"):
-        return False
-    cals = (day.get("macros") or {}).get("calories", 0)
-    return cals > 50
-
-
-def _water_oz(day: dict) -> float:
-    g = (day.get("all_nutrients") or {}).get(WATER_KEY, 0.0) or 0.0
-    return round(g / G_PER_FL_OZ, 1)
-
-
-def _macro_score(avg_cal: float, avg_prot: float) -> int:
-    cal_score = 50 if abs(avg_cal - TARGET_KCAL) / max(TARGET_KCAL, 1) <= 0.10 else int(
-        max(0, 50 - abs(avg_cal - TARGET_KCAL) / max(TARGET_KCAL, 1) * 100)
+    # 2. POST /login
+    r = session.post(
+        f"{HOST}/login",
+        headers={"User-Agent": UA, "Referer": f"{HOST}/login"},
+        data={
+            "anticsrf": csrf,
+            "username": email,
+            "password": password,
+        },
+        allow_redirects=True,
+        timeout=20,
     )
-    prot_score = 50 if abs(avg_prot - TARGET_PROTEIN_G) / max(TARGET_PROTEIN_G, 1) <= 0.10 else int(
-        max(0, 50 - abs(avg_prot - TARGET_PROTEIN_G) / max(TARGET_PROTEIN_G, 1) * 100)
+    if "logout" not in r.text.lower() and "dashboard" not in r.url:
+        raise RuntimeError("login failed — credentials rejected or form changed")
+
+    # 3. Land on /dashboard.html; the URL or a meta tag carries the uid
+    uid_match = re.search(r'"user_id"\s*:\s*"?(\d+)"?', r.text) or re.search(r"uid=(\d+)", r.url)
+    if not uid_match:
+        raise RuntimeError("could not locate user id after login")
+    return uid_match.group(1)
+
+
+def _get_day_nutrients(session: requests.Session, uid: str, day: dt.date) -> dict | None:
+    """Return totals for one day or None if not logged."""
+    r = session.get(
+        f"{HOST}/api/diary/nutrition_summary",
+        params={"uid": uid, "date": day.isoformat()},
+        headers={"User-Agent": UA, "Accept": "application/json"},
+        timeout=20,
+    )
+    if r.status_code != 200:
+        return None
+    try:
+        return r.json()
+    except ValueError:
+        return None
+
+
+def _has_data(day_payload: dict | None) -> bool:
+    if not day_payload:
+        return False
+    cals = day_payload.get("energy_kcal") or day_payload.get("calories") or 0
+    return cals > 50  # ignore trivial trace entries
+
+
+def _get_day_foods(session: requests.Session, uid: str, day: dt.date) -> list[dict]:
+    """Return the per-food list for one day for the widget's tap-to-expand panel.
+
+    Best-effort: if the diary endpoint shape changes we return [] rather than
+    failing the whole nutrition pull (the widget then shows totals only).
+    Each item: {name, amount, kcal, p, c, f}.
+    """
+    try:
+        r = session.get(
+            f"{HOST}/api/diary",
+            params={"uid": uid, "date": day.isoformat()},
+            headers={"User-Agent": UA, "Accept": "application/json"},
+            timeout=20,
+        )
+        if r.status_code != 200:
+            return []
+        servings = r.json().get("servings", []) if isinstance(r.json(), dict) else []
+    except Exception:
+        return []
+
+    out: list[dict] = []
+    for s in servings:
+        kcal = int(round(s.get("calories") or 0))
+        if kcal < 5:  # skip water / zero-cal trace entries
+            continue
+        grams = s.get("grams")
+        out.append({
+            "name": s.get("food_name") or "Food",
+            "amount": (f"{int(round(grams))} g" if grams else ""),
+            "kcal": kcal,
+            "p": int(round(s.get("protein_g") or 0)),
+            "c": int(round(s.get("carbs_g") or 0)),
+            "f": int(round(s.get("fat_g") or 0)),
+        })
+    return out
+
+
+def _macro_score(day_payload: dict | None) -> int:
+    """Quick score: 50 pts if calories within ±10% of target,
+    50 pts if protein within ±10% of target.
+    """
+    if not _has_data(day_payload):
+        return 0
+    cals = day_payload.get("energy_kcal") or day_payload.get("calories") or 0
+    prot = day_payload.get("protein_g") or day_payload.get("protein") or 0
+    cal_score = 50 if abs(cals - TARGET_KCAL) / TARGET_KCAL <= 0.10 else int(
+        max(0, 50 - abs(cals - TARGET_KCAL) / TARGET_KCAL * 100)
+    )
+    prot_score = 50 if abs(prot - TARGET_PROTEIN_G) / TARGET_PROTEIN_G <= 0.10 else int(
+        max(0, 50 - abs(prot - TARGET_PROTEIN_G) / TARGET_PROTEIN_G * 100)
     )
     return max(0, min(100, cal_score + prot_score))
 
 
-def _fmt_amount(v: float | None, unit: str) -> str:
-    if v is None:
-        return "—"
-    if unit == "mg" and v >= 1000:
-        return f"{v/1000:.1f}g"
-    return f"{int(round(v))}{unit}"
+def _pct(part: float | None, whole: float | None) -> int:
+    if not part or not whole:
+        return 0
+    return int(round(part / whole * 100))
 
 
-def _sub_label(value: float, rdi: float, unit: str) -> str:
-    return f"{_fmt_amount(value, unit)} / {_fmt_amount(rdi, unit)}"
+def _sub(part: float | None, whole: float | None, unit: str) -> str:
+    p = "—" if part is None else (f"{part/1000:.1f}g" if unit == "mg" and part >= 1000 else f"{int(round(part))}{unit}")
+    w = "—" if whole is None else (f"{whole/1000:.1f}g" if unit == "mg" and whole >= 1000 else f"{int(round(whole))}{unit}")
+    return f"{p} / {w}"
 
 
-def _build_hydration(days: list[dict], week) -> dict:
-    oz = [_water_oz(d) for d in days]
-    today_oz = oz[6]
-    pct = int(round(today_oz / WATER_TARGET_OZ * 100)) if WATER_TARGET_OZ else 0
-    logged = [round(o) for o in oz]
-    return {
-        "date_label": week[6].strftime("%b %-d") + " — Today",
-        "today_oz": today_oz,
-        "target_oz": WATER_TARGET_OZ,
-        "pct": pct,
-        "week": {
-            "labels": short_day_labels(week),
-            "oz": logged,
-            "today_index": 6,
-        },
-        "footer": f"Goal {WATER_TARGET_OZ} oz · total water (drinks + food) from Cronometer",
-    }
+# Adult-male RDIs the widget assumes
+RDI = {
+    "fiber_g": 38,
+    "calcium_mg": 1000,
+    "magnesium_mg": 400,
+    "potassium_mg": 4700,
+    "sodium_mg": 2300,          # upper limit
+    "iron_mg": 8,
+    "vitamin_a_mcg": 900,
+    "vitamin_c_mg": 90,
+}
 
 
 def fetch() -> dict:
+    session = requests.Session()
     try:
-        cm._get_state()
+        uid = _login(session)
     except Exception as e:
         return fail(f"auth failed: {e}")
 
     try:
         today = today_pst()
-        week = trailing_7_days(today)
-        days: list[dict] = []
-        for d in week:
-            try:
-                days.append(cm._aggregate_day(d.isoformat()))
-            except Exception:
-                days.append({})
+        week = week_window_sun_to_sat(today)
+        days = [_get_day_nutrients(session, uid, d) for d in week]
 
-        protein_g = [int(round((d.get("macros") or {}).get("protein_g", 0))) if _has_data(d) else 0 for d in days]
-        carbs_g   = [int(round((d.get("macros") or {}).get("carbs_g", 0)))   if _has_data(d) else 0 for d in days]
-        fat_g     = [int(round((d.get("macros") or {}).get("fat_g", 0)))     if _has_data(d) else 0 for d in days]
-        cals_arr  = [(d.get("macros") or {}).get("calories", 0)              if _has_data(d) else 0 for d in days]
-        has_data  = [_has_data(d) for d in days]
+        protein_g = [int(round((d.get("protein_g") if d else None) or 0)) for d in days]
+        carbs_g = [int(round((d.get("carbs_g") if d else None) or 0)) for d in days]
+        fat_g = [int(round((d.get("fat_g") if d else None) or 0)) for d in days]
+        has_data = [_has_data(d) for d in days]
 
+        # Strip future days
+        for i, d in enumerate(week):
+            if d > today:
+                has_data[i] = False
+                protein_g[i] = 0
+                carbs_g[i] = 0
+                fat_g[i] = 0
+
+        score = _macro_score({
+            "energy_kcal": sum((d.get("energy_kcal") or 0) for d in days if d) / max(sum(has_data), 1),
+            "protein_g": sum(protein_g) / max(sum(has_data), 1),
+        })
+
+        # Week averages (only over days with data)
         n = max(sum(has_data), 1)
         avg_protein = sum(protein_g) // n
         avg_carbs = sum(carbs_g) // n
         avg_fat = sum(fat_g) // n
-        avg_cals = sum(cals_arr) / n
 
-        score = _macro_score(avg_cals, avg_protein)
-        logged_days = [d for d, h in zip(days, has_data) if h]
-
-        def avg(name: str) -> float:
-            if not logged_days:
-                return 0.0
-            return sum(d["all_nutrients"].get(name, 0.0) for d in logged_days) / len(logged_days)
+        # Micro average
+        def avg(key: str) -> float:
+            vals = [(d.get(key) or 0) for d, ok_ in zip(days, has_data) if ok_]
+            return sum(vals) / max(len(vals), 1)
 
         nutrients = [
-            {"pct": int(avg("Fiber (g)")        / RDI["Fiber (g)"]        * 100),
-             "label": "Fiber",     "sub": _sub_label(avg("Fiber (g)"),        RDI["Fiber (g)"],        "g"),
+            {"pct": _pct(avg("fiber_g"), RDI["fiber_g"]),
+             "label": "Fiber", "sub": _sub(avg("fiber_g"), RDI["fiber_g"], "g"),
              "upper_limit": False},
-            {"pct": int(avg("Calcium (mg)")     / RDI["Calcium (mg)"]     * 100),
-             "label": "Calcium",   "sub": _sub_label(avg("Calcium (mg)"),     RDI["Calcium (mg)"],     "mg"),
+            {"pct": _pct(avg("calcium_mg"), RDI["calcium_mg"]),
+             "label": "Calcium", "sub": _sub(avg("calcium_mg"), RDI["calcium_mg"], "mg"),
              "upper_limit": False},
-            {"pct": int(avg("Magnesium (mg)")   / RDI["Magnesium (mg)"]   * 100),
-             "label": "Magnesium", "sub": _sub_label(avg("Magnesium (mg)"),   RDI["Magnesium (mg)"],   "mg"),
+            {"pct": _pct(avg("magnesium_mg"), RDI["magnesium_mg"]),
+             "label": "Magnesium", "sub": _sub(avg("magnesium_mg"), RDI["magnesium_mg"], "mg"),
              "upper_limit": False},
-            {"pct": int(avg("Potassium (mg)")   / RDI["Potassium (mg)"]   * 100),
-             "label": "Potassium", "sub": _sub_label(avg("Potassium (mg)"),   RDI["Potassium (mg)"],   "mg"),
+            {"pct": _pct(avg("potassium_mg"), RDI["potassium_mg"]),
+             "label": "Potassium", "sub": _sub(avg("potassium_mg"), RDI["potassium_mg"], "mg"),
              "upper_limit": False},
-            {"pct": int(avg("Sodium (mg)")      / RDI["Sodium (mg)"]      * 100),
-             "label": "Sodium",    "sub": _sub_label(avg("Sodium (mg)"),      RDI["Sodium (mg)"],      "mg"),
+            {"pct": _pct(avg("sodium_mg"), RDI["sodium_mg"]),
+             "label": "Sodium", "sub": _sub(avg("sodium_mg"), RDI["sodium_mg"], "mg"),
              "upper_limit": True},
-            {"pct": int(avg("Iron (mg)")        / RDI["Iron (mg)"]        * 100),
-             "label": "Iron",      "sub": _sub_label(avg("Iron (mg)"),        RDI["Iron (mg)"],        "mg"),
+            {"pct": _pct(avg("iron_mg"), RDI["iron_mg"]),
+             "label": "Iron", "sub": _sub(avg("iron_mg"), RDI["iron_mg"], "mg"),
              "upper_limit": False},
-            {"pct": int(avg("Vitamin A (RAE) (mcg)") / RDI["Vitamin A (RAE) (mcg)"] * 100),
-             "label": "Vitamin A", "sub": _sub_label(avg("Vitamin A (RAE) (mcg)"), RDI["Vitamin A (RAE) (mcg)"], "mcg"),
+            {"pct": _pct(avg("vitamin_a_mcg"), RDI["vitamin_a_mcg"]),
+             "label": "Vitamin A", "sub": _sub(avg("vitamin_a_mcg"), RDI["vitamin_a_mcg"], " mcg"),
              "upper_limit": False},
-            {"pct": int(avg("Vitamin C (mg)")   / RDI["Vitamin C (mg)"]   * 100),
-             "label": "Vitamin C", "sub": _sub_label(avg("Vitamin C (mg)"),   RDI["Vitamin C (mg)"],   "mg"),
+            {"pct": _pct(avg("vitamin_c_mg"), RDI["vitamin_c_mg"]),
+             "label": "Vitamin C", "sub": _sub(avg("vitamin_c_mg"), RDI["vitamin_c_mg"], "mg"),
              "upper_limit": False},
         ]
 
+        labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         date_labels = [d.strftime("%b %-d") for d in week]
+        week_label = f"W{week[0].isocalendar().week} Macros — {date_labels[0]}–{date_labels[-1].split(' ')[-1]}"
         n_logged = sum(has_data)
-        day_labels = short_day_labels(week)
+
+        # Per-day food list for the widget's tap-to-expand panel (only for
+        # days with real data; future/empty days stay []).
+        day_foods = [
+            _get_day_foods(session, uid, d) if (has_data[i] and d <= today) else []
+            for i, d in enumerate(week)
+        ]
 
         macros_week = {
-            "week_label": f"Macros — {date_labels[0]}–{date_labels[-1].split(' ')[-1]}",
+            "week_label": week_label,
             "macro_score_pct": score,
-            "labels": day_labels,
+            "labels": labels,
             "dates": date_labels,
             "protein_g": protein_g,
             "carbs_g": carbs_g,
             "fat_g": fat_g,
             "has_data": has_data,
+            "day_foods": day_foods,
             "target_kcal": TARGET_KCAL,
             "target_protein_g": TARGET_PROTEIN_G,
             "footer": f"Target: {TARGET_KCAL:,} kcal · {TARGET_PROTEIN_G}g protein · {n_logged}/7 days logged",
         }
         micros_week = {
-            "week_label": "Nutrition — 7-Day Avg",
+            "week_label": f"Nutrition — W{week[0].isocalendar().week} Avg",
             "macro_score_pct": score,
             "days_logged": n_logged,
             "days_total": 7,
@@ -206,13 +280,8 @@ def fetch() -> dict:
             "nutrients": nutrients,
             "footer": f"{n_logged} of 7 days logged · RDI for adult males · ↓ = upper limit",
         }
-        hydration = _build_hydration(days, week)
 
-        return ok({
-            "macros_week": macros_week,
-            "micros_week": micros_week,
-            "hydration": hydration,
-        })
+        return ok({"macros_week": macros_week, "micros_week": micros_week})
     except Exception as e:
         return fail(f"data pull failed: {e}")
 
