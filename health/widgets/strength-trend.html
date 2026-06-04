@@ -8,13 +8,13 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:290px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
-  body{display:flex;flex-direction:column;padding:14px 18px 10px}
+  body{display:flex;flex-direction:column;padding:14px 18px 10px;position:relative}
   .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35)}
   .legend{display:flex;gap:10px}
   .leg{display:flex;align-items:center;gap:4px;font-size:8px;color:rgba(255,255,255,.42)}
   .leg-dot{width:8px;height:8px;border-radius:2px}
-  .chart-wrap{flex:1;position:relative;min-height:0}
+  .chart-wrap{flex:1;position:relative;min-height:0;cursor:pointer}
   .divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
   .lifts{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
   .lift-row{display:flex;align-items:center;gap:6px}
@@ -22,6 +22,31 @@
   .lift-val{font-size:10px;font-weight:700;color:#e8943a;white-space:nowrap}
   .lift-arrow{font-size:9px;color:#6bda87}
   .empty{font-size:10px;color:rgba(255,255,255,.3);padding:2px 0}
+  .tap-hint{font-size:7.5px;color:rgba(255,255,255,.28);font-style:italic;text-align:center;margin-top:5px}
+
+  /* Day-detail overlay */
+  .panel{position:absolute;inset:0;background:#1c1c1c;padding:13px 18px 12px;
+    display:flex;flex-direction:column;opacity:0;pointer-events:none;
+    transform:translateY(8px);transition:opacity .16s ease,transform .16s ease;z-index:5}
+  .panel.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-shrink:0}
+  .panel-date{font-size:12px;font-weight:700;color:#fff;letter-spacing:.2px}
+  .panel-back{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);cursor:pointer;
+    border:1px solid rgba(255,255,255,.14);border-radius:6px;padding:3px 9px;background:rgba(255,255,255,.03)}
+  .panel-back:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+  .panel-body{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px}
+  .panel-body::-webkit-scrollbar{width:5px}
+  .panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+  .sess{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:9px 11px}
+  .sess-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .chip{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;
+    padding:2px 8px;border-radius:5px;color:#191919}
+  .sess-meta{font-size:9px;color:rgba(255,255,255,.45);font-weight:600}
+  .ex-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:2.5px 0}
+  .ex-name{font-size:11px;color:rgba(255,255,255,.78);font-weight:600}
+  .ex-set{font-size:10px;color:#e8943a;font-weight:700;white-space:nowrap}
+  .rest-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;
+    color:rgba(255,255,255,.4);font-size:12px;gap:4px}
 </style>
 </head>
 <body>
@@ -36,6 +61,16 @@
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
 <div class="divider"></div>
 <div class="lifts" id="lifts"></div>
+<div class="tap-hint">Tap any day for the full session breakdown</div>
+
+<!-- Day-detail overlay -->
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <span class="panel-date" id="panelDate">—</span>
+    <span class="panel-back" id="panelBack">← Back</span>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
 
 <script>
 const FALLBACK = {
@@ -54,6 +89,28 @@ const FALLBACK = {
     {name:'Overhead Press',  value:'35 lb × 12',next:'→ try 40'},
     {name:'DB Rows',         value:'35 lb × 12',next:'→ try 40'},
     {name:'Bicep Curls',     value:'15 lb × 12',next:'→ try 20'}
+  ],
+  // Optional per-day lift exercise lists for the tap-to-expand panel.
+  // null = no extra detail (panel still reconstructs sessions from the
+  // lift/basketball/walk minutes above). Populated live once the pipeline
+  // carries it; baked here so the demo is rich.
+  day_details: [
+    { exercises:[ {name:'Bench Press',set:'135 lb · 3×8'},
+                  {name:'Incline DB Press',set:'55 lb · 3×8'},
+                  {name:'Overhead Press',set:'35 lb · 3×12'} ] },
+    { exercises:[ {name:'Bench Press',set:'140 lb · 4×6'},
+                  {name:'Incline DB Press',set:'55 lb · 3×8'},
+                  {name:'Overhead Press',set:'35 lb · 3×12'},
+                  {name:'Lateral Raises',set:'15 lb · 3×15'},
+                  {name:'Tricep Pushdowns',set:'40 lb · 3×12'} ] },
+    { exercises:[ {name:'Pull-ups',set:'BW · 4×8'},
+                  {name:'Dumbbell Rows',set:'35 lb · 3×12'},
+                  {name:'Curls',set:'15 lb · 3×12'} ] },
+    null,
+    { exercises:[ {name:'Bench Press',set:'135 lb · 3×6'},
+                  {name:'Lateral Raises',set:'15 lb · 3×15'} ] },
+    null,
+    null
   ]
 };
 
@@ -65,7 +122,10 @@ const LIFT_COLORS = {
 const BBALL_COLOR = 'rgba(90,169,230,.88)';
 const WALK_COLOR  = 'rgba(255,255,255,.30)';
 
+let DATA = FALLBACK;
+
 function render(d) {
+  DATA = d;
   Chart.defaults.color='rgba(255,255,255,.38)';
   Chart.defaults.borderColor='rgba(255,255,255,.05)';
   document.getElementById('title').textContent = d.week_label || 'Training';
@@ -89,6 +149,8 @@ function render(d) {
       {label:'Walk', data:walkMin, backgroundColor:WALK_COLOR, stack:'s', borderRadius:2, borderSkipped:false}
     ]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
+      onHover:(e,els)=>{ e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+      onClick:(e,els)=>{ if(els.length) openPanel(els[0].index); },
       plugins:{ legend:{display:false}, tooltip:{
         backgroundColor:'#1e1e1e', titleColor:'#f0f0f0', bodyColor:'rgba(255,255,255,.72)',
         borderColor:'rgba(255,255,255,.1)', borderWidth:1,
@@ -105,7 +167,7 @@ function render(d) {
             return null;
           },
           footer:(c)=>{ const i=c[0].dataIndex; const cal=(liftCal[i]||0)+(bballCal[i]||0)+(walkCal[i]||0);
-            return cal? `Total ${cal} cal` : 'Rest day'; }
+            return cal? `Total ${cal} cal · tap for detail` : 'Rest day'; }
         }}},
       scales:{
         x:{stacked:true, ticks:{font:{size:10.5},color:'rgba(255,255,255,.4)',maxRotation:0},grid:{display:false},border:{display:false}},
@@ -132,13 +194,63 @@ function render(d) {
   }
 }
 
+function openPanel(i){
+  const d = DATA;
+  const dateLbl = (d.date_labels && d.date_labels[i]) || (d.labels && d.labels[i]) || 'Day';
+  document.getElementById('panelDate').textContent = dateLbl;
+  const body = document.getElementById('panelBody');
+  body.innerHTML = '';
+
+  const dd = (d.day_details || [])[i] || {};
+  const sessions = [];
+  if ((d.lift_min||[])[i] > 0) {
+    const t = (d.lift_type||[])[i] || '';
+    sessions.push({ label: t ? 'Lift · ' + t : 'Lift',
+                    color: LIFT_COLORS[t] || 'rgba(232,148,58,.92)',
+                    min: d.lift_min[i], cal: (d.lift_cal||[])[i],
+                    exercises: dd.exercises || [] });
+  }
+  if ((d.bball_min||[])[i] > 0)
+    sessions.push({ label:'Basketball', color:BBALL_COLOR, min:d.bball_min[i], cal:(d.bball_cal||[])[i], exercises:[] });
+  if ((d.walk_min||[])[i] > 0)
+    sessions.push({ label:'Walk', color:WALK_COLOR, min:d.walk_min[i], cal:(d.walk_cal||[])[i], exercises:[] });
+
+  if (!sessions.length) {
+    const rest = document.createElement('div');
+    rest.className = 'rest-msg';
+    rest.innerHTML = `<div style="font-size:22px">🌙</div><div>Rest day</div>`+
+      `<div style="font-size:9px;color:rgba(255,255,255,.3)">Recovery — no session logged</div>`;
+    body.appendChild(rest);
+  } else {
+    sessions.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'sess';
+      const meta = [s.min ? s.min+' min' : null, s.cal ? s.cal+' cal' : null].filter(Boolean).join('  ·  ');
+      const exHtml = (s.exercises || []).map(ex =>
+        `<div class="ex-row"><span class="ex-name">${ex.name}</span>`+
+        `<span class="ex-set">${ex.set || ''}</span></div>`).join('');
+      card.innerHTML =
+        `<div class="sess-top"><span class="chip" style="background:${s.color}">${s.label}</span>`+
+        `<span class="sess-meta">${meta}</span></div>${exHtml}`;
+      body.appendChild(card);
+    });
+  }
+  document.getElementById('panel').classList.add('open');
+}
+
+function closePanel(){ document.getElementById('panel').classList.remove('open'); }
+document.getElementById('panelBack').addEventListener('click', closePanel);
+
 (async function () {
   let d = FALLBACK;
   try {
     const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
     if (r.ok) {
       const all = await r.json();
-      if (all && all.strength_week) d = all.strength_week;
+      if (all && all.strength_week) {
+        d = all.strength_week;
+        if (!d.day_details) d.day_details = FALLBACK.day_details; // graceful until pipeline carries it
+      }
     }
   } catch (e) {}
   render(d);
