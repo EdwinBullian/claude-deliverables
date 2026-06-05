@@ -6,26 +6,29 @@
   <title>Vitals</title>
   <style>
     :root {
-      color-scheme: light;
-      --bg:     #ede5d2;
-      --card:   #e3d9c6;
-      --border: #cfc4ae;
-      --navy:   #1b3a5c;
-      --muted:  #7a6d5e;
-      --dim:    #b8ad9e;
-      --hover:  #e0d5c0;
+      color-scheme: dark;
+      --bg:     #191919;
+      --card:   #2f2f2f;
+      --border: #424242;
+      --text:   #e6e6e6;
+      --num:    #ffffff;
+      --muted:  #9b9b9b;
+      --dim:    #555555;
+      --hover:  #3a3a3a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
+    html, body {
       font-family: -apple-system, 'Segoe UI', 'Inter', sans-serif;
       background: var(--bg);
+      height: 100%;
     }
 
     .bar {
       display: flex;
       width: 100%;
-      border-bottom: 1px solid var(--border);
+      gap: 5px;
+      padding: 5px;
     }
 
     .col {
@@ -34,52 +37,37 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 13px 8px 11px;
-      border-right: 1px solid var(--border);
+      padding: 7px 6px 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 5px;
       gap: 3px;
-      min-height: 70px;
+      min-height: 50px;
     }
-    .col:last-child { border-right: none; }
 
     .col.tap { cursor: pointer; transition: background 0.12s; }
     .col.tap:hover { background: var(--hover); }
 
     .num {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 700;
-      color: var(--navy);
+      color: var(--num);
       letter-spacing: -0.03em;
       line-height: 1;
       font-variant-numeric: tabular-nums;
     }
     .num.loading {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 400;
       color: var(--dim);
-      opacity: 0.7;
     }
 
     .lbl {
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 8px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.09em;
       color: var(--muted);
-    }
-
-    .hint {
-      font-size: 8px;
-      color: var(--dim);
-      letter-spacing: 0.04em;
-    }
-
-    footer {
-      text-align: right;
-      padding: 2px 10px 3px;
-      font-size: 8px;
-      color: var(--dim);
-      background: var(--card);
-      border-top: 1px solid var(--border);
     }
 
     /* Edit Modal */
@@ -87,7 +75,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(27, 58, 92, 0.18);
+      background: rgba(0,0,0,0.55);
       z-index: 99;
       align-items: center;
       justify-content: center;
@@ -95,19 +83,19 @@
     .veil.on { display: flex; }
 
     .modal {
-      background: var(--bg);
-      border: 1.5px solid var(--border);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 20px 22px 16px;
       width: 272px;
-      box-shadow: 0 12px 40px rgba(27, 58, 92, 0.16);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
     .modal h4 {
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.11em;
-      color: var(--navy);
+      color: var(--text);
       margin-bottom: 14px;
     }
 
@@ -126,14 +114,14 @@
       padding: 7px 10px;
       border: 1px solid var(--border);
       border-radius: 6px;
-      background: #f4ecdc;
+      background: #252525;
       font-family: inherit;
       font-size: 14px;
       font-weight: 600;
-      color: var(--navy);
+      color: var(--text);
       outline: none;
     }
-    .field input:focus { border-color: var(--navy); }
+    .field input:focus { border-color: #666; }
 
     .btns { display: flex; gap: 8px; margin-top: 14px; }
     .btns button {
@@ -148,7 +136,7 @@
       cursor: pointer;
       border: 1px solid var(--border);
     }
-    .btn-save   { background: var(--navy); color: #f4ecdc; border-color: var(--navy); }
+    .btn-save   { background: var(--text); color: #191919; border-color: var(--text); }
     .btn-cancel { background: transparent; color: var(--muted); }
   </style>
 </head>
@@ -156,26 +144,19 @@
 
   <div class="bar">
 
-    <div class="col" id="c-email">
-      <div class="num loading" id="n-email">…</div>
-      <div class="lbl">New Today</div>
-    </div>
-
-    <div class="col" id="c-nd">
-      <div class="num" id="n-nd">—</div>
-      <div class="lbl">Days to ND</div>
-    </div>
-
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-cpct">—</div>
       <div class="lbl">Claude Usage</div>
-      <div class="hint">tap to update</div>
     </div>
 
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-ctok">—</div>
       <div class="lbl">Claude Tokens</div>
-      <div class="hint">tap to update</div>
+    </div>
+
+    <div class="col" id="c-email">
+      <div class="num loading" id="n-email">…</div>
+      <div class="lbl">Unread Emails</div>
     </div>
 
     <div class="col" id="c-hw">
@@ -189,8 +170,6 @@
     </div>
 
   </div>
-
-  <footer id="foot">&nbsp;</footer>
 
   <!-- Edit Modal -->
   <div class="veil" id="veil">
@@ -213,13 +192,6 @@
 
   <script>
     const DATA_URL = 'https://edwinbullian.github.io/claude-deliverables/misc/vitals-data.json';
-
-    // ── Notre Dame countdown (always live) ───────────────────────────────
-    (function () {
-      const nd   = new Date('2026-08-22T00:00:00-07:00');
-      const days = Math.max(0, Math.ceil((nd - new Date()) / 86400000));
-      document.getElementById('n-nd').textContent = days;
-    })();
 
     // ── Claude — localStorage ────────────────────────────────────────────
     function renderClaude() {
@@ -269,28 +241,14 @@
 
     function setError() {
       ['n-email','n-hw','n-ht'].forEach(id => setVal(id, '—'));
-      document.getElementById('foot').textContent = 'data unavailable — refresh to retry';
     }
 
     fetch(DATA_URL + '?_=' + Date.now())
-      .then(r => {
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
-      })
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(d => {
         setVal('n-email', d.emails ?? '—');
         setVal('n-hw', fmtH(d.hours_week));
         setVal('n-ht', fmtH(d.hours_today));
-
-        if (d.updated) {
-          const ts = new Date(d.updated);
-          document.getElementById('foot').textContent =
-            'Updated ' + ts.toLocaleString('en-US', {
-              timeZone: 'America/Los_Angeles',
-              month: 'short', day: 'numeric',
-              hour: 'numeric', minute: '2-digit', hour12: true
-            }) + ' PST';
-        }
       })
       .catch(setError);
   </script>
