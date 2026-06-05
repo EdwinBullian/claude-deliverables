@@ -15,20 +15,29 @@
       --muted:  #9b9b9b;
       --dim:    #555555;
       --hover:  #3a3a3a;
+      --green:  #4ade80;
+      --red:    #f87171;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html, body {
       font-family: -apple-system, 'Segoe UI', 'Inter', sans-serif;
       background: var(--bg);
-      height: 100%;
     }
 
-    .bar {
+    .frame {
+      margin: 4px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .row {
       display: flex;
-      width: 100%;
-      gap: 5px;
-      padding: 5px;
+      gap: 4px;
+      padding: 4px;
+    }
+    .row + .row {
+      padding-top: 0;
     }
 
     .col {
@@ -37,104 +46,75 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 7px 6px 6px;
+      padding: 6px 3px 5px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 5px;
-      gap: 3px;
-      min-height: 50px;
+      gap: 2px;
+      min-height: 46px;
+      min-width: 0;
     }
 
     .col.tap { cursor: pointer; transition: background 0.12s; }
     .col.tap:hover { background: var(--hover); }
 
     .num {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--num);
-      letter-spacing: -0.03em;
+      letter-spacing: -0.02em;
       line-height: 1;
       font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
-    .num.loading {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--dim);
-    }
+    .num.loading { font-size: 11px; font-weight: 400; color: var(--dim); }
+    .num.up { color: var(--green); }
+    .num.dn { color: var(--red); }
 
     .lbl {
-      font-size: 8px;
+      font-size: 7px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--muted);
-    }
-
-    /* Edit Modal */
-    .veil {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 99;
-      align-items: center;
-      justify-content: center;
-    }
-    .veil.on { display: flex; }
-
-    .modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 22px 16px;
-      width: 272px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    }
-    .modal h4 {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.11em;
-      color: var(--text);
-      margin-bottom: 14px;
-    }
-
-    .field { margin-bottom: 11px; }
-    .field label {
-      display: block;
-      font-size: 9px;
-      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
-      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    /* Modal */
+    .veil {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55); z-index: 99;
+      align-items: center; justify-content: center;
+    }
+    .veil.on { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px 22px 16px; width: 272px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .modal h4 {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.11em; color: var(--text); margin-bottom: 14px;
+    }
+    .field { margin-bottom: 11px; }
+    .field label {
+      display: block; font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px;
     }
     .field input {
-      width: 100%;
-      padding: 7px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: #252525;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      outline: none;
+      width: 100%; padding: 7px 10px; border: 1px solid var(--border);
+      border-radius: 6px; background: #252525; font-family: inherit;
+      font-size: 14px; font-weight: 600; color: var(--text); outline: none;
     }
     .field input:focus { border-color: #666; }
-
     .btns { display: flex; gap: 8px; margin-top: 14px; }
     .btns button {
-      flex: 1;
-      padding: 7px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border: 1px solid var(--border);
+      flex: 1; padding: 7px; border-radius: 6px; font-family: inherit;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; cursor: pointer; border: 1px solid var(--border);
     }
     .btn-save   { background: var(--text); color: #191919; border-color: var(--text); }
     .btn-cancel { background: transparent; color: var(--muted); }
@@ -142,115 +122,183 @@
 </head>
 <body>
 
-  <div class="bar">
+<div class="frame">
 
+  <!-- TOP ROW (7) -->
+  <div class="row">
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-cpct">—</div>
       <div class="lbl">Claude Usage</div>
     </div>
-
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-ctok">—</div>
       <div class="lbl">Claude Tokens</div>
     </div>
-
-    <div class="col" id="c-email">
+    <div class="col">
       <div class="num loading" id="n-email">…</div>
       <div class="lbl">Unread Emails</div>
     </div>
-
-    <div class="col" id="c-hw">
+    <div class="col">
       <div class="num loading" id="n-hw">…</div>
       <div class="lbl">Hrs This Week</div>
     </div>
-
-    <div class="col" id="c-ht">
+    <div class="col">
       <div class="num loading" id="n-ht">…</div>
       <div class="lbl">Hrs Today</div>
     </div>
-
-  </div>
-
-  <!-- Edit Modal -->
-  <div class="veil" id="veil">
-    <div class="modal">
-      <h4>Update Claude Usage</h4>
-      <div class="field">
-        <label>Weekly Usage %</label>
-        <input id="i-pct" type="text" placeholder="e.g. 34%" autocomplete="off" />
-      </div>
-      <div class="field">
-        <label>Tokens This Week</label>
-        <input id="i-tok" type="text" placeholder="e.g. 1.2M or 450K" autocomplete="off" />
-      </div>
-      <div class="btns">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-save" onclick="saveModal()">Save</button>
-      </div>
+    <div class="col">
+      <div class="num loading" id="n-tasks">…</div>
+      <div class="lbl">Tasks Today</div>
+    </div>
+    <div class="col">
+      <div class="num" id="n-nd">—</div>
+      <div class="lbl">Days to ND</div>
     </div>
   </div>
 
-  <script>
-    const DATA_URL = 'https://edwinbullian.github.io/claude-deliverables/misc/vitals-data.json';
+  <!-- BOTTOM ROW (7) -->
+  <div class="row">
+    <div class="col">
+      <div class="num loading" id="n-xp">…</div>
+      <div class="lbl">Weekly XP</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n-sleep">…</div>
+      <div class="lbl">Sleep Score</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n-energy">…</div>
+      <div class="lbl">Energy</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n-dow">…</div>
+      <div class="lbl">DOW</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n-sp">…</div>
+      <div class="lbl">S&amp;P 500</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n- nasdaq">…</div>
+      <div class="lbl">NASDAQ</div>
+    </div>
+    <div class="col">
+      <div class="num loading" id="n-vix">…</div>
+      <div class="lbl">VIX</div>
+    </div>
+  </div>
 
-    // ── Claude — localStorage ────────────────────────────────────────────
-    function renderClaude() {
-      document.getElementById('n-cpct').textContent = localStorage.getItem('v_cpct') || '—';
-      document.getElementById('n-ctok').textContent = localStorage.getItem('v_ctok') || '—';
-    }
-    renderClaude();
+</div>
 
-    function openModal() {
-      document.getElementById('i-pct').value = localStorage.getItem('v_cpct') || '';
-      document.getElementById('i-tok').value = localStorage.getItem('v_ctok') || '';
-      document.getElementById('veil').classList.add('on');
-      document.getElementById('i-pct').focus();
-    }
-    function closeModal() {
-      document.getElementById('veil').classList.remove('on');
-    }
-    function saveModal() {
-      const p = document.getElementById('i-pct').value.trim();
-      const t = document.getElementById('i-tok').value.trim();
-      if (p) localStorage.setItem('v_cpct', p);
-      if (t) localStorage.setItem('v_ctok', t);
-      renderClaude();
-      closeModal();
-    }
-    document.getElementById('veil').addEventListener('click', e => {
-      if (e.target.id === 'veil') closeModal();
+<!-- Edit Modal -->
+<div class="veil" id="veil">
+  <div class="modal">
+    <h4>Update Claude Usage</h4>
+    <div class="field">
+      <label>Weekly Usage %</label>
+      <input id="i-pct" type="text" placeholder="e.g. 34%" autocomplete="off" />
+    </div>
+    <div class="field">
+      <label>Tokens This Week</label>
+      <input id="i-tok" type="text" placeholder="e.g. 1.2M or 450K" autocomplete="off" />
+    </div>
+    <div class="btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DATA_URL = 'https://edwinbullian.github.io/claude-deliverables/misc/vitals-data.json';
+  const YAHOO    = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5EDJI,%5EGSPC,%5EIXIC,%5EVIX';
+  const PROXY    = 'https://corsproxy.io/?' + encodeURIComponent(YAHOO);
+
+  // ── ND countdown ─────────────────────────────────────────────────────
+  (function() {
+    const nd = new Date('2026-08-22T00:00:00-07:00');
+    document.getElementById('n-nd').textContent =
+      Math.max(0, Math.ceil((nd - new Date()) / 86400000));
+  })();
+
+  // ── Claude (localStorage) ─────────────────────────────────────────────
+  function renderClaude() {
+    document.getElementById('n-cpct').textContent = localStorage.getItem('v_cpct') || '—';
+    document.getElementById('n-ctok').textContent = localStorage.getItem('v_ctok') || '—';
+  }
+  renderClaude();
+
+  function openModal() {
+    document.getElementById('i-pct').value = localStorage.getItem('v_cpct') || '';
+    document.getElementById('i-tok').value = localStorage.getItem('v_ctok') || '';
+    document.getElementById('veil').classList.add('on');
+    document.getElementById('i-pct').focus();
+  }
+  function closeModal() { document.getElementById('veil').classList.remove('on'); }
+  function saveModal() {
+    const p = document.getElementById('i-pct').value.trim();
+    const t = document.getElementById('i-tok').value.trim();
+    if (p) localStorage.setItem('v_cpct', p);
+    if (t) localStorage.setItem('v_ctok', t);
+    renderClaude(); closeModal();
+  }
+  document.getElementById('veil').addEventListener('click', e => {
+    if (e.target.id === 'veil') closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && document.getElementById('veil').classList.contains('on')) saveModal();
+  });
+
+  // ── Helpers ───────────────────────────────────────────────────────────
+  function fmtH(h) {
+    if (h == null || isNaN(h)) return '—';
+    const w = Math.floor(h), m = Math.round((h - w) * 60);
+    return m > 0 ? `${w}h ${m}m` : `${w}h`;
+  }
+  function setVal(id, text, cls) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('loading', 'up', 'dn');
+    if (cls) el.classList.add(cls);
+  }
+
+  // ── JSON feed ─────────────────────────────────────────────────────────
+  fetch(DATA_URL + '?_=' + Date.now())
+    .then(r => { if (!r.ok) throw 0; return r.json(); })
+    .then(d => {
+      setVal('n-email',  d.emails      ?? '—');
+      setVal('n-hw',     fmtH(d.hours_week));
+      setVal('n-ht',     fmtH(d.hours_today));
+      setVal('n-tasks',  d.tasks_today ?? '—');
+      setVal('n-xp',     d.weekly_xp   != null ? d.weekly_xp.toLocaleString() : '—');
+      setVal('n-sleep',  d.sleep_score ?? '—');
+      setVal('n-energy', d.energy      ?? '—');
+    })
+    .catch(() => {
+      ['n-email','n-hw','n-ht','n-tasks','n-xp','n-sleep','n-energy']
+        .forEach(id => setVal(id, '—'));
     });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-      if (e.key === 'Enter' && document.getElementById('veil').classList.contains('on')) saveModal();
+
+  // ── Market data (live) ────────────────────────────────────────────────
+  fetch(PROXY)
+    .then(r => r.json())
+    .then(d => {
+      (d.quoteResponse?.result || []).forEach(q => {
+        const pct   = q.regularMarketChangePercent;
+        const price = q.regularMarketPrice;
+        const sign  = pct >= 0 ? '+' : '';
+        const cls   = pct >= 0 ? 'up' : 'dn';
+        if (q.symbol === '^DJI')  setVal('n-dow',   `${sign}${pct.toFixed(2)}%`, cls);
+        if (q.symbol === '^GSPC') setVal('n-sp',    `${sign}${pct.toFixed(2)}%`, cls);
+        if (q.symbol === '^IXIC') setVal('n- nasdaq',`${sign}${pct.toFixed(2)}%`, cls);
+        if (q.symbol === '^VIX')  setVal('n-vix',   price.toFixed(1));
+      });
+    })
+    .catch(() => {
+      ['n-dow','n-sp','n- nasdaq','n-vix'].forEach(id => setVal(id, '—'));
     });
-
-    // ── Data feed ────────────────────────────────────────────────────────
-    function fmtH(h) {
-      if (h == null || isNaN(h)) return '—';
-      const w = Math.floor(h);
-      const m = Math.round((h - w) * 60);
-      return m > 0 ? `${w}h ${m}m` : `${w}h`;
-    }
-
-    function setVal(id, text) {
-      const el = document.getElementById(id);
-      el.textContent = text;
-      el.classList.remove('loading');
-    }
-
-    function setError() {
-      ['n-email','n-hw','n-ht'].forEach(id => setVal(id, '—'));
-    }
-
-    fetch(DATA_URL + '?_=' + Date.now())
-      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(d => {
-        setVal('n-email', d.emails ?? '—');
-        setVal('n-hw', fmtH(d.hours_week));
-        setVal('n-ht', fmtH(d.hours_today));
-      })
-      .catch(setError);
-  </script>
+</script>
 </body>
 </html>
