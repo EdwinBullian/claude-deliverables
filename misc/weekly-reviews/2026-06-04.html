@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Eddie's Weekly Review — 2026-06-04</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F4ECD8;
+      --parchment-card: #F8F1DF;
+      --parchment-soft: #EFE6CE;
+      --ink: #1A1A1A;
+      --warm-gray: #5C5853;
+      --faded-ink: #8B857C;
+      --pink: #F5D5CF;
+      --blue: #C9DDE6;
+      --sage: #CADBC4;
+      --yellow: #EFE5BD;
+      --forest: #4A6B45;
+      --terracotta: #C97B5C;
+      --sienna: #A0524D;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--parchment);
+      color: var(--ink);
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+      line-height: 1.55;
+    }
+    .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; }
+    h1 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 4px;
+      line-height: 1.05;
+    }
+    h1 .highlight {
+      background: var(--sage);
+      padding: 0 8px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--warm-gray);
+      letter-spacing: 0.03em;
+      margin-bottom: 36px;
+    }
+
+    /* Top bar — 5 tiles */
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .tile {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 16px 16px 12px;
+    }
+    .tile-pink { background: var(--pink); }
+    .tile-blue { background: var(--blue); }
+    .tile-sage { background: var(--sage); }
+    .tile-yellow { background: var(--yellow); }
+    .tile-cream { background: var(--parchment-card); }
+    .tile-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .tile-number {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .tile-caption {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--warm-gray);
+      letter-spacing: 0.02em;
+    }
+
+    /* LifeOS levels block */
+    .levels-overall {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 10px;
+      background: var(--ink);
+      color: var(--parchment);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .levels-overall .ov-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      flex: 0 0 auto;
+    }
+    .levels-overall .ov-progression {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--parchment);
+      flex: 0 0 auto;
+    }
+    .levels-overall .ov-progression .arrow { color: var(--yellow); margin: 0 6px; }
+    .levels-overall .ov-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(244,236,216,0.15);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .levels-overall .ov-bar-fill {
+      height: 100%;
+      background: var(--yellow);
+      border-radius: 4px;
+    }
+    .levels-overall .ov-bar-mark {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(244,236,216,0.5);
+    }
+    .levels-overall .ov-xp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--yellow);
+      flex: 0 0 auto;
+    }
+
+    .grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .lvl-card {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 10px 12px 12px;
+      background: var(--parchment-card);
+    }
+    .lvl-card .lvl-icon {
+      font-size: 18px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .lvl-card .lvl-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .lvl-card .lvl-bar {
+      height: 6px;
+      background: rgba(26,26,26,0.08);
+      border: 1px solid rgba(26,26,26,0.25);
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .lvl-card .lvl-bar-fill {
+      height: 100%;
+      background: var(--ink);
+      border-radius: 3px;
+    }
+    .lvl-card .lvl-bar-start {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1.5px;
+      background: var(--terracotta);
+    }
+    .lvl-card .lvl-progression {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--warm-gray);
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+    .lvl-card .lvl-progression .arrow { color: var(--forest); margin: 0 2px; }
+    .lvl-card .lvl-progression .delta { color: var(--forest); font-weight: 600; }
+    .lvl-card.tint-pink   { background: var(--pink); }
+    .lvl-card.tint-sage   { background: var(--sage); }
+    .lvl-card.tint-yellow { background: var(--yellow); }
+    .lvl-card.tint-blue   { background: var(--blue); }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 44px 0 14px;
+    }
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 5px 11px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .section-title {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+    .section-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--faded-ink);
+      opacity: 0.4;
+    }
+
+    /* Cards */
+    .card {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 20px 24px;
+      background: var(--parchment-card);
+      margin-bottom: 14px;
+    }
+    .card p { margin: 4px 0; }
+
+    /* Health */
+    .health-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .health-cell .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 4px;
+    }
+    .health-cell .value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .health-cell .sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--faded-ink);
+    }
+
+    /* Tasks & projects */
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .area-col {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 16px 18px 18px;
+      background: var(--parchment-card);
+    }
+    .area-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .area-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .area-count {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1;
+    }
+    .area-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13.5px;
+    }
+    .area-list li {
+      padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px dashed rgba(26,26,26,0.12);
+    }
+    .area-list li:last-child { border-bottom: none; }
+    .area-list .name { flex: 1; min-width: 0; }
+    .area-list .progress {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--warm-gray);
+      white-space: nowrap;
+    }
+    .delta-up { color: var(--forest); }
+    .delta-flat { color: var(--faded-ink); }
+    .overdue-block {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1.5px dashed var(--sienna);
+    }
+    .overdue-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 6px;
+    }
+    .placeholder {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--faded-ink);
+      font-style: italic;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    /* Time spent */
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .time-col {
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 14px 16px 16px;
+      background: var(--parchment-card);
+    }
+    .time-col.manual { border-style: dashed; }
+    .time-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .time-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .time-total {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .time-total .unit { font-size: 12px; color: var(--warm-gray); font-weight: 500; margin-left: 2px; }
+    .time-list { list-style: none; padding: 0; margin: 0; font-size: 12.5px; }
+    .time-list li {
+      padding: 3px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .time-list .hours {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--warm-gray);
+      white-space: nowrap;
+    }
+
+    /* Black contrast blocks */
+    .grade-block, .insight-block {
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 24px 28px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .grade-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+    .grade-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .grade-letter { font-size: 48px; font-weight: 700; line-height: 1; }
+    .grade-summary { color: var(--parchment); opacity: 0.92; font-size: 15px; line-height: 1.6; }
+    .insight-block .grade-summary { margin-bottom: 12px; }
+    .insight-block .grade-summary:last-child { margin-bottom: 0; }
+    .insight-block .grade-summary strong.tag { color: var(--yellow); }
+
+    ul.list-clean { padding-left: 18px; margin: 4px 0; }
+    ul.list-clean li { margin: 6px 0; }
+
+    .alert-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--yellow);
+      border: 1.5px dashed var(--ink);
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
+    }
+    .meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--faded-ink);
+      letter-spacing: 0.02em;
+    }
+    .meta a { color: var(--forest); text-decoration: none; border-bottom: 1px solid var(--forest); }
+  </style>
+</head>
+<body>
+
+<div class="alert-note">
+  ⚠ XP values estimated — formula properties unresolvable via MCP (5th consecutive week). Estimates based on W21 snapshot + known task completions this week. · PRE-OP JUN 9 · Jun 5 calendar overloaded (~9h scheduled) — see Recommendations.
+</div>
+
+<h1>Weekly <span class="highlight">Review</span></h1>
+<div class="subtitle">MAY 28 – JUN 4, 2026 · WEEK 23 · AUTO-GENERATED · GRADE B</div>
+
+<!-- Grade -->
+<div class="grade-block">
+  <div class="grade-row"><span class="grade-label">Overall grade</span></div>
+  <div class="grade-row" style="align-items: center;">
+    <span class="grade-letter">B</span>
+    <span class="grade-summary">Strong production rebound after 4-day post-graduation dead zone. Finance agent delivered two high-quality theses (SpaceX SOTP + Anthropic), Agent Dispatch System shipped, nutrition logging jumped from 1/7 to 6/7. Gaps: M1.4 still overdue, W23 research incomplete, Scholarships at zero with 26 days left, Jun 5 calendar severely overloaded.</span>
+  </div>
+</div>
+
+<!-- TOP BAR: 5 tiles -->
+<div class="grid-5">
+  <div class="tile tile-pink">
+    <div class="tile-label">Tasks · Done</div>
+    <div class="tile-number">8</div>
+    <div class="tile-caption">67% completion</div>
+  </div>
+  <div class="tile tile-yellow">
+    <div class="tile-label">Tasks · Overdue</div>
+    <div class="tile-number">4</div>
+    <div class="tile-caption">oldest 14+ days</div>
+  </div>
+  <div class="tile tile-sage">
+    <div class="tile-label">Projects · Worked</div>
+    <div class="tile-number">5</div>
+    <div class="tile-caption">of 7 active</div>
+  </div>
+  <div class="tile tile-blue">
+    <div class="tile-label">Workouts · Hit</div>
+    <div class="tile-number">3</div>
+    <div class="tile-caption">Push + 2× Basketball</div>
+  </div>
+  <div class="tile tile-cream">
+    <div class="tile-label">Habits · Avg</div>
+    <div class="tile-number">60%</div>
+    <div class="tile-caption">8 habits · est.</div>
+  </div>
+</div>
+
+<!-- LIFEOS LEVELS BAR -->
+<div class="levels-overall">
+  <span class="ov-label">Overall</span>
+  <span class="ov-progression">L19 75%<span class="arrow">→</span>L19 90%</span>
+  <div class="ov-bar">
+    <div class="ov-bar-fill" style="width: 90%;"></div>
+    <div class="ov-bar-mark" style="left: 75%;"></div>
+  </div>
+  <span class="ov-xp">+~115 XP est.</span>
+</div>
+
+<!-- 6 skill cards -->
+<div class="grid-6">
+
+  <div class="lvl-card tint-pink">
+    <div class="lvl-icon">💪</div>
+    <div class="lvl-name">Fitness</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 30%;"></div><div class="lvl-bar-start" style="left: 20%;"></div></div>
+    <div class="lvl-progression">L5 20% <span class="arrow">→</span> L5 30% <span class="delta">+10</span></div>
+  </div>
+
+  <div class="lvl-card tint-sage">
+    <div class="lvl-icon">🏀</div>
+    <div class="lvl-name">Sports</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 40%;"></div><div class="lvl-bar-start" style="left: 20%;"></div></div>
+    <div class="lvl-progression">L4 20% <span class="arrow">→</span> L4 40% <span class="delta">+20</span></div>
+  </div>
+
+  <div class="lvl-card tint-yellow">
+    <div class="lvl-icon">💰</div>
+    <div class="lvl-name">Finance</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 90%;"></div><div class="lvl-bar-start" style="left: 70%;"></div></div>
+    <div class="lvl-progression">L5 70% <span class="arrow">→</span> L5 90% <span class="delta">+45</span></div>
+  </div>
+
+  <div class="lvl-card tint-blue">
+    <div class="lvl-icon">💻</div>
+    <div class="lvl-name">Programming</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 65%;"></div><div class="lvl-bar-start" style="left: 35%;"></div></div>
+    <div class="lvl-progression">L4 35% <span class="arrow">→</span> L4 65% <span class="delta">+35</span></div>
+  </div>
+
+  <div class="lvl-card">
+    <div class="lvl-icon">🎮</div>
+    <div class="lvl-name">Hobbies</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 85%;"></div><div class="lvl-bar-start" style="left: 80%;"></div></div>
+    <div class="lvl-progression">L2 80% <span class="arrow">→</span> L2 85% <span class="delta">+5</span></div>
+  </div>
+
+  <div class="lvl-card">
+    <div class="lvl-icon">🎓</div>
+    <div class="lvl-name">School</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 50%;"></div><div class="lvl-bar-start" style="left: 50%;"></div></div>
+    <div class="lvl-progression">L2 50% <span class="arrow">→</span> L2 50% <span class="delta" style="color: var(--faded-ink);">+0</span></div>
+  </div>
+
+</div>
+
+<!-- 01 HEALTH -->
+<div class="section-header">
+  <span class="section-num">01</span>
+  <span class="section-title">Health</span>
+  <span class="section-rule"></span>
+</div>
+<div class="card">
+  <div class="health-grid">
+    <div class="health-cell">
+      <div class="label">Training</div>
+      <div class="value">3 sessions</div>
+      <div class="sub">Push Thu · Basketball Mon+Wed</div>
+      <div class="sub" style="margin-top: 4px;">Adherence ~60% (3/5 planned)</div>
+    </div>
+    <div class="health-cell">
+      <div class="label">Sleep</div>
+      <div class="value">7.5 hr · score 77</div>
+      <div class="sub">RHR 54.7 bpm (ex-outlier)</div>
+      <div class="sub">May 31 anomaly: 4.5hr + RHR 69 (social night, resolved)</div>
+    </div>
+    <div class="health-cell">
+      <div class="label">Nutrition</div>
+      <div class="value">6/7 days logged</div>
+      <div class="sub">Protein hit 3/6 days (50%)</div>
+      <div class="sub">Fiber avg 11.9g · HRV unavailable (5th+ wk)</div>
+    </div>
+  </div>
+  <p class="meta" style="margin-top: 14px;">
+    Detail → <a href="../../Health/weekly_reviews/2026-W22.md">Health/weekly_reviews/2026-W22.md</a>
+    · W22 was a catch-up run (W21 had no review) · W23 health plan not yet generated
+  </p>
+</div>
+
+<!-- 02 TASKS & PROJECTS -->
+<div class="section-header">
+  <span class="section-num">02</span>
+  <span class="section-title">Tasks &amp; Projects</span>
+  <span class="section-rule"></span>
+</div>
+<div class="area-grid">
+
+  <div class="area-col">
+    <div class="area-head">
+      <span class="area-name">Finance</span>
+      <span class="area-count">10</span>
+    </div>
+    <ul class="area-list">
+      <li><span class="name">High Finance M1 (ongoing)</span><span class="progress">M1.8 ✓</span></li>
+      <li><span class="name">SpaceX SOTP Thesis</span><span class="progress delta-up">✓ done</span></li>
+      <li><span class="name">Anthropic Investment Thesis</span><span class="progress delta-up">✓ done</span></li>
+      <li><span class="name">VC Market Scan W23</span><span class="progress delta-up">✓ done</span></li>
+      <li><span class="name">Finance networking</span><span class="progress delta-flat">~0.75hr</span></li>
+    </ul>
+    <div class="overdue-block">
+      <div class="overdue-label">Overdue · 2</div>
+      <ul class="area-list">
+        <li><span class="name">M1.4 Business Segments</span><span class="progress" style="color: var(--sienna);">14d+ ⚠</span></li>
+        <li><span class="name">M1.5 Earnings Quality</span><span class="progress" style="color: var(--sienna);">14d+ ⚠</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="area-col">
+    <div class="area-head">
+      <span class="area-name">Coding</span>
+      <span class="area-count">8</span>
+    </div>
+    <ul class="area-list">
+      <li><span class="name">CS50 Wk6 PS6</span><span class="progress delta-up">✓ done</span></li>
+      <li><span class="name">CS50 Wk7 PS7</span><span class="progress">in progress</span></li>
+      <li><span class="name">AI Engineering Mod 5</span><span class="progress delta-up">✓ done</span></li>
+      <li><span class="name">AI Engineering Mod 6</span><span class="progress">in progress</span></li>
+      <li><span class="name">Agent Dispatch System</span><span class="progress delta-up">✓ shipped</span></li>
+    </ul>
+  </div>
+
+  <div class="area-col">
+    <div class="area-head">
+      <span class="area-name">Research</span>
+      <span class="area-count">2</span>
+    </div>
+    <ul class="area-list">
+      <li>
+        <span class="name">Neuroscience project</span>
+        <span class="progress"><span class="delta-flat">in progress</span></span>
+      </li>
+      <li>
+        <span class="name">Caffeine &amp; Cognition</span>
+        <span class="progress"><span class="delta-flat">prior wk</span></span>
+      </li>
+    </ul>
+    <div class="overdue-block">
+      <div class="overdue-label">Failed · 1</div>
+      <ul class="area-list">
+        <li><span class="name">W23 Research (Tue agent)</span><span class="progress" style="color: var(--sienna);">INCOMPLETE ⚠</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="area-col">
+    <div class="area-head">
+      <span class="area-name">Misc / Urgent</span>
+      <span class="area-count">—</span>
+    </div>
+    <div class="placeholder" style="text-align: left; padding: 0;">
+      <div style="font-style: normal; font-size: 12.5px; color: var(--ink); margin-bottom: 8px;">🚨 Scholarships 2026</div>
+      <div style="font-size: 11px; color: var(--sienna); font-family: 'JetBrains Mono', monospace;">Jun 30 deadline · 26 days</div>
+      <div style="font-size: 11px; color: var(--sienna); font-family: 'JetBrains Mono', monospace; margin-bottom: 12px;">Zero work logged</div>
+      <div style="font-style: normal; font-size: 12.5px; color: var(--ink); margin-bottom: 4px;">🏥 Pre-op appointment</div>
+      <div style="font-size: 11px; color: var(--warm-gray); font-family: 'JetBrains Mono', monospace;">Jun 9 · Marin ENT · 11:15 AM</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 03 TIME SPENT -->
+<div class="section-header">
+  <span class="section-num">03</span>
+  <span class="section-title">Time Spent</span>
+  <span class="section-rule"></span>
+</div>
+<p class="meta" style="margin-bottom: 12px;">
+  Solid border = auto from task estimates · dashed border = estimated/manual · Time Log DB empty this week · Total tracked: <strong style="color: var(--ink);">~18.5 hrs</strong> of 112 waking · May 28–31 largely untracked (graduation decompression)
+</p>
+<div class="time-grid">
+
+  <div class="time-col">
+    <div class="time-head">
+      <span class="time-name">Finance</span>
+      <span class="time-total">3.0<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>M1.8 SOTP active work</span><span class="hours">1.5</span></li>
+      <li><span>Agent review &amp; feedback</span><span class="hours">1.0</span></li>
+      <li><span>Networking / misc</span><span class="hours">0.5</span></li>
+    </ul>
+  </div>
+
+  <div class="time-col">
+    <div class="time-head">
+      <span class="time-name">Coding · AgentOS</span>
+      <span class="time-total">7.5<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>Agent Dispatch System</span><span class="hours">3.0</span></li>
+      <li><span>CS50 PS6 + PS7</span><span class="hours">2.5</span></li>
+      <li><span>AI Engineering Mod 5-6</span><span class="hours">2.0</span></li>
+    </ul>
+  </div>
+
+  <div class="time-col">
+    <div class="time-head">
+      <span class="time-name">Health &amp; Sports</span>
+      <span class="time-total">5.0<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>Push workout (Thu)</span><span class="hours">1.0</span></li>
+      <li><span>Basketball (Mon + Wed)</span><span class="hours">2.0</span></li>
+      <li><span>Cooking / meal prep</span><span class="hours">2.0</span></li>
+    </ul>
+  </div>
+
+  <div class="time-col manual">
+    <div class="time-head">
+      <span class="time-name">Research</span>
+      <span class="time-total">1.0<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>Neuroscience project</span><span class="hours">1.0</span></li>
+    </ul>
+  </div>
+
+  <div class="time-col manual">
+    <div class="time-head">
+      <span class="time-name">AgentOS Admin</span>
+      <span class="time-total">2.0<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>Agent monitoring</span><span class="hours">1.0</span></li>
+      <li><span>System reviews</span><span class="hours">1.0</span></li>
+    </ul>
+  </div>
+
+  <div class="time-col manual">
+    <div class="time-head">
+      <span class="time-name">Dead Zone</span>
+      <span class="time-total">~55<span class="unit">h</span></span>
+    </div>
+    <ul class="time-list">
+      <li><span>May 28–31 decompression</span><span class="hours">untracked</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- 04 INSIGHT -->
+<div class="section-header">
+  <span class="section-num">04</span>
+  <span class="section-title">Insight</span>
+  <span class="section-rule"></span>
+</div>
+<div class="insight-block">
+  <div class="grade-label" style="margin-bottom: 12px;">Patterns &amp; cross-domain signals</div>
+  <p class="grade-summary">
+    <strong class="tag">·</strong> Post-graduation decompression (May 28–31) cost 4 days of output. The Jun 1 restart was clean and fast — that's a good pattern. But 4 dead days is a lot when Finance and Coding have forward momentum. Build a "re-entry protocol" for after big transitions (graduation, exams, Notre Dame arrival).
+  </p>
+  <p class="grade-summary">
+    <strong class="tag">·</strong> The Finance agent is producing high-quality theses autonomously (SpaceX SOTP, Anthropic), but Eddie's own module work (M1.4, M1.5) is stalling 14+ days. There's a growing gap between agent-generated output and Eddie's actual learning progress. The modules aren't optional — M1.4/M1.5 are prerequisites for building models.
+  </p>
+  <p class="grade-summary">
+    <strong class="tag">·</strong> Jun 5 calendar is at ~9 hrs of structured work (Pull + M1.8 + AI Eng Mod 6 + M1.9 DCF 2hr + CS50 PS7). This is a scheduler error, not Eddie's fault. Without a reschedule, the most cognitively expensive items (DCF session, PS7) will get cut. Reschedule PS7 to Saturday before the day starts.
+  </p>
+  <p class="grade-summary">
+    <strong class="tag">·</strong> Scholarships 2026 (Jun 30 deadline) is not on the calendar and has zero work logged. At 26 days out, this is now urgent. Notre Dame scholarships typically require essays and financial docs — this can't be a crunch situation at June 28.
+  </p>
+</div>
+
+<!-- 05 WINS -->
+<div class="section-header">
+  <span class="section-num">05</span>
+  <span class="section-title">Wins</span>
+  <span class="section-rule"></span>
+</div>
+<div class="card">
+  <ul class="list-clean">
+    <li><strong>SpaceX SOTP thesis</strong> — debut of the Sum-of-the-Parts valuation framework. First multi-division thesis with segment modeling. Qualitatively strong work from the Finance agent.</li>
+    <li><strong>Agent Dispatch System shipped</strong> — fire-and-forget job queue with Notion DB, 15-min worker, and upgraded agents.html Command Center. Real infrastructure maturity milestone.</li>
+    <li><strong>Nutrition logging: 6/7 days</strong> — up from 1/7 in W21. Habit is forming. Protein consistency (3/6 days, 50%) is next to fix.</li>
+    <li><strong>W22 Health review ran</strong> — closed the W21 gap. Both W22 and this review running same-day is the system recovering properly.</li>
+    <li><strong>Anthropic on-demand thesis</strong> — same-day turnaround on a novel company, solid quality. The on-demand research pipeline is working.</li>
+  </ul>
+</div>
+
+<!-- 06 GAPS -->
+<div class="section-header">
+  <span class="section-num">06</span>
+  <span class="section-title">Gaps</span>
+  <span class="section-rule"></span>
+</div>
+<div class="card">
+  <ul class="list-clean">
+    <li><strong>M1.4 / M1.5 overdue 14+ days</strong> — High Finance module progression is blocked. These are the building blocks for model work; skipping costs more than doing them.</li>
+    <li><strong>W23 research incomplete</strong> — autonomous Tuesday agent failed. Root cause unknown. Must debug before next Tuesday's run or the research agent is unreliable.</li>
+    <li><strong>Scholarships 2026 at zero</strong> — Jun 30 deadline is 26 days away. Not on calendar, not started. This is the highest-urgency item not being tracked as urgent.</li>
+    <li><strong>LBO / 3-statement skills never started</strong> — These are IB interview prerequisites. Still at zero. Need a dedicated project, not a task.</li>
+    <li><strong>Jun 5 calendar overloaded</strong> — ~9 hrs structured work scheduled for one day. Needs human review and reschedule now.</li>
+  </ul>
+</div>
+
+<!-- 07 RECOMMENDATIONS -->
+<div class="section-header">
+  <span class="section-num">07</span>
+  <span class="section-title">Recommendations</span>
+  <span class="section-rule"></span>
+</div>
+<div class="card">
+  <ul class="list-clean">
+    <li><strong>Immediate — Jun 5 reschedule:</strong> Move CS50 PS7 to Saturday. Keep M1.9 DCF (2hr) + AI Eng Mod 6 on Friday — they're the priority items. Pull gym stays (morning).</li>
+    <li><strong>This weekend — M1.4 + M1.5:</strong> Block 3hrs Saturday afternoon to knock out both overdue Finance modules before anything else moves forward. No more agent theses without module progress.</li>
+    <li><strong>This weekend — Scholarships 2026:</strong> Block 2hrs Sunday to research what Notre Dame scholarship applications require (essays, deadlines, financial docs). Create a Notion project with subtasks before Jun 8. 26 days is not much time.</li>
+    <li><strong>By Monday — debug W23 research:</strong> Review the W23 research agent log, identify what failed, and test a fix before Tuesday's scheduled run.</li>
+    <li><strong>Jun 9 — Pre-op prep:</strong> Keep Tuesday schedule light after 11:15 AM. Flag any heavy cognitive work for morning or Wednesday. Confirm transport if needed.</li>
+    <li><strong>Next month — start LBO:</strong> Create a Notion project "LBO Foundations" with a 3-session plan. This can't stay at zero heading into recruiting conversations at Notre Dame.</li>
+  </ul>
+</div>
+
+<p class="meta" style="margin-top: 56px; padding-top: 16px; border-top: 1px solid rgba(26,26,26,0.15);">
+  Reports archived → <span class="mono">Misc/WeeklyReviews/</span> · Health → <span class="mono">Health/weekly_reviews/</span> · Weekly summary → <span class="mono">Misc/AgentOS/weekly_summary.md</span> · XP source → <span class="mono">Notion Areas DB (formula properties estimated)</span> · Pre-op Jun 9 · Marin ENT 11:15 AM
+</p>
+
+</body>
+</html>
