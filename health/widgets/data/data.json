@@ -262,7 +262,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jun 4",
+    "date_label": "Jun 5",
     "curve_24h": [
       5,
       5,
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-04T22:08:42-07:00",
-    "last_updated_label": "Jun 4, 10:08 PM PST",
+    "last_updated_iso": "2026-06-05T03:39:50-07:00",
+    "last_updated_label": "Jun 5, 3:39 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -340,13 +340,13 @@
         "error": null
       },
       "cronometer": {
-        "ok": true,
+        "ok": false,
         "last_ok_iso": "2026-06-04T22:08:43-07:00",
-        "error": null
+        "error": "auth failed: 403 Client Error: Forbidden for url: https://cronometer.com/api/v2/login"
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-04T22:08:44-07:00",
+        "last_ok_iso": "2026-06-05T03:39:51-07:00",
         "error": null
       }
     },
