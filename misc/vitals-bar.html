@@ -15,29 +15,27 @@
       --muted:  #9b9b9b;
       --dim:    #555555;
       --hover:  #3a3a3a;
-      --green:  #4ade80;
-      --red:    #f87171;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       font-family: -apple-system, 'Segoe UI', 'Inter', sans-serif;
       background: var(--bg);
+      height: 100%;
     }
 
     .frame {
-      margin: 4px;
+      margin: 6px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
+      padding: 6px;
     }
 
-    .row {
+    .bar {
       display: flex;
-      gap: 4px;
-      padding: 4px;
-    }
-    .row + .row {
-      padding-top: 0;
+      gap: 5px;
+      height: calc(100vh - 24px);
+      min-height: 80px;
     }
 
     .col {
@@ -46,12 +44,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px 3px 5px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 5px;
-      gap: 2px;
-      min-height: 46px;
+      border-radius: 7px;
+      gap: 5px;
+      padding: 8px 4px;
       min-width: 0;
     }
 
@@ -59,10 +56,10 @@
     .col.tap:hover { background: var(--hover); }
 
     .num {
-      font-size: 17px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--num);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       line-height: 1;
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
@@ -70,15 +67,13 @@
       text-overflow: ellipsis;
       max-width: 100%;
     }
-    .num.loading { font-size: 11px; font-weight: 400; color: var(--dim); }
-    .num.up { color: var(--green); }
-    .num.dn { color: var(--red); }
+    .num.loading { font-size: 14px; font-weight: 400; color: var(--dim); }
 
     .lbl {
-      font-size: 7px;
+      font-size: 8px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
       color: var(--muted);
       white-space: nowrap;
     }
@@ -123,71 +118,49 @@
 <body>
 
 <div class="frame">
+  <div class="bar">
 
-  <!-- TOP ROW (7) -->
-  <div class="row">
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-cpct">—</div>
       <div class="lbl">Claude Usage</div>
     </div>
+
     <div class="col tap" onclick="openModal()">
       <div class="num" id="n-ctok">—</div>
       <div class="lbl">Claude Tokens</div>
     </div>
+
     <div class="col">
       <div class="num loading" id="n-email">…</div>
       <div class="lbl">Unread Emails</div>
     </div>
+
     <div class="col">
       <div class="num loading" id="n-hw">…</div>
       <div class="lbl">Hrs This Week</div>
     </div>
+
     <div class="col">
       <div class="num loading" id="n-ht">…</div>
       <div class="lbl">Hrs Today</div>
     </div>
+
     <div class="col">
       <div class="num loading" id="n-tasks">…</div>
       <div class="lbl">Tasks Today</div>
     </div>
-    <div class="col">
-      <div class="num" id="n-nd">—</div>
-      <div class="lbl">Days to ND</div>
-    </div>
-  </div>
 
-  <!-- BOTTOM ROW (7) -->
-  <div class="row">
     <div class="col">
       <div class="num loading" id="n-xp">…</div>
       <div class="lbl">Weekly XP</div>
     </div>
-    <div class="col">
-      <div class="num loading" id="n-sleep">…</div>
-      <div class="lbl">Sleep Score</div>
-    </div>
-    <div class="col">
-      <div class="num loading" id="n-energy">…</div>
-      <div class="lbl">Energy</div>
-    </div>
-    <div class="col">
-      <div class="num loading" id="n-dow">…</div>
-      <div class="lbl">DOW</div>
-    </div>
-    <div class="col">
-      <div class="num loading" id="n-sp">…</div>
-      <div class="lbl">S&amp;P 500</div>
-    </div>
-    <div class="col">
-      <div class="num loading" id="n- nasdaq">…</div>
-      <div class="lbl">NASDAQ</div>
-    </div>
-    <div class="col">
-      <div class="num loading" id="n-vix">…</div>
-      <div class="lbl">VIX</div>
-    </div>
-  </div>
 
+    <div class="col">
+      <div class="num" id="n-nd">—</div>
+      <div class="lbl">Days to ND</div>
+    </div>
+
+  </div>
 </div>
 
 <!-- Edit Modal -->
@@ -211,10 +184,8 @@
 
 <script>
   const DATA_URL = 'https://edwinbullian.github.io/claude-deliverables/misc/vitals-data.json';
-  const YAHOO    = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5EDJI,%5EGSPC,%5EIXIC,%5EVIX';
-  const PROXY    = 'https://corsproxy.io/?' + encodeURIComponent(YAHOO);
 
-  // ── ND countdown ─────────────────────────────────────────────────────
+  // ── ND countdown ──────────────────────────────────────────────────────
   (function() {
     const nd = new Date('2026-08-22T00:00:00-07:00');
     document.getElementById('n-nd').textContent =
@@ -256,12 +227,11 @@
     const w = Math.floor(h), m = Math.round((h - w) * 60);
     return m > 0 ? `${w}h ${m}m` : `${w}h`;
   }
-  function setVal(id, text, cls) {
+  function setVal(id, text) {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = text;
-    el.classList.remove('loading', 'up', 'dn');
-    if (cls) el.classList.add(cls);
+    el.classList.remove('loading');
   }
 
   // ── JSON feed ─────────────────────────────────────────────────────────
@@ -272,32 +242,10 @@
       setVal('n-hw',     fmtH(d.hours_week));
       setVal('n-ht',     fmtH(d.hours_today));
       setVal('n-tasks',  d.tasks_today ?? '—');
-      setVal('n-xp',     d.weekly_xp   != null ? d.weekly_xp.toLocaleString() : '—');
-      setVal('n-sleep',  d.sleep_score ?? '—');
-      setVal('n-energy', d.energy      ?? '—');
+      setVal('n-xp',     d.weekly_xp != null ? d.weekly_xp.toLocaleString() : '—');
     })
     .catch(() => {
-      ['n-email','n-hw','n-ht','n-tasks','n-xp','n-sleep','n-energy']
-        .forEach(id => setVal(id, '—'));
-    });
-
-  // ── Market data (live) ────────────────────────────────────────────────
-  fetch(PROXY)
-    .then(r => r.json())
-    .then(d => {
-      (d.quoteResponse?.result || []).forEach(q => {
-        const pct   = q.regularMarketChangePercent;
-        const price = q.regularMarketPrice;
-        const sign  = pct >= 0 ? '+' : '';
-        const cls   = pct >= 0 ? 'up' : 'dn';
-        if (q.symbol === '^DJI')  setVal('n-dow',   `${sign}${pct.toFixed(2)}%`, cls);
-        if (q.symbol === '^GSPC') setVal('n-sp',    `${sign}${pct.toFixed(2)}%`, cls);
-        if (q.symbol === '^IXIC') setVal('n- nasdaq',`${sign}${pct.toFixed(2)}%`, cls);
-        if (q.symbol === '^VIX')  setVal('n-vix',   price.toFixed(1));
-      });
-    })
-    .catch(() => {
-      ['n-dow','n-sp','n- nasdaq','n-vix'].forEach(id => setVal(id, '—'));
+      ['n-email','n-hw','n-ht','n-tasks','n-xp'].forEach(id => setVal(id, '—'));
     });
 </script>
 </body>
