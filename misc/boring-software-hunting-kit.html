@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boring-Software Hunting Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parch:#f6f1e6;--parch-2:#efe7d6;--card:#fbf8f0;
+    --ink:#2c2a26;--ink-soft:#55514a;--line:#e2d8c3;--line-strong:#d4c7ab;
+    --accent:#b5673a;--accent-2:#5f7a6b;--accent-3:#7d6ca3;--gold:#c79a3c;
+    --green:#3f7a52;--amber:#b8862a;--red:#a8412f;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--parch);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.62;font-size:16.5px}
+  .wrap{max-width:920px;margin:0 auto;padding:54px 28px 90px}
+  header.masthead{border-bottom:2px solid var(--line-strong);padding-bottom:26px;margin-bottom:14px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-weight:700;font-size:40px;line-height:1.08;margin:0 0 14px}
+  .sub{color:var(--ink-soft);font-size:17px;max-width:680px}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:20px;display:flex;flex-wrap:wrap;gap:18px}
+  .meta b{color:var(--ink)}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin:54px 0 6px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:20px}
+  h2 .num{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:500;margin-right:10px}
+  h3{font-weight:700;font-size:18px;margin:28px 0 6px}
+  p{margin:12px 0}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(181,103,58,.3)}
+  ul,ol{margin:12px 0;padding-left:22px}li{margin:7px 0}strong{font-weight:700}
+  .mono{font-family:var(--mono)}
+  .note{border-radius:10px;padding:15px 18px;margin:18px 0;font-size:15px}
+  .note.good{background:#eaf1ea;border:1px solid #c6dcc8;border-left:4px solid var(--green)}
+  .note.warn{background:#f7efe2;border:1px solid #e6d3a6;border-left:4px solid var(--amber)}
+  .note.danger{background:#f7e9e3;border:1px solid #e7c3b6;border-left:4px solid var(--red)}
+  .note.key{background:var(--card);border:1px solid var(--line-strong);border-left:5px solid var(--accent)}
+  .badge{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .b-src{background:#e7eee8;color:var(--green);border:1px solid #c6dcc8}
+  .b-est{background:#f3ead7;color:var(--amber);border:1px solid #e6d3a6}
+  sup.c{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:700}
+  .tbl-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line-strong);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--card)}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--parch-2);font-weight:700;font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft)}
+  tr:last-child td{border-bottom:none}
+  td.c,th.c{text-align:center;font-family:var(--mono);white-space:nowrap}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:16px 0;position:relative}
+  .step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent);border-radius:5px 0 0 5px}
+  .step .st{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .step h3{margin:4px 0 2px;font-family:'Fraunces',serif;font-size:20px;font-weight:600}
+  .weight{font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--parch-2);border:1px solid var(--line-strong);color:var(--ink-soft)}
+  .killbox{background:#f7e9e3;border:1px solid #e7c3b6;border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+  .work{background:var(--parch-2);border:1px dashed var(--line-strong);border-radius:11px;padding:18px 22px;margin:16px 0}
+  .work .q{font-weight:700;margin:14px 0 2px}
+  .work .blank{border-bottom:1.5px dotted var(--line-strong);height:1.4em;margin:6px 0}
+  nav.toc{background:var(--parch-2);border:1px solid var(--line-strong);border-radius:11px;padding:18px 22px;margin:26px 0;font-size:14.5px}
+  nav.toc div{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  nav.toc ol{columns:2;column-gap:30px;margin:0;padding-left:20px}
+  @media(max-width:600px){nav.toc ol{columns:1}h1{font-size:30px}.wrap{padding:34px 18px 70px}}
+  footer{margin-top:60px;padding-top:22px;border-top:2px solid var(--line-strong);font-size:13px;color:var(--ink-soft)}
+  .ref-list{font-size:12.5px;font-family:var(--mono);color:var(--ink-soft);line-height:1.5}.ref-list li{margin:5px 0;word-break:break-word}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="kicker">Hunting Gear · Not a List of Niches — a Way to Find Them</div>
+  <h1>The Boring-Software Hunting Kit</h1>
+  <p class="sub">The playbook, the scorecard, the honest economics, and the access map for finding an unsexy vertical-software niche you can actually win — built for a capable, AI-native builder who hasn't shipped to customers yet.</p>
+  <div class="meta">
+    <span><b>For:</b> Eddie</span>
+    <span><b>Date:</b> June 5, 2026</span>
+    <span><b>Use with:</b> ~300 summer hrs</span>
+    <span><b>Sourced + flagged estimates</b></span>
+  </div>
+</header>
+
+<div class="note key">
+  <strong>The one idea this whole kit defends:</strong> in boring vertical software, <em>the code is the easy 20%. Your access to the industry and your read on its pain is the 80%.</em> So this kit is built to make you strong where you're weak (finding & validating a real niche you can reach) and to keep you from over-relying on where you're already strong (building). <span class="badge b-est">EST</span> flags = my estimates; <span class="badge b-src">SOURCED</span> = cited below.
+</div>
+
+<nav class="toc">
+  <div>Contents</div>
+  <ol>
+    <li><a href="#why">Why this model is real</a></li>
+    <li><a href="#playbook">The playbook (find → sell)</a></li>
+    <li><a href="#scorecard">The niche scorecard</a></li>
+    <li><a href="#econ">Honest economics</a></li>
+    <li><a href="#access">Mapping your access</a></li>
+    <li><a href="#next">Your next 2 weeks</a></li>
+    <li><a href="#refs">Sources</a></li>
+  </ol>
+</nav>
+
+<!-- WHY -->
+<h2 id="why"><span class="num">01</span>Why "Boring" Is Real (and Not Just a TikTok Thing)</h2>
+<p>Vertical SaaS — software built deep for one industry — is genuinely outpacing generic "horizontal" software, growing roughly <strong>~32%/yr vs ~12%</strong>.<sup class="c">1</sup> The "unsexy" end of it has become a real prize: bootstrapped boring-software businesses command <strong>7–10x ARR</strong> on exit, and PE is buying them aggressively (73 vertical-SaaS deals worth $15.3B in a single quarter).<sup class="c">1</sup> The structural reasons it works: the product is <em>mission-critical, not convenient</em>, so retention is high; the buyer pool is small enough that incumbents ignore it; and your accumulated knowledge of the workflow becomes a moat as raw AI gets commoditized.<sup class="c">1</sup></p>
+<p>The best candidates share three traits: <strong>(1)</strong> currently run on paper, spreadsheets, or ancient on-prem tools; <strong>(2)</strong> a recurring, expensive pain; <strong>(3)</strong> a market big enough to matter but too small to attract big players.<sup class="c">1</sup> Analog-heavy fields — trades, healthcare-adjacent, agriculture, construction, compliance, logistics — are where this is hottest.<sup class="c">1</sup></p>
+<div class="note good"><strong>Why it fits you specifically:</strong> no technical buyer to grill you, no "build it and they'll come" if you pick a niche you can reach, AI-buildable v1, designable to be low-maintenance, and a model serious investors respect. It routes around both of your fears. <span class="badge b-est">EST</span></div>
+
+<!-- PLAYBOOK -->
+<h2 id="playbook"><span class="num">02</span>The Playbook — Find → Validate → Build → Sell</h2>
+<p>The order matters enormously. Most failures come from doing step 3 before steps 1–2. <strong>You build last, not first.</strong></p>
+
+<div class="step">
+  <div class="st">Step 1 · Find through access, not brainstorming</div>
+  <h3>Start from who you can reach, then look for pain</h3>
+  <p>Don't start with "what's a good idea." Start with <em>"what unsexy worlds do I have a way into?"</em> (§05 is the worksheet for this.) For each, go look for the recurring, expensive, manual task everyone hates. The niche finds you through a door you already have.</p>
+</div>
+<div class="step">
+  <div class="st">Step 2 · Validate the problem before you love it</div>
+  <h3>10–15 problem interviews. Don't pitch — ask.</h3>
+  <p>Find 10–15 people in the niche and ask about their <em>current workflow</em> and what they've tried — never pitch your solution.<sup class="c">4</sup> Lurk in their Facebook groups, subreddits, forums, trade-association threads for two weeks first.<sup class="c">4</sup> The gold-standard validation is a <strong>pre-sale</strong>: offer a discount to anyone who'll put money down now for something you ship in 30–60 days. If they won't pay, the pain isn't real enough.<sup class="c">4</sup> <em>This is the same rigor you used to kill your overfit backtests — apply it here.</em></p>
+</div>
+<div class="step">
+  <div class="st">Step 3 · Build the smallest thing that removes the pain</div>
+  <h3>Boring on purpose. One workflow, done right.</h3>
+  <p>Solve the <em>one</em> painful task — not a platform. Rudimentary-but-reliable beats fancy-but-fragile in these markets. This is where your AI-assisted building is a genuine edge: you can ship a working v1 in a summer that a non-builder competitor can't. Design for <strong>low support load</strong> from day one (async value, few high-touch clients) so it doesn't follow you into your ND semester.</p>
+</div>
+<div class="step">
+  <div class="st">Step 4 · Sell as a business outcome, through trust</div>
+  <h3>These buyers don't shop online — they're referred</h3>
+  <p>Non-technical, older buyers buy <em>problem-solving, not software</em>, and they buy from people/channels they already trust — trade associations, resellers, industry advisors, word of mouth.<sup class="c">3</sup> Lead with the business-value math ("this saves you X hours / $Y a month"); buyers who get a value analysis are 3× more likely to move and 5× more likely to pay a premium.<sup class="c">3</sup> Invest heavily in hand-held onboarding — it's how you beat your trust gap as an 18-year-old.<sup class="c">3</sup></p>
+</div>
+
+<!-- SCORECARD -->
+<h2 id="scorecard"><span class="num">03</span>The Niche Scorecard</h2>
+<p>Score any candidate niche 1–5 on each line. Multiply by the weight. <strong>But first check the two kill-switches</strong> — if either fails, the total doesn't matter.</p>
+<div class="killbox">
+  <strong>⛔ Auto-kill switches (score ≤2 on either = walk away, regardless of total):</strong>
+  <ul style="margin-bottom:0">
+    <li><strong>Access</strong> — do you have a real way to reach &amp; understand these buyers? No door = no business, no matter how good the idea.</li>
+    <li><strong>Acute recurring pain</strong> — is this a weekly/monthly bleed that costs them real time or money? A "nice to have" never converts older buyers.</li>
+  </ul>
+</div>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Criterion</th><th class="c">Wt</th><th>1–2 (bad)</th><th>4–5 (good)</th></tr>
+  <tr><td><strong>Access</strong> <span class="weight">KILL</span></td><td class="c">×3</td><td>No connection, no way in</td><td>You know people in it / can get warm intros</td></tr>
+  <tr><td><strong>Acute recurring pain</strong> <span class="weight">KILL</span></td><td class="c">×3</td><td>Annual / mild annoyance</td><td>Weekly/monthly, costs real hours or $</td></tr>
+  <tr><td>Greenfield (paper/spreadsheet/legacy)</td><td class="c">×2</td><td>Already has slick modern tools</td><td>Runs on paper, Excel, fax, whiteboard<sup class="c">1</sup></td></tr>
+  <tr><td>Reachable, finite buyer pool</td><td class="c">×2</td><td>Scattered / impossible to target</td><td>~500–5,000 findable buyers<sup class="c">4</sup></td></tr>
+  <tr><td>Willingness to pay</td><td class="c">×2</td><td>Pain &lt; your price</td><td>Pain costs more than you'd charge<sup class="c">4</sup></td></tr>
+  <tr><td>Low maintenance by nature</td><td class="c">×2</td><td>24/7 uptime, heavy support</td><td>Async value, few low-touch clients</td></tr>
+  <tr><td>Big players ignore it</td><td class="c">×1</td><td>Salesforce/big SaaS already there</td><td>Too small/niche for incumbents</td></tr>
+  <tr><td>Buildable in a summer (with AI)</td><td class="c">×1</td><td>Needs novel hard tech</td><td>One bounded workflow you can ship</td></tr>
+  <tr><td>Stickiness once embedded</td><td class="c">×1</td><td>Trivial to drop</td><td>Becomes their daily system of record</td></tr>
+  <tr><td>Regulation = moat, not landmine</td><td class="c">×1</td><td>You'd carry safety/liability risk</td><td>Rules deter competitors, you stay low-stakes</td></tr>
+</table>
+</div>
+<p style="font-size:14px;color:var(--ink-soft)"><strong>Reading the score</strong> <span class="badge b-est">EST</span>: max is 90. Below ~55 → keep hunting. 55–70 → promising, validate hard. 70+ <em>with both kill-switches ≥4</em> → this is a real candidate; start the §02 Step-2 interviews.</p>
+
+<!-- ECON -->
+<h2 id="econ"><span class="num">04</span>Honest Economics (the reality check)</h2>
+<p>Be the skeptic you were with your backtests. The model is real; the TikTok numbers are the new "6x backtest."</p>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Reality</th><th>The honest number</th></tr>
+  <tr><td>When the first paying customer shows up</td><td>Often <strong>week 12–18</strong>, not week 2. One case: 14 customers @ $29 = ~$406/mo by month 6.<sup class="c">2</sup></td></tr>
+  <tr><td>"Successful" no-audience trajectory <span class="badge b-est">EST</span></td><td>~M1 $0.5–2k · M3 $2–10k · M6 $5–25k · M12 $10–50k — these are the <em>winners'</em> ranges, not the average.<sup class="c">2</sup></td></tr>
+  <tr><td>Time to $1M ARR (for the ones that make it)</td><td>Median <strong>~24 months</strong>.<sup class="c">2</sup></td></tr>
+  <tr><td>How most actually do</td><td><strong>70% of micro-SaaS make under $1,000/mo.</strong><sup class="c">2</sup></td></tr>
+  <tr><td>#1 cause of death</td><td><strong>No market need — ~40–42% of failures.</strong> (This is why steps 1–2 come before building.)<sup class="c">2</sup></td></tr>
+  <tr><td>Churn reality</td><td>SMB churn runs ~<strong>8.2%/mo</strong> (brutal) vs ~1% enterprise; &gt;5%/mo logo churn = no product-market fit.<sup class="c">2</sup></td></tr>
+  <tr><td>Early revenue is jumpy</td><td>50–200% month-swings at 0–3 mo (tiny customer counts) — don't read signal into noise.<sup class="c">2</sup></td></tr>
+  <tr><td>The upside if it works</td><td>70%+ profit margins bootstrapped<sup class="c">2</sup>; exits at <strong>7–10x ARR</strong>, PE actively buying.<sup class="c">1</sup></td></tr>
+</table>
+</div>
+<div class="note warn"><strong>Translation:</strong> this is a 12–24 month game to real money, not a summer. What a summer <em>can</em> realistically produce: a validated niche, a shipped v1, and your first few paying customers (~$300–1,500/mo <span class="badge b-est">EST</span>) — which is a genuine win and a real foundation, even though it's a fraction of the TikTok flex. The high-churn SMB reality is also why niche + stickiness matter so much.</div>
+
+<!-- ACCESS -->
+<h2 id="access"><span class="num">05</span>Mapping Your Access <span style="font-size:15px;color:var(--ink-soft)">— fill this in</span></h2>
+<p>This is the most important page, because access is your kill-switch. Be concrete and honest. The goal: surface 3–5 unsexy worlds you have a real door into.</p>
+<div class="work">
+  <div class="q">1. Every industry a family member or close family friend works in:</div>
+  <div class="blank"></div><div class="blank"></div>
+  <div class="q">2. Industries your hometown / region is unusually dense in (local employers, trades, agriculture, ports, tourism, etc.):</div>
+  <div class="blank"></div><div class="blank"></div>
+  <div class="q">3. Anywhere you've worked, volunteered, interned, or spent real time:</div>
+  <div class="blank"></div>
+  <div class="q">4. Communities you genuinely belong to (church, sports, clubs, school networks, online groups):</div>
+  <div class="blank"></div>
+  <div class="q">5. The "who'd take my call?" test — name 5 adults in non-tech jobs who'd give you 20 minutes about their work:</div>
+  <div class="blank"></div><div class="blank"></div>
+  <div class="q">6. For each world above, jot the most annoying recurring task you've ever heard them complain about:</div>
+  <div class="blank"></div><div class="blank"></div>
+</div>
+<div class="note danger"><strong>The trap to avoid:</strong> don't default to a <em>finance</em> niche just because it's comfortable. If you have no access to the buyers (small RIAs, fund admins, etc.), comfort is worthless — <strong>access beats domain comfort every time.</strong> Your finance/Notre Dame network is a <em>future</em> asset; right now your real access is family, hometown, and the people who'd take your call. Build from the door you actually have. <span class="badge b-est">EST</span></div>
+
+<!-- NEXT -->
+<h2 id="next"><span class="num">06</span>Your Next 2 Weeks (a concrete sprint)</h2>
+<ol>
+  <li><strong>Days 1–2:</strong> Fill in §05. Get 3–5 candidate worlds you can reach.</li>
+  <li><strong>Days 3–4:</strong> Run each through the §03 scorecard. Kill anything failing a kill-switch. Keep the top 2–3.</li>
+  <li><strong>Days 5–10:</strong> For your top niches, lurk their forums/FB groups/subreddits and book 10–15 <em>problem</em> interviews. Don't pitch. Hunt for the one expensive, recurring, manual task.<sup class="c">4</sup></li>
+  <li><strong>Days 11–14:</strong> Pick the single sharpest pain. Try a <strong>pre-sale</strong> — will anyone put money down for a 30–60 day delivery? That answer, not your enthusiasm, decides whether you build.<sup class="c">4</sup></li>
+</ol>
+<div class="note key"><strong>Come back to me with:</strong> your filled-in access map and the 2–3 niches that survived the scorecard. We'll pressure-test them together, then design the smallest v1 and a build plan that fits the summer and stays low-maintenance once you're at ND. <em>Don't write any code until a niche clears the kill-switches and someone signals they'd pay.</em></div>
+
+<!-- REFS -->
+<h2 id="refs" style="font-size:22px"><span class="num">REF</span>Sources</h2>
+<p style="font-size:13px;color:var(--ink-soft)">Compiled June 5, 2026 from live web search. Market dynamics, failure/churn stats, and validation methods are sourced; revenue trajectories and scorecard thresholds are my estimates/judgment, flagged <span class="badge b-est">EST</span>. Many sources are practitioner blogs (indie-hacker/SaaS operators) — directionally useful, not peer-reviewed.</p>
+<ol class="ref-list">
+  <li>Vertical SaaS 2026 trends, niche-selection traits, exit multiples &amp; PE activity — SaaS Mag / Qubit Capital / The Scaling Conversation — https://www.saasmag.com/vertical-saas-niche-beats-horizontal-2026/</li>
+  <li>Micro-SaaS solo-founder timelines, churn, failure rates, margins — SoftwareSeni / StartupInsider / NetSuite churn benchmarks — https://www.softwareseni.com/solo-founder-saas-metrics-from-0-to-10k-mrr-in-6-months-with-realistic-timelines/</li>
+  <li>Selling B2B SaaS to non-technical buyers; channel/trade-association distribution; value-based selling — HowdyGo / AppDirect / Janek — https://www.howdygo.com/blog/selling-to-non-technical-saas-buyers</li>
+  <li>Validating a micro-SaaS niche: market size, willingness to pay, problem interviews, pre-selling — Problem Pop / PayPro Global / Medium (Upen) — https://www.problempop.io/blog-posts/how-to-identify-micro-saas-ideas-that-can-realistically-make-5k-month</li>
+</ol>
+
+<footer>
+  <p><strong>The Boring-Software Hunting Kit.</strong> Prepared for Eddie · June 5, 2026 · working document. Economics are industry estimates, not guarantees; scorecard thresholds are heuristics to pressure-test ideas, not rules. Not legal/financial advice.</p>
+</footer>
+
+</div>
+</body>
+</html>
