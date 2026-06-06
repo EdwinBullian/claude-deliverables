@@ -197,8 +197,18 @@ def fetch() -> dict:
         yesterday = today - dt.timedelta(days=1)
         week = trailing_7_days(today)  # today is always index 6
 
-        # ---- Last night's sleep (stored under yesterday's date) ----
-        slp = _summary_for(yesterday).get("slp", {}) or {}
+        # ---- Last night's sleep ----
+        # Zepp files a sleep session under either the bed date or the wake date
+        # depending on account/firmware; for Eddie's it lands on the WAKE date,
+        # so a fixed "yesterday" query returned the night-before-last. Pull both
+        # candidate days and keep whichever session woke most recently — robust
+        # to either filing convention, and the date label self-corrects to the
+        # actual wake morning.
+        def _slp_for(day: dt.date) -> dict:
+            s = _summary_for(day).get("slp", {}) or {}
+            return s if s.get("ed") else {}
+        _cands = [s for s in (_slp_for(today), _slp_for(yesterday)) if s]
+        slp = max(_cands, key=lambda s: s.get("ed", 0)) if _cands else {}
         deep = slp.get("dp", 0)
         light = slp.get("lt", 0)
         rem = slp.get("dt", 0)
@@ -207,9 +217,10 @@ def fetch() -> dict:
         score = slp.get("ss") or _estimate_sleep_score(deep, light, rem, slp.get("wc"))
         bed_dt = dt.datetime.fromtimestamp(slp["st"], tz=PST) if slp.get("st") else None
         wake_dt = dt.datetime.fromtimestamp(slp["ed"], tz=PST) if slp.get("ed") else None
+        sleep_date = wake_dt.date() if wake_dt else yesterday
 
         sleep_payload = {
-            "date_label": _date_label(yesterday) + " — Last Night",
+            "date_label": _date_label(sleep_date) + " — Last Night",
             "score": score,
             "total_minutes": total or None,
             "total_label": minutes_to_label(total) if total else "—",
