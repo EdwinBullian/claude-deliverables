@@ -55,7 +55,7 @@
   },
   "macros_week": {
     "week_label": "Macros — May 31–6",
-    "macro_score_pct": 1,
+    "macro_score_pct": 65,
     "labels": [
       "Sun",
       "Mon",
@@ -77,56 +77,56 @@
     "protein_g": [
       143,
       3,
-      0,
-      0,
+      1203,
+      90,
       124,
-      0,
-      0
+      144,
+      34
     ],
     "carbs_g": [
       113,
       51,
-      0,
-      0,
+      220,
+      22,
       143,
-      0,
-      0
+      139,
+      55
     ],
     "fat_g": [
       82,
       1,
-      0,
-      0,
+      274,
+      68,
       95,
-      0,
-      0
+      71,
+      23
     ],
     "has_data": [
       true,
       true,
-      false,
-      false,
       true,
-      false,
-      false
+      true,
+      true,
+      true,
+      true
     ],
     "target_kcal": 2500,
     "target_protein_g": 200,
-    "footer": "Target: 2,500 kcal · 200g protein · 3/7 days logged"
+    "footer": "Target: 2,500 kcal · 200g protein · 7/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 1,
-    "days_logged": 3,
+    "macro_score_pct": 65,
+    "days_logged": 7,
     "days_total": 7,
-    "avg_protein_g": 90,
-    "avg_carbs_g": 102,
-    "avg_fat_g": 59,
+    "avg_protein_g": 248,
+    "avg_carbs_g": 106,
+    "avg_fat_g": 87,
     "target_kcal": 2500,
     "target_protein_g": 200,
     "nutrients": [
       {
-        "pct": 29,
+        "pct": 27,
         "label": "Fiber",
         "sub": "11g / 38g",
         "upper_limit": false
@@ -134,47 +134,47 @@
       {
         "pct": 59,
         "label": "Calcium",
-        "sub": "600mg / 1.0g",
+        "sub": "597mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 37,
+        "pct": 75,
         "label": "Magnesium",
-        "sub": "151mg / 400mg",
+        "sub": "301mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 44,
+        "pct": 66,
         "label": "Potassium",
-        "sub": "2.1g / 4.7g",
+        "sub": "3.1g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 95,
+        "pct": 192,
         "label": "Sodium",
-        "sub": "2.2g / 2.3g",
+        "sub": "4.4g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 122,
+        "pct": 206,
         "label": "Iron",
-        "sub": "10mg / 8mg",
+        "sub": "17mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 85,
+        "pct": 65,
         "label": "Vitamin A",
-        "sub": "773mcg / 900mcg",
+        "sub": "593mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 77,
+        "pct": 64,
         "label": "Vitamin C",
-        "sub": "70mg / 90mg",
+        "sub": "58mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "3 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "7 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
@@ -293,7 +293,7 @@
   },
   "hydration": {
     "date_label": "Jun 6 — Today",
-    "today_oz": 0.0,
+    "today_oz": 0.1,
     "target_oz": 130,
     "pct": 0,
     "week": {
@@ -309,10 +309,10 @@
       "oz": [
         17,
         34,
-        40,
-        0,
+        143,
+        9,
         24,
-        0,
+        26,
         0
       ],
       "today_index": 6
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-06T07:23:40-07:00",
-    "last_updated_label": "Jun 6, 7:23 AM PST",
+    "last_updated_iso": "2026-06-06T13:03:05-07:00",
+    "last_updated_label": "Jun 6, 1:03 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -341,12 +341,12 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T07:23:41-07:00",
+        "last_ok_iso": "2026-06-06T13:03:07-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T07:23:41-07:00",
+        "last_ok_iso": "2026-06-06T13:03:06-07:00",
         "error": null
       }
     },
