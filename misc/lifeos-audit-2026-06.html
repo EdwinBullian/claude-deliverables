@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life OS — Full System Audit</title>
+<style>
+  :root{
+    --bg:#e4d9c4; --card:#dbd0ba; --card2:#ded3bd; --ink:#2b2b28; --soft:#6b6457;
+    --accent:#1b3a5c; --line:#c7bca3;
+    --red:#9c4a3c; --redbg:#e9cfc6; --amber:#9a7430; --amberbg:#e8dcb9;
+    --green:#4f6b43; --greenbg:#d4dcc1; --blue:#3a5a7a; --bluebg:#cdd8e0;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;line-height:1.62;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px;margin:0 auto;padding:46px 26px 80px;}
+  h1,h2,h3,.klabel,.tag,.tier-l,.metric .n,.foot{font-family:'Inter','Helvetica Neue',Arial,sans-serif;}
+  .eyebrow{font-family:'JetBrains Mono','Courier New',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);font-weight:700;}
+  h1{font-size:35px;line-height:1.12;margin:.32em 0 .1em;letter-spacing:-.01em;color:var(--accent);}
+  .sub{color:var(--soft);font-size:15px;margin:0 0 4px;}
+  .rule{height:2px;background:var(--accent);opacity:.5;margin:26px 0;border:0;}
+  .thin{height:1px;background:var(--line);border:0;margin:30px 0;}
+  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    margin:40px 0 4px;font-weight:800;}
+  h2 .num{font-family:'JetBrains Mono',monospace;opacity:.55;margin-right:8px;}
+  .lead{font-size:16px;color:#36332c;}
+  .verdict{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);
+    border-radius:10px;padding:20px 22px;margin:18px 0 6px;}
+  .verdict p{margin:.5em 0;}
+  .scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 6px;}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:13px 12px;text-align:center;}
+  .metric .n{font-size:25px;font-weight:800;color:var(--accent);line-height:1;}
+  .metric .n.bad{color:var(--red);} .metric .n.warn{color:var(--amber);} .metric .n.good{color:var(--green);}
+  .metric .l{font-size:10.5px;letter-spacing:.04em;color:var(--soft);text-transform:uppercase;margin-top:6px;
+    font-family:'Inter',sans-serif;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin:13px 0;}
+  .card.dead{border-left:5px solid var(--red);}
+  .card.dormant{border-left:5px solid var(--amber);}
+  .card.gap{border-left:5px solid var(--blue);}
+  .card.cut{border-left:5px solid var(--green);}
+  .card h3{margin:0 0 7px;font-size:17px;color:#23211d;display:flex;align-items:baseline;gap:9px;}
+  .card h3 .id{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);font-weight:700;
+    background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;flex:none;}
+  .card p{margin:.42em 0;font-size:14.5px;}
+  .ev{font-size:13px;color:var(--soft);border-top:1px dashed var(--line);margin-top:11px;padding-top:9px;}
+  .ev b{color:#52301f;font-weight:700;}
+  .fix{font-size:13.5px;margin-top:9px;background:var(--card2);border:1px solid var(--line);
+    border-radius:7px;padding:9px 12px;}
+  .fix b{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;}
+  .tag{font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.03em;padding:2px 9px;border-radius:20px;
+    border:1px solid var(--line);color:var(--soft);background:var(--bg);text-transform:uppercase;font-weight:600;}
+  .tag.imp{color:var(--red);border-color:#cbb0a6;background:var(--redbg);}
+  .tag.eff{color:var(--green);border-color:#b9c2a0;background:var(--greenbg);}
+  .tier-head{display:flex;align-items:center;gap:12px;margin:42px 0 4px;}
+  .tier-l{font-size:11px;font-weight:800;letter-spacing:.05em;color:#fff;padding:3px 11px;border-radius:6px;}
+  .tier-l.t1{background:var(--red);} .tier-l.t2{background:var(--amber);}
+  .tier-l.t3{background:var(--blue);} .tier-l.t4{background:var(--green);}
+  .tier-d{font-size:13px;color:var(--soft);}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);}
+  td.p{font-family:'JetBrains Mono',monospace;font-weight:700;}
+  .p1{color:var(--red);} .p2{color:var(--amber);} .p3{color:var(--blue);}
+  ol.road{padding-left:0;list-style:none;counter-reset:r;}
+  ol.road li{counter-increment:r;position:relative;padding:13px 16px 13px 52px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;margin:9px 0;font-size:14.5px;}
+  ol.road li::before{content:counter(r);position:absolute;left:13px;top:13px;width:26px;height:26px;
+    background:var(--accent);color:#f0e9d8;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;}
+  ol.road li b{color:#23211d;}
+  .foot{margin-top:46px;font-size:12px;color:var(--soft);text-align:center;
+    border-top:1px solid var(--line);padding-top:18px;letter-spacing:.02em;}
+  strong{color:#23211d;}
+  @media(max-width:620px){.scorecard{grid-template-columns:repeat(2,1fr);}h1{font-size:28px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Life OS · System Audit</div>
+  <h1>Where your Life OS leaks time, energy &amp; attention</h1>
+  <p class="sub">A full audit of the Notion workspace, dashboards, widgets, agents &amp; automations — what's broken, what's dormant, what's untracked, and what to upgrade.</p>
+  <p class="sub" style="font-family:'JetBrains Mono',monospace;font-size:12px;">Prepared June 6, 2026 · supersedes the May 5 SystemMap audit</p>
+
+  <hr class="rule">
+
+  <h2><span class="num">00</span>The honest verdict</h2>
+  <div class="verdict">
+    <p class="lead"><strong>The architecture is genuinely excellent — that's not the problem.</strong> You have 13 scheduled agents, a gamified Notion economy, a deliverables pipeline, an iMessage bridge, and a real coordination layer. Very few people your age (or twice it) run anything this sophisticated.</p>
+    <p>The problem is the opposite of what you'd expect. You don't need <em>more</em> structure. You have <strong>built systems that have quietly decayed or never went live</strong>, and a handful of <strong>high-leverage life domains with no real tracking at all</strong>. The polish on the dashboard is hiding the fact that several of the pipes underneath are dry.</p>
+    <p>Three things, bluntly: <strong>(1)</strong> your Health data has been dead for 5+ weeks — the agent is writing reviews on data that doesn't exist. <strong>(2)</strong> Your Career Hub — the single most important system for your actual IB→VC goal — is an empty shell with zero contacts. <strong>(3)</strong> Real money is leaking through the cracks right now: a scholarship deadline is 24 days out with nothing started. Fix the dry pipes before adding new ones.</p>
+  </div>
+
+  <div class="scorecard">
+    <div class="metric"><div class="n good">13</div><div class="l">Agents scheduled</div></div>
+    <div class="metric"><div class="n bad">5+ wk</div><div class="l">Health data blind</div></div>
+    <div class="metric"><div class="n bad">0</div><div class="l">Career contacts</div></div>
+    <div class="metric"><div class="n warn">6</div><div class="l">Overdue tasks</div></div>
+    <div class="metric"><div class="n bad">0</div><div class="l">Time Log rows</div></div>
+    <div class="metric"><div class="n warn">6×</div><div class="l">Repeat thesis result</div></div>
+    <div class="metric"><div class="n warn">68%</div><div class="l">Habit rate</div></div>
+    <div class="metric"><div class="n bad">24d</div><div class="l">To scholarship deadline</div></div>
+  </div>
+
+  <hr class="thin">
+
+  <!-- ===================== TIER 1 ===================== -->
+  <div class="tier-head"><span class="tier-l t1">TIER 1</span><span class="tier-d"><strong>Broken / decayed</strong> — fix these before building anything new. Garbage in, garbage out.</span></div>
+
+  <div class="card dead">
+    <h3><span class="id">1.1</span>Health data pipeline is dead — and the agent is faking it</h3>
+    <p>This is the most serious issue in the whole system. Your Health agent runs a full Saturday review and a Sunday plan every week — but it's running on <strong>no real data</strong>. HRV has been blind for 4+ weeks, Cronometer nutrition logging is sparse-to-empty for 4–5 weeks, and Notion workout logs have been missing for 3 weeks.</p>
+    <p>The result: the Saturday "weekly review" is theater. It estimates adherence from a step proxy, marks recovery "Moderate" with no HRV, and reports "No data" on nutrition — then the Sunday plan adjusts off that nothing. A health system that can't see the body isn't a health system.</p>
+    <div class="ev"><b>Evidence:</b> pending_actions logs HRV unavailable 4 wks, nutrition missing 4 wks, Notion workouts missing 3 wks; <b>zepp_cli</b> (SyntaxError line 522) and <b>cronometer_cli</b> (database error) both broken; activity log W21 review written retroactively June 4, "HRV blind 4th week… Nutrition No data"; health review offline 5 consecutive weeks.</p>
+    <div class="fix"><b>Fix &middot; high ROI</b> — You now have <strong>zepp-health and cronometer MCP connectors wired up</strong>. Retire the two broken CLIs entirely and re-point the Health agent at the MCPs. One repair re-lights the entire domain. Until then, the Saturday/Sunday health runs are burning tokens to produce fiction.</p>
+    <div class="tags"><span class="tag imp">Impact: critical</span><span class="tag eff">Effort: medium</span><span class="tag">Health</span></div>
+  </div>
+
+  <div class="card dead">
+    <h3><span class="id">1.2</span>Time Log is empty — your weekly review reports numbers that don't exist</h3>
+    <p>The "Time Spent by area" tile in your Sunday review is one of the most valuable things the whole OS could give you: ground truth on where your life actually goes. Except the <strong>Time Log database has zero rows</strong>. The review either estimates it or skips it. The one quantitative mirror of your attention is hollow.</p>
+    <div class="ev"><b>Evidence:</b> Time Log data source returns no entries; schema has an "Auto/Manual" Source field but nothing is feeding Auto; the database also lives under a separate "Second Brain (1)" parent, detached from the Life OS page.</div>
+    <div class="fix"><b>Fix &middot; near-zero manual effort</b> — Your schedule agent already writes calendar blocks every Sunday. Add a tiny daily job that reconciles calendar events → writes Time Log rows (Source: Auto). You get real time-tracking with no manual logging, and the weekly review stops inventing the number.</div>
+    <div class="tags"><span class="tag imp">Impact: high</span><span class="tag eff">Effort: low</span><span class="tag">Measurement</span></div>
+  </div>
+
+  <div class="card dead">
+    <h3><span class="id">1.3</span>Research agent fails silently and the queue is chronically jammed</h3>
+    <p>The Tuesday research run died mid-session on June 2 and produced <strong>zero deliverables</strong> — no folder, no log entry, no signal — and nothing caught it until Thursday's check. Separately, the research queue has sat <strong>above its alert threshold for weeks</strong> (8–9 items vs. a threshold of 7) with no resolution.</p>
+    <div class="ev"><b>Evidence:</b> pending_actions 2026-06-04 "Research output missing for W23 — run appears to have died mid-session"; queue_alert logged 2026-04-30 and 2026-05-07 (persistent backlog); W23 weekly review grade notes "Research: W23 failure — 0 deliverables."</div>
+    <div class="fix"><b>Fix</b> — Add a same-day retry + hard iMessage alert on any agent that finishes with no deliverable (silent failure is the worst failure). And do a one-time queue triage: trim or promote so it sits at/below threshold.</div>
+    <div class="tags"><span class="tag imp">Impact: high</span><span class="tag eff">Effort: low</span><span class="tag">Reliability</span></div>
+  </div>
+
+  <div class="card dead">
+    <h3><span class="id">1.4</span>The Agent Dispatch "Command Center" you built is sitting dark</h3>
+    <p>You shipped the Agent Dispatch system on June 3 — queue DB, Command Center widget, 15-min worker. But the <strong>worker is disabled</strong> and the Apps Script proxy was never deployed, so the whole thing is built-but-off. Built-and-dark features are worse than no feature: they're cognitive clutter that looks done.</p>
+    <div class="ev"><b>Evidence:</b> scheduled task <b>agent-dispatch-worker</b> shows <code>enabled: false</code>; memory note flags "Eddie must deploy proxy"; Agent Dispatch + AgentOS Settings DBs exist on the Life OS page but the trigger path is inert.</div>
+    <div class="fix"><b>Decide</b> — Either deploy the proxy + enable the worker this week, or consciously shelve it and hide the widgets. Don't leave it half-live.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: low</span><span class="tag">Automation</span></div>
+  </div>
+
+  <!-- ===================== TIER 2 ===================== -->
+  <div class="tier-head"><span class="tier-l t2">TIER 2</span><span class="tier-d"><strong>Dormant</strong> — built, but unused. Either activate or stop pretending they exist.</span></div>
+
+  <div class="card dormant">
+    <h3><span class="id">2.1</span>Career Hub is a ghost town — your #1 strategic gap</h3>
+    <p>Here's the uncomfortable one. Your stated goal is <strong>IB → VC, tech focus</strong>. The single highest-leverage activity for that, starting now and especially the summer before ND, is <strong>building a network</strong>. Your Career Hub has the perfect schema for it — Contacts, Firms, Outreach Log, Coffee Chats, priority tiers, ND grad-year tracking. And it has <strong>zero contacts, zero outreach, zero coffee chats.</strong></p>
+    <p>The page itself still says "Goal: add 10 ND alumni before fall move-in" and the plugin commands that would power it (<code>/network</code>, <code>/alumni-find</code>, <code>/firm-research</code>) are marked "Phase 2 — not built." This is the biggest disconnect between your ambitions and your system. Everything else is polishing how you study and lift; this is the thing that actually moves your career.</p>
+    <div class="ev"><b>Evidence:</b> Contacts data source empty; Career Hub page shows v0.1.0 with all three commands unbuilt; Recruiting Pipeline "empty until ~Spring 2027."</div>
+    <div class="fix"><b>Fix &middot; highest career ROI</b> — Activate it now, not in "Phase 2." A weekly auto-task ("reach out to 2 ND alumni in PE/VC"), Chrome-driven LinkedIn alumni pulls into Contacts, and an auto follow-up task whenever you log outreach. You have a writing plugin with cold-outreach already — wire it to the Hub. Turn the empty schema into a living pipeline before fall.</div>
+    <div class="tags"><span class="tag imp">Impact: critical</span><span class="tag eff">Effort: medium</span><span class="tag">Career</span></div>
+  </div>
+
+  <div class="card dormant">
+    <h3><span class="id">2.2</span>Finance agent has stopped teaching you</h3>
+    <p>Six consecutive weekly theses have landed on the <strong>exact same conclusion</strong>: best-in-class platform, DCF-vs-market gap, "avoid at spot." PLTR, CRWD, AMD, NET, DBX, then SpaceX at a –94% gap. The agent itself flagged this as a structural framework gap, not noise. When every output rhymes, you've stopped learning from them — you're just confirming that DCF underprices optionality.</p>
+    <div class="ev"><b>Evidence:</b> pending_actions "finance_sector_pattern_6x"; probability-weighted FV vs spot: PLTR –74%, CRWD –39%, AMD –38%, NET –17%, DBX –39%, SpaceX –94%.</div>
+    <div class="fix"><b>Fix</b> — Diversify the <em>method and the muscle</em>, not just the ticker. Rotate deliverable types: an LBO rep one week, a comps drill the next, an earnings teardown, an optionality/SOTP framework for the hyper-capex names. Force non-tech sectors periodically. The goal is reps across the analyst skill tree, not a 7th "avoid at spot."</div>
+    <div class="tags"><span class="tag imp">Impact: high</span><span class="tag eff">Effort: low</span><span class="tag">Finance · Learning</span></div>
+  </div>
+
+  <div class="card dormant">
+    <h3><span class="id">2.3</span>The XP economy's back half may be unused</h3>
+    <p>You built a full RPG layer — XP Ledger, Gold, Loot Table (D20 on Hard tasks), Rewards Shop, Achievements. The front half (earning XP from tasks/habits) clearly drives you. But the <strong>back half — actually spending Gold and rolling loot — is where these systems usually die.</strong> If you're not redeeming rewards, the economy is one-directional and the dopamine loop is half-open.</p>
+    <div class="ev"><b>Evidence:</b> Rewards Shop, Loot Table, Achievements all exist but tucked in the collapsed Archives toggle; no recent redemption activity surfaced in logs.</div>
+    <div class="fix"><b>Decide</b> — Either make redemption a real ritual (weekly "spend your Gold" in the Sunday review) or simplify. A reward you never claim is just a number.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: low</span><span class="tag">Motivation</span></div>
+  </div>
+
+  <!-- ===================== TIER 3 ===================== -->
+  <div class="tier-head"><span class="tier-l t3">TIER 3</span><span class="tier-d"><strong>Untracked domains</strong> — whole areas of your life with no home in the OS.</span></div>
+
+  <div class="card gap">
+    <h3><span class="id">3.1</span>You're a finance guy with no personal-finance tracking</h3>
+    <p>The deepest irony in the system. You're building DCFs and studying PE returns, but there is <strong>no budget, no spending log, no net-worth or savings tracker</strong> for your own money. Investment <em>learning</em> is well covered; personal <em>money management</em> — the thing every adult needs and the thing that compounds longest — has zero presence.</p>
+    <div class="fix"><b>Add</b> — A lightweight Personal Finance DB (income, expenses, savings, simple net-worth) + a monthly review. Even at student scale, the habit is the point, and you'll be glad it exists before your first paycheck.</div>
+    <div class="tags"><span class="tag imp">Impact: high</span><span class="tag eff">Effort: low</span><span class="tag">Personal Finance</span></div>
+  </div>
+
+  <div class="card gap">
+    <h3><span class="id">3.2</span>No "Summer 2026" or "College Transition" command center</h3>
+    <p>You're in a rare, high-stakes window: high school done (May 13), ND not started. This summer is the last fully free runway you'll have for years, and the move to Notre Dame is a major life event — yet there's <strong>no dedicated tracker</strong> for either. Course registration, dorm/move logistics, summer goals, orientation, what to lock in before move-in — all of it is floating without a home.</p>
+    <div class="fix"><b>Add</b> — A time-boxed "Summer → ND" project with two lanes: (1) summer accomplishments (finance reps, coding, network-building, fitness bulk), (2) transition logistics with hard dates. This is the most time-sensitive new tracker on the list.</div>
+    <div class="tags"><span class="tag imp">Impact: high</span><span class="tag eff">Effort: low</span><span class="tag">Life Transition</span></div>
+  </div>
+
+  <div class="card gap">
+    <h3><span class="id">3.3</span>Relationships &amp; social life have no presence</h3>
+    <p>Career Hub tracks <em>professional</em> contacts (empty). Nothing tracks the <em>personal</em> side — friends, family, the people you'll want to stay close to when you move cross-country, and the new ones you'll meet at ND. For a major relocation, a light "stay in touch" loop matters more than most productivity tooling.</p>
+    <div class="fix"><b>Add</b> — A minimal relationships tracker (person, last contact, a nudge cadence). It doesn't need to be elaborate — just enough that nobody important goes 3 months without a text by accident.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: low</span><span class="tag">Social</span></div>
+  </div>
+
+  <div class="card gap">
+    <h3><span class="id">3.4</span>The learning-consumption loop is open</h3>
+    <p>Your Media Curator now fills a Media DB daily and the Resources DB exists — good. But there's <strong>no capture of what you actually consumed and what you took from it.</strong> Content flows in; nothing closes the loop on "watched / read → one insight → retained." For someone whose edge is learning fast, an open consumption loop leaks the most valuable thing: retention.</p>
+    <div class="fix"><b>Add</b> — A one-tap "consumed + 1 takeaway" field on Media/Resources, optionally surfaced in the weekly review as "what you learned this week." Tiny friction, big compounding.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: low</span><span class="tag">Learning</span></div>
+  </div>
+
+  <!-- ===================== TIER 4 ===================== -->
+  <div class="tier-head"><span class="tier-l t4">TIER 4</span><span class="tier-d"><strong>Efficiency cuts</strong> — kill grunt work, plug leaks, save time &amp; energy.</span></div>
+
+  <div class="card cut">
+    <h3><span class="id">4.1</span>Deadline leaks — money is falling through right now</h3>
+    <p>This isn't hypothetical. <strong>Scholarships 2026 is 24 days from its June 30 deadline with nothing started</strong>, and it's been sitting overdue. Your memory has a "never drop overdue tasks" rule, but the system isn't <em>escalating</em> time-sensitive, high-consequence items hard enough — a scholarship is literal free money about to expire.</p>
+    <div class="fix"><b>Fix</b> — A deadline sentinel in the 6 AM daily briefing: scan tasks/scholarships/applications for anything with money or career consequences inside 30 days and escalate loudly (not a quiet reschedule). Overdue ≠ done; high-stakes overdue should get louder each day.</div>
+    <div class="tags"><span class="tag imp">Impact: critical</span><span class="tag eff">Effort: low</span><span class="tag">Deadlines</span></div>
+  </div>
+
+  <div class="card cut">
+    <h3><span class="id">4.2</span>Database sprawl across two "brains"</h3>
+    <p>Your databases are spread across at least two parent trees — the Life OS page and a separate "Second Brain (1)" page (where Time Log lives). Plus a known unresolved issue: <strong>three competing Habit Tracker candidates</strong>. Sprawl makes the system harder to trust and to automate against.</p>
+    <div class="ev"><b>Evidence:</b> Time Log parent = "Second Brain (1)"; memory note: "Habit Tracker (3 candidates — needs disambiguation)."</div>
+    <div class="fix"><b>Fix</b> — One consolidation pass: pick the canonical Habit Tracker and archive the other two; pull stray DBs under the Life OS tree (or document why they're separate). Update reference_notion_ids afterward.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: medium</span><span class="tag">Hygiene</span></div>
+  </div>
+
+  <div class="card cut">
+    <h3><span class="id">4.3</span>Confirm XP/Gold logging isn't manual grunt work</h3>
+    <p>If you're hand-entering XP/Gold ledger rows when you finish tasks, that's exactly the repetitive work this OS should eat. The point of the gamification is that it's <em>automatic</em> — completing a task should mint its own XP.</p>
+    <div class="fix"><b>Verify</b> — Make sure XP/Gold posts automatically on task completion (formula rollup or an agent step). If it's manual, automate it — never make yourself the data-entry clerk for your own reward system.</div>
+    <div class="tags"><span class="tag imp">Impact: medium</span><span class="tag eff">Effort: low</span><span class="tag">Automation</span></div>
+  </div>
+
+  <div class="card cut">
+    <h3><span class="id">4.4</span>Screen-time &amp; sleep behavioral loop has trackers but no teeth</h3>
+    <p>The Screen Time Tracker DB exists but (like Time Log) appears unfed, and sleep data is broken upstream with Zepp. So the "use my phone less / sleep better" loop has the furniture but no signal and no intervention — it can't nudge you because it can't see you.</p>
+    <div class="fix"><b>Fix</b> — Once 1.1 re-lights Zepp, surface a single weekly behavioral nudge ("phone up 22% / sleep down 40 min — pick one to fix"). One actionable line beats a dashboard nobody reads.</div>
+    <div class="tags"><span class="tag imp">Impact: low</span><span class="tag eff">Effort: medium</span><span class="tag">Behavior</span></div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================== ROADMAP ===================== -->
+  <h2><span class="num">05</span>Prioritized roadmap — do them in this order</h2>
+  <p class="lead">Sequenced by leverage. The first four are mostly repairs of things you already built — highest return, lowest effort.</p>
+  <ol class="road">
+    <li><b>Re-light Health via the MCPs.</b> Retire the broken CLIs, point the Health agent at the zepp-health + cronometer connectors. Stops 5 weeks of fictional reviews. <em>(1.1)</em></li>
+    <li><b>Stand up the deadline sentinel</b> and rescue Scholarships 2026 this week — 24 days left. <em>(4.1)</em></li>
+    <li><b>Activate the Career Hub.</b> Weekly "reach 2 alumni" auto-task + LinkedIn pulls + outreach follow-ups. Your highest career-ROI move before fall. <em>(2.1)</em></li>
+    <li><b>Auto-feed Time Log from the calendar.</b> Real attention data with zero manual logging; fixes the weekly-review number. <em>(1.2)</em></li>
+    <li><b>Add silent-failure retry + alerts</b> and triage the research queue. <em>(1.3)</em></li>
+    <li><b>Spin up the Summer → ND transition project.</b> Time-sensitive; the window is now. <em>(3.2)</em></li>
+    <li><b>Diversify the Finance agent</b> across deliverable types and sectors so it teaches again. <em>(2.2)</em></li>
+    <li><b>Add the personal-finance tracker.</b> The habit that compounds longest. <em>(3.1)</em></li>
+    <li><b>Decide on Agent Dispatch</b> — deploy or shelve, don't leave it dark. <em>(1.4)</em></li>
+    <li><b>Consolidation pass</b> — one Habit Tracker, one brain, verify XP auto-posts. <em>(4.2, 4.3)</em></li>
+  </ol>
+
+  <h2><span class="num">06</span>The one-line summary</h2>
+  <div class="verdict">
+    <p class="lead">You've out-built your own maintenance. <strong>Stop adding; start repairing and activating.</strong> Re-light Health, rescue the scholarship, and turn the Career Hub from a beautiful empty schema into the thing that actually gets you to VC. Everything else is polish on a machine whose best parts are currently switched off.</p>
+  </div>
+
+  <div class="foot">
+    Life OS Full System Audit · June 6, 2026 · Built from the live Notion workspace, AgentOS SystemMap, scheduled-task registry, activity &amp; pending-action logs.<br>
+    Scope: Notion pages, dashboards, widgets, agents &amp; automations — per request, individual Claude skills/plugins were not audited.
+  </div>
+
+</div>
+</body>
+</html>
