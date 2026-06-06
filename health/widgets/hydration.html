@@ -7,7 +7,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:290px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
-  body{display:flex;flex-direction:column;padding:16px 18px 12px}
+  body{display:flex;flex-direction:column;padding:16px 18px 12px;position:relative}
   .heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
     letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:10px}
   .top{display:flex;align-items:center;gap:18px}
@@ -33,9 +33,25 @@
   .bar-fill.today-bar{background:rgba(124,192,240,.95)}
   .oz-val{font-size:8px;color:rgba(255,255,255,.4);text-align:center}
   .footer{margin-top:auto;font-size:8px;color:rgba(255,255,255,.28);padding-top:8px}
+  .add-row{display:flex;align-items:center;gap:9px;margin-top:3px}
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:5px;border:none;cursor:pointer;
+    border-radius:9px;padding:8px 13px;background:rgba(90,169,230,.16);color:#9fd2f5;font-weight:800;
+    font-size:12px;-webkit-tap-highlight-color:transparent;transition:transform .08s ease,background .15s ease}
+  .add-btn:hover{background:rgba(90,169,230,.28)}
+  .add-btn:active{transform:scale(.92)}
+  .add-btn .plus{font-size:16px;line-height:1;margin-top:-1px}
+  .undo-btn{border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.34);
+    font-size:11px;font-weight:700;padding:6px 3px;-webkit-tap-highlight-color:transparent}
+  .undo-btn:hover{color:rgba(255,255,255,.62)}
+  .undo-btn:disabled{opacity:.22;cursor:default}
+  .flash{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:rgba(90,169,230,.95);
+    color:#06121c;font-weight:800;font-size:10px;padding:3px 10px;border-radius:11px;opacity:0;
+    pointer-events:none;transition:opacity .2s ease,top .25s ease;z-index:9}
+  .flash.show{opacity:1;top:3px}
 </style>
 </head>
 <body>
+<div class="flash" id="flash">+8 oz</div>
 <div class="heading" id="heading">Hydration — Today</div>
 
 <div class="top">
@@ -54,6 +70,10 @@
     <div class="pct" id="pct">—</div>
     <div class="goal" id="goal">Goal — oz</div>
     <div class="rem" id="rem"></div>
+    <div class="add-row">
+      <button class="add-btn" id="addBtn"><span class="plus">+</span>8 oz</button>
+      <button class="undo-btn" id="undoBtn" title="Undo last tap">undo</button>
+    </div>
   </div>
 </div>
 
@@ -71,10 +91,48 @@ const FALLBACK = {
   footer: 'Goal 130 oz · total water (drinks + food) from Cronometer'
 };
 
-function render(d) {
+let DATA = FALLBACK;
+
+// --- Manual quick-add layer (localStorage) --------------------------------
+// The pipeline refreshes today_oz from Cronometer every 6h. The + button lets
+// Eddie log water instantly between refreshes. Taps are stored locally (per
+// browser) keyed by date and layered on top of the pipeline's Cronometer value.
+const MANUAL_KEY = 'hydration_manual_v1';
+const STEP_OZ = 8;
+
+function todayKey(){ return new Date().toLocaleDateString('en-CA'); }  // YYYY-MM-DD, local (PST)
+function loadManual(){ try { return JSON.parse(localStorage.getItem(MANUAL_KEY)) || {}; } catch(e){ return {}; } }
+function saveManual(m){
+  const keys = Object.keys(m).sort();
+  while (keys.length > 4) delete m[keys.shift()];      // keep only the last few days
+  try { localStorage.setItem(MANUAL_KEY, JSON.stringify(m)); } catch(e){}
+}
+function manualToday(){ return loadManual()[todayKey()] || 0; }
+
+function addWater(delta){
+  const m = loadManual(), k = todayKey();
+  m[k] = Math.max(0, Math.round((m[k] || 0) + delta));
+  saveManual(m);
+  paint();
+  if (delta > 0) showFlash('+' + delta + ' oz');
+}
+
+let flashTimer = null;
+function showFlash(txt){
+  const f = document.getElementById('flash');
+  f.textContent = txt; f.classList.add('show');
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(()=> f.classList.remove('show'), 850);
+}
+
+function render(d){ DATA = d; paint(); }
+
+function paint() {
+  const d = DATA;
   const target = d.target_oz || 130;
-  const today = d.today_oz || 0;
-  const pct = d.pct != null ? d.pct : Math.round(today / target * 100);
+  const manual = manualToday();
+  const today = (d.today_oz || 0) + manual;
+  const pct = Math.round(today / target * 100);
 
   document.getElementById('heading').textContent = 'Hydration — ' + (d.date_label || 'Today');
   document.getElementById('oz').textContent = Math.round(today);
@@ -87,9 +145,13 @@ function render(d) {
   const frac = Math.max(0, Math.min(1, pct / 100));
   document.getElementById('ring').setAttribute('stroke-dashoffset', circ * (1 - frac));
 
+  const undoBtn = document.getElementById('undoBtn');
+  if (undoBtn) undoBtn.disabled = manual <= 0;
+
   const days = d.week?.labels || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const oz = d.week?.oz || [];
+  const oz = (d.week?.oz || []).slice();
   const todayIdx = d.week?.today_index ?? 6;
+  if (manual > 0) oz[todayIdx] = (oz[todayIdx] || 0) + manual;   // reflect taps in today's bar
   const maxOz = Math.max(target, ...oz.filter(v => v != null), 1);
 
   const grid = document.getElementById('grid');
@@ -109,6 +171,9 @@ function render(d) {
 
   document.getElementById('footer').textContent = d.footer || '';
 }
+
+document.getElementById('addBtn').addEventListener('click', ()=> addWater(STEP_OZ));
+document.getElementById('undoBtn').addEventListener('click', ()=> { if (manualToday() > 0) addWater(-STEP_OZ); });
 
 (async function () {
   let d = FALLBACK;
