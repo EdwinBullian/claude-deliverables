@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POD Venture — 90-Day Validation Plan & Agent-Fleet Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parch:#f6f1e6;--parch-2:#efe7d6;--card:#fbf8f0;
+    --ink:#2c2a26;--ink-soft:#55514a;--line:#e2d8c3;--line-strong:#d4c7ab;
+    --accent:#b5673a;--accent-2:#5f7a6b;--accent-3:#7d6ca3;--gold:#c79a3c;
+    --green:#3f7a52;--amber:#b8862a;--red:#a8412f;--mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--parch);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.62;font-size:16.5px}
+  .wrap{max-width:920px;margin:0 auto;padding:54px 28px 90px}
+  header.masthead{border-bottom:2px solid var(--line-strong);padding-bottom:26px;margin-bottom:14px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-weight:700;font-size:38px;line-height:1.1;margin:0 0 14px}
+  .sub{color:var(--ink-soft);font-size:17px;max-width:680px}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:20px;display:flex;flex-wrap:wrap;gap:18px}
+  .meta b{color:var(--ink)}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:27px;margin:54px 0 6px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:20px}
+  h2 .num{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:500;margin-right:10px;vertical-align:middle}
+  h3{font-weight:700;font-size:18px;margin:28px 0 6px}
+  p{margin:12px 0}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(181,103,58,.3)}
+  ul,ol{margin:12px 0;padding-left:22px}li{margin:7px 0}
+  strong{font-weight:700}
+  .mono{font-family:var(--mono)}
+  .note{border-radius:10px;padding:15px 18px;margin:18px 0;font-size:15px}
+  .note.good{background:#eaf1ea;border:1px solid #c6dcc8;border-left:4px solid var(--green)}
+  .note.warn{background:#f7efe2;border:1px solid #e6d3a6;border-left:4px solid var(--amber)}
+  .note.danger{background:#f7e9e3;border:1px solid #e7c3b6;border-left:4px solid var(--red)}
+  .note.key{background:var(--card);border:1px solid var(--line-strong);border-left:5px solid var(--accent)}
+  .badge{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:5px;vertical-align:middle;white-space:nowrap}
+  .b-est{background:#f3ead7;color:var(--amber);border:1px solid #e6d3a6}
+
+  .tbl-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line-strong);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--card)}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--parch-2);font-weight:700;font-size:12.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft)}
+  tr:last-child td{border-bottom:none}
+  td.num{font-family:var(--mono);white-space:nowrap;text-align:right}
+  .pill{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block;white-space:nowrap}
+  .p-auto{background:#e3efe5;color:var(--green)}
+  .p-human{background:#f4ead4;color:var(--amber)}
+  .p-forbid{background:#f5ddd5;color:var(--red)}
+
+  /* phase blocks */
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0;position:relative;overflow:hidden}
+  .phase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent)}
+  .phase.p0::before{background:var(--ink-soft)}
+  .phase.p1::before{background:var(--accent)}
+  .phase.p2::before{background:var(--accent-2)}
+  .phase.p3::before{background:var(--accent-3)}
+  .phase .ph{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .phase h3{margin:4px 0 2px;font-family:'Fraunces',serif;font-size:21px;font-weight:600}
+  .phase .goal{font-size:14px;color:var(--ink-soft);font-style:italic;margin-bottom:6px}
+
+  /* gate */
+  .gate{background:var(--parch-2);border:2px dashed var(--line-strong);border-radius:12px;padding:18px 22px;margin:20px 0}
+  .gate .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+
+  /* agent cards */
+  .agent{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin:12px 0}
+  .agent .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .agent .nm{font-weight:700;font-size:16.5px}
+  .agent .role{font-size:14.5px;color:var(--ink-soft)}
+  .agent .det{font-size:13.5px;color:var(--ink-soft);margin-top:8px}
+  .agent .det b{color:var(--ink)}
+  .agent .tools{font-family:var(--mono);font-size:12px;color:var(--accent-2)}
+
+  /* pipeline */
+  .pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0;font-family:var(--mono);font-size:12.5px}
+  .pipe .node{background:var(--parch-2);border:1px solid var(--line-strong);border-radius:8px;padding:8px 11px;font-weight:600}
+  .pipe .node.gate{background:#f4ead4;border-color:#e6d3a6;color:var(--amber)}
+  .pipe .node.auto{background:#e3efe5;border-color:#c6dcc8;color:var(--green)}
+  .pipe .arr{color:var(--accent);font-weight:700}
+
+  nav.toc{background:var(--parch-2);border:1px solid var(--line-strong);border-radius:11px;padding:18px 22px;margin:26px 0;font-size:14.5px}
+  nav.toc div{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  nav.toc ol{columns:2;column-gap:30px;margin:0;padding-left:20px}
+  @media(max-width:600px){nav.toc ol{columns:1}h1{font-size:29px}.wrap{padding:34px 18px 70px}}
+  footer{margin-top:60px;padding-top:22px;border-top:2px solid var(--line-strong);font-size:13px;color:var(--ink-soft)}
+  .human{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--red);background:#f5ddd5;padding:2px 7px;border-radius:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="kicker">Build Plan · Companion to the Landscape Report</div>
+  <h1>90-Day Validation Plan &amp; Agent-Fleet Architecture</h1>
+  <p class="sub">How to test the cute-animal POD thesis as a disciplined kill/scale experiment — and the AI agent org that runs it, mapped to the legal automation lanes.</p>
+  <div class="meta">
+    <span><b>For:</b> Eddie</span>
+    <span><b>Date:</b> June 5, 2026</span>
+    <span><b>Horizon:</b> 90 days</span>
+    <span><b>Mode:</b> Etsy-first, organic, original</span>
+  </div>
+</header>
+
+<div class="note key">
+  <strong>The whole plan in one sentence:</strong> spend ~$200–400 and 90 days proving that <em>one</em> original sub-niche can pull free Etsy search demand profitably, with an agent fleet doing the volume work and a human holding three gates — <span class="human">TASTE</span> <span class="human">MONEY</span> <span class="human">REVIEW/BOT</span> — then make a hard, pre-committed kill-or-scale call. <span class="badge b-est">EST</span> — all figures here are planning estimates.
+</div>
+
+<nav class="toc">
+  <div>Contents</div>
+  <ol>
+    <li><a href="#hyp">The hypothesis &amp; the one metric</a></li>
+    <li><a href="#budget">Budget &amp; what you're risking</a></li>
+    <li><a href="#p0">Phase 0 — Setup (Week 0)</a></li>
+    <li><a href="#p1">Phase 1 — Launch (Wks 1–4)</a></li>
+    <li><a href="#p2">Phase 2 — Iterate (Wks 5–8)</a></li>
+    <li><a href="#p3">Phase 3 — Scale/Kill (Wks 9–12)</a></li>
+    <li><a href="#gate">The decision gate</a></li>
+    <li><a href="#fleet">Agent-fleet architecture</a></li>
+    <li><a href="#pipeline">The pipeline &amp; data flow</a></li>
+    <li><a href="#guardrails">Compliance guardrails</a></li>
+    <li><a href="#buildorder">Build order &amp; stack</a></li>
+  </ol>
+</nav>
+
+<!-- HYP -->
+<h2 id="hyp"><span class="num">01</span>The Hypothesis &amp; the One Metric</h2>
+<p><strong>Hypothesis:</strong> "A coherent, original, witty brand in <em>[one chosen sub-niche]</em> can reach <strong>≥2 organic Etsy sales/day at ≥30% net margin</strong> within 90 days, on &lt;$400 cash and a mostly-automated operation."</p>
+<p><strong>The one metric that decides everything:</strong> <span class="mono">organic conversion on found listings</span> — i.e., are Etsy shoppers who <em>see</em> your listings buying them, without paid ads? Everything else (designs, SEO, volume) is in service of moving that number.</p>
+<div class="note good"><strong>Why this metric:</strong> it isolates the only thing that makes single-tee POD viable for a beginner — free qualified demand that converts. If organic doesn't convert, no amount of ad spend or automation saves it; if it does, the agent fleet just pours fuel on a working fire.</div>
+
+<!-- BUDGET -->
+<h2 id="budget"><span class="num">02</span>Budget &amp; What You're Actually Risking</h2>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Item</th><th>Cost</th><th>Notes</th></tr>
+  <tr><td>Etsy listing fees (40 listings × renewals)</td><td class="num">~$15</td><td>$0.20 each; trivial</td></tr>
+  <tr><td>Physical samples (order your own designs)</td><td class="num">~$60–100</td><td>Non-negotiable — you must hold the product &amp; photograph it</td></tr>
+  <tr><td>Design tooling (AI gen + vector cleanup)</td><td class="num">~$20–60</td><td>Image-gen subscription + an SVG/upscale tool</td></tr>
+  <tr><td>SEO/research tool (eRank or EverBee)</td><td class="num">~$0–30/mo</td><td>Free tiers exist; paid pays for itself if validated</td></tr>
+  <tr><td>LLC + EIN (optional but recommended)</td><td class="num">~$0–120</td><td>CA LLC has fees; sole-prop is $0 to start</td></tr>
+  <tr><td>Light Pinterest ads (optional, Phase 2)</td><td class="num">~$50–100</td><td>Only to test discovery, not to carry the business</td></tr>
+  <tr><td><strong>Total at-risk (90 days)</strong></td><td class="num"><strong>~$200–400</strong></td><td>Plus your time + the agent-build effort</td></tr>
+</table>
+</div>
+<p><span class="badge b-est">EST</span> The real cost isn't cash — it's the build effort for the agent fleet. That's fine, because the system <em>is</em> a goal. Cap cash hard at $400 until the decision gate; do not pour money into ads to "make it work."</p>
+
+<!-- P0 -->
+<h2 id="p0"><span class="num">03</span>Phase 0 — Setup</h2>
+<div class="phase p0">
+  <div class="ph">Week 0 · Foundations</div>
+  <h3>Pick the lane, build the rails</h3>
+  <div class="goal">Goal: everything in place to launch designs on day 1 of week 1.</div>
+  <ul>
+    <li><strong>Pick ONE sub-niche</strong> (recommend axolotl-with-a-voice or "ugly-cute cryptids" from the landscape report). Define a brand name, voice, and 3–5 caption "formats."</li>
+    <li><strong>Accounts:</strong> Etsy seller account; Printify account + pin one well-reviewed US Bella+Canvas DTG provider; Pinterest business account.</li>
+    <li><strong>Legal:</strong> decide sole-prop vs LLC; set aside the USPTO Class 25 check step for every caption. <span class="human">MONEY</span></li>
+    <li><strong>Design system:</strong> lock a visual style (palette, line weight, mascot) so 20 designs look like one brand, not 20 strangers.</li>
+    <li><strong>Stand up the agent scaffolding</strong> (see §08) in draft mode — nothing publishes yet.</li>
+  </ul>
+</div>
+
+<!-- P1 -->
+<h2 id="p1"><span class="num">04</span>Phase 1 — Launch &amp; First-Sale Validation</h2>
+<div class="phase p1">
+  <div class="ph">Weeks 1–4 · Prove demand exists</div>
+  <h3>Ship 15–20 original listings, optimize, get the first sales</h3>
+  <div class="goal">Goal: first organic sale within 2–6 weeks; learn which designs/keywords get impressions.</div>
+  <ul>
+    <li><strong>Launch 15–20 genuinely original designs</strong>, each with full production-partner + AI disclosure, SEO-optimized titles/tags (agent-drafted, human-approved). <span class="human">TASTE</span></li>
+    <li><strong>Order samples</strong> of your top 3–5; shoot real lifestyle photos (model shots convert far better than flat mockups).</li>
+    <li><strong>Track per-listing:</strong> impressions → visits → favorites → sales. The funnel tells you if it's a <em>visibility</em> problem (SEO) or a <em>conversion</em> problem (design/price/photos).</li>
+    <li><strong>Do NOT run paid ads yet.</strong> Opt out of Etsy Offsite Ads if eligible while under $10k.</li>
+  </ul>
+</div>
+<div class="note warn"><strong>Phase 1 checkpoint (end Wk 4):</strong> if you have &lt;1,000 total impressions across 20 listings, it's an SEO/keyword problem — fix tags before anything else. Impressions but no sales = design/photo/price problem.</div>
+
+<!-- P2 -->
+<h2 id="p2"><span class="num">05</span>Phase 2 — Iterate on Signal</h2>
+<div class="phase p2">
+  <div class="ph">Weeks 5–8 · Double down on what moves</div>
+  <h3>Kill dead designs, clone winners, add a discovery channel</h3>
+  <div class="goal">Goal: find the 2–3 designs/angles that get traction and expand around them.</div>
+  <ul>
+    <li><strong>Cull &amp; clone:</strong> retire zero-impression designs; produce variations of anything getting favorites/sales (same joke, new animal/format).</li>
+    <li><strong>Expand to 40–50 listings</strong> concentrated around proven angles — this is where agent volume pays off.</li>
+    <li><strong>Turn on Pinterest</strong> (organic pins for every listing + a small $50–100 ad test) to test whether external discovery lifts the Etsy funnel. <span class="human">MONEY</span></li>
+    <li><strong>Request real reviews</strong> from actual buyers via Etsy's allowed flow. <span class="human">REVIEW/BOT</span> — never fabricate.</li>
+    <li><strong>Start an email list</strong> (Etsy doesn't give you the customer relationship — begin owning it).</li>
+  </ul>
+</div>
+
+<!-- P3 -->
+<h2 id="p3"><span class="num">06</span>Phase 3 — Scale or Kill</h2>
+<div class="phase p3">
+  <div class="ph">Weeks 9–12 · Push the winners, then decide</div>
+  <h3>Scale proven angles; prep the decision</h3>
+  <div class="goal">Goal: hit the success metric or prove you can't — cleanly, with data.</div>
+  <ul>
+    <li><strong>Scale the winners:</strong> more variations, bundles/2-packs to lift AOV (the only thing that later makes paid ads viable), seasonal angles.</li>
+    <li><strong>Add higher-margin formats</strong> for proven designs (stickers, totes, mugs at 50–80% gross) to raise blended margin.</li>
+    <li><strong>Consider a Shopify storefront</strong> only if you have a repeat-buyer base + email list worth owning. Not before.</li>
+    <li><strong>Assemble the decision pack:</strong> sales/day, net margin, organic conversion, top designs, CAC if you tested Pinterest.</li>
+  </ul>
+</div>
+
+<!-- GATE -->
+<h2 id="gate"><span class="num">07</span>The Decision Gate <span style="font-size:15px;color:var(--ink-soft)">(pre-commit now, judge in week 12)</span></h2>
+<div class="gate">
+  <div class="lbl">✅ SCALE if (by day 90)</div>
+  <ul>
+    <li><strong>≥2 organic sales/day</strong> sustained over the final 2 weeks, AND</li>
+    <li><strong>≥30% net margin</strong> on organic sales, AND</li>
+    <li>at least <strong>2–3 repeatable winning angles</strong> identified (not one fluke listing).</li>
+  </ul>
+</div>
+<div class="gate" style="border-color:#e7c3b6">
+  <div class="lbl" style="color:var(--red)">🔻 KILL / PIVOT if (by day 90)</div>
+  <ul>
+    <li>&lt;0.5 organic sales/day despite &gt;5,000 impressions (demand isn't there for this niche), OR</li>
+    <li>conversion only happens with paid spend at &lt;3:1 ROAS (no organic engine), OR</li>
+    <li>you're relying on a single lucky listing with nothing repeatable behind it.</li>
+  </ul>
+  <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)"><strong>Pivot options:</strong> swap the sub-niche (cheap — the fleet is reusable), or repurpose the entire agent system toward a different product category. The system survives even if this niche doesn't.</p>
+</div>
+<div class="note good"><strong>Why a pre-committed gate matters:</strong> POD founders mostly fail by <em>refusing to quit</em> — pouring ad money into a dead niche. Deciding the kill criteria <em>now</em>, while unemotional, is the single best risk control you have.</div>
+
+<!-- FLEET -->
+<h2 id="fleet"><span class="num">08</span>Agent-Fleet Architecture</h2>
+<p>You're the <strong>Creative Director / CEO</strong>. The fleet does the labor; you hold three gates — <span class="human">TASTE</span> (what's good &amp; on-brand), <span class="human">MONEY</span> (anything spending or paying out), <span class="human">REVIEW/BOT</span> (nothing fake, ever). Each agent below is labeled by autonomy: <span class="pill p-auto">AUTO</span> runs unattended, <span class="pill p-human">GATED</span> drafts then waits for you.</p>
+
+<div class="agent">
+  <div class="top"><span class="nm">① Trend Scout</span><span class="pill p-auto">AUTO</span></div>
+  <div class="role">Finds rising animals, aesthetics, and caption angles before they peak.</div>
+  <div class="det"><b>Does:</b> monitors search trends, social tags, marketplace bestsellers; scores opportunities by demand-vs-saturation; files briefs. <b>Guardrail:</b> uses APIs &amp; allowed research tools only — <b>never scrapes Etsy</b> (TOS). <div class="tools">tools: web/search APIs · eRank/EverBee · trends data</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">② Design Studio</span><span class="pill p-human">GATED</span></div>
+  <div class="role">Generates design concepts + captions from Scout briefs.</div>
+  <div class="det"><b>Does:</b> AI-generates art in the locked brand style, drafts witty captions, prepares print-ready files + mockups. <b>Gate:</b> you curate for taste &amp; originality. <span class="human">TASTE</span> <b>Guardrail:</b> originality + IP check before anything advances. <div class="tools">tools: image-gen · vectorizer · Printify mockup API</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">③ Compliance Sentinel</span><span class="pill p-human">GATED</span></div>
+  <div class="role">The legal seatbelt. Clears every design + caption before publish.</div>
+  <div class="det"><b>Does:</b> runs captions against USPTO Class 25 live marks, flags possible character/logo/brand echoes, confirms AI-disclosure + production-partner fields are set. <b>Gate:</b> blocks publish until green. <div class="tools">tools: USPTO search · ruleset checks</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">④ Listing Smith</span><span class="pill p-human">GATED</span></div>
+  <div class="role">Turns approved designs into SEO-optimized Etsy listings.</div>
+  <div class="det"><b>Does:</b> drafts titles/tags/descriptions, sets price &amp; production-partner disclosure, creates the draft listing via API. <b>Gate:</b> human approves first publishes; loosen to AUTO once the pipeline is proven clean. <div class="tools">tools: Etsy API <span class="mono">createDraftListing</span></div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">⑤ Fulfillment Ops</span><span class="pill p-auto">AUTO</span></div>
+  <div class="role">Routes orders to the printer, tracks shipping, flags exceptions.</div>
+  <div class="det"><b>Does:</b> auto-forwards paid orders to Printify, syncs tracking, escalates delays/defects. Cleanest fully-automatable station. <div class="tools">tools: Printify API · order webhooks</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">⑥ CS Concierge</span><span class="pill p-human">GATED</span></div>
+  <div class="role">Drafts customer replies; humans approve money moves.</div>
+  <div class="det"><b>Does:</b> drafts answers to WISMO/sizing/returns; auto-sends routine info. <b>Gate:</b> refunds, replacements, and escalations need your approval. <span class="human">MONEY</span> <div class="tools">tools: Etsy messages · templates</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">⑦ Growth &amp; Social</span><span class="pill p-human">GATED</span></div>
+  <div class="role">Produces Pinterest pins + TikTok/Reels drafts, schedules via official tools.</div>
+  <div class="det"><b>Does:</b> drafts pins/clips for every listing, queues via approved schedulers. <b>Gate:</b> you own brand voice + any ad spend. <span class="human">MONEY</span> <b>Guardrail:</b> <b>no engagement bots</b> (auto-follow/like/comment) — TOS + FTC violation. <div class="tools">tools: Pinterest API · Buffer/Later · Meta/TikTok business tools</div></div>
+</div>
+<div class="agent">
+  <div class="top"><span class="nm">⑧ Analyst</span><span class="pill p-auto">AUTO</span></div>
+  <div class="role">The scoreboard. Tells you what's working against the decision gate.</div>
+  <div class="det"><b>Does:</b> pulls sales/impressions/conversion daily, ranks designs, tracks margin &amp; the §07 gate metrics, sends you a digest. <div class="tools">tools: Etsy API · Printify API · reporting</div></div>
+</div>
+
+<div class="note danger"><strong>The hard "never" list — no agent does any of this:</strong> writing/buying/incentivizing reviews · fabricating ratings, favorites, or follower counts · sockpuppet purchases · scraping Etsy · auto-engagement bots on social. All are TOS-banned and several are illegal under the FTC Consumer Review Rule (up to $53,088/violation). <span class="human">REVIEW/BOT</span></div>
+
+<!-- PIPELINE -->
+<h2 id="pipeline"><span class="num">09</span>The Pipeline &amp; Data Flow</h2>
+<p>How a design travels from idea to fulfilled order, with gates inline:</p>
+<div class="pipe">
+  <span class="node auto">① Trend Scout brief</span><span class="arr">→</span>
+  <span class="node auto">② Design gen</span><span class="arr">→</span>
+  <span class="node gate">TASTE gate</span><span class="arr">→</span>
+  <span class="node gate">③ Compliance clear</span><span class="arr">→</span>
+  <span class="node gate">④ Listing draft</span><span class="arr">→</span>
+  <span class="node gate">publish approve</span><span class="arr">→</span>
+  <span class="node auto">live on Etsy</span>
+</div>
+<div class="pipe">
+  <span class="node auto">order paid</span><span class="arr">→</span>
+  <span class="node auto">⑤ auto-fulfill (Printify)</span><span class="arr">→</span>
+  <span class="node auto">tracking synced</span><span class="arr">→</span>
+  <span class="node gate">⑥ CS if issue</span><span class="arr">→</span>
+  <span class="node auto">⑧ Analyst logs result</span><span class="arr">→</span>
+  <span class="node auto">feeds ① next brief</span>
+</div>
+<p style="font-size:14px;color:var(--ink-soft)">The loop is self-improving: the Analyst's results on what sold feed the Trend Scout's next briefs, so the fleet learns the niche over time. Humans touch only the gates.</p>
+
+<!-- GUARDRAILS -->
+<h2 id="guardrails"><span class="num">10</span>Compliance Guardrails (baked in, not bolted on)</h2>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Risk</th><th>Built-in control</th><th>Owner</th></tr>
+  <tr><td>Etsy suspension — originality</td><td>Design Studio produces original art only; Compliance Sentinel blocks anything echoing known characters/logos</td><td><span class="pill p-human">GATED</span></td></tr>
+  <tr><td>Etsy suspension — disclosure</td><td>Listing Smith auto-fills production-partner + AI disclosure on every listing; publish blocked if missing</td><td><span class="pill p-human">GATED</span></td></tr>
+  <tr><td>Trademark on captions</td><td>USPTO Class 25 live-mark check before publish</td><td><span class="pill p-human">GATED</span></td></tr>
+  <tr><td>Etsy API terms</td><td>No Etsy scraping; research via allowed tools; rate-limit-aware batching</td><td><span class="pill p-auto">AUTO</span></td></tr>
+  <tr><td>FTC fake-review rule</td><td>Reviews never generated or incentivized; only real buyers, via Etsy's flow</td><td><span class="human" style="font-size:10px">REVIEW/BOT</span></td></tr>
+  <tr><td>Social TOS</td><td>Posting via official APIs/schedulers only; zero engagement bots</td><td><span class="pill p-human">GATED</span></td></tr>
+  <tr><td>Overspend</td><td>Hard $400 cap to decision gate; every dollar out needs human approval</td><td><span class="human" style="font-size:10px">MONEY</span></td></tr>
+</table>
+</div>
+
+<!-- BUILD ORDER -->
+<h2 id="buildorder"><span class="num">11</span>Build Order &amp; Suggested Stack</h2>
+<p>Don't build all 8 agents at once. Sequence so you're selling fast and automating progressively:</p>
+<ol>
+  <li><strong>Manual-first MVP (Week 0–1):</strong> you + Design Studio + Compliance, listing by hand. Prove the niche converts before automating it.</li>
+  <li><strong>Automate fulfillment (Wk 2):</strong> Fulfillment Ops — highest ROI, lowest risk, fully legal to run unattended.</li>
+  <li><strong>Automate listing drafts (Wk 3–4):</strong> Listing Smith in draft mode with a human publish-gate.</li>
+  <li><strong>Add the scoreboard (Wk 4):</strong> Analyst — you can't run the decision gate without it.</li>
+  <li><strong>Add growth (Wk 5+):</strong> Trend Scout + Growth &amp; Social once you have winners worth amplifying.</li>
+  <li><strong>Add CS Concierge (as volume warrants):</strong> when message load justifies it.</li>
+</ol>
+<div class="note good"><span class="badge b-est">EST</span> <strong>Stack:</strong> orchestration in whatever you're fluent in (Python is fine); Etsy Open API v3 + Printify API for the operational core; an image-gen model + vectorizer for design; a scheduler (Buffer/Later) for social; a lightweight DB/sheet + the Analyst digest for the scoreboard. Keep a human-approval queue (even a simple dashboard) for the three gates — that queue <em>is</em> your compliance system.</div>
+
+<div class="note key" style="margin-top:30px">
+  <strong>The honest framing:</strong> this plan optimizes for <em>learning cheaply</em>, not for guaranteed revenue. If the niche works, you've got a real store and a showable autonomous system. If it doesn't, you've spent ~$400 and built a reusable agent fleet you can point at the next idea. Either way the system is the durable asset — the t-shirts are just the first thing it sells.
+</div>
+
+<footer>
+  <p><strong>90-Day Validation Plan &amp; Agent-Fleet Architecture.</strong> Companion to the POD Cute-Animal Tee Landscape Report · Prepared for Eddie · June 5, 2026. All budgets, timelines, and metrics are planning estimates <span class="badge b-est">EST</span>; legal controls reflect the sourced rules in the landscape report but are not legal advice.</p>
+</footer>
+
+</div>
+</body>
+</html>
