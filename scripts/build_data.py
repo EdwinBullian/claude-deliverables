@@ -231,18 +231,25 @@ def main(out_path: Path, sections_spec: str) -> int:
         if any(s in needed for s in secs)
     ]
 
-    # Rate-limit Zepp to ~once/day. Each Zepp pull does a fresh login, and
-    # Huami allows ~one active session per account, so every automation login
-    # evicts Eddie's phone. Pulling only when >20h since the last SUCCESSFUL
-    # Zepp data (or when activity is empty) holds phone logouts to ~1/day
-    # instead of every run. Cronometer + Notion don't have this conflict and
-    # keep refreshing every run. Set env FORCE_ZEPP=1 to override.
+    # Rate-limit Zepp to once/day. Each Zepp pull does a fresh login, and Huami
+    # allows ~one active session per account, so every automation login evicts
+    # Eddie's phone. We pull exactly once per local day, and only AFTER a morning
+    # cutoff (ZEPP_PULL_AFTER_HOUR) so last night's sleep has finished syncing to
+    # the Zepp cloud before we read it. The old "20h since last pull" rule landed
+    # the daily pull on the 6 AM cron — before Eddie wakes — so last night hadn't
+    # uploaded yet and the widget showed a day-old night. Now the first cron
+    # at/after the cutoff (the noon run) does the daily pull; later runs skip it.
+    # Cronometer + Notion have no such conflict and refresh every run. Set env
+    # FORCE_ZEPP=1 to override.
+    ZEPP_PULL_AFTER_HOUR = 10  # PST
     now = now_pst()
     last_zepp_data = (previous.get("_meta") or {}).get("last_zepp_data_iso")
     zepp_due = True
     if last_zepp_data and not env("FORCE_ZEPP"):
         try:
-            zepp_due = (now - dt.datetime.fromisoformat(last_zepp_data)) >= dt.timedelta(hours=20)
+            last = dt.datetime.fromisoformat(last_zepp_data)
+            pulled_today = (last.date() == now.date() and last.hour >= ZEPP_PULL_AFTER_HOUR)
+            zepp_due = (now.hour >= ZEPP_PULL_AFTER_HOUR) and not pulled_today
         except Exception:
             zepp_due = True
     if "zepp" in sources_to_run and not zepp_due:
