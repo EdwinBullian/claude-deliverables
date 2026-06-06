@@ -53,9 +53,10 @@
 <div class="header">
   <div class="stats-heading" id="title">Training</div>
   <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Lift</div>
-    <div class="leg"><div class="leg-dot" style="background:#5aa9e6"></div>Basketball</div>
-    <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,.32)"></div>Walk</div>
+    <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,.82)"></div>Walk</div>
+    <div class="leg"><div class="leg-dot" style="background:#f3b56a"></div>Basketball</div>
+    <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Upper</div>
+    <div class="leg"><div class="leg-dot" style="background:#b85820"></div>Legs</div>
   </div>
 </div>
 <div class="chart-wrap"><canvas id="chart"></canvas></div>
@@ -114,13 +115,17 @@ const FALLBACK = {
   ]
 };
 
+// Orange shade scale by workout type:
+//   Walk → white · Basketball → lightest orange ·
+//   Upper-body lift (Push/Pull/Strength) → medium orange · Legs → dark orange
 const LIFT_COLORS = {
-  'Legs':'rgba(184,88,32,.92)','Lower':'rgba(184,88,32,.92)',
-  'Push':'rgba(232,148,58,.92)','Upper':'rgba(232,148,58,.92)',
-  'Pull':'rgba(240,176,96,.90)','Strength':'rgba(232,148,58,.88)'
+  'Legs':'rgba(184,88,32,.95)','Lower':'rgba(184,88,32,.95)',
+  'Push':'rgba(232,148,58,.92)','Pull':'rgba(232,148,58,.92)',
+  'Upper':'rgba(232,148,58,.92)','Strength':'rgba(232,148,58,.92)'
 };
-const BBALL_COLOR = 'rgba(90,169,230,.88)';
-const WALK_COLOR  = 'rgba(255,255,255,.30)';
+const LIFT_DEFAULT = 'rgba(232,148,58,.92)';   // unknown lift type → treat as upper (medium orange)
+const BBALL_COLOR = 'rgba(243,181,106,.92)';   // lightest orange
+const WALK_COLOR  = 'rgba(255,255,255,.82)';   // white
 
 let DATA = FALLBACK;
 
