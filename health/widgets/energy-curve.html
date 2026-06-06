@@ -115,6 +115,30 @@ function render(d) {
     ctx.beginPath(); ctx.arc(x,y,7,0,Math.PI*2); ctx.fillStyle='rgba(148,207,227,.18)'; ctx.fill();
     ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fillStyle='#bfe6f4';
     ctx.shadowColor='rgba(148,207,227,.9)'; ctx.shadowBlur=8; ctx.fill();
+    ctx.shadowBlur=0;
+
+    // Floating value pill that tracks the dot — shows the energy level at
+    // the hovered time right where the cursor is.
+    const pct = Math.round(scrub.val) + '%';
+    ctx.font = '700 12px -apple-system,BlinkMacSystemFont,"Segoe UI","Inter",sans-serif';
+    const tw = ctx.measureText(pct).width;
+    const padX = 7, boxH = 20, boxW = tw + padX*2, r = 5;
+    let bx = x + 11, by = y - boxH - 9;        // default: up-right of the dot
+    if (bx + boxW > chartArea.right) bx = x - 11 - boxW;   // flip left near right edge
+    if (by < chartArea.top) by = y + 9;                    // flip below near top edge
+    if (bx < chartArea.left) bx = chartArea.left + 2;
+    ctx.beginPath();
+    ctx.moveTo(bx+r,by);
+    ctx.arcTo(bx+boxW,by,bx+boxW,by+boxH,r);
+    ctx.arcTo(bx+boxW,by+boxH,bx,by+boxH,r);
+    ctx.arcTo(bx,by+boxH,bx,by,r);
+    ctx.arcTo(bx,by,bx+boxW,by,r);
+    ctx.closePath();
+    ctx.fillStyle='rgba(20,28,34,.92)';
+    ctx.strokeStyle='rgba(148,207,227,.55)'; ctx.lineWidth=1;
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#fff'; ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillText(pct, bx+padX, by+boxH/2+0.5);
     ctx.restore();
   }};
 
