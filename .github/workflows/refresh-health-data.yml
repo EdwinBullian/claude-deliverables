@@ -13,6 +13,16 @@ on:
         required: false
         type: boolean
         default: false
+      sections:
+        description: 'Sections preset (full/fast/nutrition) or comma list'
+        required: false
+        type: string
+        default: 'full'
+      force_zepp:
+        description: 'Force a Zepp re-pull (override the once/day guard)'
+        required: false
+        type: string
+        default: 'false'
 
 permissions:
   contents: write   # required so the job can commit back to main
@@ -59,8 +69,10 @@ jobs:
           NOTION_TOKEN:             ${{ secrets.NOTION_TOKEN }}
           NOTION_WORKOUT_DB_ID:     ${{ secrets.NOTION_WORKOUT_DB_ID }}
           NOTION_SUPPLEMENT_DB_ID:  ${{ secrets.NOTION_SUPPLEMENT_DB_ID }}
+          REFRESH_ENDPOINT:         ${{ vars.REFRESH_ENDPOINT }}
+          FORCE_ZEPP:               ${{ (github.event_name == 'workflow_dispatch' && inputs.force_zepp == 'true') && '1' || '' }}
         run: |
-          python scripts/build_data.py health/widgets/data/data.json
+          python scripts/build_data.py health/widgets/data/data.json --sections "${{ (github.event_name == 'workflow_dispatch' && inputs.sections) || 'full' }}"
         continue-on-error: true   # let us commit a partial update if 1 source dies
 
       - name: Show updated payload (head)
