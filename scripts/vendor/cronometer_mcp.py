@@ -430,6 +430,13 @@ def _fetch_food(food_id: int) -> dict:
 
 # ── Aggregation ───────────────────────────────────────────────────────────────
 
+# Proximate-analysis mass components: protein, fat, carbohydrate, water, ash,
+# alcohol. In per-100 g data these sum to ~100; in a custom recipe's batch
+# totals they sum to the recipe's full gram weight. Used to detect and correctly
+# normalize recipe foods (see _aggregate_day).
+_MASS_COMPONENT_IDS = (203, 204, 205, 255, 207, 221)
+
+
 def _aggregate_day(date: str) -> dict:
     """Pull diary + food nutrition for a date, return totals and per-serving rows."""
     servings = _fetch_day_info(date)
@@ -445,8 +452,18 @@ def _aggregate_day(date: str) -> dict:
     rows = []
     for s in servings:
         food   = foods[s["food_id"]]
-        scale  = s["grams"] / 100.0
-        scaled = {nid: v * scale for nid, v in food["nutrients_per_100g"].items()}
+        npg    = food["nutrients_per_100g"]
+        # Database foods store nutrients per 100 g, so the mass components sum to
+        # ~100. Custom RECIPES come back from getFood as batch TOTALS, so the same
+        # sum equals the recipe's full weight (~1,600 g here). Normalize by that
+        # sum: normal foods still divide by ~100, recipes divide by their real
+        # weight instead of a hard-coded 100 (which inflated every recipe by
+        # weight/100 — ~16x for one chicken recipe). Threshold 110 is safe because
+        # real per-100 g proximate components can never exceed 100.
+        mass_base = sum(npg.get(i, 0.0) for i in _MASS_COMPONENT_IDS)
+        per_unit  = mass_base if mass_base > 110.0 else 100.0
+        scale  = s["grams"] / per_unit
+        scaled = {nid: v * scale for nid, v in npg.items()}
         for nid, v in scaled.items():
             if nid in _PER_FOOD_PCT_IDS:
                 continue   # don't sum per-food percent-of-energy fields
