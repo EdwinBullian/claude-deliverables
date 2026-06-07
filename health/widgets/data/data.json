@@ -298,9 +298,9 @@
   },
   "hydration": {
     "date_label": "Jun 7 — Today",
-    "today_oz": 0.0,
+    "today_oz": 24.0,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 18,
     "week": {
       "labels": [
         "Mon",
@@ -312,29 +312,22 @@
         "Sun"
       ],
       "oz": [
-        34,
-        59,
-        14,
-        24,
-        26,
-        7,
-        0
+        105,
+        99,
+        102,
+        96,
+        114,
+        79,
+        24
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-07T07:45:38-07:00",
-    "last_updated_label": "Jun 7, 7:45 AM PST",
+    "last_updated_iso": "2026-06-07T10:27:41-07:00",
+    "last_updated_label": "Jun 7, 10:27 AM PST",
     "refreshed_sections": [
-      "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
       "hydration"
     ],
     "last_zepp_data_iso": "2026-06-06T22:03:49-07:00",
@@ -347,7 +340,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-07T07:45:42-07:00",
+        "last_ok_iso": "2026-06-07T10:27:44-07:00",
         "error": null
       },
       "notion": {
