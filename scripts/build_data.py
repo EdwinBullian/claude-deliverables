@@ -319,6 +319,7 @@ def main(out_path: Path, sections_spec: str) -> int:
         "last_updated_label": now.strftime("%b %-d, %-I:%M %p PST"),
         "refreshed_sections": requested,
         "last_zepp_data_iso": new_last_zepp,
+        "refresh_endpoint": env("REFRESH_ENDPOINT") or "",
         "sources": meta_sources,
         "schema_version": 2,
     }
