@@ -1,45 +1,88 @@
-# Force-refresh proxy — 5-minute deploy
+# Force-refresh proxy — deploy guide
 
-This Cloudflare Worker lets the dashboard's ⟳ buttons trigger a real pipeline
-refresh without exposing any token in the public widget code.
+The dashboard's ⟳ buttons trigger a real pipeline refresh without exposing any
+token in the public widget code. Three one-time steps below. Until they're done,
+the buttons simply reload the latest data (safe) — they "upgrade" to a true
+source-pull automatically once configured.
+
+---
+
+## 0. Add the workflow inputs (one file I couldn't push)
+
+Everything else is already live in the repo. The only piece left is two new
+inputs on the Action — and the API token I use lacks the GitHub **`workflow`**
+scope, so GitHub blocks me from editing files under `.github/workflows/`.
+
+**Easiest fix:** GitHub → your token → tick the **`workflow`** checkbox (classic
+PAT: *Settings → Developer settings → Tokens → edit → check `workflow`*), tell me,
+and I'll push it in one shot.
+
+**Or do it yourself** in the GitHub web editor (the web UI isn't scope-limited).
+Edit `.github/workflows/refresh-health-data.yml`:
+
+**(a)** Under `workflow_dispatch: inputs:` — right after the `dry_run` block — add:
+
+```yaml
+      sections:
+        description: 'Sections preset (full/fast/nutrition) or comma list'
+        required: false
+        type: string
+        default: 'full'
+      force_zepp:
+        description: 'Force a Zepp re-pull (override the once/day guard)'
+        required: false
+        type: string
+        default: 'false'
+```
+
+**(b)** In the **Build data.json** step, add two env vars after
+`NOTION_SUPPLEMENT_DB_ID:` …
+
+```yaml
+          REFRESH_ENDPOINT:         ${{ vars.REFRESH_ENDPOINT }}
+          FORCE_ZEPP:               ${{ (github.event_name == 'workflow_dispatch' && inputs.force_zepp == 'true') && '1' || '' }}
+```
+
+…and change the run line to pass the sections through:
+
+```yaml
+        run: |
+          python scripts/build_data.py health/widgets/data/data.json --sections "${{ (github.event_name == 'workflow_dispatch' && inputs.sections) || 'full' }}"
+```
+
+(Scheduled runs ignore the inputs and keep doing a normal full refresh.)
+
+---
 
 ## 1. Create the Worker
-1. Go to **dash.cloudflare.com → Workers & Pages → Create → Create Worker**.
-2. Name it something like `health-refresh`. Click **Deploy** (the default code is fine for now).
-3. Click **Edit code**, delete the template, paste the contents of `worker.js`, then **Deploy**.
+1. **dash.cloudflare.com → Workers & Pages → Create → Create Worker**.
+2. Name it e.g. `health-refresh`. **Deploy**, then **Edit code**, paste `worker.js`, **Deploy**.
 
 ## 2. Add the GitHub token (kept server-side)
-1. Create a **fine-grained** GitHub token: **github.com → Settings → Developer settings →
-   Fine-grained tokens → Generate new token**.
-   - **Resource owner:** your account
-   - **Repository access:** Only select repositories → `EdwinBullian/claude-deliverables`
-   - **Permissions:** Repository permissions → **Actions: Read and write** (nothing else)
-   - Generate and copy it.
-2. In the Worker: **Settings → Variables and Secrets → Add → Secret**
-   - Name: `GH_TOKEN`
-   - Value: paste the token → **Save and deploy**.
+1. Create a **fine-grained** token (github.com → Settings → Developer settings →
+   Fine-grained tokens → Generate):
+   - **Repository access:** Only `EdwinBullian/claude-deliverables`
+   - **Permissions:** **Actions: Read and write** (nothing else)
+2. Worker → **Settings → Variables and Secrets → Add → Secret**
+   - Name `GH_TOKEN`, value = the token → **Save and deploy**.
 
-> Why fine-grained + Actions-only: even in the unlikely event the Worker URL leaks,
-> that token can do nothing but trigger/read Actions on this one repo — it can't read
-> code, secrets, or anything else.
+> Even if the Worker URL leaked, this token can only trigger/read Actions on this
+> one repo — no code, no secrets, nothing else.
 
 ## 3. Point the widgets at the Worker
 1. Copy the Worker URL (e.g. `https://health-refresh.<you>.workers.dev`).
-2. In the repo: **Settings → Secrets and variables → Actions → Variables tab → New repository variable**
-   - Name: `REFRESH_ENDPOINT`
-   - Value: the Worker URL
-3. Trigger one refresh (tap any ⟳ button, or run the Action once). From then on the
-   widgets read the endpoint from `data.json` automatically — no widget redeploy needed.
+2. Repo → **Settings → Secrets and variables → Actions → Variables tab → New variable**
+   - Name `REFRESH_ENDPOINT`, value = the Worker URL.
+3. Tap any ⟳ button once (or run the Action). From then on the widgets read the
+   endpoint from `data.json` automatically — no widget redeploy needed.
 
-That's it. Until `REFRESH_ENDPOINT` is set, the ⟳ buttons simply reload the latest
-data (safe). Once it's set, they trigger a live pull from Zepp / Cronometer / Notion.
+---
 
 ## How each button behaves
 - **Sleep / Energy / Activity / Training** → forces a Zepp re-pull (overrides the
-  once-a-day guard, so it works even if you woke earlier than the scheduled pull).
-- **Macros / Micros / Hydration** → refreshes Cronometer only (won't log your phone
-  out of Zepp).
-- **Supplements** → refreshes Notion only.
+  once/day guard, so it works even if you woke earlier than the scheduled pull).
+- **Macros / Micros / Hydration** → Cronometer only (won't log your phone out of Zepp).
+- **Supplements** → Notion only.
 
-A tap shows a spinner, waits for the pipeline to finish (~20–60s), then reloads with
-fresh numbers. If it can't confirm an update within ~2.5 min it shows "timed out — try again".
+A tap shows a spinner, waits for the pipeline (~20–60s), then reloads with fresh
+numbers. If it can't confirm an update within ~2.5 min it shows "timed out — try again".
