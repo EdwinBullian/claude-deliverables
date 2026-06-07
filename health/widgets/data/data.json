@@ -208,7 +208,7 @@
       0,
       33,
       0,
-      0
+      17
     ],
     "lift_cal": [
       0,
@@ -217,7 +217,7 @@
       0,
       230,
       0,
-      0
+      132
     ],
     "lift_type": [
       "",
@@ -226,7 +226,7 @@
       "",
       "Push",
       "",
-      ""
+      "Pull"
     ],
     "bball_min": [
       0,
@@ -235,7 +235,7 @@
       24.3,
       83.5,
       23.4,
-      0
+      63.3
     ],
     "bball_cal": [
       0,
@@ -244,7 +244,7 @@
       158,
       475,
       166,
-      0
+      239
     ],
     "walk_min": [
       81.8,
@@ -325,18 +325,17 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-06T22:02:03-07:00",
-    "last_updated_label": "Jun 6, 10:02 PM PST",
+    "last_updated_iso": "2026-06-06T22:03:49-07:00",
+    "last_updated_label": "Jun 6, 10:03 PM PST",
     "refreshed_sections": [
-      "sleep",
-      "energy"
+      "strength_week"
     ],
-    "last_zepp_data_iso": "2026-06-06T22:02:03-07:00",
+    "last_zepp_data_iso": "2026-06-06T22:03:49-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T22:02:08-07:00",
+        "last_ok_iso": "2026-06-06T22:03:55-07:00",
         "error": null
       },
       "cronometer": {
@@ -346,7 +345,7 @@
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T20:41:00-07:00",
+        "last_ok_iso": "2026-06-06T22:03:50-07:00",
         "error": null
       }
     },
