@@ -17,8 +17,8 @@
     "date_label": "Jun 6 — Today",
     "today": {
       "rhr": 52,
-      "steps": 5433,
-      "avg_hr": 73,
+      "steps": 6318,
+      "avg_hr": 75,
       "sleep_score": 75
     },
     "week": {
@@ -38,7 +38,7 @@
         1422,
         5405,
         5563,
-        5433
+        6318
       ],
       "rhr": [
         69,
@@ -52,9 +52,9 @@
       "today_index": 6
     },
     "today_workout": {
-      "type": "Walk",
-      "duration_min": 20,
-      "calories": 132,
+      "type": "Basketball",
+      "duration_min": 63,
+      "calories": 239,
       "avg_hr": null
     }
   },
@@ -294,7 +294,7 @@
       46,
       32
     ],
-    "footer": "Wake 7:57 AM · Walk 20 min · Natural curve"
+    "footer": "Wake 7:57 AM · Basketball 63 min · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 6 — Today",
@@ -325,17 +325,18 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-06T21:47:47-07:00",
-    "last_updated_label": "Jun 6, 9:47 PM PST",
+    "last_updated_iso": "2026-06-06T22:02:03-07:00",
+    "last_updated_label": "Jun 6, 10:02 PM PST",
     "refreshed_sections": [
-      "hydration"
+      "sleep",
+      "energy"
     ],
-    "last_zepp_data_iso": "2026-06-06T17:54:00-07:00",
+    "last_zepp_data_iso": "2026-06-06T22:02:03-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T17:54:03-07:00",
+        "last_ok_iso": "2026-06-06T22:02:08-07:00",
         "error": null
       },
       "cronometer": {
