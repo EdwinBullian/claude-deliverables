@@ -21,7 +21,7 @@
 
   var css = document.createElement('style');
   css.textContent =
-    '.cw-refresh{position:fixed;top:6px;right:7px;z-index:9999;width:22px;height:22px;border:none;' +
+    '.cw-refresh{position:fixed;bottom:6px;right:7px;z-index:9999;width:22px;height:22px;border:none;' +
     'border-radius:6px;cursor:pointer;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);' +
     'display:flex;align-items:center;justify-content:center;padding:0;-webkit-tap-highlight-color:transparent;' +
     'transition:background .15s,color .15s}' +
@@ -31,7 +31,7 @@
     '.cw-refresh.busy svg{animation:cwspin .8s linear infinite}' +
     '.cw-refresh.ok{color:#6bda87}.cw-refresh.err{color:#e88}' +
     '@keyframes cwspin{to{transform:rotate(360deg)}}' +
-    '.cw-toast{position:fixed;top:6px;right:34px;z-index:9999;font:600 9px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;' +
+    '.cw-toast{position:fixed;bottom:6px;right:34px;z-index:9999;font:600 9px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;' +
     'color:rgba(255,255,255,.72);background:rgba(20,20,20,.88);padding:4px 8px;border-radius:6px;opacity:0;' +
     'transition:opacity .2s;pointer-events:none;white-space:nowrap}.cw-toast.show{opacity:1}';
   document.head.appendChild(css);
