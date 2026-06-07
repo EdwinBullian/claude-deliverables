@@ -325,19 +325,13 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-06T20:41:00-07:00",
-    "last_updated_label": "Jun 6, 8:41 PM PST",
+    "last_updated_iso": "2026-06-06T21:47:47-07:00",
+    "last_updated_label": "Jun 6, 9:47 PM PST",
     "refreshed_sections": [
-      "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
       "hydration"
     ],
     "last_zepp_data_iso": "2026-06-06T17:54:00-07:00",
+    "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
@@ -346,7 +340,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-06T20:41:02-07:00",
+        "last_ok_iso": "2026-06-06T21:47:50-07:00",
         "error": null
       },
       "notion": {
