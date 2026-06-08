@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Snowflake (SNOW) Investment Thesis — 2026-W24</title><style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+.summary, .section { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv { background: var(--card); border-left: 3px solid var(--accent); padding: 0.5rem 0.8rem; border-radius: 0 6px 6px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kv span { color: var(--subtle); font-size: 0.75rem; display: block; font-family: -apple-system, sans-serif; }
+.kv strong { color: var(--heading); font-size: 0.92rem; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style></head><body>
+<h1>Snowflake Inc. (SNOW) — Investment Thesis</h1>
+<div class="meta">Week 2026-W24 &middot; Finance Agent &middot; Valuation date: 2026-06-08</div>
+
+<div class="summary">
+<div class="summary-grid">
+<div class="kv"><span>Spot Price</span><strong>$238.26</strong></div>
+<div class="kv"><span>Market Cap</span><strong>~$82.6B</strong></div>
+<div class="kv"><span>Enterprise Value</span><strong>~$80B</strong></div>
+<div class="kv"><span>DCF Prob-Weighted FV</span><strong>~$101 (&minus;58%)</strong></div>
+<div class="kv"><span>Comps (avg of methods)</span><strong>~$233 (&minus;2%)</strong></div>
+<div class="kv"><span>Conviction</span><strong>Medium</strong></div>
+</div>
+<p style="margin-bottom:0"><strong>The DCF says expensive (&minus;60% base); the comps say roughly fair (&minus;2%). That divergence between intrinsic and relative value is the thesis.</strong></p>
+</div>
+
+<h2>1. Company Overview — What Snowflake Is, and Why It Matters</h2>
+<p>Snowflake sells a cloud data platform. The original product was a data warehouse that decoupled storage from compute and ran on top of AWS, Azure, and GCP — letting enterprises dump structured and semi-structured data into one place and query it elastically, paying only for the compute they consume. That consumption model is the heart of the business: customers don't buy seats, they buy credits, and spend scales automatically as workloads grow. There is no renewal cliff and no per-seat ceiling — when a customer adds a pipeline, a dashboard, or an AI workload, revenue grows without a new sales motion.</p>
+<p>Over the last two years the company has repositioned from "cloud data warehouse" to "the data cloud for the AI era." The pitch: AI models are only as good as the governed, query-ready data they sit on, and Snowflake already holds that data for ~14,000 enterprises. The newer surfaces — Cortex (managed LLM functions inside the warehouse), Snowflake Intelligence (natural-language analytics), and Snowpark (Python/ML in-platform) — are designed to keep AI workloads inside Snowflake's billing perimeter rather than letting them leak out to a separate vendor.</p>
+<p>The numbers say the strategy is working. In <strong>Q1 FY2027 (quarter ended April 30, 2026)</strong>, product revenue was <strong>$1.33B, up 34% year over year</strong> — and critically, that growth <em>accelerated</em> from 30% the prior quarter, reversing the multi-year deceleration that defined the stock. Net revenue retention was <strong>126%</strong>, remaining performance obligations (RPO) hit <strong>$9.21B (+38%)</strong>, non-GAAP operating margin expanded ~300bps to <strong>12%</strong>, and the company added <strong>616 net new customers</strong> to reach <strong>13,912</strong>. Accounts using Snowflake Intelligence <strong>more than doubled quarter over quarter</strong>. Management raised full-year FY2027 product-revenue guidance to <strong>$5.84B (+31%)</strong>. For full-year FY2026 (ended Jan 31, 2026): product revenue $4.47B (+29%), RPO $9.77B (+42%), non-GAAP free cash flow $1.12B (~25% of product revenue).</p>
+<p>This matters because Snowflake is the clearest public-market proxy for a thesis Eddie will see constantly in tech investing: <strong>the value of owning the data layer in an AI world.</strong> Whoever holds the governed enterprise data has a structural toll booth on the AI applications built on top of it. Snowflake is betting it is that toll booth.</p>
+
+<h2>2. Industry Position &amp; Competitive Dynamics</h2>
+<p>Snowflake sits in the most contested neighborhood in enterprise software. Its position is genuinely strong but not unassailable, and the bear case lives entirely in the word "but."</p>
+<p><strong>The strength:</strong> Snowflake is the category-defining independent data cloud — cloud-agnostic across all three hyperscalers, with a best-in-class governance and data-sharing layer (the Marketplace and cross-org sharing create real network effects), and consumption pricing that aligns revenue with customer success. Among independent data/infrastructure names it is the <strong>fastest grower at scale</strong> — 30%+ on a ~$5B base — with a Rule of 40 around 55.</p>
+<p><strong>The threats, ranked:</strong></p>
+<ol>
+<li><strong>Databricks</strong> — the single most important competitor (~$130B private). It came from the data-lake/ML side and is converging on Snowflake's warehouse turf the same way Snowflake is converging on its lakehouse turf. Widely seen as ahead on AI/ML-native workloads — precisely where the next dollar of spend is going. A true two-horse race.</li>
+<li><strong>Hyperscaler-native offerings</strong> — Microsoft Fabric, Google BigQuery, AWS Redshift are "good enough" for a large slice of workloads and come bundled, discounted, and pre-integrated. Snowflake's independence is a feature for some buyers and a redundant cost for others.</li>
+<li><strong>Consumption optimization</strong> — the flip side of usage pricing: when budgets tighten, customers optimize queries and spend falls without any churn event. This drove the 2023–2025 deceleration and remains the structural governor on NRR.</li>
+</ol>
+<p>The most important competitive fact for valuation: because Snowflake resells underlying hyperscaler compute, its gross margin (~67% total) is <strong>permanently below</strong> pure-SaaS peers (75–80%). That is a hard ceiling on terminal profitability that no amount of execution removes.</p>
+
+<h2>3. Valuation — The Tension That Is the Thesis</h2>
+<p>The two standard valuation lenses <strong>disagree violently</strong> — and reconciling them is the entire analytical exercise.</p>
+<h3>The DCF says expensive</h3>
+<p>A strict DCF (see <code>snowflake_dcf.xlsx</code>) builds a base case of ~21% revenue CAGR to ~$15B by FY2032, with non-GAAP EBIT margin expanding from ~12% today to a 28% steady state, discounted at an 11.0% WACC with a 3.0% terminal growth rate — producing a <strong>base-case fair value of ~$94, roughly 60% below spot.</strong> The probability-weighted fair value (25/50/25) is <strong>~$101</strong>.</p>
+<div class="case bull"><strong>Bull — $179 (&minus;25%)</strong> · Rev CAGR 26.9% · FY32E rev $19.7B · WACC 9.5% / g 3.5%</div>
+<div class="case base"><strong>Base — $94 (&minus;60%)</strong> · Rev CAGR 21.4% · FY32E rev $15.1B · WACC 11.0% / g 3.0%</div>
+<div class="case bear"><strong>Bear — $37 (&minus;84%)</strong> · Rev CAGR 14.6% · FY32E rev $10.7B · WACC 13.5% / g 2.0%</div>
+<p>Run in reverse, today's $238 price requires something close to a flawless decade: a ~38% revenue CAGR sustained for six years <em>and</em> a 30%+ steady-state margin — the kind of input you assume only when you already own the stock.</p>
+<h3>The comps say roughly fair</h3>
+<p>The relative-value lens (see <code>snowflake_comps.xlsx</code>) tells the opposite story. Against five scaled data/infrastructure peers — Datadog, MongoDB, Cloudflare, Confluent, Elastic — Snowflake trades at <strong>13.0x EV/Rev FY26E</strong> vs a peer <strong>median of ~11x</strong>. A modest, easily justified premium: Snowflake is the fastest grower in the set with a top-tier Rule of 40, and on a growth-adjusted basis (EV/Rev ÷ growth) it screens <em>cheaper</em> than Datadog and Cloudflare.</p>
+<table>
+<tr><th>Method</th><th>Implied Price</th><th>&Delta; vs Spot</th></tr>
+<tr><td>EV/Rev FY26E — peer median (11.0x)</td><td>$202</td><td>&minus;15%</td></tr>
+<tr><td>EV/Rev FY27E — peer median (9.3x)</td><td>$217</td><td>&minus;9%</td></tr>
+<tr><td>EV/EBITDA FY26E — peer median</td><td>$175</td><td>&minus;27%</td></tr>
+<tr><td>EV/Rev FY26E — peer 75th pct (18.5x)</td><td>$336</td><td>+41%</td></tr>
+<tr><td><strong>Average of methods</strong></td><td><strong>$233</strong></td><td><strong>&minus;2%</strong></td></tr>
+</table>
+<h3>Reconciling the two</h3>
+<p>The gap between "&minus;60% on DCF" and "&minus;2% on comps" is not a modeling error — it <em>is</em> the thesis. It means the entire peer group is priced on growth and narrative, not on discounted cash flow. Buying Snowflake at $238 is a bet that the public market continues to value scaled consumption-software franchises at a large premium to their intrinsic cash-flow value, <strong>and</strong> that Snowflake's AI re-acceleration sustains its place at the top of that group. The DCF is the gravity; the comps are the weather. Over one-to-two years the weather wins; over five-to-ten years gravity does.</p>
+
+<h2>4. Bull / Base / Bear</h2>
+<div class="case bull"><strong>Bull (~$179, 25% weight).</strong> Cortex and Snowflake Intelligence inflect into a genuine second growth engine. AI-native workloads — where Snowflake has been seen as <em>behind</em> Databricks — convert installed data gravity into consumption. RPO's +38% re-acceleration proves to be the leading edge of sustained 30%+ growth into FY2029, NRR re-expands, and operating leverage carries non-GAAP EBIT margin to ~32%. As profitability de-risks the story, the discount rate compresses. Even this case lands ~25% <em>below</em> today's price — the bull scenario roughly justifies the <em>current</em> multiple rather than a re-rate higher.</div>
+<div class="case base"><strong>Base (~$94, 50% weight).</strong> Management's +31% FY2027 guide proves about right, then growth decelerates gradually to the mid-teens by FY2032 as the law of large numbers and competition bite. Margins expand on consumption leverage but cap in the high-20s because of the structural gross-margin ceiling. A healthy, durable, category-leading business — still worth meaningfully less than 13x forward revenue on intrinsic cash flows.</div>
+<div class="case bear"><strong>Bear (~$37, 25% weight).</strong> Databricks and hyperscaler-native lakehouses compress share of new workloads; consumption optimization drags NRR toward ~115%; growth fades to high-single digits by FY2032; and ~35%-of-revenue stock-based comp keeps <em>true</em> GAAP free cash flow far below the non-GAAP figures the bulls quote. Margins stall in the high-teens; the multiple collapses toward decelerating software.</div>
+
+<h2>5. Key Risks (ranked by probability × impact)</h2>
+<div class="risk"><strong>1. SBC-inflated profitability (high / high).</strong> Stock-based comp runs ~35% of revenue. Every non-GAAP margin and FCF figure here — and across the peer group — overstates true economic profit. The most under-appreciated risk, and why the DCF base looks so punishing relative to the headline "12% operating margin."</div>
+<div class="risk"><strong>2. Databricks competition (medium-high / high).</strong> The clearest threat to the growth narrative, attacking exactly the AI-native workloads the bull case depends on.</div>
+<div class="risk"><strong>3. Consumption optimization / macro (medium / high).</strong> Usage pricing means revenue can soften without churn the moment IT budgets tighten — the mechanism behind the 2023–2025 deceleration.</div>
+<div class="risk"><strong>4. Multiple compression (medium / high).</strong> With ~75–80% of comps-implied value in the multiple rather than near-term cash flow, a regime shift in how the market prices growth software is the largest mark-to-market risk.</div>
+<div class="risk"><strong>5. Gross-margin ceiling (high / medium).</strong> Reselling hyperscaler compute structurally caps terminal margins below pure-SaaS peers — permanent, not cyclical.</div>
+
+<h2>6. Eddie's Takeaway — What Snowflake Teaches About the Sector</h2>
+<p>Snowflake is the cleanest case study you will find of <strong>the gap between intrinsic value and relative value in high-growth software</strong>, and holding both lenses at once is exactly the skill that separates an analyst from a chart-reader. The DCF says the stock is worth a third of its price; the comps say it's fairly valued. Both are "right" — they answer different questions. The DCF answers <em>"what are the cash flows worth?"</em> The comps answer <em>"what is the market willing to pay for this kind of business today?"</em> A junior analyst picks one and declares victory. A good one explains the divergence and tells you which question matters for the horizon being underwritten.</p>
+<p>The second lesson is <strong>consumption economics</strong>: Snowflake, Datadog, and Cloudflare sustain 25–35% growth at multi-billion-dollar scale for the same structural reason — usage pricing means revenue compounds with workloads, not seat count. The most powerful business model in software, whose dark twin is that the same elasticity works in reverse the instant budgets tighten.</p>
+<p>The third lesson is <strong>SBC discipline</strong>: the single most important adjustment in modern software valuation is treating stock-based comp as the real, cash-equivalent expense it is. Do that, and a swathe of "profitable" SaaS names look very different — Snowflake, at ~35% of revenue, is a textbook example.</p>
+<div class="rec"><strong>Conviction: Medium.</strong> A best-in-class franchise riding the most important secular tailwind in tech, at a price the DCF cannot defend but the comps can tolerate. The honest position is not "buy" or "avoid" — it is <strong>own the business, respect the entry price.</strong> The DCF bull case (~$179) is where intrinsic and relative value finally converge; the ~$150–180 zone is where risk/reward turns genuinely attractive. Chasing above ~$200 means underwriting the market's narrative rather than the company's cash flows.</div>
+
+<p class="meta" style="margin-top:1.5rem">Analysis only — not investment advice. Models: snowflake_dcf.xlsx, snowflake_comps.xlsx. Figures sourced from Snowflake Q1 FY2027 and FY2026 results, SEC filings, and consensus estimates as of 2026-06-08.</p>
+</body></html>
