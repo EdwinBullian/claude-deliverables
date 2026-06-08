@@ -293,9 +293,9 @@
   },
   "hydration": {
     "date_label": "Jun 8 — Today",
-    "today_oz": 0.0,
+    "today_oz": 40.0,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 31,
     "week": {
       "labels": [
         "Tue",
@@ -312,19 +312,18 @@
         96,
         114,
         79,
-        24,
-        0
+        90,
+        40
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-08T12:54:12-07:00",
-    "last_updated_label": "Jun 8, 12:54 PM PST",
+    "last_updated_iso": "2026-06-08T12:56:16-07:00",
+    "last_updated_label": "Jun 8, 12:56 PM PST",
     "refreshed_sections": [
-      "sleep",
-      "energy"
+      "hydration"
     ],
     "last_zepp_data_iso": "2026-06-08T12:54:12-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
@@ -336,7 +335,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-08T09:43:11-07:00",
+        "last_ok_iso": "2026-06-08T12:56:18-07:00",
         "error": null
       },
       "notion": {
