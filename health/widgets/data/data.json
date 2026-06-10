@@ -14,49 +14,44 @@
     "awakenings": 3
   },
   "activity": {
-    "date_label": "Jun 9 — Today",
+    "date_label": "Tue Jun 9 — Latest",
     "today": {
       "rhr": 50,
-      "steps": 869,
-      "avg_hr": 59,
+      "steps": 8998,
+      "avg_hr": 70,
       "sleep_score": 83
     },
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "steps": [
-        1422,
         5405,
         5563,
         7071,
         4462,
         3501,
-        869
+        8998,
+        null
       ],
       "rhr": [
-        55,
         55,
         54,
         52,
         52,
         50,
-        50
+        50,
+        null
       ],
       "today_index": 6
     },
-    "today_workout": {
-      "type": "Basketball",
-      "duration_min": 57,
-      "calories": 285,
-      "avg_hr": null
-    }
+    "today_workout": null
   },
   "macros_week": {
     "week_label": "Macros — Jun 4–10",
@@ -325,24 +320,17 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-10T09:29:06-07:00",
-    "last_updated_label": "Jun 10, 9:29 AM PST",
+    "last_updated_iso": "2026-06-10T12:24:12-07:00",
+    "last_updated_label": "Jun 10, 12:24 PM PST",
     "refreshed_sections": [
-      "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
-      "hydration"
+      "activity"
     ],
-    "last_zepp_data_iso": "2026-06-09T13:52:30-07:00",
+    "last_zepp_data_iso": "2026-06-10T12:24:12-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-09T13:52:36-07:00",
+        "last_ok_iso": "2026-06-10T12:24:15-07:00",
         "error": null
       },
       "cronometer": {
