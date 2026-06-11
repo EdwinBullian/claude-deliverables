@@ -1,57 +1,62 @@
 {
   "sleep": {
-    "date_label": "Jun 9 — Last Night",
-    "score": 83,
-    "total_minutes": 569,
-    "total_label": "9 h 29 m",
-    "deep_minutes": 64,
-    "light_minutes": 347,
-    "rem_minutes": 158,
-    "awake_minutes": 18,
-    "bedtime_label": "11:17 PM",
-    "wake_label": "9:04 AM",
-    "resting_hr": 50,
+    "date_label": "Jun 11 — Last Night",
+    "score": 87,
+    "total_minutes": 464,
+    "total_label": "7 h 44 m",
+    "deep_minutes": 77,
+    "light_minutes": 283,
+    "rem_minutes": 104,
+    "awake_minutes": 6,
+    "bedtime_label": "11:34 PM",
+    "wake_label": "7:24 AM",
+    "resting_hr": 48,
     "awakenings": 3
   },
   "activity": {
-    "date_label": "Tue Jun 9 — Latest",
+    "date_label": "Jun 11 — Today",
     "today": {
-      "rhr": 50,
-      "steps": 8998,
-      "avg_hr": 70,
-      "sleep_score": 83
+      "rhr": 48,
+      "steps": 819,
+      "avg_hr": 58,
+      "sleep_score": 87
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        5405,
         5563,
         7071,
         4462,
         3501,
-        8998,
-        null
+        9847,
+        2791,
+        819
       ],
       "rhr": [
-        55,
         54,
         52,
         52,
         50,
         50,
-        null
+        50,
+        48
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Training",
+      "duration_min": 19,
+      "calories": 122,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — Jun 5–11",
@@ -179,83 +184,83 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Wed",
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
-      "Tue"
+      "Tue",
+      "Wed",
+      "Thu"
     ],
     "date_labels": [
-      "Wed 6/3",
-      "Thu 6/4",
       "Fri 6/5",
       "Sat 6/6",
       "Sun 6/7",
       "Mon 6/8",
-      "Tue 6/9"
+      "Tue 6/9",
+      "Wed 6/10",
+      "Thu 6/11"
     ],
     "lift_min": [
-      0,
-      33,
       0,
       17,
       0,
       0,
-      85
+      85,
+      0,
+      0
     ],
     "lift_cal": [
       0,
-      230,
-      0,
       132,
+      0,
+      0,
       0,
       0,
       0
     ],
     "lift_type": [
       "",
-      "Push",
-      "",
       "Pull",
       "",
       "",
-      "Upper"
+      "Upper",
+      "",
+      ""
     ],
     "bball_min": [
-      24.3,
-      83.5,
       23.4,
       63.3,
       81.8,
       82.0,
-      57.3
+      57.3,
+      0,
+      19.4
     ],
     "bball_cal": [
-      158,
-      475,
       166,
       239,
       412,
       352,
-      285
+      285,
+      0,
+      122
     ],
     "walk_min": [
       0,
-      0,
-      0,
       23.2,
       7.4,
+      0,
+      3.0,
       0,
       0
     ],
     "walk_cal": [
       0,
-      0,
-      0,
       155,
       26,
+      0,
+      13,
       0,
       0
     ],
@@ -271,12 +276,12 @@
       5,
       5,
       5,
-      5,
-      5,
       28,
       18,
-      18,
-      18,
+      14,
+      20,
+      20,
+      20,
       65,
       72,
       78,
@@ -289,7 +294,7 @@
       46,
       32
     ],
-    "footer": "Wake 9:04 AM · No workout · Natural curve"
+    "footer": "Wake 7:24 AM · Training 19 min · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 11 — Today",
@@ -320,8 +325,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-11T09:43:21-07:00",
-    "last_updated_label": "Jun 11, 9:43 AM PST",
+    "last_updated_iso": "2026-06-11T14:10:53-07:00",
+    "last_updated_label": "Jun 11, 2:10 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +337,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-06-10T12:24:12-07:00",
+    "last_zepp_data_iso": "2026-06-11T14:10:53-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-10T12:24:15-07:00",
+        "last_ok_iso": "2026-06-11T14:11:04-07:00",
         "error": null
       },
       "cronometer": {
-        "ok": false,
-        "last_ok_iso": "2026-06-11T04:17:10-07:00",
-        "error": "auth failed: 403 Client Error: Forbidden for url: https://cronometer.com/api/v2/login"
+        "ok": true,
+        "last_ok_iso": "2026-06-11T14:10:55-07:00",
+        "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-11T09:43:22-07:00",
+        "last_ok_iso": "2026-06-11T14:10:54-07:00",
         "error": null
       }
     },
