@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-11T04:17:09-07:00",
-    "last_updated_label": "Jun 11, 4:17 AM PST",
+    "last_updated_iso": "2026-06-11T09:43:21-07:00",
+    "last_updated_label": "Jun 11, 9:43 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -341,13 +341,13 @@
         "error": null
       },
       "cronometer": {
-        "ok": true,
+        "ok": false,
         "last_ok_iso": "2026-06-11T04:17:10-07:00",
-        "error": null
+        "error": "auth failed: 403 Client Error: Forbidden for url: https://cronometer.com/api/v2/login"
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-11T04:17:10-07:00",
+        "last_ok_iso": "2026-06-11T09:43:22-07:00",
         "error": null
       }
     },
