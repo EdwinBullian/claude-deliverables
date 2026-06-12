@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Agents — Analysis &amp; True-Agent Conversion Plan</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { color: var(--subtle); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+.summary { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.case { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+.case.bull { border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; }
+.case.base { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.case.bear { border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+pre { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin: 0.8rem 0 1.2rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; }
+code { font-family: 'JetBrains Mono', 'Consolas', monospace; color: var(--heading); }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+<h1>The Agents — Analysis &amp; True-Agent Conversion Plan</h1>
+<p class="meta">2026-06-12 · Companion to the LifeOS Write-Up · Part 1 assesses each agent as it exists; Part 2 converts them into real agents — without the Anthropic Agent SDK and without per-token Claude billing</p>
+
+<h2>Part 1 — What They Are Today, Honestly</h2>
+<div class="summary">
+<p>Today's "agents" are <strong>occupations, not organisms</strong>: project folders with a persona (CLAUDE.md + standing orders), domain skills, and markdown memory — animated only when a scheduled Cowork session possesses them for an hour. Between sessions they don't perceive, can't react, and hold no state beyond their files. That's not a criticism — it's a deliberately cheap design that produced months of real output. But the ceiling is visible: no event-driven behavior, no retries, no awareness between runs, and every heartbeat costs Claude tokens.</p>
+</div>
+
+<h3>Assistant (Scheduler / Orchestrator) — Misc/</h3>
+<p><strong>Role:</strong> the manager layer — weekly review + schedule, midweek quality gate, daily briefing, signal processing, conflict surfacing.</p>
+<div class="rec"><strong>What works:</strong> the quality gate genuinely catches failures (W24 missing research, notify.py corruption, the 5x thesis pattern). The weekly review/schedule loop is the spine of the whole system. Coordination-file discipline is excellent.</div>
+<div class="risk"><strong>Weaknesses:</strong> most of its job is deterministic (file checks, calendar math, overdue bumping) yet burns Claude-grade tokens; pending_actions accumulates without enforcement (April items still open); the evening reschedule engine is disabled, so overdue tasks aren't being bumped at all.</div>
+<p><strong>Conversion priority: FIRST.</strong> Highest mechanical share, highest frequency, clearest spec.</p>
+
+<h3>Finance — Finance/</h3>
+<p><strong>Role:</strong> Monday thesis (full skill chain → DCF + comps + 1.5–2.5k words), Wednesday market scan, watchlist rotation.</p>
+<div class="rec"><strong>What works:</strong> the strongest producer. Six theses with audited models, disciplined 12-week rotation, sector-pattern self-awareness, interview-grade output.</div>
+<div class="risk"><strong>Weaknesses:</strong> the 5–6x identical-conclusion pattern was flagged twice and never acted on — the agent can observe its own rut but nothing forces escape; it doesn't write to Notion; the market scan is half-mechanical (data pull) and half-judgment (the take).</div>
+<p><strong>Conversion priority: PARTIAL.</strong> Thesis stays Claude (Tier-2 — it's the point of the system). Scan data assembly, watchlist maintenance, and earnings-calendar triggers move to the loop.</p>
+
+<h3>Research — Research/</h3>
+<p><strong>Role:</strong> Tuesday queue-driven report, 2–5k words, sourced, with cross-agent recommendations.</p>
+<div class="rec"><strong>What works:</strong> consistently synthesizes rather than summarizes; cross-agent recs (thesis-template upgrades, tutor flags) feed other lanes; queue threshold alerts work.</div>
+<div class="risk"><strong>Weaknesses:</strong> failed silently for two consecutive weeks (ran, produced nothing, nobody knew until Thursday) — the clearest indictment of fire-and-forget sessions; queue curation depends on Eddie remembering.</div>
+<p><strong>Conversion priority: PARTIAL.</strong> Synthesis stays Claude. The loop owns: pre-run source gathering, output verification + retry, queue hygiene, NotebookLM mechanics.</p>
+
+<h3>Health — Health/</h3>
+<p><strong>Role:</strong> Thursday midweek check, Saturday full review, Sunday meal + workout plan; adaptive periodization from Zepp + Cronometer.</p>
+<div class="rec"><strong>What works:</strong> best persistent-memory design of any agent (baseline / metrics_history / training_log / injury_log); auto-adjust math is sound; plans respect real life (exam weeks, post-finals ramp).</div>
+<div class="risk"><strong>Weaknesses:</strong> flying blind — HRV 4+ weeks dead, Cronometer barely logged, Notion workout logs missing — yet still burning ~3 sessions/week reviewing absent data; both CLIs broken; the agent most dependent on input discipline and least able to create it.</div>
+<p><strong>Conversion priority: HIGH for the data layer.</strong> Pulls, freshness checks, metrics-history appends, and the midweek check are loop work; only the Saturday review's judgment and Sunday plan composition merit Claude — gated on data freshness.</p>
+
+<h3>Support tracks (not agents, correctly so)</h3>
+<p><strong>Programming</strong> (Coding/) is a PM layer over Claude Code — its judgment is the value; leave it. <strong>Tutor / Trading / Writing</strong> are skill packs invoked on demand — no schedule, no conversion needed. <strong>The bridge + dispatch worker</strong> are infrastructure, not personas; the worker's 72 Cowork polls/day is the immediate conversion target.</p>
+
+<hr>
+
+<h2>Part 2 — True Agents Without the SDK</h2>
+
+<h3>The definition we're building toward</h3>
+<div class="summary"><p>A true agent: <strong>perceives</strong> (reads its world on a trigger), <strong>decides</strong> (small model for routine, escalates for judgment), <strong>acts</strong> (tools: Notion, Calendar, files, notify), <strong>remembers</strong> (its markdown + the shared recall index), and <strong>runs without permission or per-token Claude cost</strong>.</p></div>
+
+<h3>The substrate already exists</h3>
+<p>The phone_link_bridge daemon is a Windows-resident Python process with a model router (Groq → Gemini → Ollama), DB, config, and notify plumbing. The conversion is not a new platform — it's promoting the bridge from messenger to <strong>agent host</strong>.</p>
+
+<h3>Architecture</h3>
+<pre><code>agents/
+  runtime.py          ← the ONE generic loop (perceive → decide → act → log)
+  tools/              ← shared, whitelisted per agent
+    notion.py         (Tasks, Projects, Workout, Career Hub via REST API)
+    gcal.py           (read/write blocks; hard rule: never move external events)
+    files.py          (domain folder R/W, dated outputs, activity_log append)
+    notify.py         (existing bridge wrapper)
+    recall.py         (the RAG index: recall(query) → passages)
+    web.py            (fetch/search for scan data)
+  personas/
+    assistant.yaml    ← persona prompt distilled from standing orders,
+    finance.yaml         tool whitelist, triggers, escalation rules,
+    research.yaml        memory file paths
+    health.yaml
+  triggers.py         ← cron + events (file-watch, Gmail poll,
+                         Notion dispatch queue, earnings calendar)
+  escalation.py       ← writes "needs-Claude" packets to the dispatch queue</code></pre>
+<p>One runtime, four configs. An agent is data, not code — adding a fifth persona (Career, this fall) is a YAML file.</p>
+
+<h3>The decide layer — three tiers, enforced by the router</h3>
+<table>
+<tr><th>Tier</th><th>What</th><th>Runs on</th><th>Cost</th></tr>
+<tr><td>0</td><td>deterministic logic: file checks, calendar math, overdue bumps, data pulls, freshness gates</td><td>pure Python</td><td>$0</td></tr>
+<tr><td>1</td><td>classification, short summaries, briefing prose, scan assembly, adherence verdicts</td><td>router free/fast (Groq → Gemini → Ollama; local for private data)</td><td>$0</td></tr>
+<tr><td>2</td><td>theses, research synthesis, plan composition — anything Eddie would call judgment</td><td>Claude — via escalation, never inline</td><td>subscription</td></tr>
+</table>
+<div class="summary"><p><strong>The escalation contract</strong> keeps this honest: the loop never calls Claude directly. When a persona hits Tier-2 work, it assembles a context packet (task, inputs, file paths, deadline) and writes it to the Agent Dispatch queue in Notion. A scheduled Cowork session — or Eddie, interactively — picks it up. Claude becomes a consultant the agents brief, not the engine they idle on. (When the Max plan is dry, the same packet can route to the OpenRouter/DeepSeek gateway with an explicit flag — degraded but alive.)</p></div>
+<p><strong>Health-data rule:</strong> anything personal (sleep, HRV, nutrition, injuries) routes to the local tier (Ollama) only. Free-cloud models never see health data.</p>
+
+<h3>Guardrails (carried over, now enforced in code)</h3>
+<ul>
+<li>Never execute trades or move money — alerts only.</li>
+<li>Never move calendar events the system didn't create.</li>
+<li>Notify on completion/failure; skips silent. No secrets, no raw scraped text, no stack traces to the phone.</li>
+<li>Every action appends to activity_log.md — same audit trail, new author.</li>
+<li><strong>Self-verification:</strong> every artifact checked (exists, non-trivial) before a run reports success; one retry, then fail-notify. No more silent two-week failures.</li>
+</ul>
+
+<h3>Per-persona conversion map</h3>
+<table>
+<tr><th>Persona</th><th>Moves to loop (Tier 0/1)</th><th>Stays Claude (Tier 2, via dispatch)</th></tr>
+<tr><td><strong>Assistant</strong></td><td>deliverable checks, overdue bump + calendar rebalance (revives the disabled evening engine), briefing assembly + prose, pending_actions aging → Notion tasks, weekly schedule build</td><td>weekly review <em>insight</em> section only</td></tr>
+<tr><td><strong>Finance</strong></td><td>scan data pull (prices, earnings calendar, headlines → Tier-1 summary), watchlist refresh + rotation filter, earnings-event triggers</td><td>the thesis; the scan's "counter-intuitive take"</td></tr>
+<tr><td><strong>Research</strong></td><td>source pre-gathering, output verification + retry, queue hygiene, NotebookLM mechanics</td><td>the synthesis itself</td></tr>
+<tr><td><strong>Health</strong></td><td>Zepp/Cronometer pulls + freshness gate, metrics_history appends, midweek adherence verdict, injury-triggered plan holds</td><td>Saturday review judgment, Sunday plan — <em>only when the freshness gate passes</em></td></tr>
+<tr><td><strong>Dispatch worker</strong></td><td>the entire 72/day poll loop → Python queue watcher that spawns sessions only when jobs exist</td><td>the dispatched jobs themselves</td></tr>
+</table>
+
+<h3>Build order</h3>
+<ol>
+<li><strong>Weekend 1 — foundations:</strong> router keys live (Groq, Ollama, OpenRouter); dispatch poller → Python (kills the leak); bridge HTTP notify endpoint.</li>
+<li><strong>Weekend 2 — runtime + Assistant:</strong> generic loop + notion/gcal/files tools; assistant.yaml takes over briefing, quality check, evening reschedule. Removes ~4 daily/weekly Cowork sessions alone.</li>
+<li><strong>Week 3 — recall index:</strong> embeddings + FTS indexer over the corpus; <code>recall()</code> joins the toolset; Obsidian pointed at the same folders.</li>
+<li><strong>Week 4 — Health + Finance data layers:</strong> freshness gates, pulls, scan assembly, watchlist automation; escalation packets wired for Sat review + Mon thesis.</li>
+<li><strong>August — Research conversion + Career persona</strong> (outreach follow-up aging, coffee-chat prep packets, ND alumni pipeline) in time for move-in.</li>
+</ol>
+
+<h3>What this buys</h3>
+<div class="case bull"><p><strong>Cost:</strong> autonomous Claude spend collapses to the Tier-2 dispatches (~thesis + research + 2 health compositions/week ≈ the ~400k tokens/week that's actually worth it). Everything else: $0, forever, regardless of what Anthropic or OpenAI charge after their IPOs.</p></div>
+<div class="case bull"><p><strong>Resilience:</strong> Max plan exhausted → the body keeps living (briefings, scheduling, health pulls, notifications, chat via local models); only the deepest thoughts pause.</p></div>
+<div class="case base"><p><strong>Capability:</strong> event-driven behavior for the first time — earnings hit the watchlist, an email lands, a task goes overdue, and something <em>happens</em> within minutes instead of next Sunday.</p></div>
+<div class="case base"><p><strong>Career capital:</strong> "I built a multi-agent OS with cost-tiered model routing, local RAG memory, and an escalation protocol to frontier models" — as a freshman. That's the AgentOS write-up's closing chapter, and it's true.</p></div>
+
+<h3>Honest caveats</h3>
+<div class="risk"><p>Open-model tool-calling is good but not Claude-good: keep loop tasks narrow and structured (JSON in/out, schema-validated), and let anything ambiguous escalate rather than improvise. Test each persona in shadow mode (loop runs, Cowork still runs, diff the outputs for two weeks) before cutting over. The local 14B tier is the floor, not the brain — don't let Tier-1 creep into judgment work just because it's free; a wrong adherence verdict costs more than the tokens it saved.</p></div>
+</body>
+</html>
