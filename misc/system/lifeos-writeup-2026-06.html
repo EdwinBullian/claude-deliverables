@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeOS — The Clean Write-Up</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { color: var(--subtle); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+.summary, .section { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.summary { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+.rec { background: var(--card); border-left: 4px solid var(--good); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.risk { background: var(--card); border-left: 4px solid var(--danger); border-radius: 0 6px 6px 0; padding: 0.7rem 1rem; margin-bottom: 0.5rem; font-size: 0.9rem; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+pre { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.2rem; margin: 0.8rem 0 1.2rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; }
+code { font-family: 'JetBrains Mono', 'Consolas', monospace; color: var(--heading); }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+<h1>LifeOS — The Clean Write-Up</h1>
+<p class="meta">Eddie's system, documented 2026-06-12 · Canonical narrative reference · Operational detail lives in the SystemMap (00–06)</p>
+
+<h2>1. What LifeOS Is</h2>
+<p>LifeOS is the operating layer of Eddie's entire life — not an app, but the sum of every system he runs himself through: the Notion dashboards, the Google Calendar, the folders on disk, the daily routines (training, cooking, studying, building), and the data services that observe them (Zepp, Cronometer, Gmail, TradingView).</p>
+<div class="summary">
+<p><strong>AgentOS is the engine inside it.</strong> Where LifeOS is the body — everything Eddie does — AgentOS is the brain and nervous system: the AI layer that watches the body, tells him what to improve, schedules his time, produces analysis he couldn't produce alone in the hours available, and increasingly acts on his behalf. The two are one system. LifeOS without AgentOS is a well-organized notebook; AgentOS without LifeOS has nothing to think about.</p>
+</div>
+<p>The design philosophy, in one line: <strong>Notion is the dashboard, files are the substrate, agents are the engine, the phone is the push channel, and Eddie is the executive.</strong></p>
+
+<h2>2. Anatomy</h2>
+
+<h3>The Body — dashboards, calendar, routines</h3>
+<ul>
+<li><strong>⚔️ Life OS (Notion main dashboard)</strong> — daily report, quick-add buttons, inline Tasks / Areas / Goals / Projects, habit row, briefing archive. The page Eddie actually lives in.</li>
+<li><strong>Character Dashboard / XP engine</strong> — tasks earn XP by difficulty (25/50/100/300), habits earn 5 XP, levels follow a progressive curve, Character Level = average of Area levels. <em>June 2026 prune: Gold economy, D20 loot, Rewards Shop and Achievements retired; XP + levels retained as the signal that matters.</em></li>
+<li><strong>Skill Trees (Areas + Sub-Areas)</strong> — Finance (Personal Finance / Markets / PE-VC), Programming (Python / Web Dev / Data Structures), Fitness, Cooking, Sports. <em>June 2026 prune: School tree retired with graduation; re-seeded for Mendoza in August.</em></li>
+<li><strong>Health (current page)</strong> — widget-driven: sleep ring, energy curve, activity &amp; biometrics, strength trend, hydration, macro trend, micro rings, supplement stack; body goals (155 → 165 lb lean bulk) and a basketball lane. Widgets render from GitHub Pages JSON refreshed daily.</li>
+<li><strong>Career Hub</strong> — Contacts, Firms, Outreach Log, Coffee Chats, Recruiting Pipeline (parked until sophomore IB recruiting, ~Spring 2027). Snapshot: Class of 2030, Mendoza Finance, PE/VC tech focus. Standing goal: 10 ND alumni contacts before fall move-in.</li>
+<li><strong>Workout Tracker</strong> — Workout Schedule DB + per-day templates (Push/Pull/Upper/Lower/Legs); progression rule: all reps clean two sessions in a row → +5 lb.</li>
+<li><strong>Google Calendar</strong> — where time becomes real. The Assistant writes weekly blocks from Notion tasks + time priors; the rule "never move external events" protects Eddie's own entries.</li>
+<li><strong>Manual routines</strong> — lifting, basketball, cooking, studying, building. The part no software does.</li>
+</ul>
+
+<h3>The Skeleton — filesystem</h3>
+<p>Everything under <code>OneDrive/Desktop/Claude/</code>, one folder per domain, each also a Cowork project root:</p>
+<pre><code>Misc/      → Assistant home + AgentOS coordination root (the heart)
+Finance/   → theses, models, market scans, watchlist
+Health/    → baselines, metrics history, training/injury logs, plans, reviews
+Research/  → queue, weekly outputs, archives
+School/    → coursework (winding down; college re-seed pending)
+Coding/    → project briefs, phone_link_bridge, llm_gateway
+Trading/   → paper-trading bots, Pine scripts, backtests (separate from Finance)
+Inbox/     → drag-in target for /analyze</code></pre>
+<p>Files are the source of truth. Deliverables land in dated week folders and are never overwritten — the history compounds. OneDrive syncs everything across desktop and MacBook.</p>
+
+<h3>The Nervous System — coordination + push</h3>
+<ul>
+<li><strong>Coordination files</strong> (<code>Misc/AgentOS/</code>): TOKEN_BUDGET.md (normal/light/paused throttle every agent reads first), activity_log.md (audit trail), signals.md (cross-agent events), pending_actions.md (Assistant's inbox), PROTOCOL.md (the rules), time_allocation.md (duration priors).</li>
+<li><strong>Phone Link bridge</strong> — Eddie's largest self-built software: a Windows Python daemon bridging iMessage. Agents push completions/warnings/failures to his lock screen; inbound texts get classified and dispatched. The system's spinal cord — and the substrate the true-agent layer will run on.</li>
+<li><strong>Model router</strong> — Groq → Gemini → Ollama cascade with Claude escalation, built so the mechanical layer survives any pricing regime. The LiteLLM/OpenRouter gateway gives interactive Claude Code a DeepSeek fallback when the Max plan is exhausted.</li>
+</ul>
+
+<h3>The Senses — data feeds</h3>
+<table>
+<tr><th>Feed</th><th>What it sees</th><th>Status</th></tr>
+<tr><td>Zepp</td><td>sleep, RHR, stress, PAI, workouts</td><td>live (HRV gap — iOS Shortcut down)</td></tr>
+<tr><td>Cronometer</td><td>macros, micros, hydration</td><td>live but under-logged (weakest input)</td></tr>
+<tr><td>Notion logs</td><td>tasks, habits, workouts</td><td>live, logging discipline variable</td></tr>
+<tr><td>Gmail / Calendar</td><td>mail, time commitments</td><td>live via MCP</td></tr>
+<tr><td>TradingView</td><td>charts, quotes, Pine</td><td>live (Trading folder)</td></tr>
+<tr><td>MC Connect</td><td>school assignments</td><td>retired with graduation</td></tr>
+</table>
+
+<h3>The Brain — AgentOS</h3>
+<p>Four personas plus support tracks, each a Cowork project folder with its own CLAUDE.md, standing orders, markdown memory, and domain skills (full analysis in the companion doc, <em>The Agents — Analysis &amp; True-Agent Conversion Plan</em>):</p>
+<table>
+<tr><th>Agent</th><th>Domain</th><th>Autonomous output</th></tr>
+<tr><td><strong>Assistant</strong></td><td>orchestration, scheduling, review</td><td>Sun weekly review + weekly schedule, Thu midweek quality check, daily 6 AM briefing</td></tr>
+<tr><td><strong>Finance</strong></td><td>investment analysis</td><td>Mon thesis (screen → deep-dive → DCF → comps → 1.5–2.5k words), Wed market scan</td></tr>
+<tr><td><strong>Research</strong></td><td>learning pipeline</td><td>Tue queue-driven report (2–5k words, sourced)</td></tr>
+<tr><td><strong>Health</strong></td><td>training + nutrition</td><td>Thu midweek check, Sat full review, Sun meal + workout plan</td></tr>
+<tr><td>Programming (track)</td><td>Claude Code PM</td><td>briefs + ACTIVE_PROJECTS.md, not autonomous</td></tr>
+<tr><td>Tutor / Trading / Writing (skill packs)</td><td>on-demand</td><td>no schedule, invoked by Eddie</td></tr>
+</table>
+<p>Daily layer: 6:01 AM briefing, 5:53 AM media curator, 7:04 AM vitals refresh, dispatch worker polling 6 AM–midnight (slated for replacement by a Python poller), evening reschedule (currently disabled, slated for Python rebuild).</p>
+
+<h3>The Memory — three layers, soon four</h3>
+<ol>
+<li><strong>Domain markdown</strong> — each agent's persistent files (baseline.md, metrics_history.md, WATCHLIST.md, RESEARCH_QUEUE.md, training/injury logs). Append-only where it matters.</li>
+<li><strong>Auto-memory</strong> — Cowork's persistent memory (user / feedback / project / reference files + MEMORY.md index) carrying cross-session knowledge.</li>
+<li><strong>Notion</strong> — the human-readable state: tasks, XP ledger, time log, agent run log.</li>
+<li><strong>Planned: the recall index</strong> — a local embeddings + SQLite FTS index over the entire markdown corpus (every thesis, report, review, note), exposing <code>recall(query)</code> to every agent and to Eddie via Obsidian on top of the same folders. The hippocampus. Free forever, can't be repriced.</li>
+</ol>
+
+<h2>3. How a Week Flows</h2>
+<pre><code>Sun  4:10a weekly review → 5:02a calendar build → 5:38a health plan
+Mon  11:07a Finance thesis
+Tue  11:12a Research project
+Wed  11:07a Finance market scan
+Thu  8:39a Assistant quality check → 11:10a Health midweek
+Fri  — reserved for Eddie —
+Sat  9:06p Health full review
+Daily 6:01a briefing · media curator · vitals refresh · iMessage pushes</code></pre>
+<p>Eddie's loop: wake to the briefing → execute against Notion tasks → log workouts/meals/habits → invoke skills on demand (<code>/check-in</code>, <code>/focus</code>, <code>/screen</code>, <code>/workout</code>, <code>/recipe</code>…) → outputs land on disk → Notion and iMessage surface them → Sunday closes the loop with review + next week's schedule.</p>
+<p>Every scheduled session follows the same contract: read TOKEN_BUDGET → read standing orders → read coordination files → produce → save to dated folder → log to activity_log → signal if needed → notify Eddie. Skips are silent; failures are flagged.</p>
+
+<h2>4. Current State (honest)</h2>
+<div class="rec"><strong>What's strong.</strong> The architecture itself — file-based coordination, standing orders, token budget culture, append-only archives — is real systems engineering. Output quality is recruiting-grade (audited DCFs, sourced reports, periodized training). Self-monitoring catches real failures. The escape-hatch layer (router + gateway) is designed and mostly built.</div>
+<div class="rec"><strong>What's being pruned (June 2026).</strong> School skill tree retired; Gold/loot/achievements economy cut to XP + levels; duplicate Habit Trackers deleted; stale sync-conflict files cleaned.</div>
+<div class="risk"><strong>Known gaps (2026-06-12 audit).</strong> The dispatch worker's 72 polls/day is the big token leak (fix: Python poller); TOKEN_BUDGET.md doesn't govern the daily layer; tasks don't verify their own outputs (the Tuesday research job failed silently for two weeks); the notify bridge needs a localhost HTTP endpoint instead of sandbox SQLite writes; health data inputs are the weakest link — the dashboards are better than the data feeding them. The deepest truth: <strong>the system produces more than its owner consumes, and the bottleneck is input discipline, not capability.</strong></div>
+
+<h2>5. Roadmap</h2>
+<p><strong>Now (June):</strong> resilience stack live (Groq + Ollama + OpenRouter keys, router flipped on, classifier/summarizer converted); Agent SDK credit claimed before June 15; dispatch poller → Python; Notion prune.</p>
+<p><strong>Summer:</strong> the recall index + Obsidian on the corpus; capture tools (gym-text workout parser, iOS Shortcuts for water/weight/HRV); true-agent conversion on the bridge substrate; personal finance terminal v1; college migration project in August (re-seed Areas, dorm-compatible meal/workout logic, campus schedule priors, ND alumni outreach push).</p>
+<p><strong>Fall and beyond:</strong> Career Hub goes live as the primary lane (networking quota, coffee-chat prep briefs, follow-up automation); cap-table simulator as the flagship VC-relevant portfolio project; AgentOS/LifeOS public write-up + repo as career capital; boring-software MVP ships when unblocked.</p>
+<div class="summary">
+<p><strong>The economics doctrine</strong> (what June 15 taught early): Claude for judgment only — theses, research synthesis, real coding. Python for everything deterministic. Free/local models for classification and prose-from-data. Data on disk, mechanical layer portable, model access behind a router. Built this way, no pricing change can kill the system — only slow its most expensive thoughts.</p>
+</div>
+</body>
+</html>
