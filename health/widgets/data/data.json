@@ -59,51 +59,51 @@
     }
   },
   "macros_week": {
-    "week_label": "Macros — Jun 5–11",
-    "macro_score_pct": 34,
+    "week_label": "Macros — Jun 6–12",
+    "macro_score_pct": 30,
     "labels": [
-      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
-      "Thu"
+      "Thu",
+      "Fri"
     ],
     "dates": [
-      "Jun 5",
       "Jun 6",
       "Jun 7",
       "Jun 8",
       "Jun 9",
       "Jun 10",
-      "Jun 11"
+      "Jun 11",
+      "Jun 12"
     ],
     "protein_g": [
-      143,
       129,
       105,
       125,
       138,
       0,
+      126,
       0
     ],
     "carbs_g": [
-      139,
       188,
       128,
       151,
       138,
       0,
+      82,
       0
     ],
     "fat_g": [
-      71,
       84,
       77,
       63,
       77,
       0,
+      77,
       0
     ],
     "has_data": [
@@ -111,8 +111,8 @@
       true,
       true,
       true,
-      true,
       false,
+      true,
       false
     ],
     "target_kcal": 2500,
@@ -121,31 +121,31 @@
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 34,
+    "macro_score_pct": 30,
     "days_logged": 5,
     "days_total": 7,
-    "avg_protein_g": 128,
-    "avg_carbs_g": 148,
-    "avg_fat_g": 74,
+    "avg_protein_g": 124,
+    "avg_carbs_g": 137,
+    "avg_fat_g": 75,
     "target_kcal": 2500,
     "target_protein_g": 200,
     "nutrients": [
       {
-        "pct": 45,
+        "pct": 41,
         "label": "Fiber",
-        "sub": "17g / 38g",
+        "sub": "16g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 65,
+        "pct": 67,
         "label": "Calcium",
-        "sub": "659mg / 1.0g",
+        "sub": "674mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 43,
+        "pct": 46,
         "label": "Magnesium",
-        "sub": "176mg / 400mg",
+        "sub": "184mg / 400mg",
         "upper_limit": false
       },
       {
@@ -155,27 +155,27 @@
         "upper_limit": false
       },
       {
-        "pct": 91,
+        "pct": 99,
         "label": "Sodium",
-        "sub": "2.1g / 2.3g",
+        "sub": "2.3g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 136,
+        "pct": 137,
         "label": "Iron",
         "sub": "11mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 110,
+        "pct": 99,
         "label": "Vitamin A",
-        "sub": "992mcg / 900mcg",
+        "sub": "895mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 160,
+        "pct": 128,
         "label": "Vitamin C",
-        "sub": "145mg / 90mg",
+        "sub": "115mg / 90mg",
         "upper_limit": false
       }
     ],
@@ -267,7 +267,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jun 11",
+    "date_label": "Jun 12",
     "curve_24h": [
       5,
       5,
@@ -297,27 +297,27 @@
     "footer": "Wake 7:24 AM · Training 19 min · Natural curve"
   },
   "hydration": {
-    "date_label": "Jun 11 — Today",
+    "date_label": "Jun 12 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "oz": [
-        114,
         79,
         90,
         101,
         18,
         0,
+        56,
         0
       ],
       "today_index": 6
@@ -325,8 +325,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-11T22:28:48-07:00",
-    "last_updated_label": "Jun 11, 10:28 PM PST",
+    "last_updated_iso": "2026-06-12T03:56:06-07:00",
+    "last_updated_label": "Jun 12, 3:56 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,13 +346,13 @@
         "error": null
       },
       "cronometer": {
-        "ok": false,
-        "last_ok_iso": "2026-06-11T14:10:55-07:00",
-        "error": "auth failed: 403 Client Error: Forbidden for url: https://cronometer.com/api/v2/login"
+        "ok": true,
+        "last_ok_iso": "2026-06-12T03:56:08-07:00",
+        "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-11T22:28:49-07:00",
+        "last_ok_iso": "2026-06-12T03:56:07-07:00",
         "error": null
       }
     },
