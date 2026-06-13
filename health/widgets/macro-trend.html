@@ -86,8 +86,8 @@ const FALLBACK = {
   carbs_g:  [54,45,98,183,39,107,122],
   fat_g:    [80,33,89,116,75,82,109],
   has_data: [true,true,true,true,true,true,true],
-  target_kcal: 2500, target_protein_g: 200,
-  footer: 'Target: 2,500 kcal · 200g protein · Fri from app screenshot',
+  target_kcal: 2300, target_protein_g: 200,
+  footer: 'Target: 2,300 kcal · 200g protein · Fri from app screenshot',
   // Per-day food log. Each item: {name, amount, kcal, p, c, f}
   day_foods: [
     [ {name:'Greek Yogurt + Granola',amount:'1 bowl',kcal:320,p:24,c:38,f:8},
@@ -154,7 +154,7 @@ function render(d) {
   const ca = i => has[i] ? 'rgba(90,174,212,.82)'  : 'transparent';
   const fa = i => has[i] ? 'rgba(232,148,58,.82)'  : 'transparent';
 
-  const target = d.target_kcal || 2500;
+  const target = d.target_kcal || 2300;
   const targetPlugin = { id:'target', afterDraw(c){
     const {ctx,chartArea,scales}=c; if(!chartArea)return;
     const y = scales.y.getPixelForValue(target);
