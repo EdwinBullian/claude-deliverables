@@ -29,7 +29,7 @@ from common import (  # noqa: E402
     trailing_7_days,
 )
 
-TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2500") or 2500)
+TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2300") or 2300)
 TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="200") or 200)
 WATER_TARGET_OZ = int(env("CRONOMETER_TARGET_WATER_OZ", default="130") or 130)
 
