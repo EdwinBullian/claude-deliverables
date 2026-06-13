@@ -48,7 +48,7 @@ const FALLBACK = {
   week_label: 'Nutrition — W21 Avg', macro_score_pct: 72,
   days_logged: 6, days_total: 7,
   avg_protein_g: 132, avg_carbs_g: 93, avg_fat_g: 84,
-  target_kcal: 2500, target_protein_g: 200,
+  target_kcal: 2300, target_protein_g: 200,
   nutrients: [
     {pct:36, label:'Fiber',     sub:'14g / 38g',     upper_limit:false},
     {pct:40, label:'Calcium',   sub:'401mg / 1g',    upper_limit:false},
@@ -83,7 +83,7 @@ function render(d) {
     </svg>
     <div class="macro-ring-info">
       <div class="macro-ring-title">Macro Score</div>
-      <div class="macro-ring-sub">Avg over ${d.days_logged ?? '?'} days &nbsp;·&nbsp; Target: ${(d.target_kcal||2500).toLocaleString()} kcal · ${d.target_protein_g||200}g protein</div>
+      <div class="macro-ring-sub">Avg over ${d.days_logged ?? '?'} days &nbsp;·&nbsp; Target: ${(d.target_kcal||2300).toLocaleString()} kcal · ${d.target_protein_g||200}g protein</div>
       <div class="macro-pcts">
         <span class="mpct" style="color:#6bda87">Protein ~${d.avg_protein_g ?? '—'}g avg</span>
         <span class="mpct" style="color:#5aaed4">Carbs ~${d.avg_carbs_g ?? '—'}g avg</span>
