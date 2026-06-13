@@ -379,7 +379,7 @@ def _build_get_food_body(token: str, food_id: int) -> str:
 # Each nutrient appears in the response as `<id>,<value>,<marker>,<id>,...`
 # — the same nutrient ID appears twice with the value sandwiched between.
 # We anchor on that double-occurrence to filter out random integers.
-_NUTRIENT_RE = re.compile(r',(-?\d{2,5}),(-?\d+(?:\.\d+)?(?:e-?\d+)?),\d+,(-?\d{2,5}),')
+_NUTRIENT_RE = re.compile(r'(?<![\d.eE-])(-?\d{2,5}),(-?\d+(?:\.\d+)?(?:[eE]-?\d+)?),\d+,(-?\d{2,5})(?![\d.])')
 
 # The English food name is the first non-flag string immediately after the US
 # flag-image URL in the type table at the end of the response.
@@ -461,8 +461,11 @@ def _aggregate_day(date: str) -> dict:
         # weight/100 — ~16x for one chicken recipe). Threshold 110 is safe because
         # real per-100 g proximate components can never exceed 100.
         mass_base = sum(npg.get(i, 0.0) for i in _MASS_COMPONENT_IDS)
-        per_unit  = mass_base if mass_base > 110.0 else 100.0
-        scale  = s["grams"] / per_unit
+        amount    = s["grams"]
+        if mass_base > 110.0:
+            scale = amount if amount <= 10.0 else amount / mass_base
+        else:
+            scale = amount / 100.0
         scaled = {nid: v * scale for nid, v in npg.items()}
         for nid, v in scaled.items():
             if nid in _PER_FOOD_PCT_IDS:
