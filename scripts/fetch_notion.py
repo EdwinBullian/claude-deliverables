@@ -113,6 +113,33 @@ def _date(node) -> dt.date | None:
     return dt.date.fromisoformat(d["start"][:10])
 
 
+_LIFT_WORDS = ("push", "pull", "upper", "lower", "legs", "arms", "chest",
+               "back", "shoulders", "strength", "full body")
+_LIFT_SPLIT_LABELS = {"push": "Push", "pull": "Pull", "upper": "Upper",
+                      "lower": "Lower", "legs": "Legs"}
+
+
+def _categorize(day_type: str | None, name: str | None) -> tuple[str, str]:
+    """Classify a workout row into (category, lift_split).
+
+    Eddie often leaves the 'Day Type' select EMPTY on basketball/walk entries —
+    only the page title carries the activity (e.g. a page created from the
+    'Basketball' template is named "Basketball"). So fall back to the title.
+    """
+    key = ((day_type or "").strip() or (name or "").strip()).lower()
+    if not key or "rest" in key:
+        return ("rest", "")
+    if "basketball" in key or "hoops" in key:
+        return ("basketball", "")
+    if "walk" in key or "run" in key:
+        return ("walking", "")
+    for w in _LIFT_WORDS:
+        if w in key:
+            split = (day_type or "").strip() or _LIFT_SPLIT_LABELS.get(w, w.title())
+            return ("lift", split)
+    return ("other", "")
+
+
 def _build_strength_week(workouts: list[dict]) -> dict:
     today = today_pst()
     # Trailing 7 days ending today, so the chart always shows recent activity
@@ -120,14 +147,15 @@ def _build_strength_week(workouts: list[dict]) -> dict:
     week = trailing_7_days(today)
     iso_to_idx = {d.isoformat(): i for i, d in enumerate(week)}
 
-    minutes = [0] * 7
-    types: list[str] = [""] * 7
+    lift_type: list[str] = [""] * 7
+    lift_min: list[int] = [0] * 7            # estimate; Zepp duration wins in merge
+    notion_bball_min: list[float] = [0.0] * 7
+    notion_walk_min: list[float] = [0.0] * 7
     most_recent_top_lifts_raw = ""
 
-    # Per-type duration estimates (minutes). The "Workout Schedule" DB doesn't
-    # log actual session duration, so we use the weekly schedule's published
-    # estimates. If a Duration / Minutes column is added later, it takes
-    # precedence over the estimate.
+    # Per-type duration estimates (minutes). The "Workout Schedule" DB usually
+    # doesn't log a session duration, so these stand in until Zepp supplies the
+    # real number (the merge prefers Zepp). A Duration column, if present, wins.
     DURATION_ESTIMATES = {
         "Upper": 85, "Lower": 75, "Push": 80, "Pull": 80, "Legs": 70,
         "Basketball": 45, "Running": 35, "Walking": 45, "Rest": 0,
@@ -147,14 +175,21 @@ def _build_strength_week(workouts: list[dict]) -> dict:
             continue
         idx = iso_to_idx[d.isoformat()]
 
-        type_name = _select(type_node) or types[idx] or ""
-        types[idx] = type_name
-        actual_dur = _num(dur_node)
-        minutes[idx] = int(actual_dur) if actual_dur else (
-            minutes[idx] or DURATION_ESTIMATES.get(type_name, 0)
-        )
-        if not most_recent_top_lifts_raw:
-            most_recent_top_lifts_raw = _text(lifts_node)
+        cat, split = _categorize(_select(type_node), _title(page))
+        dur = _num(dur_node)
+
+        if cat == "lift":
+            if not lift_type[idx]:
+                lift_type[idx] = split or "Strength"
+            est = int(dur) if dur else DURATION_ESTIMATES.get(split, 60)
+            lift_min[idx] = max(lift_min[idx], est)
+            if not most_recent_top_lifts_raw:
+                most_recent_top_lifts_raw = _text(lifts_node)
+        elif cat == "basketball":
+            notion_bball_min[idx] += float(dur) if dur else DURATION_ESTIMATES["Basketball"]
+        elif cat == "walking":
+            notion_walk_min[idx] += float(dur) if dur else DURATION_ESTIMATES["Walking"]
+        # rest / other -> no chart segment
 
     top_lifts = _parse_top_lifts(most_recent_top_lifts_raw)
 
@@ -166,8 +201,10 @@ def _build_strength_week(workouts: list[dict]) -> dict:
         "week_label": "Training — Last 7 Days",
         "labels": day_labels,
         "date_labels": date_labels,
-        "minutes": minutes,
-        "types": types,
+        "lift_type": lift_type,
+        "lift_min": lift_min,
+        "notion_bball_min": notion_bball_min,
+        "notion_walk_min": notion_walk_min,
         "top_lifts": top_lifts,
     }
 
