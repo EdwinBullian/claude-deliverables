@@ -60,7 +60,7 @@
   },
   "macros_week": {
     "week_label": "Macros — Jun 7–13",
-    "macro_score_pct": 43,
+    "macro_score_pct": 61,
     "labels": [
       "Sun",
       "Mon",
@@ -115,20 +115,24 @@
       true,
       false
     ],
-    "target_kcal": 2300,
-    "target_protein_g": 200,
-    "footer": "Target: 2,300 kcal · 200g protein · 6/7 days logged"
+    "target_kcal": 2400,
+    "target_protein_g": 150,
+    "target_carbs_g": 200,
+    "target_fat_g": 100,
+    "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 6/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 43,
+    "macro_score_pct": 61,
     "days_logged": 6,
     "days_total": 7,
     "avg_protein_g": 130,
     "avg_carbs_g": 178,
     "avg_fat_g": 66,
-    "target_kcal": 2300,
-    "target_protein_g": 200,
+    "target_kcal": 2400,
+    "target_protein_g": 150,
+    "target_carbs_g": 200,
+    "target_fat_g": 100,
     "nutrients": [
       {
         "pct": 39,
@@ -325,10 +329,17 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-13T10:49:45-07:00",
-    "last_updated_label": "Jun 13, 10:49 AM PST",
+    "last_updated_iso": "2026-06-13T13:10:22-07:00",
+    "last_updated_label": "Jun 13, 1:10 PM PST",
     "refreshed_sections": [
-      "strength_week"
+      "sleep",
+      "activity",
+      "energy",
+      "strength_week",
+      "supplements",
+      "macros_week",
+      "micros_week",
+      "hydration"
     ],
     "last_zepp_data_iso": "2026-06-13T10:49:45-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
@@ -340,12 +351,12 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-13T10:01:38-07:00",
+        "last_ok_iso": "2026-06-13T13:10:23-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-13T10:49:45-07:00",
+        "last_ok_iso": "2026-06-13T13:10:22-07:00",
         "error": null
       }
     },
