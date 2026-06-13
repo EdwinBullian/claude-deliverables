@@ -67,9 +67,17 @@ LIFT_SPLITS = {"push", "pull", "legs", "upper", "lower", "full body", "arms",
 # ---- Strength merge ------------------------------------------------------
 
 def _merge_strength(notion: dict | None, zepp_workouts: dict | None) -> dict | None:
-    """Combine the Notion lift log with classified Zepp workouts into a
-    stacked-bar payload: per day, a Lift segment (Notion split + Zepp duration/
-    calories), a Basketball segment, and a Walking segment.
+    """Combine the Notion workout log with Zepp sessions into a stacked-bar
+    payload (Lift / Basketball / Walk per day).
+
+    Notion is AUTHORITATIVE for *what kind* of session happened — Eddie logs
+    each workout's type there. Zepp supplies real duration + calories but
+    classifies lift-vs-basketball unreliably (a logged lift can come back with
+    a basketball-ish type code). So:
+      * If Notion logged a lift that day, the LONGEST Zepp non-walk session is
+        the lift, regardless of how Zepp tagged it; any extras stay basketball.
+      * Notion-logged basketball / walks are surfaced even when Zepp missed
+        them, deduped against Zepp by taking the max (never summing both).
     """
     if not notion and not zepp_workouts:
         return None
@@ -79,8 +87,10 @@ def _merge_strength(notion: dict | None, zepp_workouts: dict | None) -> dict | N
     date_labels = (notion or {}).get("date_labels") \
         or (zepp_workouts or {}).get("date_labels") or labels
 
-    n_types = (notion or {}).get("types") or [""] * 7
-    n_min = (notion or {}).get("minutes") or [0] * 7
+    n_lift_type = (notion or {}).get("lift_type") or [""] * 7
+    n_lift_est = (notion or {}).get("lift_min") or [0] * 7
+    n_bball = (notion or {}).get("notion_bball_min") or [0] * 7
+    n_walk = (notion or {}).get("notion_walk_min") or [0] * 7
     by_day = (zepp_workouts or {}).get("by_day") or [[] for _ in range(7)]
 
     lift_min = [0] * 7
@@ -93,38 +103,36 @@ def _merge_strength(notion: dict | None, zepp_workouts: dict | None) -> dict | N
 
     for i in range(7):
         sessions = by_day[i] if i < len(by_day) else []
-        training = [s for s in sessions if s["cat"] == "training"]
-        bball = [s for s in sessions if s["cat"] == "basketball"]
-        walk = [s for s in sessions if s["cat"] == "walking"]
+        z_walk = [s for s in sessions if s["cat"] == "walking"]
+        z_nonwalk = [s for s in sessions if s["cat"] != "walking"]
 
-        notion_lift = (n_types[i] or "").strip()
-        has_notion_lift = notion_lift.lower() in LIFT_SPLITS or (
-            notion_lift != "" and notion_lift.lower() not in
-            {"basketball", "walking", "running", "rest", "cardio"}
-        )
-
-        if has_notion_lift:
-            lift_type[i] = notion_lift
-            if training:
-                # The longest same-day "training" session IS the lift.
-                training.sort(key=lambda s: s["min"], reverse=True)
-                lift = training[0]
+        bpool = []  # Zepp sessions that count as basketball
+        if (n_lift_type[i] or "").strip():
+            lift_type[i] = n_lift_type[i].strip()
+            if z_nonwalk:
+                # Notion says this was a lift day, so the longest non-walk Zepp
+                # session IS the lift even if Zepp mis-tagged it as basketball.
+                z_nonwalk.sort(key=lambda s: s["min"], reverse=True)
+                lift = z_nonwalk[0]
                 lift_min[i] = int(round(lift["min"]))
                 lift_cal[i] = lift["cal"]
-                # Any remaining training sessions = evening hoops.
-                bball.extend(training[1:])
+                bpool = z_nonwalk[1:]
             else:
-                # Forgot to log the lift on Zepp — fall back to Notion estimate.
-                lift_min[i] = int(n_min[i] or 0)
+                # No Zepp session for the lift — fall back to Notion estimate.
+                lift_min[i] = int(n_lift_est[i] or 0)
                 lift_cal[i] = 0
         else:
-            # No lift that day: every "training" session is basketball.
-            bball.extend(training)
+            bpool = z_nonwalk  # no lift logged -> all non-walk = basketball
 
-        bball_min[i] = round(sum(s["min"] for s in bball), 1)
-        bball_cal[i] = int(sum(s["cal"] for s in bball))
-        walk_min[i] = round(sum(s["min"] for s in walk), 1)
-        walk_cal[i] = int(sum(s["cal"] for s in walk))
+        z_b_min = sum(s["min"] for s in bpool)
+        z_b_cal = int(sum(s["cal"] for s in bpool))
+        bball_min[i] = round(max(z_b_min, float(n_bball[i] or 0)), 1)
+        bball_cal[i] = z_b_cal
+
+        z_w_min = sum(s["min"] for s in z_walk)
+        z_w_cal = int(sum(s["cal"] for s in z_walk))
+        walk_min[i] = round(max(z_w_min, float(n_walk[i] or 0)), 1)
+        walk_cal[i] = z_w_cal
 
     return {
         "week_label": "Training — Last 7 Days",
