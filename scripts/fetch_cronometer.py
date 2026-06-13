@@ -29,8 +29,10 @@ from common import (  # noqa: E402
     trailing_7_days,
 )
 
-TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2300") or 2300)
-TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="200") or 200)
+TARGET_KCAL = int(env("CRONOMETER_TARGET_KCAL", default="2400") or 2400)
+TARGET_PROTEIN_G = int(env("CRONOMETER_TARGET_PROTEIN_G", default="150") or 150)
+TARGET_CARBS_G = int(env("CRONOMETER_TARGET_CARBS_G", default="200") or 200)
+TARGET_FAT_G = int(env("CRONOMETER_TARGET_FAT_G", default="100") or 100)
 WATER_TARGET_OZ = int(env("CRONOMETER_TARGET_WATER_OZ", default="130") or 130)
 
 WATER_KEY = "Water (g)"
@@ -191,7 +193,9 @@ def fetch() -> dict:
             "has_data": has_data,
             "target_kcal": TARGET_KCAL,
             "target_protein_g": TARGET_PROTEIN_G,
-            "footer": f"Target: {TARGET_KCAL:,} kcal · {TARGET_PROTEIN_G}g protein · {n_logged}/7 days logged",
+            "target_carbs_g": TARGET_CARBS_G,
+            "target_fat_g": TARGET_FAT_G,
+            "footer": f"Target: {TARGET_KCAL:,} kcal · {TARGET_PROTEIN_G}p / {TARGET_CARBS_G}c / {TARGET_FAT_G}f · {n_logged}/7 days logged",
         }
         micros_week = {
             "week_label": "Nutrition — 7-Day Avg",
@@ -203,6 +207,8 @@ def fetch() -> dict:
             "avg_fat_g": avg_fat,
             "target_kcal": TARGET_KCAL,
             "target_protein_g": TARGET_PROTEIN_G,
+            "target_carbs_g": TARGET_CARBS_G,
+            "target_fat_g": TARGET_FAT_G,
             "nutrients": nutrients,
             "footer": f"{n_logged} of 7 days logged · RDI for adult males · ↓ = upper limit",
         }
