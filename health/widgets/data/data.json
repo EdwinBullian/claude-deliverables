@@ -184,82 +184,82 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
       "Thu",
-      "Fri"
+      "Fri",
+      "Sat"
     ],
     "date_labels": [
-      "Sat 6/6",
       "Sun 6/7",
       "Mon 6/8",
       "Tue 6/9",
       "Wed 6/10",
       "Thu 6/11",
-      "Fri 6/12"
+      "Fri 6/12",
+      "Sat 6/13"
     ],
     "lift_min": [
-      17,
       0,
       0,
       85,
       0,
       0,
-      3
+      3,
+      0
     ],
     "lift_cal": [
-      132,
       0,
       0,
       0,
       0,
       0,
-      19
+      19,
+      0
     ],
     "lift_type": [
-      "Pull",
       "",
       "",
       "Upper",
       "",
       "",
-      "Push"
+      "Push",
+      ""
     ],
     "bball_min": [
-      63.3,
       81.8,
       82.0,
       57.3,
       0,
       19.4,
-      60.4
+      60.4,
+      0
     ],
     "bball_cal": [
-      239,
       412,
       352,
       285,
       0,
       122,
-      477
+      477,
+      0
     ],
     "walk_min": [
-      23.2,
       7.4,
       0,
       3.0,
       0,
       0,
+      0,
       0
     ],
     "walk_cal": [
-      155,
       26,
       0,
       13,
+      0,
       0,
       0,
       0
@@ -325,24 +325,17 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-13T07:55:37-07:00",
-    "last_updated_label": "Jun 13, 7:55 AM PST",
+    "last_updated_iso": "2026-06-13T09:54:36-07:00",
+    "last_updated_label": "Jun 13, 9:54 AM PST",
     "refreshed_sections": [
-      "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
-      "hydration"
+      "strength_week"
     ],
-    "last_zepp_data_iso": "2026-06-12T23:22:10-07:00",
+    "last_zepp_data_iso": "2026-06-13T09:54:36-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-12T23:22:20-07:00",
+        "last_ok_iso": "2026-06-13T09:54:39-07:00",
         "error": null
       },
       "cronometer": {
@@ -352,7 +345,7 @@
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-13T07:55:38-07:00",
+        "last_ok_iso": "2026-06-13T09:54:36-07:00",
         "error": null
       }
     },
