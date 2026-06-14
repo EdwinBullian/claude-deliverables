@@ -14,49 +14,44 @@
     "awakenings": 2
   },
   "activity": {
-    "date_label": "Jun 12 — Today",
+    "date_label": "Fri Jun 12 — Latest",
     "today": {
       "rhr": 47,
-      "steps": 869,
-      "avg_hr": 63,
+      "steps": 1000,
+      "avg_hr": 66,
       "sleep_score": 76
     },
     "week": {
       "labels": [
-        "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
-        "Fri"
+        "Fri",
+        "Sat"
       ],
       "steps": [
-        7071,
         4462,
         3501,
         9847,
         2791,
         4270,
-        869
+        1000,
+        null
       ],
       "rhr": [
-        52,
         52,
         50,
         50,
         50,
         48,
-        47
+        47,
+        null
       ],
       "today_index": 6
     },
-    "today_workout": {
-      "type": "Basketball",
-      "duration_min": 95,
-      "calories": 477,
-      "avg_hr": null
-    }
+    "today_workout": null
   },
   "macros_week": {
     "week_label": "Macros — Jun 7–13",
@@ -298,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:53 AM · Basketball 95 min · Natural curve"
+    "footer": "Wake 6:53 AM · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 13 — Today",
@@ -329,18 +324,18 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-13T16:15:47-07:00",
-    "last_updated_label": "Jun 13, 4:15 PM PST",
+    "last_updated_iso": "2026-06-13T19:28:17-07:00",
+    "last_updated_label": "Jun 13, 7:28 PM PST",
     "refreshed_sections": [
-      "macros_week",
-      "micros_week"
+      "sleep",
+      "energy"
     ],
-    "last_zepp_data_iso": "2026-06-13T10:49:45-07:00",
+    "last_zepp_data_iso": "2026-06-13T19:28:17-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-13T10:49:50-07:00",
+        "last_ok_iso": "2026-06-13T19:28:23-07:00",
         "error": null
       },
       "cronometer": {
