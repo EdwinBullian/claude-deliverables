@@ -1,25 +1,25 @@
 {
   "sleep": {
-    "date_label": "Jun 12 — Last Night",
-    "score": 76,
-    "total_minutes": 458,
-    "total_label": "7 h 38 m",
-    "deep_minutes": 37,
-    "light_minutes": 270,
-    "rem_minutes": 151,
-    "awake_minutes": 2,
-    "bedtime_label": "11:13 PM",
-    "wake_label": "6:53 AM",
-    "resting_hr": 47,
+    "date_label": "Jun 13 — Last Night",
+    "score": 75,
+    "total_minutes": 503,
+    "total_label": "8 h 23 m",
+    "deep_minutes": 91,
+    "light_minutes": 233,
+    "rem_minutes": 179,
+    "awake_minutes": 3,
+    "bedtime_label": "1:02 AM",
+    "wake_label": "9:28 AM",
+    "resting_hr": 55,
     "awakenings": 2
   },
   "activity": {
-    "date_label": "Fri Jun 12 — Latest",
+    "date_label": "Jun 13 — Today",
     "today": {
-      "rhr": 47,
-      "steps": 1000,
-      "avg_hr": 66,
-      "sleep_score": 76
+      "rhr": 55,
+      "steps": 3657,
+      "avg_hr": 71,
+      "sleep_score": 75
     },
     "week": {
       "labels": [
@@ -37,8 +37,8 @@
         9847,
         2791,
         4270,
-        1000,
-        null
+        1628,
+        3657
       ],
       "rhr": [
         52,
@@ -47,11 +47,16 @@
         50,
         48,
         47,
-        null
+        55
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Walk",
+      "duration_min": 28,
+      "calories": 205,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — Jun 7–13",
@@ -274,13 +279,13 @@
       5,
       5,
       5,
+      5,
+      5,
+      5,
       28,
       18,
-      14,
-      20,
-      26,
-      26,
-      26,
+      18,
+      18,
       65,
       72,
       78,
@@ -293,7 +298,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:53 AM · No workout · Natural curve"
+    "footer": "Wake 9:28 AM · Walk 28 min · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 13 — Today",
@@ -324,18 +329,18 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-13T19:28:17-07:00",
-    "last_updated_label": "Jun 13, 7:28 PM PST",
+    "last_updated_iso": "2026-06-13T19:30:20-07:00",
+    "last_updated_label": "Jun 13, 7:30 PM PST",
     "refreshed_sections": [
       "sleep",
       "energy"
     ],
-    "last_zepp_data_iso": "2026-06-13T19:28:17-07:00",
+    "last_zepp_data_iso": "2026-06-13T19:30:20-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-13T19:28:23-07:00",
+        "last_ok_iso": "2026-06-13T19:30:26-07:00",
         "error": null
       },
       "cronometer": {
