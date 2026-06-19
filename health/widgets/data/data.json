@@ -1,17 +1,17 @@
 {
   "sleep": {
-    "date_label": "Jun 16 — Last Night",
-    "score": 67,
-    "total_minutes": 420,
-    "total_label": "7 h 0 m",
-    "deep_minutes": 71,
-    "light_minutes": 220,
-    "rem_minutes": 129,
+    "date_label": "Jun 18 — Last Night",
+    "score": null,
+    "total_minutes": null,
+    "total_label": "—",
+    "deep_minutes": 0,
+    "light_minutes": 0,
+    "rem_minutes": 0,
     "awake_minutes": 0,
-    "bedtime_label": "12:06 PM",
-    "wake_label": "7:06 PM",
-    "resting_hr": 57,
-    "awakenings": 0
+    "bedtime_label": "—",
+    "wake_label": "—",
+    "resting_hr": null,
+    "awakenings": null
   },
   "activity": {
     "date_label": "Wed Jun 17 — Latest",
@@ -19,34 +19,34 @@
       "rhr": 57,
       "steps": 6974,
       "avg_hr": 75,
-      "sleep_score": 67
+      "sleep_score": null
     },
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "steps": [
-        1628,
         4271,
         5874,
         748,
         null,
         6974,
+        null,
         null
       ],
       "rhr": [
-        47,
         55,
         50,
         51,
         null,
         57,
+        null,
         null
       ],
       "today_index": 6
@@ -183,83 +183,83 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
-      "Thu"
+      "Thu",
+      "Fri"
     ],
     "date_labels": [
-      "Fri 6/12",
       "Sat 6/13",
       "Sun 6/14",
       "Mon 6/15",
       "Tue 6/16",
       "Wed 6/17",
-      "Thu 6/18"
+      "Thu 6/18",
+      "Fri 6/19"
     ],
     "lift_min": [
-      60,
       0,
       110,
+      0,
       0,
       0,
       0,
       0
     ],
     "lift_cal": [
-      477,
       0,
       483,
+      0,
       0,
       0,
       0,
       0
     ],
     "lift_type": [
-      "Push",
       "",
       "Pull",
+      "",
       "",
       "",
       "",
       ""
     ],
     "bball_min": [
-      3.0,
       0,
       40.8,
+      0,
       0,
       0,
       0,
       0
     ],
     "bball_cal": [
-      19,
       0,
       145,
+      0,
       0,
       0,
       0,
       0
     ],
     "walk_min": [
-      0,
       39.5,
       0,
       4.9,
       3.5,
       0,
+      0,
       0
     ],
     "walk_cal": [
-      0,
       269,
       0,
       27,
       19,
+      0,
       0,
       0
     ],
@@ -275,12 +275,12 @@
       5,
       5,
       5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
+      28,
+      18,
+      14,
+      20,
+      20,
+      20,
       65,
       72,
       78,
@@ -293,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 7:06 PM · No workout · Natural curve"
+    "footer": "Wake — · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 19 — Today",
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-19T08:55:01-07:00",
-    "last_updated_label": "Jun 19, 8:55 AM PST",
+    "last_updated_iso": "2026-06-19T13:23:26-07:00",
+    "last_updated_label": "Jun 19, 1:23 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,22 +336,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-06-18T14:15:32-07:00",
+    "last_zepp_data_iso": "2026-06-19T13:23:26-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-18T14:15:34-07:00",
+        "last_ok_iso": "2026-06-19T13:23:28-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-19T08:55:02-07:00",
+        "last_ok_iso": "2026-06-19T13:23:28-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-19T08:55:02-07:00",
+        "last_ok_iso": "2026-06-19T13:23:26-07:00",
         "error": null
       }
     },
