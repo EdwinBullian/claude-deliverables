@@ -54,60 +54,60 @@
     "today_workout": null
   },
   "macros_week": {
-    "week_label": "Macros — Jun 15–21",
+    "week_label": "Macros — Jun 16–22",
     "macro_score_pct": 31,
     "labels": [
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
-      "Sun"
+      "Sun",
+      "Mon"
     ],
     "dates": [
-      "Jun 15",
       "Jun 16",
       "Jun 17",
       "Jun 18",
       "Jun 19",
       "Jun 20",
-      "Jun 21"
+      "Jun 21",
+      "Jun 22"
     ],
     "protein_g": [
-      0,
       0,
       54,
       0,
       0,
       158,
+      0,
       0
     ],
     "carbs_g": [
-      0,
       0,
       42,
       0,
       0,
       109,
+      0,
       0
     ],
     "fat_g": [
-      0,
       0,
       62,
       0,
       0,
       103,
+      0,
       0
     ],
     "has_data": [
       false,
-      false,
       true,
       false,
       false,
       true,
+      false,
       false
     ],
     "target_kcal": 2400,
@@ -266,7 +266,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jun 21",
+    "date_label": "Jun 22",
     "curve_24h": [
       5,
       5,
@@ -296,27 +296,27 @@
     "footer": "Wake 5:24 PM · No workout · Natural curve"
   },
   "hydration": {
-    "date_label": "Jun 21 — Today",
+    "date_label": "Jun 22 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
-        "Sun"
+        "Sun",
+        "Mon"
       ],
       "oz": [
-        0,
         0,
         8,
         0,
         0,
         28,
+        0,
         0
       ],
       "today_index": 6
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-21T23:18:43-07:00",
-    "last_updated_label": "Jun 21, 11:18 PM PST",
+    "last_updated_iso": "2026-06-22T05:41:38-07:00",
+    "last_updated_label": "Jun 22, 5:41 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,12 +346,12 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-21T23:18:45-07:00",
+        "last_ok_iso": "2026-06-22T05:41:39-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-21T23:18:44-07:00",
+        "last_ok_iso": "2026-06-22T05:41:39-07:00",
         "error": null
       }
     },
