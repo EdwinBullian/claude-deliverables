@@ -14,7 +14,7 @@
     "awakenings": 3
   },
   "activity": {
-    "date_label": "Jun 21 — Today",
+    "date_label": "Sun Jun 21 — Latest",
     "today": {
       "rhr": 55,
       "steps": 76,
@@ -23,31 +23,31 @@
     },
     "week": {
       "labels": [
-        "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
-        "Sun"
+        "Sun",
+        "Mon"
       ],
       "steps": [
-        748,
         null,
         6974,
         null,
         2419,
         10536,
-        76
+        76,
+        null
       ],
       "rhr": [
-        51,
         null,
         57,
         null,
         55,
         52,
-        55
+        55,
+        null
       ],
       "today_index": 6
     },
@@ -183,22 +183,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
-      "Sun"
+      "Sun",
+      "Mon"
     ],
     "date_labels": [
-      "Mon 6/15",
       "Tue 6/16",
       "Wed 6/17",
       "Thu 6/18",
       "Fri 6/19",
       "Sat 6/20",
-      "Sun 6/21"
+      "Sun 6/21",
+      "Mon 6/22"
     ],
     "lift_min": [
       0,
@@ -246,20 +246,20 @@
       0
     ],
     "walk_min": [
-      4.9,
       3.5,
       0,
       0,
       21.6,
       0,
+      0,
       0
     ],
     "walk_cal": [
-      27,
       19,
       0,
       0,
       142,
+      0,
       0,
       0
     ],
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-22T05:41:38-07:00",
-    "last_updated_label": "Jun 22, 5:41 AM PST",
+    "last_updated_iso": "2026-06-22T10:24:09-07:00",
+    "last_updated_label": "Jun 22, 10:24 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,22 +336,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-06-21T13:19:43-07:00",
+    "last_zepp_data_iso": "2026-06-22T10:24:09-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-21T13:19:46-07:00",
+        "last_ok_iso": "2026-06-22T10:24:15-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-22T05:41:39-07:00",
+        "last_ok_iso": "2026-06-22T10:24:10-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-22T05:41:39-07:00",
+        "last_ok_iso": "2026-06-22T10:24:09-07:00",
         "error": null
       }
     },
