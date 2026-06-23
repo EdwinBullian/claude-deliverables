@@ -1,17 +1,17 @@
 {
   "sleep": {
-    "date_label": "Jun 20 — Last Night",
-    "score": 80,
-    "total_minutes": 489,
-    "total_label": "8 h 9 m",
-    "deep_minutes": 76,
-    "light_minutes": 260,
-    "rem_minutes": 153,
-    "awake_minutes": 3,
-    "bedtime_label": "9:12 AM",
-    "wake_label": "5:24 PM",
-    "resting_hr": 55,
-    "awakenings": 3
+    "date_label": "Jun 22 — Last Night",
+    "score": null,
+    "total_minutes": null,
+    "total_label": "—",
+    "deep_minutes": 0,
+    "light_minutes": 0,
+    "rem_minutes": 0,
+    "awake_minutes": 0,
+    "bedtime_label": "—",
+    "wake_label": "—",
+    "resting_hr": null,
+    "awakenings": null
   },
   "activity": {
     "date_label": "Sun Jun 21 — Latest",
@@ -19,34 +19,34 @@
       "rhr": 55,
       "steps": 76,
       "avg_hr": 58,
-      "sleep_score": 80
+      "sleep_score": null
     },
     "week": {
       "labels": [
-        "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
-        "Mon"
+        "Mon",
+        "Tue"
       ],
       "steps": [
-        null,
         6974,
         null,
         2419,
         10536,
         76,
+        null,
         null
       ],
       "rhr": [
-        null,
         57,
         null,
         55,
         52,
         55,
+        null,
         null
       ],
       "today_index": 6
@@ -275,12 +275,12 @@
       5,
       5,
       5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
+      28,
+      18,
+      14,
+      20,
+      20,
+      20,
       65,
       72,
       78,
@@ -293,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 5:24 PM · No workout · Natural curve"
+    "footer": "Wake — · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 23 — Today",
@@ -324,24 +324,18 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-23T03:27:29-07:00",
-    "last_updated_label": "Jun 23, 3:27 AM PST",
+    "last_updated_iso": "2026-06-23T07:44:29-07:00",
+    "last_updated_label": "Jun 23, 7:44 AM PST",
     "refreshed_sections": [
       "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
-      "hydration"
+      "energy"
     ],
-    "last_zepp_data_iso": "2026-06-22T10:24:09-07:00",
+    "last_zepp_data_iso": "2026-06-23T07:44:29-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-22T10:24:15-07:00",
+        "last_ok_iso": "2026-06-23T07:44:35-07:00",
         "error": null
       },
       "cronometer": {
