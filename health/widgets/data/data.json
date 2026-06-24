@@ -1,6 +1,6 @@
 {
   "sleep": {
-    "date_label": "Jun 22 — Last Night",
+    "date_label": "Jun 23 — Last Night",
     "score": null,
     "total_minutes": null,
     "total_label": "—",
@@ -23,29 +23,29 @@
     },
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "steps": [
-        6974,
         null,
         2419,
         10536,
         76,
         null,
+        null,
         null
       ],
       "rhr": [
-        57,
         null,
         55,
         52,
         55,
+        null,
         null,
         null
       ],
@@ -324,24 +324,18 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-24T03:12:07-07:00",
-    "last_updated_label": "Jun 24, 3:12 AM PST",
+    "last_updated_iso": "2026-06-24T08:12:16-07:00",
+    "last_updated_label": "Jun 24, 8:12 AM PST",
     "refreshed_sections": [
       "sleep",
-      "activity",
-      "energy",
-      "strength_week",
-      "supplements",
-      "macros_week",
-      "micros_week",
-      "hydration"
+      "energy"
     ],
-    "last_zepp_data_iso": "2026-06-23T13:58:10-07:00",
+    "last_zepp_data_iso": "2026-06-24T08:12:16-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-23T13:58:14-07:00",
+        "last_ok_iso": "2026-06-24T08:12:20-07:00",
         "error": null
       },
       "cronometer": {
