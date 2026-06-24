@@ -1,120 +1,43 @@
 {
   "sleep": {
-    "date_label": "Jun 21 — Latest Synced",
-    "score": 80,
-    "total_minutes": 489,
-    "total_label": "8h 9m",
-    "deep_minutes": 76,
-    "light_minutes": 260,
-    "rem_minutes": 153,
+    "date_label": "Jun 23 — Last Night",
+    "score": 76,
+    "total_minutes": 432,
+    "total_label": "7h 12m",
+    "deep_minutes": 65,
+    "light_minutes": 243,
+    "rem_minutes": 124,
     "awake_minutes": 3,
-    "bedtime_label": "11:12 PM",
-    "wake_label": "7:24 AM",
+    "bedtime_label": "12:19 AM",
+    "wake_label": "7:34 AM",
     "resting_hr": 55,
     "awakenings": 3
   },
   "activity": {
-    "date_label": "Sun Jun 21 — Latest Synced",
+    "date_label": "Wed Jun 24 — Today",
     "today": {
       "rhr": 55,
-      "steps": 76,
-      "avg_hr": 58,
-      "sleep_score": 80
+      "steps": 4587,
+      "avg_hr": null,
+      "sleep_score": 76
     },
     "week": {
-      "labels": [
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed"
-      ],
-      "steps": [
-        null,
-        2419,
-        10536,
-        76,
-        null,
-        null,
-        null
-      ],
-      "rhr": [
-        null,
-        55,
-        52,
-        55,
-        null,
-        null,
-        null
-      ],
+      "labels": ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"],
+      "steps": [null, 2419, 10536, 6530, 5582, 7309, 4587],
+      "rhr": [null, 55, 52, 55, 53, 52, 55],
       "today_index": 6
     },
-    "today_workout": {
-      "type": "Upper",
-      "duration_min": 85,
-      "calories": 430,
-      "avg_hr": null
-    }
+    "today_workout": null
   },
   "macros_week": {
     "week_label": "Macros — Jun 18–24",
-    "macro_score_pct": 100,
-    "labels": [
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed"
-    ],
-    "dates": [
-      "Jun 18",
-      "Jun 19",
-      "Jun 20",
-      "Jun 21",
-      "Jun 22",
-      "Jun 23",
-      "Jun 24"
-    ],
-    "protein_g": [
-      152,
-      131,
-      162,
-      207,
-      162,
-      123,
-      161
-    ],
-    "carbs_g": [
-      162,
-      185,
-      122,
-      170,
-      187,
-      142,
-      196
-    ],
-    "fat_g": [
-      97,
-      96,
-      114,
-      102,
-      121,
-      89,
-      107
-    ],
-    "has_data": [
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true
-    ],
+    "macro_score_pct": 87,
+    "labels": ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"],
+    "dates": ["Jun 18", "Jun 19", "Jun 20", "Jun 21", "Jun 22", "Jun 23", "Jun 24"],
+    "protein_g": [152, 131, 162, 207, 162, 123, 161],
+    "carbs_g": [162, 185, 122, 170, 187, 142, 196],
+    "fat_g": [97, 96, 114, 102, 121, 89, 107],
+    "has_data": [true, true, true, true, true, true, true],
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
@@ -122,349 +45,102 @@
     "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 7/7 days logged"
   },
   "micros_week": {
-    "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 100,
+    "week_label": "Nutrition — Jun 18–24 Avg",
+    "macro_score_pct": 87,
     "days_logged": 7,
     "days_total": 7,
-    "avg_protein_g": 156,
+    "avg_protein_g": 157,
     "avg_carbs_g": 166,
-    "avg_fat_g": 103,
+    "avg_fat_g": 104,
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
     "target_fat_g": 100,
     "nutrients": [
-      {
-        "pct": 21,
-        "label": "Fiber",
-        "sub": "8g / 38g",
-        "upper_limit": false
-      },
-      {
-        "pct": 29,
-        "label": "Calcium",
-        "sub": "296mg / 1.0g",
-        "upper_limit": false
-      },
-      {
-        "pct": 49,
-        "label": "Magnesium",
-        "sub": "196mg / 400mg",
-        "upper_limit": false
-      },
-      {
-        "pct": 58,
-        "label": "Potassium",
-        "sub": "2.7g / 4.7g",
-        "upper_limit": false
-      },
-      {
-        "pct": 108,
-        "label": "Sodium",
-        "sub": "2.5g / 2.3g",
-        "upper_limit": true
-      },
-      {
-        "pct": 148,
-        "label": "Iron",
-        "sub": "12mg / 8mg",
-        "upper_limit": false
-      },
-      {
-        "pct": 57,
-        "label": "Vitamin A",
-        "sub": "518mcg / 900mcg",
-        "upper_limit": false
-      },
-      {
-        "pct": 22,
-        "label": "Vitamin C",
-        "sub": "20mg / 90mg",
-        "upper_limit": false
-      }
+      {"pct": 22, "label": "Fiber", "sub": "8g / 38g", "upper_limit": false},
+      {"pct": 30, "label": "Calcium", "sub": "296mg / 1.0g", "upper_limit": false},
+      {"pct": 49, "label": "Magnesium", "sub": "196mg / 400mg", "upper_limit": false},
+      {"pct": 58, "label": "Potassium", "sub": "2.7g / 4.7g", "upper_limit": false},
+      {"pct": 108, "label": "Sodium", "sub": "2.5g / 2.3g", "upper_limit": true},
+      {"pct": 148, "label": "Iron", "sub": "11.9mg / 8mg", "upper_limit": false},
+      {"pct": 58, "label": "Vitamin A", "sub": "518 / 900 mcg", "upper_limit": false},
+      {"pct": 22, "label": "Vitamin C", "sub": "20mg / 90mg", "upper_limit": false}
     ],
     "footer": "7 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Jun 17–23",
-    "labels": [
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun",
-      "Mon",
-      "Tue"
-    ],
-    "date_labels": [
-      "Wed 6/17",
-      "Thu 6/18",
-      "Fri 6/19",
-      "Sat 6/20",
-      "Sun 6/21",
-      "Mon 6/22",
-      "Tue 6/23"
-    ],
-    "lift_min": [
-      0,
-      80,
-      0,
-      0,
-      85,
-      0,
-      75
-    ],
-    "lift_cal": [
-      0,
-      400,
-      0,
-      0,
-      430,
-      0,
-      420
-    ],
-    "lift_type": [
-      "",
-      "Push",
-      "",
-      "",
-      "Upper",
-      "",
-      "Lower"
-    ],
-    "bball_min": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "bball_cal": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "walk_min": [
-      60,
-      30,
-      60,
-      21.6,
-      0,
-      0,
-      0
-    ],
-    "walk_cal": [
-      240,
-      120,
-      240,
-      142,
-      0,
-      0,
-      0
-    ],
-    "swim_min": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      120,
-      0
-    ],
-    "swim_cal": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      960,
-      0
-    ],
+    "labels": ["Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue"],
+    "date_labels": ["Wed 6/17", "Thu 6/18", "Fri 6/19", "Sat 6/20", "Sun 6/21", "Mon 6/22", "Tue 6/23"],
+    "lift_min": [0, 80, 0, 0, 85, 0, 75],
+    "lift_cal": [0, 400, 0, 0, 430, 0, 420],
+    "lift_type": ["", "Push", "", "", "Upper", "", "Lower"],
+    "bball_min": [0, 0, 0, 0, 0, 0, 0],
+    "bball_cal": [0, 0, 0, 0, 0, 0, 0],
+    "walk_min": [60, 30, 60, 21.6, 0, 0, 0],
+    "walk_cal": [240, 120, 240, 142, 0, 0, 0],
+    "swim_min": [0, 0, 0, 0, 0, 120, 0],
+    "swim_cal": [0, 0, 0, 0, 0, 960, 0],
     "top_lifts": [],
     "day_details": [
       null,
-      {
-        "exercises": [
-          {
-            "name": "Incline DB Press",
-            "set": "4 sets"
-          },
-          {
-            "name": "Overhead Press",
-            "set": "3 sets"
-          },
-          {
-            "name": "Lateral Raises",
-            "set": "4 sets"
-          },
-          {
-            "name": "Tricep Pushdowns",
-            "set": "3 sets"
-          }
-        ]
-      },
+      {"exercises": [
+        {"name": "Incline DB Press", "set": "4 sets"},
+        {"name": "Overhead Press", "set": "3 sets"},
+        {"name": "Lateral Raises", "set": "4 sets"},
+        {"name": "Tricep Pushdowns", "set": "3 sets"}
+      ]},
       null,
       null,
-      {
-        "exercises": [
-          {
-            "name": "Incline DB Press",
-            "set": "4 sets"
-          },
-          {
-            "name": "DB Row",
-            "set": "3 sets"
-          },
-          {
-            "name": "Lat Pulldown / Pull-Ups",
-            "set": "3 sets"
-          },
-          {
-            "name": "Overhead Press",
-            "set": "3 sets"
-          },
-          {
-            "name": "Band Face Pulls",
-            "set": "3 sets"
-          },
-          {
-            "name": "Bicep Curls",
-            "set": "4 sets"
-          },
-          {
-            "name": "Tricep Pushdowns",
-            "set": "3 sets"
-          }
-        ]
-      },
+      {"exercises": [
+        {"name": "Incline DB Press", "set": "4 sets"},
+        {"name": "DB Row", "set": "3 sets"},
+        {"name": "Lat Pulldown / Pull-Ups", "set": "3 sets"},
+        {"name": "Overhead Press", "set": "3 sets"},
+        {"name": "Band Face Pulls", "set": "3 sets"},
+        {"name": "Bicep Curls", "set": "4 sets"},
+        {"name": "Tricep Pushdowns", "set": "3 sets"}
+      ]},
       null,
-      {
-        "exercises": [
-          {
-            "name": "Box Jumps / Jump Squats",
-            "set": "3 sets"
-          },
-          {
-            "name": "DB Goblet Squat",
-            "set": "4 sets"
-          },
-          {
-            "name": "Romanian Deadlift",
-            "set": "4 sets"
-          },
-          {
-            "name": "Walking Lunges",
-            "set": "3 sets"
-          },
-          {
-            "name": "Lateral Band Walks",
-            "set": "3 sets"
-          },
-          {
-            "name": "Single-Leg Calf Raises",
-            "set": "3 sets"
-          },
-          {
-            "name": "Plank",
-            "set": "1 set"
-          },
-          {
-            "name": "Dead Bug",
-            "set": "2 sets"
-          }
-        ]
-      }
+      {"exercises": [
+        {"name": "Box Jumps / Jump Squats", "set": "3 sets"},
+        {"name": "DB Goblet Squat", "set": "4 sets"},
+        {"name": "Romanian Deadlift", "set": "4 sets"},
+        {"name": "Walking Lunges", "set": "3 sets"},
+        {"name": "Lateral Band Walks", "set": "3 sets"},
+        {"name": "Single-Leg Calf Raises", "set": "3 sets"},
+        {"name": "Plank", "set": "1 set"},
+        {"name": "Dead Bug", "set": "2 sets"}
+      ]}
     ]
   },
   "energy": {
     "date_label": "Jun 24",
-    "curve_24h": [
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      28,
-      18,
-      14,
-      20,
-      20,
-      20,
-      65,
-      72,
-      78,
-      72,
-      70,
-      78,
-      82,
-      78,
-      60,
-      46,
-      32
-    ],
-    "footer": "Wake — · No workout · Natural curve"
+    "curve_24h": [5, 5, 5, 5, 5, 5, 5, 28, 18, 14, 20, 20, 20, 65, 72, 78, 72, 70, 78, 82, 78, 60, 46, 32],
+    "footer": "Wake 7:34 AM · No workout today · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 24 — Today",
-    "today_oz": 0.0,
+    "today_oz": 24.0,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 18,
     "week": {
-      "labels": [
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed"
-      ],
-      "oz": [
-        0,
-        0,
-        28,
-        0,
-        0,
-        0,
-        0
-      ],
+      "labels": ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"],
+      "oz": [96, 86, 108, 28, 24, 18, 24],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-24T09:18:12-07:00",
-    "last_updated_label": "Jun 24, 9:18 AM PST",
-    "refreshed_sections": [
-      "macros_week",
-      "micros_week"
-    ],
-    "last_zepp_data_iso": "2026-06-21T07:24:00-07:00",
+    "last_updated_iso": "2026-06-24T09:25:00-07:00",
+    "last_updated_label": "Jun 24, 9:25 AM PST",
+    "refreshed_sections": ["sleep", "activity", "strength_week", "macros_week", "micros_week", "hydration", "energy"],
+    "last_zepp_data_iso": "2026-06-24T07:34:00-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
-      "zepp": {
-        "ok": true,
-        "last_ok_iso": "2026-06-24T09:00:00-07:00",
-        "error": "no watch sync since 2026-06-21"
-      },
-      "cronometer": {
-        "ok": true,
-        "last_ok_iso": "2026-06-24T09:18:16-07:00",
-        "error": null
-      },
-      "notion": {
-        "ok": true,
-        "last_ok_iso": "2026-06-24T09:00:00-07:00",
-        "error": null
-      }
+      "zepp": {"ok": true, "last_ok_iso": "2026-06-24T09:25:00-07:00", "error": null},
+      "cronometer": {"ok": true, "last_ok_iso": "2026-06-24T09:25:00-07:00", "error": null},
+      "notion": {"ok": true, "last_ok_iso": "2026-06-24T09:25:00-07:00", "error": null}
     },
     "schema_version": 2
   }
