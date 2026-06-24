@@ -54,6 +54,7 @@
   <div class="stats-heading" id="title">Training</div>
   <div class="legend">
     <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,.82)"></div>Walk</div>
+    <div class="leg"><div class="leg-dot" style="background:#5aaed4"></div>Swim</div>
     <div class="leg"><div class="leg-dot" style="background:#f3b56a"></div>Basketball</div>
     <div class="leg"><div class="leg-dot" style="background:#e8943a"></div>Upper</div>
     <div class="leg"><div class="leg-dot" style="background:#b85820"></div>Legs</div>
@@ -85,6 +86,8 @@ const FALLBACK = {
   bball_cal: [0, 720, 29, 31, 0, 0, 0],
   walk_min:  [0, 3, 0, 24, 24, 0, 0],
   walk_cal:  [0, 16, 0, 159, 153, 0, 0],
+  swim_min:  [0, 0, 0, 0, 0, 0, 0],
+  swim_cal:  [0, 0, 0, 0, 0, 0, 0],
   top_lifts: [
     {name:'Incline DB Press',value:'55 lb × 8', next:'→ try 60'},
     {name:'Overhead Press',  value:'35 lb × 12',next:'→ try 40'},
@@ -126,6 +129,7 @@ const LIFT_COLORS = {
 const LIFT_DEFAULT = 'rgba(232,148,58,.92)';   // unknown lift type → treat as upper (medium orange)
 const BBALL_COLOR = 'rgba(243,181,106,.92)';   // lightest orange
 const WALK_COLOR  = 'rgba(255,255,255,.82)';   // white
+const SWIM_COLOR  = 'rgba(90,174,212,.92)';    // blue
 
 let DATA = FALLBACK;
 
@@ -139,11 +143,12 @@ function render(d) {
   const liftMin = d.lift_min || [], liftCal = d.lift_cal || [], liftType = d.lift_type || [];
   const bballMin = d.bball_min || [], bballCal = d.bball_cal || [];
   const walkMin = d.walk_min || [], walkCal = d.walk_cal || [];
+  const swimMin = d.swim_min || [], swimCal = d.swim_cal || [];
   const dateLbls = d.date_labels || labels;
 
   const liftColors = liftMin.map((v,i)=> LIFT_COLORS[liftType[i]] || 'rgba(232,148,58,.88)');
 
-  const totals = labels.map((_,i)=> (liftMin[i]||0)+(bballMin[i]||0)+(walkMin[i]||0));
+  const totals = labels.map((_,i)=> (liftMin[i]||0)+(bballMin[i]||0)+(walkMin[i]||0)+(swimMin[i]||0));
   const yMax = Math.max(60, Math.ceil(Math.max(...totals)/30)*30);
 
   new Chart(document.getElementById('chart').getContext('2d'),{
@@ -151,7 +156,8 @@ function render(d) {
     data:{ labels, datasets:[
       {label:'Lift', data:liftMin, backgroundColor:liftColors, stack:'s', borderRadius:2, borderSkipped:false},
       {label:'Basketball', data:bballMin, backgroundColor:BBALL_COLOR, stack:'s', borderRadius:2, borderSkipped:false},
-      {label:'Walk', data:walkMin, backgroundColor:WALK_COLOR, stack:'s', borderRadius:2, borderSkipped:false}
+      {label:'Walk', data:walkMin, backgroundColor:WALK_COLOR, stack:'s', borderRadius:2, borderSkipped:false},
+      {label:'Swim', data:swimMin, backgroundColor:SWIM_COLOR, stack:'s', borderRadius:2, borderSkipped:false}
     ]},
     options:{ responsive:true, maintainAspectRatio:false, animation:false,
       onHover:(e,els)=>{ e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
@@ -169,9 +175,11 @@ function render(d) {
               return ` Basketball: ${bballMin[i]} min · ${bballCal[i]||0} cal`; }
             if(ds==='Walk'){ if(!walkMin[i]) return null;
               return ` Walk: ${walkMin[i]} min · ${walkCal[i]||0} cal`; }
+            if(ds==='Swim'){ if(!swimMin[i]) return null;
+              return ` Swim: ${swimMin[i]} min · ${swimCal[i]||0} cal`; }
             return null;
           },
-          footer:(c)=>{ const i=c[0].dataIndex; const cal=(liftCal[i]||0)+(bballCal[i]||0)+(walkCal[i]||0);
+          footer:(c)=>{ const i=c[0].dataIndex; const cal=(liftCal[i]||0)+(bballCal[i]||0)+(walkCal[i]||0)+(swimCal[i]||0);
             return cal? `Total ${cal} cal · tap for detail` : 'Rest day'; }
         }}},
       scales:{
@@ -219,6 +227,8 @@ function openPanel(i){
     sessions.push({ label:'Basketball', color:BBALL_COLOR, min:d.bball_min[i], cal:(d.bball_cal||[])[i], exercises:[] });
   if ((d.walk_min||[])[i] > 0)
     sessions.push({ label:'Walk', color:WALK_COLOR, min:d.walk_min[i], cal:(d.walk_cal||[])[i], exercises:[] });
+  if ((d.swim_min||[])[i] > 0)
+    sessions.push({ label:'Swim', color:SWIM_COLOR, min:d.swim_min[i], cal:(d.swim_cal||[])[i], exercises:[] });
 
   if (!sessions.length) {
     const rest = document.createElement('div');
