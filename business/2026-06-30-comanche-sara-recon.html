@@ -62,26 +62,27 @@
 <header>
   <p class="kicker">Boring-Software Venture · Hotel Track · Field Kit</p>
   <h1>Comanche &amp; SARA — On-Site Recon Playbook + Strategic Brief</h1>
-  <p class="meta">Prepared for Eddie · June 30, 2026 · Salil hotels (Bangkok) · <strong>Window: ~2 days of hands-on, local-only access</strong></p>
+  <p class="meta">Prepared for Eddie · June 30, 2026 · Salil hotels (Bangkok) · <strong>Window: ~2 days of hands-on, local-only access</strong> · <em>v2 — updated with confirmed on-site intel</em></p>
 </header>
 
 <p class="lede">You have a narrow, non-renewable window: the software is local, so once you fly home you can't touch it. This kit is built around that. <strong>Part 1 is what to do on their computer in the next 48 hours.</strong> <strong>Part 2 is the strategy</strong> — including the blunt call on whether to replace Comanche at all (you shouldn't). Read Part 1 first; act on it while you have access.</p>
 
 <div class="card priority">
-<p style="margin:0"><span class="pill warn">Read this first</span> &nbsp;The single most valuable thing to walk away with is not opinions about Comanche — it's <strong>(1) proof of how data gets OUT of it, and (2) real sample exports to build against.</strong> Everything an AI layer can ever do is gated by data access, and that's the one thing you can only verify on-site. If you do nothing else, do Section A and Section B.</p>
+<p style="margin:0"><span class="pill warn">Read this first</span> &nbsp;<strong>Good news, confirmed on-site:</strong> Comanche exports to Excel with a single button press — the data exit, which I'd flagged as the make-or-break constraint, is effectively <strong>solved</strong>. That removes the biggest risk to the whole AI-layer idea. So the on-site priority shifts: stop worrying <em>whether</em> you can get data out and instead <strong>(1) grab a real week of those Excel exports to build against, and (2) confirm one detail — does the button download a file locally or email it somewhere?</strong> That single detail decides how automation grabs the file later.</p>
 </div>
 
 <h2>Part 1 — On-Site Recon Playbook <span class="pill">Do in 48h</span></h2>
 
-<h3>A · The data-exit question <span class="num">(highest priority)</span></h3>
-<p>This decides whether <em>any</em> AI/automation layer is even buildable. Comanche is closed third-party software — you will not modify it. So the layer reads its <strong>outputs</strong>. Find out what outputs exist:</p>
+<h3>A · The data-exit question <span class="pill good">Largely answered</span></h3>
+<p>This is what decides whether <em>any</em> AI/automation layer is buildable — and you've already confirmed the answer is <strong>yes</strong>: Comanche exports to Excel on a single button press. Comanche is closed third-party software (you won't modify it), so the layer reads its <strong>outputs</strong> — and the output path is wide open. Nail down the few remaining specifics:</p>
 <ul>
-  <li><strong>What database does it run on?</strong> Go to the server/back-office PC. Check the Comanche install folder (e.g. <code>C:\Comanche</code>) and note file types — older Thai PMS installs often run on <strong>Sybase SQL Anywhere</strong> (<code>.db</code> files) or <strong>MS SQL Server</strong>. Open Windows <em>ODBC Data Sources</em> (search "ODBC") and screenshot any DSNs — engine, version, server name, database name.</li>
-  <li><strong>Does it export?</strong> On every report screen, look for Export / Save As / Print-to-file. Note which formats: <strong>Excel, CSV, PDF, TXT</strong>. Find any "Interface," "Export," or "Scheduler" menu.</li>
-  <li><strong>Is there a cloud/sync/API piece?</strong> Ask IT or the Comanche rep: any web service, "WProfile" centralized sync, or scheduled auto-export? Get a contact name + email for their Comanche support.</li>
+  <li><strong>Where does the export go? (most important remaining unknown)</strong> Press the button and watch: does it <em>download/save a file</em> to a folder on the machine, or <em>email it</em> somewhere? If it saves, note the exact folder path and filename pattern. If it emails, note the address. This determines how an automation later picks the file up.</li>
+  <li><strong>What's in the one-button export vs. report-by-report?</strong> Is it a single workbook or per-report files? Export the manager's whole daily set and see what you get.</li>
+  <li><strong>Is there scheduling?</strong> Ask IT/the rep whether exports can run automatically on a timer (a "Scheduler" or auto-export). If yes, automation can be fully hands-off; if no, someone clicks the button — still fine for v1.</li>
+  <li><strong>Database underneath (nice-to-have):</strong> if easy, open Windows <em>ODBC Data Sources</em> and screenshot any DSNs (engine/version/server). Older Thai PMS often run on <strong>Sybase SQL Anywhere</strong> or <strong>MS SQL</strong>. Not urgent now that Excel export is confirmed, but useful if you ever want richer/real-time access.</li>
   <li><strong>Version:</strong> Help → About. Screenshot it.</li>
 </ul>
-<div class="card"><p style="margin:0"><strong>Why this matters:</strong> if the DB is readable (ODBC/SQL) or exports can be scheduled, automation can be near-real-time. If it's fully closed, you're limited to <em>manual CSV exports as input</em> — still fine for a v1, but it caps how hands-off the product can be. Know which world you're in <em>before</em> you leave.</p></div>
+<div class="card"><p style="margin:0"><strong>Also confirmed:</strong> Comanche is <strong>role-gated by department</strong> — housekeeping/maid data isn't visible to front desk or kitchen, etc. Implication for anything you build: data is siloed by role, so a reporting layer that <em>aggregates across departments</em> (with permission) is doing something individual staff logins can't — that's part of the value. It also means you'll want a login with broad enough access to export the full picture.</p></div>
 
 <h3>B · Export real sample data <span class="num">(your build fuel)</span></h3>
 <p>For each item below, export to <strong>Excel/CSV and PDF</strong>, and save copies to a USB drive <em>and</em> OneDrive. This becomes your test set once you're home — you cannot get it later.</p>
@@ -97,13 +98,12 @@
 <h3>C · Screenshot every screen</h3>
 <p>Walk each module menu and capture it: <strong>Front Office, POS, Inventory Control, Back Office/Accounting, Event Management, Reports.</strong> Critically, screenshot the <strong>full list of canned report names</strong> in the Reports module — that inventory tells you what's already automated vs. what staff still build by hand.</p>
 
-<h3>D · Pin down what "SARA" actually is <span class="pill warn">Ambiguous — confirm</span></h3>
-<p>Desk research surfaced two different things called SARA, and I can't tell from outside which one your aunt uses. Resolve this on-site:</p>
+<h3>D · SARA — identity confirmed <span class="pill good">Resolved</span></h3>
+<p>Settled: SARA is <strong>S.A.R.A Operations Platform by DXM Solutions Pte Ltd</strong> (Singapore vendor, hotelservices.online) — a commercial cloud SaaS the hotel subscribes to, <em>not</em> custom software and <em>not</em> a Comanche module. It's the staff messaging + service-request/dispatch tool (the "professional LINE"), with a guest-request app. See Part 2 for the full profile. A couple of light things still worth capturing while you're there:</p>
 <ul>
-  <li>Is SARA <strong>part of Comanche</strong> (their "Hotel Dashboard &amp; Analytic" layer) or a <strong>separate vendor/login</strong> (there's an unrelated "S.A.R.A." hotel operations / service-request platform at hotelservices.online)?</li>
-  <li>How do you open it — desktop app, local web page, or internet URL? Screenshot the login + the URL.</li>
-  <li><strong>Where does its data come from?</strong> Does it read Comanche's database automatically, or does someone <em>key numbers into it manually</em>? (If manual, that re-keying is itself a wedge.)</li>
-  <li>What does it show, and how fresh is it (live, daily, on-demand)? Who built/maintains it, and what does it cost?</li>
+  <li>Confirm whether their SARA is wired to Comanche via its <strong>2-way PMS integration (HTNG)</strong>, or runs standalone. (Changes what data already flows between the two.)</li>
+  <li>Screenshot SARA's own <strong>Reports</strong> + dashboard screens — so you know exactly what request/ops analytics it already covers (and therefore what <em>not</em> to rebuild).</li>
+  <li>Note what people still send over <strong>LINE</strong> instead of SARA — you mentioned daily reports. Confirm: what exactly still goes through LINE, and who assembles it?</li>
 </ul>
 
 <h3>E · Staff pain interviews (Mom Test — past &amp; concrete)</h3>
@@ -123,18 +123,19 @@
 <div class="card">
 <h4 style="font-family:Helvetica,Arial,sans-serif;color:var(--accent);margin:0 0 8px">Printable capture checklist</h4>
 <ul class="check">
-  <li>ODBC / database engine + version screenshot</li>
-  <li>Comanche version (Help → About) screenshot</li>
-  <li>Export formats available (Excel / CSV / PDF?) noted</li>
-  <li>1 week of daily reports exported (Excel + PDF) → USB + OneDrive</li>
+  <li><strong>Where the Excel export goes — download to a folder, or email? (path/address noted)</strong></li>
+  <li>1 week of daily reports exported (Excel) → USB + OneDrive</li>
   <li>Month-end P&amp;L / GL exported</li>
   <li>Folio / invoice samples exported</li>
-  <li>Every module menu screenshotted</li>
-  <li>Full canned-report list screenshotted</li>
-  <li>SARA: what it is, URL/app, data source, refresh, owner, cost</li>
-  <li>SARA dashboard fully screenshotted + its source export</li>
+  <li>Is the export one workbook or per-report files? noted</li>
+  <li>Can exports be scheduled/automated? asked IT/rep</li>
+  <li>Comanche version (Help → About) screenshot</li>
+  <li>ODBC / DB engine screenshot (nice-to-have)</li>
+  <li>Every module menu + full report list screenshotted</li>
+  <li>SARA Reports + dashboard screenshotted (what it already covers)</li>
+  <li>Is SARA wired to Comanche (HTNG) or standalone? noted</li>
+  <li>What still goes through LINE (and who assembles it)? noted</li>
   <li>≥3 staff interviews done, with hours/week numbers</li>
-  <li>Comanche support contact (name + email)</li>
   <li>License cost / contract / data-ownership answers</li>
 </ul>
 </div>
@@ -147,70 +148,101 @@
 <div class="twocol">
   <div class="box s"><h4>Strengths</h4>
     <ul style="margin:0;padding-left:18px">
+      <li><strong>One-button Excel export</strong> — confirmed on-site; data exit is trivial (this is the big one for any AI layer)</li>
       <li>Deep, mature, genuinely integrated feature set (30 yrs of edge cases)</li>
       <li>Built for the Thai/Asian market — local tax, compliance, language, on-the-ground support</li>
       <li>Large interface library you'd otherwise have to rebuild from scratch</li>
-      <li>Cheap relative to Oracle OPERA; entrenched and sticky</li>
-      <li>Runs <strong>locally/offline</strong> — resilient to internet outages</li>
+      <li>Cheap relative to Oracle OPERA; entrenched and sticky; runs <strong>locally/offline</strong></li>
     </ul>
   </div>
   <div class="box w"><h4>Weaknesses</h4>
     <ul style="margin:0;padding-left:18px">
       <li>Dated client-server architecture; needs on-site servers + someone to maintain them</li>
-      <li>Data effectively <strong>locked in a local DB</strong>; export is often clunky/manual</li>
-      <li>Reporting is <strong>canned operational reports, not flexible BI</strong></li>
+      <li>Reporting is <strong>canned operational reports, not flexible BI</strong> — exports are raw, not insight</li>
+      <li><strong>Role-gated by department</strong> — no single view aggregates across the property</li>
       <li>Little to no native AI; weak remote/mobile access</li>
       <li>Thin public reputation — 0 verified reviews, no Hotel Tech "Certificate of Excellence"</li>
     </ul>
   </div>
 </div>
 
-<h3>What SARA likely is</h3>
-<p>Best read from outside: SARA is the <strong>thin analytics/dashboard layer</strong> the team glances at — either Comanche's own "Hotel Dashboard &amp; Analytic" product or a separate KPI/operations dashboard. Either way it's a <em>presentation layer</em>, and its usefulness is entirely a function of <strong>what data it can see and how fresh that data is</strong>. Strength: at-a-glance KPIs without digging through Comanche. Weakness: if it's fed manually or only shows a fixed set of metrics, it's exactly the kind of rigid layer an AI agent replaces. Confirm the data source on-site (Section D) — that one fact reshapes the whole opportunity.</p>
-
-<h3>The call: do NOT replace Comanche <span class="pill warn">Blunt</span></h3>
-<div class="card thesis">
-<p style="margin-top:0">Replacing Comanche means building a PMS. That is the <strong>exact saturated trap your own Module 1 research already flagged</strong> — generic small-hotel PMS is a graveyard. You'd be fighting a 30-year incumbent with 1,200 live installs, local compliance baked in, and an interface library you'd have to recreate. You would lose, and it wouldn't even prove the thesis. <strong>This is the shiny-object pull — name it and kill it.</strong></p>
-<p style="margin-bottom:0">The thesis test is simple: AI is only a durable edge where it <em>multiplies something only you have</em>. Re-implementing a PMS multiplies nothing — anyone can build CRUD screens. So that's out.</p>
+<h3>What SARA actually is <span class="pill good">Confirmed</span></h3>
+<p>SARA is <strong>S.A.R.A Operations Platform by DXM Solutions Pte Ltd</strong> — a Singapore-based commercial cloud SaaS (hotelservices.online), listed on the Oracle Cloud Marketplace, marketing "400+ hotels and 50,000+ users." It's a <strong>subscription product the hotel buys</strong> — not custom-built for them, and not part of Comanche. Category: <strong>staff messaging + service-request dispatch</strong> — the "professional LINE" for live operations, with a guest-request app.</p>
+<p>It does: department-routed task/request management (housekeeping, maintenance, room service, concierge, IT), auto-dispatch with auto-escalation when a request stalls, a real-time chat room per request (with images), room-inspection/engineering checklists, a guest app that auto-routes requests to the right department, ops/request reports, and a 2-way PMS integration over HTNG. Multi-language (11+ UI, 133 chat-translation). This maps exactly to what you observed: bellboy bag alerts, cleaning requests, guests asking for an iron/water through the app.</p>
+<div class="twocol">
+  <div class="box s"><h4>Strengths</h4>
+    <ul style="margin:0;padding-left:18px">
+      <li>Purpose-built real-time dispatch + escalation — genuinely useful, sticky</li>
+      <li>Mobile-first + guest app; cloud, no local install</li>
+      <li>Already does <strong>operational request analytics</strong></li>
+      <li>Funded incumbent (400+ hotels) — credible, maintained</li>
+    </ul>
+  </div>
+  <div class="box w"><h4>Weaknesses / gaps</h4>
+    <ul style="margin:0;padding-left:18px">
+      <li>Scoped to <strong>ops requests</strong> — does <em>not</em> touch financial / management reporting</li>
+      <li>Doesn't fully displace LINE — staff still use LINE for "big stuff" like daily reports</li>
+      <li>Generic "AI-powered" branding; not deep, hotel-specific intelligence</li>
+    </ul>
+  </div>
 </div>
 
-<h3>The actual play: an AI layer ON TOP <span class="pill good">Thesis-positive</span></h3>
-<p>Don't change Comanche; <strong>read its outputs and automate the managerial work around it</strong> — the daily/weekly/monthly reporting, the re-keying, the owner's ad-hoc questions. This is the same "AI-into-existing-workflow" track you're spinning up in the other session, and it's where your real advantages live:</p>
+<h3>The three layers at the hotel — and the unowned seam</h3>
+<p>With SARA confirmed, the operating picture is clean. There are three layers, and the opportunity is the gap between them:</p>
+<table>
+  <tr><th>Layer</th><th>Tool</th><th>Owns</th></tr>
+  <tr><td><span class="num">1</span></td><td><strong>Comanche</strong></td><td>System of record — all money + ops data. Easy Excel export out.</td></tr>
+  <tr><td><span class="num">2</span></td><td><strong>SARA</strong></td><td>Real-time ops dispatch/comms — live requests + guest app.</td></tr>
+  <tr><td><span class="num">3</span></td><td><strong>LINE</strong></td><td>Whatever's left — including "the big stuff," i.e. daily report packs.</td></tr>
+</table>
+<div class="card thesis">
+<p style="margin-top:0"><strong>The seam = management reporting.</strong> Comanche emits raw Excel. SARA deliberately doesn't touch financial/management reporting. So the daily/weekly/monthly report packs are still <em>assembled by hand and pushed through LINE</em>. No one owns that layer — and it's fed by the one thing that's trivially available (Comanche's one-button Excel). That seam is your wedge.</p>
+<p style="margin-bottom:0">You compete with neither incumbent. You sit in the gap they both ignore.</p>
+</div>
+
+<h3>The call: do NOT replace Comanche <em>or</em> SARA <span class="pill warn">Blunt</span></h3>
+<p><strong>Replacing Comanche</strong> = building a PMS = the exact saturated trap Module 1 flagged. 30-year incumbent, 1,200 installs, local compliance, interface library you'd have to recreate. You'd lose, and it wouldn't prove the thesis.</p>
+<p><strong>Out-building SARA</strong> is the same mistake one layer up: it's a funded incumbent (400+ hotels) that already owns real-time dispatch <em>and</em> operational request analytics, and it's already branding "AI." Don't aim your AI play at ops tickets — that's contested ground. Both of these are shiny-object pulls; name them and kill them.</p>
+<p>The thesis test: AI is only a durable edge where it <em>multiplies something only you have</em>. Rebuilding a PMS or a dispatch app multiplies nothing — anyone can build those. Owning the report seam, fed by data you have privileged access to, does.</p>
+
+<h3>The actual play: an AI reporting layer in the seam <span class="pill good">Thesis-positive</span></h3>
+<p>Don't change either system; <strong>read Comanche's Excel exports and produce the management reporting that currently goes through LINE by hand</strong> — the daily flash, the weekly pack, the month-end summary, the owner's ad-hoc questions. This is the same "AI-into-existing-workflow" track as your other session, and it's where your real advantages live:</p>
 <ul>
   <li><strong>Access</strong> — your aunt's hotels are a live design partner with real data and a warm intro. Strangers can't get that.</li>
-  <li><strong>Speed</strong> — your agent OS lets you turn an export into a polished report pack faster than a vendor ships a feature.</li>
+  <li><strong>Speed</strong> — your agent OS turns an export into a polished, cross-department report pack faster than a vendor ships a feature.</li>
 </ul>
 <p>That passes the thesis test: the edge multiplies access + iteration speed, not a commodity anyone can generate.</p>
 
 <h3>Where AI actually plugs in (ranked by pain/ROI)</h3>
 <table>
-  <tr><th>#</th><th>Wedge</th><th>What it does</th><th>Gated by</th></tr>
-  <tr><td>1</td><td><strong>Automated reporting agent</strong></td><td>Turn Comanche exports into the daily flash / weekly pack / monthly P&amp;L the manager builds by hand</td><td>Export access (Section A)</td></tr>
-  <tr><td>2</td><td>Natural-language data Q&amp;A</td><td>"RevPAR last weekend vs. same weekend last year?" answered over the exported data</td><td>Clean historical exports</td></tr>
-  <tr><td>3</td><td>Reconciliation / re-keying killer</td><td>Move data Comanche ↔ accounting ↔ OTA ↔ Excel without manual typing</td><td>Both systems' exports</td></tr>
-  <tr><td>4</td><td>Anomaly &amp; alerting</td><td>Flag AR aging, no-shows, rate-parity gaps, stockouts</td><td>Scheduled data pull</td></tr>
+  <tr><th>#</th><th>Wedge</th><th>What it does</th><th>Contested?</th></tr>
+  <tr><td>1</td><td><strong>Management reporting agent</strong></td><td>Turn Comanche's one-button Excel into the daily flash / weekly pack / month-end summary now built by hand and sent via LINE</td><td><span style="color:var(--good)">Clear — no one owns it</span></td></tr>
+  <tr><td>2</td><td>Natural-language data Q&amp;A</td><td>"RevPAR last weekend vs. the same weekend last year?" answered over the exports</td><td><span style="color:var(--good)">Clear</span></td></tr>
+  <tr><td>3</td><td>Cross-department roll-up</td><td>Aggregate across Comanche's role-gated silos into one owner/GM view</td><td><span style="color:var(--good)">Clear</span></td></tr>
+  <tr><td>4</td><td>Reconciliation / re-keying killer</td><td>Move data Comanche ↔ accounting ↔ OTA ↔ Excel without manual typing</td><td><span style="color:var(--good)">Clear</span></td></tr>
+  <tr><td>5</td><td>Ops request analytics</td><td>Trends on complaints/requests/response times</td><td><span style="color:var(--warn)">SARA already does this — avoid</span></td></tr>
 </table>
-<p style="font-size:13.5px;color:var(--muted)"><strong>Note:</strong> integrating <em>into</em> Comanche (modifying the app itself) is almost certainly off the table — it's closed software. The layer lives <em>beside</em> it, consuming its outputs. That's a feature, not a limitation: it keeps you off the PMS-building treadmill.</p>
+<p style="font-size:13.5px;color:var(--muted)"><strong>Note:</strong> you don't integrate <em>into</em> Comanche or SARA — both are closed. Your layer lives <em>beside</em> them, consuming Comanche's Excel. That's a feature, not a limitation: it keeps you off both the PMS-building and the dispatch-app treadmills. Wedge #1 is the spearhead — highest pain, cleanest ground, fed by data that's already one click away.</p>
 
 <h3>Decision gates — what makes this real</h3>
 <ol>
-  <li><strong>Data is extractable</strong> (Section A comes back "yes, ODBC/SQL or scheduled export").</li>
-  <li><strong>Confirmed manual-reporting pain</strong> — a real hours/week number from staff (Section E).</li>
+  <li><span style="color:var(--good)">✓</span> <strong>Data is extractable</strong> — confirmed: one-button Excel export. <em>Gate cleared.</em></li>
+  <li><strong>Confirmed manual-reporting pain</strong> — a real hours/week number from staff (Section E). <em>This is now the key open gate.</em></li>
   <li><strong>Aunt will be a design partner</strong> and ideally eventually pay (even a token amount = signal).</li>
-  <li><strong>It generalizes</strong> — the same report pack works for other Salil properties, then for the long tail of Thai independents <em>also</em> running Comanche. That's a real wedge market: ~1,200 hotels sharing one data-export pain, ignored by funded incumbents.</li>
+  <li><strong>It generalizes</strong> — the same report pack works for other Salil properties, then for the long tail of Thai independents <em>also</em> running Comanche. A real wedge market: ~1,200 hotels sharing the same easy-export-but-no-good-reporting gap, ignored by funded incumbents.</li>
 </ol>
 
 <h3>Open questions to settle on-site</h3>
 <ul>
-  <li>Closed DB or extractable? (the whole thing hinges on this)</li>
-  <li>Is SARA Comanche's layer or a separate tool — and is it fed automatically or by hand?</li>
-  <li>How many hours/week does the team spend on manual reporting today?</li>
-  <li>What does the owner/head office want that's currently painful to produce?</li>
+  <li>Where does the Excel export land — a folder (which path?) or an email? (the one technical detail that still matters)</li>
+  <li>How many hours/week does the team spend assembling reports for LINE today, and who does it?</li>
+  <li>What exactly still goes through LINE rather than SARA?</li>
+  <li>What does the owner/head office ask for that's painful to produce?</li>
   <li>Would your aunt let one property be the design partner?</li>
 </ul>
 
 <div class="foot">
-<p><strong>Sources:</strong> Comanche International (official), Hotel Tech Report — Comanche PMS profile &amp; OPERA comparison, Comanche Software, S.A.R.A Operations Platform (hotelservices.online), G2 — S.A.R.A. The SARA identity is unconfirmed from public sources and must be verified on-site. Strengths/weaknesses synthesize vendor materials + third-party PMS-category analysis; treat anything not directly observed on their machine as a hypothesis to confirm.</p>
+<p><strong>Sources:</strong> Comanche International (official); Hotel Tech Report — Comanche PMS profile &amp; OPERA comparison; S.A.R.A Operations Platform (hotelservices.online); DXM Solutions (dxmsolutions.net); Oracle Cloud Marketplace — S.A.R.A listing; ExploreTech — DXM Solutions S.A.R.A. <strong>SARA identity now confirmed</strong> as a commercial product by DXM Solutions Pte Ltd. The one-button Excel export and department role-gating are confirmed by on-site observation (Eddie, Salil hotels, Jun 2026). Other strengths/weaknesses synthesize vendor materials + third-party analysis; treat anything not directly observed as a hypothesis to confirm.</p>
 <p>Boring-Software Venture · pipeline stage: validate (hotel track) · do not build until data-access + pain are confirmed.</p>
 </div>
 
