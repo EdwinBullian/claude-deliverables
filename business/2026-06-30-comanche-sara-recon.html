@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comanche + SARA — On-Site Recon Playbook & Strategic Brief</title>
+<style>
+  :root{
+    --bg:#e4d9c4; --card:#dbd0ba; --accent:#1b3a5c; --accent-soft:#2c5378;
+    --ink:#2a2620; --muted:#6b6356; --line:#c4b89f; --warn:#8a4b2a; --good:#3d5a3d;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:48px 28px 80px}
+  header{border-bottom:3px double var(--accent); padding-bottom:22px; margin-bottom:36px}
+  .kicker{font-family:Helvetica,Arial,sans-serif; text-transform:uppercase; letter-spacing:.18em;
+    font-size:11px; color:var(--accent-soft); font-weight:700; margin:0 0 10px}
+  h1{font-family:Helvetica,Arial,sans-serif; font-size:30px; line-height:1.18; margin:0 0 12px; color:var(--accent)}
+  .meta{font-size:13.5px; color:var(--muted); margin:0}
+  h2{font-family:Helvetica,Arial,sans-serif; font-size:21px; color:var(--accent);
+    margin:46px 0 8px; padding-bottom:7px; border-bottom:1px solid var(--line)}
+  h3{font-family:Helvetica,Arial,sans-serif; font-size:16px; color:var(--accent-soft); margin:28px 0 6px}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0 10px; padding-left:22px}
+  li{margin:6px 0}
+  strong{color:var(--accent)}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:7px;
+    padding:18px 22px; margin:18px 0}
+  .card.priority{border-left:5px solid var(--warn)}
+  .card.thesis{border-left:5px solid var(--accent)}
+  .pill{display:inline-block; font-family:Helvetica,Arial,sans-serif; font-size:10.5px;
+    font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:3px 9px;
+    border-radius:20px; background:var(--accent); color:var(--bg); vertical-align:middle}
+  .pill.warn{background:var(--warn)} .pill.good{background:var(--good)}
+  .lede{font-size:17px; color:var(--accent-soft)}
+  .twocol{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media(max-width:620px){.twocol{grid-template-columns:1fr}}
+  .box{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:14px 16px}
+  .box h4{font-family:Helvetica,Arial,sans-serif; margin:0 0 6px; font-size:14px; color:var(--accent)}
+  .box.s h4::before{content:"▲ "; color:var(--good)}
+  .box.w h4::before{content:"▼ "; color:var(--warn)}
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px}
+  th,td{text-align:left; padding:9px 11px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{font-family:Helvetica,Arial,sans-serif; font-size:11.5px; text-transform:uppercase;
+    letter-spacing:.05em; color:var(--accent-soft)}
+  .check{list-style:none; padding-left:0}
+  .check li{padding-left:30px; position:relative; margin:8px 0}
+  .check li::before{content:"☐"; position:absolute; left:0; font-size:17px; color:var(--accent-soft)}
+  .q{font-style:italic; color:var(--accent-soft)}
+  .foot{margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted)}
+  a{color:var(--accent-soft)}
+  .num{font-family:Helvetica,Arial,sans-serif; font-weight:700; color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">Boring-Software Venture · Hotel Track · Field Kit</p>
+  <h1>Comanche &amp; SARA — On-Site Recon Playbook + Strategic Brief</h1>
+  <p class="meta">Prepared for Eddie · June 30, 2026 · Salil hotels (Bangkok) · <strong>Window: ~2 days of hands-on, local-only access</strong></p>
+</header>
+
+<p class="lede">You have a narrow, non-renewable window: the software is local, so once you fly home you can't touch it. This kit is built around that. <strong>Part 1 is what to do on their computer in the next 48 hours.</strong> <strong>Part 2 is the strategy</strong> — including the blunt call on whether to replace Comanche at all (you shouldn't). Read Part 1 first; act on it while you have access.</p>
+
+<div class="card priority">
+<p style="margin:0"><span class="pill warn">Read this first</span> &nbsp;The single most valuable thing to walk away with is not opinions about Comanche — it's <strong>(1) proof of how data gets OUT of it, and (2) real sample exports to build against.</strong> Everything an AI layer can ever do is gated by data access, and that's the one thing you can only verify on-site. If you do nothing else, do Section A and Section B.</p>
+</div>
+
+<h2>Part 1 — On-Site Recon Playbook <span class="pill">Do in 48h</span></h2>
+
+<h3>A · The data-exit question <span class="num">(highest priority)</span></h3>
+<p>This decides whether <em>any</em> AI/automation layer is even buildable. Comanche is closed third-party software — you will not modify it. So the layer reads its <strong>outputs</strong>. Find out what outputs exist:</p>
+<ul>
+  <li><strong>What database does it run on?</strong> Go to the server/back-office PC. Check the Comanche install folder (e.g. <code>C:\Comanche</code>) and note file types — older Thai PMS installs often run on <strong>Sybase SQL Anywhere</strong> (<code>.db</code> files) or <strong>MS SQL Server</strong>. Open Windows <em>ODBC Data Sources</em> (search "ODBC") and screenshot any DSNs — engine, version, server name, database name.</li>
+  <li><strong>Does it export?</strong> On every report screen, look for Export / Save As / Print-to-file. Note which formats: <strong>Excel, CSV, PDF, TXT</strong>. Find any "Interface," "Export," or "Scheduler" menu.</li>
+  <li><strong>Is there a cloud/sync/API piece?</strong> Ask IT or the Comanche rep: any web service, "WProfile" centralized sync, or scheduled auto-export? Get a contact name + email for their Comanche support.</li>
+  <li><strong>Version:</strong> Help → About. Screenshot it.</li>
+</ul>
+<div class="card"><p style="margin:0"><strong>Why this matters:</strong> if the DB is readable (ODBC/SQL) or exports can be scheduled, automation can be near-real-time. If it's fully closed, you're limited to <em>manual CSV exports as input</em> — still fine for a v1, but it caps how hands-off the product can be. Know which world you're in <em>before</em> you leave.</p></div>
+
+<h3>B · Export real sample data <span class="num">(your build fuel)</span></h3>
+<p>For each item below, export to <strong>Excel/CSV and PDF</strong>, and save copies to a USB drive <em>and</em> OneDrive. This becomes your test set once you're home — you cannot get it later.</p>
+<ul>
+  <li>A full week of the daily reports the manager actually reads: <strong>manager flash / night-audit report, occupancy &amp; RevPAR, room revenue, F&amp;B daily sales, AR aging.</strong></li>
+  <li>Arrivals / departures / in-house guest list.</li>
+  <li>2–3 sample folios / invoices.</li>
+  <li>Month-end back-office output: <strong>P&amp;L, trial balance, GL export.</strong></li>
+  <li>Whatever data feeds the <strong>SARA dashboard</strong> (see Section D).</li>
+  <li>A guest-profile export (anonymize names if needed — don't carry PII you don't need).</li>
+</ul>
+
+<h3>C · Screenshot every screen</h3>
+<p>Walk each module menu and capture it: <strong>Front Office, POS, Inventory Control, Back Office/Accounting, Event Management, Reports.</strong> Critically, screenshot the <strong>full list of canned report names</strong> in the Reports module — that inventory tells you what's already automated vs. what staff still build by hand.</p>
+
+<h3>D · Pin down what "SARA" actually is <span class="pill warn">Ambiguous — confirm</span></h3>
+<p>Desk research surfaced two different things called SARA, and I can't tell from outside which one your aunt uses. Resolve this on-site:</p>
+<ul>
+  <li>Is SARA <strong>part of Comanche</strong> (their "Hotel Dashboard &amp; Analytic" layer) or a <strong>separate vendor/login</strong> (there's an unrelated "S.A.R.A." hotel operations / service-request platform at hotelservices.online)?</li>
+  <li>How do you open it — desktop app, local web page, or internet URL? Screenshot the login + the URL.</li>
+  <li><strong>Where does its data come from?</strong> Does it read Comanche's database automatically, or does someone <em>key numbers into it manually</em>? (If manual, that re-keying is itself a wedge.)</li>
+  <li>What does it show, and how fresh is it (live, daily, on-demand)? Who built/maintains it, and what does it cost?</li>
+</ul>
+
+<h3>E · Staff pain interviews (Mom Test — past &amp; concrete)</h3>
+<p>Talk to the GM, front-office manager, and the accountant. Ask about the <em>last time</em>, never the hypothetical. You're hunting for hours-per-week of manual work, not opinions.</p>
+<ul>
+  <li class="q">"Walk me through the last daily report you built by hand — what did you copy, from which screen, into what?"</li>
+  <li class="q">"How long did last month-end close take? What was the annoying part?"</li>
+  <li class="q">"What number does the owner / head office ask for that's a pain to pull?"</li>
+  <li class="q">"What do you re-type out of Comanche into Excel or email every week?"</li>
+  <li class="q">"What does Comanche just not do that you wish it did?"</li>
+</ul>
+<p>Get <strong>numbers</strong>: hours/week, who does it, how often. "3 hours every Monday building the weekly pack" is the kind of evidence that justifies building anything.</p>
+
+<h3>F · Commercials &amp; constraints</h3>
+<p>Quick asks that decide the economics later: annual license/support cost, contract lock-in, who legally owns the data, last time it was upgraded, and whether the aunt would let you use a property as a <strong>design partner</strong>.</p>
+
+<div class="card">
+<h4 style="font-family:Helvetica,Arial,sans-serif;color:var(--accent);margin:0 0 8px">Printable capture checklist</h4>
+<ul class="check">
+  <li>ODBC / database engine + version screenshot</li>
+  <li>Comanche version (Help → About) screenshot</li>
+  <li>Export formats available (Excel / CSV / PDF?) noted</li>
+  <li>1 week of daily reports exported (Excel + PDF) → USB + OneDrive</li>
+  <li>Month-end P&amp;L / GL exported</li>
+  <li>Folio / invoice samples exported</li>
+  <li>Every module menu screenshotted</li>
+  <li>Full canned-report list screenshotted</li>
+  <li>SARA: what it is, URL/app, data source, refresh, owner, cost</li>
+  <li>SARA dashboard fully screenshotted + its source export</li>
+  <li>≥3 staff interviews done, with hours/week numbers</li>
+  <li>Comanche support contact (name + email)</li>
+  <li>License cost / contract / data-ownership answers</li>
+</ul>
+</div>
+
+<h2>Part 2 — Strategic Brief</h2>
+
+<h3>What Comanche is</h3>
+<p>Comanche International is a Thailand-based hospitality-IT company, founded 1996 and listed on Thailand's MAI exchange in 2016 (ticker <strong>COMAN</strong>). Its PMS is used by <strong>~1,200 hotels and serviced apartments across ~19 countries</strong>, heavily concentrated in Thailand and Asia. It's a <strong>full-suite, on-premise (local client-server) system</strong> — which matches exactly what you described: it lives on their computers, not the cloud. Modules span Front Office (reservations, front desk, housekeeping, billing, night audit), Point of Sale, Back Office accounting (AP/AR/GL), Inventory Control, Event Management, plus a large library of third-party <em>interfaces</em> (channel managers, booking engines, door locks, passport scanners, CRM, yield management).</p>
+
+<div class="twocol">
+  <div class="box s"><h4>Strengths</h4>
+    <ul style="margin:0;padding-left:18px">
+      <li>Deep, mature, genuinely integrated feature set (30 yrs of edge cases)</li>
+      <li>Built for the Thai/Asian market — local tax, compliance, language, on-the-ground support</li>
+      <li>Large interface library you'd otherwise have to rebuild from scratch</li>
+      <li>Cheap relative to Oracle OPERA; entrenched and sticky</li>
+      <li>Runs <strong>locally/offline</strong> — resilient to internet outages</li>
+    </ul>
+  </div>
+  <div class="box w"><h4>Weaknesses</h4>
+    <ul style="margin:0;padding-left:18px">
+      <li>Dated client-server architecture; needs on-site servers + someone to maintain them</li>
+      <li>Data effectively <strong>locked in a local DB</strong>; export is often clunky/manual</li>
+      <li>Reporting is <strong>canned operational reports, not flexible BI</strong></li>
+      <li>Little to no native AI; weak remote/mobile access</li>
+      <li>Thin public reputation — 0 verified reviews, no Hotel Tech "Certificate of Excellence"</li>
+    </ul>
+  </div>
+</div>
+
+<h3>What SARA likely is</h3>
+<p>Best read from outside: SARA is the <strong>thin analytics/dashboard layer</strong> the team glances at — either Comanche's own "Hotel Dashboard &amp; Analytic" product or a separate KPI/operations dashboard. Either way it's a <em>presentation layer</em>, and its usefulness is entirely a function of <strong>what data it can see and how fresh that data is</strong>. Strength: at-a-glance KPIs without digging through Comanche. Weakness: if it's fed manually or only shows a fixed set of metrics, it's exactly the kind of rigid layer an AI agent replaces. Confirm the data source on-site (Section D) — that one fact reshapes the whole opportunity.</p>
+
+<h3>The call: do NOT replace Comanche <span class="pill warn">Blunt</span></h3>
+<div class="card thesis">
+<p style="margin-top:0">Replacing Comanche means building a PMS. That is the <strong>exact saturated trap your own Module 1 research already flagged</strong> — generic small-hotel PMS is a graveyard. You'd be fighting a 30-year incumbent with 1,200 live installs, local compliance baked in, and an interface library you'd have to recreate. You would lose, and it wouldn't even prove the thesis. <strong>This is the shiny-object pull — name it and kill it.</strong></p>
+<p style="margin-bottom:0">The thesis test is simple: AI is only a durable edge where it <em>multiplies something only you have</em>. Re-implementing a PMS multiplies nothing — anyone can build CRUD screens. So that's out.</p>
+</div>
+
+<h3>The actual play: an AI layer ON TOP <span class="pill good">Thesis-positive</span></h3>
+<p>Don't change Comanche; <strong>read its outputs and automate the managerial work around it</strong> — the daily/weekly/monthly reporting, the re-keying, the owner's ad-hoc questions. This is the same "AI-into-existing-workflow" track you're spinning up in the other session, and it's where your real advantages live:</p>
+<ul>
+  <li><strong>Access</strong> — your aunt's hotels are a live design partner with real data and a warm intro. Strangers can't get that.</li>
+  <li><strong>Speed</strong> — your agent OS lets you turn an export into a polished report pack faster than a vendor ships a feature.</li>
+</ul>
+<p>That passes the thesis test: the edge multiplies access + iteration speed, not a commodity anyone can generate.</p>
+
+<h3>Where AI actually plugs in (ranked by pain/ROI)</h3>
+<table>
+  <tr><th>#</th><th>Wedge</th><th>What it does</th><th>Gated by</th></tr>
+  <tr><td>1</td><td><strong>Automated reporting agent</strong></td><td>Turn Comanche exports into the daily flash / weekly pack / monthly P&amp;L the manager builds by hand</td><td>Export access (Section A)</td></tr>
+  <tr><td>2</td><td>Natural-language data Q&amp;A</td><td>"RevPAR last weekend vs. same weekend last year?" answered over the exported data</td><td>Clean historical exports</td></tr>
+  <tr><td>3</td><td>Reconciliation / re-keying killer</td><td>Move data Comanche ↔ accounting ↔ OTA ↔ Excel without manual typing</td><td>Both systems' exports</td></tr>
+  <tr><td>4</td><td>Anomaly &amp; alerting</td><td>Flag AR aging, no-shows, rate-parity gaps, stockouts</td><td>Scheduled data pull</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--muted)"><strong>Note:</strong> integrating <em>into</em> Comanche (modifying the app itself) is almost certainly off the table — it's closed software. The layer lives <em>beside</em> it, consuming its outputs. That's a feature, not a limitation: it keeps you off the PMS-building treadmill.</p>
+
+<h3>Decision gates — what makes this real</h3>
+<ol>
+  <li><strong>Data is extractable</strong> (Section A comes back "yes, ODBC/SQL or scheduled export").</li>
+  <li><strong>Confirmed manual-reporting pain</strong> — a real hours/week number from staff (Section E).</li>
+  <li><strong>Aunt will be a design partner</strong> and ideally eventually pay (even a token amount = signal).</li>
+  <li><strong>It generalizes</strong> — the same report pack works for other Salil properties, then for the long tail of Thai independents <em>also</em> running Comanche. That's a real wedge market: ~1,200 hotels sharing one data-export pain, ignored by funded incumbents.</li>
+</ol>
+
+<h3>Open questions to settle on-site</h3>
+<ul>
+  <li>Closed DB or extractable? (the whole thing hinges on this)</li>
+  <li>Is SARA Comanche's layer or a separate tool — and is it fed automatically or by hand?</li>
+  <li>How many hours/week does the team spend on manual reporting today?</li>
+  <li>What does the owner/head office want that's currently painful to produce?</li>
+  <li>Would your aunt let one property be the design partner?</li>
+</ul>
+
+<div class="foot">
+<p><strong>Sources:</strong> Comanche International (official), Hotel Tech Report — Comanche PMS profile &amp; OPERA comparison, Comanche Software, S.A.R.A Operations Platform (hotelservices.online), G2 — S.A.R.A. The SARA identity is unconfirmed from public sources and must be verified on-site. Strengths/weaknesses synthesize vendor materials + third-party PMS-category analysis; treat anything not directly observed on their machine as a hypothesis to confirm.</p>
+<p>Boring-Software Venture · pipeline stage: validate (hotel track) · do not build until data-access + pain are confirmed.</p>
+</div>
+
+</div>
+</body>
+</html>
