@@ -14,7 +14,7 @@
     "awakenings": 4
   },
   "activity": {
-    "date_label": "Jun 29 — Today",
+    "date_label": "Mon Jun 29 — Latest",
     "today": {
       "rhr": 60,
       "steps": 4691,
@@ -23,40 +23,35 @@
     },
     "week": {
       "labels": [
-        "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
-        "Mon"
+        "Mon",
+        "Tue"
       ],
       "steps": [
-        7309,
         4587,
         null,
         1959,
         5536,
         3270,
-        4691
+        4691,
+        null
       ],
       "rhr": [
-        52,
         55,
         null,
         58,
         55,
         0,
-        60
+        60,
+        null
       ],
       "today_index": 6
     },
-    "today_workout": {
-      "type": "Basketball",
-      "duration_min": 66,
-      "calories": 398,
-      "avg_hr": null
-    }
+    "today_workout": null
   },
   "macros_week": {
     "week_label": "Macros — Jun 24–30",
@@ -188,31 +183,31 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
-      "Mon"
+      "Mon",
+      "Tue"
     ],
     "date_labels": [
-      "Tue 6/23",
       "Wed 6/24",
       "Thu 6/25",
       "Fri 6/26",
       "Sat 6/27",
       "Sun 6/28",
-      "Mon 6/29"
+      "Mon 6/29",
+      "Tue 6/30"
     ],
     "lift_min": [
-      75,
       0,
       0,
       0,
       0,
       0,
-      66
+      66,
+      70
     ],
     "lift_cal": [
       0,
@@ -220,17 +215,17 @@
       0,
       0,
       0,
-      0,
-      398
+      398,
+      0
     ],
     "lift_type": [
-      "Lower",
       "",
       "",
       "",
       "",
       "",
-      "Upper"
+      "Upper",
+      "Legs"
     ],
     "bball_min": [
       0,
@@ -251,22 +246,22 @@
       0
     ],
     "walk_min": [
-      7.1,
       7.6,
       25.2,
       0,
       0,
       0,
-      12.7
+      12.7,
+      0
     ],
     "walk_cal": [
-      42,
       50,
       160,
       0,
       0,
       0,
-      74
+      74,
+      0
     ],
     "top_lifts": []
   },
@@ -298,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:56 PM · Basketball 66 min · Natural curve"
+    "footer": "Wake 6:56 PM · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jun 30 — Today",
@@ -329,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-06-30T08:22:10-07:00",
-    "last_updated_label": "Jun 30, 8:22 AM PST",
+    "last_updated_iso": "2026-06-30T13:49:38-07:00",
+    "last_updated_label": "Jun 30, 1:49 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -341,22 +336,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-06-29T13:45:44-07:00",
+    "last_zepp_data_iso": "2026-06-30T13:49:38-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-29T13:45:47-07:00",
+        "last_ok_iso": "2026-06-30T13:49:41-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-06-30T08:22:10-07:00",
+        "last_ok_iso": "2026-06-30T13:49:40-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-06-30T08:22:10-07:00",
+        "last_ok_iso": "2026-06-30T13:49:39-07:00",
         "error": null
       }
     },
