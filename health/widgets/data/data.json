@@ -1,17 +1,17 @@
 {
   "sleep": {
-    "date_label": "Jun 28 — Last Night",
-    "score": 82,
-    "total_minutes": 472,
-    "total_label": "7 h 52 m",
-    "deep_minutes": 62,
-    "light_minutes": 278,
-    "rem_minutes": 132,
-    "awake_minutes": 4,
-    "bedtime_label": "11:00 AM",
-    "wake_label": "6:56 PM",
-    "resting_hr": 60,
-    "awakenings": 4
+    "date_label": "Jun 30 — Last Night",
+    "score": null,
+    "total_minutes": null,
+    "total_label": "—",
+    "deep_minutes": 0,
+    "light_minutes": 0,
+    "rem_minutes": 0,
+    "awake_minutes": 0,
+    "bedtime_label": "—",
+    "wake_label": "—",
+    "resting_hr": null,
+    "awakenings": null
   },
   "activity": {
     "date_label": "Mon Jun 29 — Latest",
@@ -19,34 +19,34 @@
       "rhr": 60,
       "steps": 4691,
       "avg_hr": 78,
-      "sleep_score": 82
+      "sleep_score": null
     },
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "steps": [
-        4587,
         null,
         1959,
         5536,
         3270,
         4691,
+        null,
         null
       ],
       "rhr": [
-        55,
         null,
         58,
         55,
         0,
         60,
+        null,
         null
       ],
       "today_index": 6
@@ -183,39 +183,39 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
-      "Tue"
+      "Tue",
+      "Wed"
     ],
     "date_labels": [
-      "Wed 6/24",
       "Thu 6/25",
       "Fri 6/26",
       "Sat 6/27",
       "Sun 6/28",
       "Mon 6/29",
-      "Tue 6/30"
+      "Tue 6/30",
+      "Wed 7/1"
     ],
     "lift_min": [
       0,
       0,
       0,
       0,
-      0,
       66,
-      70
+      70,
+      0
     ],
     "lift_cal": [
       0,
       0,
       0,
       0,
-      0,
       398,
+      0,
       0
     ],
     "lift_type": [
@@ -223,9 +223,9 @@
       "",
       "",
       "",
-      "",
       "Upper",
-      "Legs"
+      "Legs",
+      ""
     ],
     "bball_min": [
       0,
@@ -246,21 +246,21 @@
       0
     ],
     "walk_min": [
-      7.6,
       25.2,
       0,
       0,
       0,
       12.7,
+      0,
       0
     ],
     "walk_cal": [
-      50,
       160,
       0,
       0,
       0,
       74,
+      0,
       0
     ],
     "top_lifts": []
@@ -275,12 +275,12 @@
       5,
       5,
       5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
+      28,
+      18,
+      14,
+      20,
+      20,
+      20,
       65,
       72,
       78,
@@ -293,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:56 PM · No workout · Natural curve"
+    "footer": "Wake — · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jul 1 — Today",
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-01T08:34:11-07:00",
-    "last_updated_label": "Jul 1, 8:34 AM PST",
+    "last_updated_iso": "2026-07-01T13:45:04-07:00",
+    "last_updated_label": "Jul 1, 1:45 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,22 +336,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-06-30T13:49:38-07:00",
+    "last_zepp_data_iso": "2026-07-01T13:45:04-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-06-30T13:49:41-07:00",
+        "last_ok_iso": "2026-07-01T13:45:07-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-01T08:34:12-07:00",
+        "last_ok_iso": "2026-07-01T13:45:05-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-07-01T08:34:13-07:00",
+        "last_ok_iso": "2026-07-01T13:45:05-07:00",
         "error": null
       }
     },
