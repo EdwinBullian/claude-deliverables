@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Eddie's Weekly Review — 2026-07-03</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F4ECD8;
+      --parchment-card: #F8F1DF;
+      --parchment-soft: #EFE6CE;
+      --ink: #1A1A1A;
+      --warm-gray: #5C5853;
+      --faded-ink: #8B857C;
+      --pink: #F5D5CF;
+      --blue: #C9DDE6;
+      --sage: #CADBC4;
+      --yellow: #EFE5BD;
+      --forest: #4A6B45;
+      --terracotta: #C97B5C;
+      --sienna: #A0524D;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--parchment);
+      color: var(--ink);
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+      line-height: 1.55;
+    }
+    .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; }
+    h1 { font-size: 56px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 4px; line-height: 1.05; }
+    h1 .highlight { background: var(--sage); padding: 0 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+    .subtitle { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--warm-gray); letter-spacing: 0.03em; margin-bottom: 36px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 28px; }
+    .tile { border: 1.5px solid var(--ink); border-radius: 8px; padding: 16px 16px 12px; }
+    .tile-pink { background: var(--pink); } .tile-blue { background: var(--blue); } .tile-sage { background: var(--sage); } .tile-yellow { background: var(--yellow); } .tile-cream { background: var(--parchment-card); }
+    .tile-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px; }
+    .tile-number { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+    .tile-caption { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--warm-gray); letter-spacing: 0.02em; }
+    .levels-overall { border: 1.5px solid var(--ink); border-radius: 8px; padding: 14px 20px; margin-bottom: 10px; background: var(--ink); color: var(--parchment); display: flex; align-items: center; gap: 18px; }
+    .levels-overall .ov-label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow); flex: 0 0 auto; }
+    .levels-overall .ov-progression { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--parchment); flex: 0 0 auto; }
+    .levels-overall .ov-progression .arrow { color: var(--yellow); margin: 0 6px; }
+    .levels-overall .ov-bar { flex: 1; height: 8px; background: rgba(244,236,216,0.15); border-radius: 4px; position: relative; overflow: hidden; }
+    .levels-overall .ov-bar-fill { height: 100%; background: var(--yellow); border-radius: 4px; }
+    .levels-overall .ov-bar-mark { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(244,236,216,0.5); }
+    .levels-overall .ov-xp { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--yellow); flex: 0 0 auto; }
+    .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 12px; }
+    .lvl-card { border: 1.5px solid var(--ink); border-radius: 8px; padding: 10px 12px 12px; background: var(--parchment-card); }
+    .lvl-card .lvl-icon { font-size: 18px; line-height: 1; margin-bottom: 4px; }
+    .lvl-card .lvl-name { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px; }
+    .lvl-card .lvl-bar { height: 6px; background: rgba(26,26,26,0.08); border: 1px solid rgba(26,26,26,0.25); border-radius: 3px; position: relative; overflow: hidden; margin-bottom: 6px; }
+    .lvl-card .lvl-bar-fill { height: 100%; background: var(--ink); border-radius: 3px; }
+    .lvl-card .lvl-bar-start { position: absolute; top: 0; bottom: 0; width: 1.5px; background: var(--terracotta); }
+    .lvl-card .lvl-progression { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--warm-gray); letter-spacing: 0.02em; line-height: 1.4; }
+    .lvl-card .lvl-progression .arrow { color: var(--forest); margin: 0 2px; }
+    .lvl-card .lvl-progression .delta { color: var(--forest); font-weight: 600; }
+    .lvl-card.tint-pink { background: var(--pink); } .lvl-card.tint-sage { background: var(--sage); } .lvl-card.tint-yellow { background: var(--yellow); } .lvl-card.tint-blue { background: var(--blue); }
+    .data-note { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--faded-ink); font-style: italic; margin-bottom: 32px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin: 44px 0 14px; }
+    .section-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; background: var(--ink); color: var(--parchment); padding: 5px 11px; border-radius: 4px; letter-spacing: 0.05em; }
+    .section-title { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; }
+    .section-rule { flex: 1; height: 1px; background: var(--faded-ink); opacity: 0.4; }
+    .card { border: 1.5px solid var(--ink); border-radius: 8px; padding: 20px 24px; background: var(--parchment-card); margin-bottom: 14px; }
+    .card p { margin: 4px 0; }
+    .health-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start; }
+    .health-cell .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 4px; }
+    .health-cell .value { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
+    .health-cell .sub { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--faded-ink); }
+    .area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .area-col { border: 1.5px solid var(--ink); border-radius: 8px; padding: 16px 18px 18px; background: var(--parchment-card); }
+    .area-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1.5px solid var(--ink); }
+    .area-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .area-count { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; line-height: 1; }
+    .area-list { list-style: none; padding: 0; margin: 0; font-size: 13.5px; }
+    .area-list li { padding: 5px 0; display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed rgba(26,26,26,0.12); }
+    .area-list li:last-child { border-bottom: none; }
+    .area-list .name { flex: 1; min-width: 0; }
+    .area-list .progress { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--warm-gray); white-space: nowrap; }
+    .delta-up { color: var(--forest); } .delta-flat { color: var(--faded-ink); }
+    .overdue-block { margin-top: 12px; padding-top: 10px; border-top: 1.5px dashed var(--sienna); }
+    .overdue-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sienna); margin-bottom: 6px; }
+    .placeholder { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--faded-ink); font-style: italic; padding: 12px 0; text-align: center; }
+    .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .time-col { border: 1.5px solid var(--ink); border-radius: 8px; padding: 14px 16px 16px; background: var(--parchment-card); }
+    .time-col.manual { border-style: dashed; }
+    .time-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--ink); }
+    .time-name { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .time-total { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+    .time-total .unit { font-size: 12px; color: var(--warm-gray); font-weight: 500; margin-left: 2px; }
+    .time-list { list-style: none; padding: 0; margin: 0; font-size: 12.5px; }
+    .time-list li { padding: 3px 0; display: flex; justify-content: space-between; gap: 6px; }
+    .time-list .hours { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--warm-gray); white-space: nowrap; }
+    .grade-block, .insight-block { background: var(--ink); color: var(--parchment); padding: 24px 28px; border-radius: 8px; margin-bottom: 16px; }
+    .grade-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+    .grade-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow); }
+    .grade-letter { font-size: 48px; font-weight: 700; line-height: 1; }
+    .grade-summary { color: var(--parchment); opacity: 0.92; font-size: 15px; line-height: 1.6; }
+    .insight-block .grade-summary { margin-bottom: 12px; } .insight-block .grade-summary:last-child { margin-bottom: 0; }
+    .insight-block .grade-summary strong.tag { color: var(--yellow); }
+    ul.list-clean { padding-left: 18px; margin: 4px 0; } ul.list-clean li { margin: 6px 0; }
+    .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--faded-ink); letter-spacing: 0.02em; }
+    .meta a { color: var(--forest); text-decoration: none; border-bottom: 1px solid var(--forest); }
+  </style>
+</head>
+<body>
+
+<h1>Weekly <span class="highlight">Review</span></h1>
+<div class="subtitle">JULY 3, 2026 · WEEK 27 · GENERATED 09:20 PST</div>
+
+<div class="grade-block">
+  <div class="grade-row"><span class="grade-label">Overall grade</span></div>
+  <div class="grade-row" style="align-items: center;">
+    <span class="grade-letter">C+</span>
+    <span class="grade-summary">Finance — the #1 priority right now — had a genuinely strong week: two full thesis packages (Anthropic, Anduril) plus an LBO deep-dive, all on-roadmap. But the task system is in real disrepair (234 overdue, 209 stale 14+ days), lifting adherence stayed near zero for a 6th+ week, and both the Time Log and Habit Tracker logged zero entries — this review's XP numbers are estimated, not measured, for the 9th week running.</span>
+  </div>
+</div>
+
+<div class="grid-5">
+  <div class="tile tile-pink">
+    <div class="tile-label">Tasks · Done</div>
+    <div class="tile-number">1</div>
+    <div class="tile-caption">due-date method, n=1</div>
+  </div>
+  <div class="tile tile-yellow">
+    <div class="tile-label">Tasks · Overdue</div>
+    <div class="tile-number">234</div>
+    <div class="tile-caption">209 are 14+ days</div>
+  </div>
+  <div class="tile tile-sage">
+    <div class="tile-label">Projects · Worked</div>
+    <div class="tile-number">2</div>
+    <div class="tile-caption">of 8 active</div>
+  </div>
+  <div class="tile tile-blue">
+    <div class="tile-label">Workouts · Hit</div>
+    <div class="tile-number">1/4</div>
+    <div class="tile-caption">~25% adherence</div>
+  </div>
+  <div class="tile tile-cream">
+    <div class="tile-label">Habits · Avg</div>
+    <div class="tile-number">0%</div>
+    <div class="tile-caption">0 entries logged</div>
+  </div>
+</div>
+
+<div class="levels-overall">
+  <span class="ov-label">Overall</span>
+  <span class="ov-progression">L24 50%<span class="arrow">→</span>L26 0%</span>
+  <div class="ov-bar"><div class="ov-bar-fill" style="width: 0%;"></div><div class="ov-bar-mark" style="left: 50%;"></div></div>
+  <span class="ov-xp">+150 XP (est.)</span>
+</div>
+
+<div class="grid-6">
+  <div class="lvl-card tint-pink">
+    <div class="lvl-icon">💪</div>
+    <div class="lvl-name">Fitness</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 80%;"></div><div class="lvl-bar-start" style="left: 70%;"></div></div>
+    <div class="lvl-progression">L5 70% <span class="arrow">→</span> L5 80% <span class="delta">+10</span></div>
+  </div>
+  <div class="lvl-card tint-sage">
+    <div class="lvl-icon">🏀</div>
+    <div class="lvl-name">Sports</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 40%;"></div><div class="lvl-bar-start" style="left: 30%;"></div></div>
+    <div class="lvl-progression">L4 30% <span class="arrow">→</span> L4 40% <span class="delta">+10</span></div>
+  </div>
+  <div class="lvl-card tint-yellow">
+    <div class="lvl-icon">💰</div>
+    <div class="lvl-name">Finance</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 45%;"></div><div class="lvl-bar-start" style="left: 65%;"></div></div>
+    <div class="lvl-progression">L7 65% <span class="arrow">→</span> L8 45% <span class="delta">+80</span></div>
+  </div>
+  <div class="lvl-card tint-blue">
+    <div class="lvl-icon">💻</div>
+    <div class="lvl-name">Programming</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 70%;"></div><div class="lvl-bar-start" style="left: 20%;"></div></div>
+    <div class="lvl-progression">L6 20% <span class="arrow">→</span> L6 70% <span class="delta">+50</span></div>
+  </div>
+  <div class="lvl-card">
+    <div class="lvl-icon">🎮</div>
+    <div class="lvl-name">Hobbies</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 15%;"></div><div class="lvl-bar-start" style="left: 15%;"></div></div>
+    <div class="lvl-progression">L3 15% <span class="arrow">→</span> L3 15% <span class="delta" style="color: var(--faded-ink);">+0</span></div>
+  </div>
+  <div class="lvl-card">
+    <div class="lvl-icon">🎓</div>
+    <div class="lvl-name">School</div>
+    <div class="lvl-bar"><div class="lvl-bar-fill" style="width: 50%;"></div><div class="lvl-bar-start" style="left: 50%;"></div></div>
+    <div class="lvl-progression">L2 50% <span class="arrow">→</span> L2 50% <span class="delta" style="color: var(--faded-ink);">+0</span></div>
+  </div>
+</div>
+<div class="data-note">LifeOS XP is estimated, not measured — Areas DB formula properties (Total XP, Level, Progress %) have returned unresolvable <span class="mono">formulaResult://</span> references for the 9th consecutive week. Estimated from the 2026-06-21 snapshot baseline + this week's confirmed task/calendar activity.</div>
+
+<div class="section-header"><span class="section-num">01</span><span class="section-title">Health</span><span class="section-rule"></span></div>
+<div class="card">
+  <p class="meta" style="margin-bottom: 12px;">Most recent Saturday health review is <strong style="color: var(--sienna);">2026-W26</strong> (window Jun 22–27) — W27's Saturday review has not run yet as of this Friday generation time.</p>
+  <div class="health-grid">
+    <div class="health-cell"><div class="label">Training</div><div class="value">1/4 sessions</div><div class="sub">Recovery: <span style="color: var(--terracotta); font-weight:600;">Moderate</span></div></div>
+    <div class="health-cell"><div class="label">Sleep</div><div class="value">7.35 hr · score 73</div><div class="sub">RHR 54.6 bpm (+2.6 vs baseline)</div></div>
+    <div class="health-cell"><div class="label">Nutrition</div><div class="value">2,273 kcal · 148.6g protein</div><div class="sub">protein hit rate 3/3 logged days (3/7 logged)</div></div>
+  </div>
+  <p class="meta" style="margin-top: 14px;">Detail → Health/reviews/weekly_reviews/2026-W26.md · HRV/SpO2 blind 11th+ consecutive week</p>
+</div>
+
+<div class="section-header"><span class="section-num">02</span><span class="section-title">Tasks &amp; Projects</span><span class="section-rule"></span></div>
+<div class="area-grid">
+  <div class="area-col"><div class="area-head"><span class="area-name">Finance</span><span class="area-count">5</span></div>
+    <ul class="area-list">
+      <li><span class="name">Thesis: Anthropic (DCF+comps)</span><span class="progress">done ✓</span></li>
+      <li><span class="name">Thesis: Anduril (DCF+comps)</span><span class="progress">done ✓</span></li>
+      <li><span class="name">Finance Agent Loop dry-run</span><span class="progress">done ✓</span></li>
+      <li><span class="name">Daily scanner (~30 tickers)</span><span class="progress">auto, running</span></li>
+      <li><span class="name">M3.x sentiment/13F/options-flow</span><span class="progress" style="color: var(--terracotta);">due ≤7d</span></li>
+    </ul>
+  </div>
+  <div class="area-col"><div class="area-head"><span class="area-name">School</span><span class="area-count">0</span></div>
+    <div class="placeholder">No active coursework —<br>graduated senior, all AP<br>exams complete.</div>
+  </div>
+  <div class="area-col"><div class="area-head"><span class="area-name">Programming</span><span class="area-count">2</span></div>
+    <ul class="area-list">
+      <li><span class="name">Health agent: meal-prep↔training bridge</span><span class="progress">done ✓</span></li>
+      <li><span class="name">CS50 PS7 / PS8</span><span class="progress" style="color: var(--terracotta);">due ≤7d</span></li>
+    </ul>
+  </div>
+  <div class="area-col"><div class="area-head"><span class="area-name">Research</span><span class="area-count">3</span></div>
+    <ul class="area-list">
+      <li><span class="name">LBO mechanics deep-dive</span><span class="progress">done ✓</span></li>
+      <li><span class="name">Caffeine — cognitive/physical (heavy)</span><span class="progress">complete (5/17)</span></li>
+      <li><span class="name">Neuroscience fundamentals (heavy)</span><span class="progress">complete (6/6)</span></li>
+    </ul>
+    <div class="overdue-block"><div class="overdue-label">Stalled</div>
+      <ul class="area-list"><li><span class="name">Processed-foods investigation</span><span class="progress" style="color: var(--sienna);">12d, 0 chunks run</span></li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="section-header"><span class="section-num">03</span><span class="section-title">Time Spent</span><span class="section-rule"></span></div>
+<p class="meta" style="margin-bottom: 12px;">Notion Time Log DB had <strong style="color: var(--sienna);">zero entries</strong> this window — all hours below are inferred from Google Calendar · Total tracked: <strong style="color: var(--ink);">~25.7 hrs</strong> of 112 waking</p>
+<div class="time-grid">
+  <div class="time-col"><div class="time-head"><span class="time-name">Health</span><span class="time-total">13.7<span class="unit">h</span></span></div>
+    <ul class="time-list"><li><span>Gym / running</span><span class="hours">7.0</span></li><li><span>Stretch / mobility</span><span class="hours">2.7</span></li><li><span>Cooking / meal-prep</span><span class="hours">4.0</span></li></ul>
+  </div>
+  <div class="time-col"><div class="time-head"><span class="time-name">Finance</span><span class="time-total">10.0<span class="unit">h</span></span></div>
+    <ul class="time-list"><li><span>Study blocks (daily)</span><span class="hours">6.0</span></li><li><span>Reading list</span><span class="hours">4.0</span></li></ul>
+  </div>
+  <div class="time-col"><div class="time-head"><span class="time-name">Career</span><span class="time-total">2.0<span class="unit">h</span></span></div>
+    <ul class="time-list"><li><span>Networking outreach</span><span class="hours">2.0</span></li></ul>
+  </div>
+  <div class="time-col manual"><div class="time-head"><span class="time-name">School / Coding / Research</span><span class="time-total">0.0<span class="unit">h</span></span></div>
+    <ul class="time-list"><li><span>No calendar blocks found</span><span class="hours">0.0</span></li></ul>
+  </div>
+</div>
+
+<div class="section-header"><span class="section-num">04</span><span class="section-title">Insight</span><span class="section-rule"></span></div>
+<div class="insight-block">
+  <div class="grade-label" style="margin-bottom: 12px;">Patterns &amp; calendar adaptation</div>
+  <p class="grade-summary"><strong class="tag">·</strong> The calendar is dominated by protected recurring habit blocks but carries <strong>zero</strong> deliberate blocks for School, Coding, or Research — the domains actually holding open backlog (CS50 PS7/PS8 due within 7 days).</p>
+  <p class="grade-summary"><strong class="tag">·</strong> Most of this week's Finance output is automated agent activity (daily scanner, autonomous Finance Agent Loop, scheduled thesis generator), not Eddie's own study time — the two thesis packages are real wins, but read the +80 XP as system output, not purely manual effort.</p>
+  <p class="grade-summary"><strong class="tag">·</strong> Nutrition and lifting are moving in opposite directions — calories +54% WoW and protein hitting 3/3 logged days, while lifting adherence stayed near zero for a 6th+ consecutive Tuesday.</p>
+  <p class="grade-summary"><strong class="tag">·</strong> Next 14 days: septoplasty operation 7/6, post-op check 7/14, "cleared to train?" check-in 7/15 — expect capped training capacity through mid-July.</p>
+  <p class="grade-summary"><strong class="tag">·</strong> Scheduled-run notify infrastructure has reportedly been down ~5 weeks — worth confirming Eddie is actually seeing these Sunday reviews.</p>
+</div>
+
+<div class="section-header"><span class="section-num">05</span><span class="section-title">Wins</span><span class="section-rule"></span></div>
+<div class="card"><ul class="list-clean">
+  <li><strong>Two full investment thesis packages</strong> (Anthropic — $965B post-money, Anduril — $61B Series H), each with DCF + comps landing below their private marks — real analyst-level reps directly on the Mendoza-prep roadmap.</li>
+  <li><strong>LBO mechanics deep-dive completed</strong> in Research — reinforces PE, roadmap priority #3.</li>
+  <li>Nutrition trending up sharply: calories +54% WoW, protein hit rate 3/3 on logged days, fiber lever worked for the first time.</li>
+  <li>Two heavy research projects (Caffeine, Neuroscience) sit fully complete with final reports.</li>
+</ul></div>
+
+<div class="section-header"><span class="section-num">06</span><span class="section-title">Gaps</span><span class="section-rule"></span></div>
+<div class="card"><ul class="list-clean">
+  <li><strong>234 tasks overdue</strong>, 209 of them 14+ days stale (oldest 113 days) — reads as an abandoned curriculum dump, not a working queue.</li>
+  <li>Workout adherence ~25%; lifting near-zero for a 6th+ consecutive Tuesday.</li>
+  <li>Time Log and Habit Tracker both logged <strong>zero entries</strong> this week — 9 weeks running.</li>
+  <li>No IB-specific deliverable this week despite IB being roadmap priority #1.</li>
+  <li>"Scholarships 2026" and "LifeOS v1" projects are past their Finish dates but still marked Active.</li>
+  <li>HRV/SpO2 blind 11th+ consecutive week.</li>
+</ul></div>
+
+<div class="section-header"><span class="section-num">07</span><span class="section-title">Recommendations</span><span class="section-rule"></span></div>
+<div class="card"><ul class="list-clean">
+  <li><strong>Finance:</strong> Keep the thesis cadence, but schedule one IB-specific deliverable next week.</li>
+  <li><strong>Health:</strong> Commit to the W27 restructure (Thu + Sat full-body, basketball anchor); check the Apple Health shortcut.</li>
+  <li><strong>Task system:</strong> Run one bulk-triage pass on the 234 overdue tasks.</li>
+  <li><strong>Coding/School:</strong> Put a real block on the calendar for CS50 PS7/PS8.</li>
+  <li><strong>Tracking:</strong> Either start actually logging Time Log + Habit Tracker, or stop relying on them.</li>
+</ul></div>
+
+<p class="meta" style="margin-top: 56px; padding-top: 16px; border-top: 1px solid rgba(26,26,26,0.15);">
+  Reports archived → <span class="mono">Misc/WeeklyReviews/</span> · Health → <span class="mono">Health/reviews/weekly_reviews/</span> · LifeOS snapshots → <span class="mono">Agent/agentos/lifeos_snapshots.md</span>
+</p>
+
+</body>
+</html>
