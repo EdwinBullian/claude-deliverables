@@ -55,7 +55,7 @@
   },
   "macros_week": {
     "week_label": "Macros — Jun 27–3",
-    "macro_score_pct": 0,
+    "macro_score_pct": 73,
     "labels": [
       "Sat",
       "Sun",
@@ -81,7 +81,7 @@
       0,
       0,
       0,
-      0
+      144
     ],
     "carbs_g": [
       0,
@@ -90,7 +90,7 @@
       0,
       0,
       0,
-      0
+      107
     ],
     "fat_g": [
       0,
@@ -99,7 +99,7 @@
       0,
       0,
       0,
-      0
+      84
     ],
     "has_data": [
       false,
@@ -108,77 +108,77 @@
       false,
       false,
       false,
-      false
+      true
     ],
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
     "target_fat_g": 100,
-    "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 0/7 days logged"
+    "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 1/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 0,
-    "days_logged": 0,
+    "macro_score_pct": 73,
+    "days_logged": 1,
     "days_total": 7,
-    "avg_protein_g": 0,
-    "avg_carbs_g": 0,
-    "avg_fat_g": 0,
+    "avg_protein_g": 144,
+    "avg_carbs_g": 107,
+    "avg_fat_g": 84,
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
     "target_fat_g": 100,
     "nutrients": [
       {
-        "pct": 0,
+        "pct": 41,
         "label": "Fiber",
-        "sub": "0g / 38g",
+        "sub": "16g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 40,
         "label": "Calcium",
-        "sub": "0mg / 1.0g",
+        "sub": "407mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 48,
         "label": "Magnesium",
-        "sub": "0mg / 400mg",
+        "sub": "196mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 50,
         "label": "Potassium",
-        "sub": "0mg / 4.7g",
+        "sub": "2.4g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 134,
         "label": "Sodium",
-        "sub": "0mg / 2.3g",
+        "sub": "3.1g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 0,
+        "pct": 75,
         "label": "Iron",
-        "sub": "0mg / 8mg",
+        "sub": "6mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 17,
         "label": "Vitamin A",
-        "sub": "0mcg / 900mcg",
+        "sub": "155mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 0,
+        "pct": 34,
         "label": "Vitamin C",
-        "sub": "0mg / 90mg",
+        "sub": "31mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "0 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
@@ -297,9 +297,9 @@
   },
   "hydration": {
     "date_label": "Jul 3 — Today",
-    "today_oz": 0.0,
+    "today_oz": 34.8,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 27,
     "week": {
       "labels": [
         "Sat",
@@ -317,15 +317,15 @@
         0,
         0,
         0,
-        0
+        35
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-03T13:08:56-07:00",
-    "last_updated_label": "Jul 3, 1:08 PM PST",
+    "last_updated_iso": "2026-07-03T21:26:42-07:00",
+    "last_updated_label": "Jul 3, 9:26 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,12 +346,12 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-03T13:08:57-07:00",
+        "last_ok_iso": "2026-07-03T21:26:43-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-07-03T13:08:57-07:00",
+        "last_ok_iso": "2026-07-03T21:26:42-07:00",
         "error": null
       }
     },
