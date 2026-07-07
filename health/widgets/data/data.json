@@ -183,25 +183,25 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
-      "Mon"
+      "Mon",
+      "Tue"
     ],
     "date_labels": [
-      "Tue 6/30",
       "Wed 7/1",
       "Thu 7/2",
       "Fri 7/3",
       "Sat 7/4",
       "Sun 7/5",
-      "Mon 7/6"
+      "Mon 7/6",
+      "Tue 7/7"
     ],
     "lift_min": [
-      70,
+      0,
       0,
       0,
       0,
@@ -219,7 +219,7 @@
       0
     ],
     "lift_type": [
-      "Legs",
+      "",
       "",
       "",
       "",
@@ -230,37 +230,37 @@
     "bball_min": [
       0,
       0,
-      0,
       21.4,
       72.4,
+      0,
       0,
       0
     ],
     "bball_cal": [
       0,
       0,
-      0,
       130,
       823,
+      0,
       0,
       0
     ],
     "walk_min": [
-      0,
       43.4,
       0,
       0,
       0,
       64.8,
+      10.3,
       0
     ],
     "walk_cal": [
-      0,
       233,
       0,
       0,
       0,
       626,
+      31,
       0
     ],
     "top_lifts": []
@@ -324,28 +324,34 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-07T09:24:24-07:00",
-    "last_updated_label": "Jul 7, 9:24 AM PST",
+    "last_updated_iso": "2026-07-07T13:44:07-07:00",
+    "last_updated_label": "Jul 7, 1:44 PM PST",
     "refreshed_sections": [
       "sleep",
-      "energy"
+      "activity",
+      "energy",
+      "strength_week",
+      "supplements",
+      "macros_week",
+      "micros_week",
+      "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-07T09:24:24-07:00",
+    "last_zepp_data_iso": "2026-07-07T13:44:07-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-07T09:24:30-07:00",
+        "last_ok_iso": "2026-07-07T13:44:11-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-07T08:38:40-07:00",
+        "last_ok_iso": "2026-07-07T13:44:07-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-07-07T08:38:39-07:00",
+        "last_ok_iso": "2026-07-07T13:44:07-07:00",
         "error": null
       }
     },
