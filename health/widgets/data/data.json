@@ -14,7 +14,7 @@
     "awakenings": 15
   },
   "activity": {
-    "date_label": "Jul 8 — Today",
+    "date_label": "Wed Jul 8 — Latest",
     "today": {
       "rhr": 52,
       "steps": 57,
@@ -23,31 +23,31 @@
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        1740,
         3768,
         5199,
         4987,
         1642,
         939,
-        57
+        57,
+        null
       ],
       "rhr": [
-        0,
         53,
         58,
         57,
         61,
         65,
-        52
+        52,
+        null
       ],
       "today_index": 6
     },
@@ -183,22 +183,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed"
+      "Wed",
+      "Thu"
     ],
     "date_labels": [
-      "Thu 7/2",
       "Fri 7/3",
       "Sat 7/4",
       "Sun 7/5",
       "Mon 7/6",
       "Tue 7/7",
-      "Wed 7/8"
+      "Wed 7/8",
+      "Thu 7/9"
     ],
     "lift_min": [
       0,
@@ -228,18 +228,18 @@
       ""
     ],
     "bball_min": [
-      0,
       21.4,
       72.4,
+      0,
       0,
       0,
       0,
       0
     ],
     "bball_cal": [
-      0,
       130,
       823,
+      0,
       0,
       0,
       0,
@@ -248,18 +248,18 @@
     "walk_min": [
       0,
       0,
-      0,
       64.8,
       10.3,
+      0,
       0,
       0
     ],
     "walk_cal": [
       0,
       0,
-      0,
       626,
       31,
+      0,
       0,
       0
     ],
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-09T08:50:55-07:00",
-    "last_updated_label": "Jul 9, 8:50 AM PST",
+    "last_updated_iso": "2026-07-09T13:41:21-07:00",
+    "last_updated_label": "Jul 9, 1:41 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,17 +336,17 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-08T13:15:35-07:00",
+    "last_zepp_data_iso": "2026-07-09T13:41:21-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-08T13:15:38-07:00",
+        "last_ok_iso": "2026-07-09T13:41:23-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-09T08:50:56-07:00",
+        "last_ok_iso": "2026-07-09T13:41:24-07:00",
         "error": null
       },
       "notion": {
