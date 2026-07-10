@@ -1,17 +1,17 @@
 {
   "sleep": {
-    "date_label": "Jul 8 — Last Night",
-    "score": 62,
-    "total_minutes": 369,
-    "total_label": "6 h 9 m",
-    "deep_minutes": 33,
-    "light_minutes": 267,
-    "rem_minutes": 69,
-    "awake_minutes": 24,
-    "bedtime_label": "11:29 PM",
-    "wake_label": "6:02 AM",
-    "resting_hr": 52,
-    "awakenings": 15
+    "date_label": "Jul 9 — Last Night",
+    "score": null,
+    "total_minutes": null,
+    "total_label": "—",
+    "deep_minutes": 0,
+    "light_minutes": 0,
+    "rem_minutes": 0,
+    "awake_minutes": 0,
+    "bedtime_label": "—",
+    "wake_label": "—",
+    "resting_hr": null,
+    "awakenings": null
   },
   "activity": {
     "date_label": "Wed Jul 8 — Latest",
@@ -19,34 +19,34 @@
       "rhr": 52,
       "steps": 57,
       "avg_hr": 58,
-      "sleep_score": 62
+      "sleep_score": null
     },
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "steps": [
-        3768,
         5199,
         4987,
         1642,
         939,
         57,
+        null,
         null
       ],
       "rhr": [
-        53,
         58,
         57,
         61,
         65,
         52,
+        null,
         null
       ],
       "today_index": 6
@@ -183,22 +183,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
-      "Thu"
+      "Thu",
+      "Fri"
     ],
     "date_labels": [
-      "Fri 7/3",
       "Sat 7/4",
       "Sun 7/5",
       "Mon 7/6",
       "Tue 7/7",
       "Wed 7/8",
-      "Thu 7/9"
+      "Thu 7/9",
+      "Fri 7/10"
     ],
     "lift_min": [
       0,
@@ -228,8 +228,8 @@
       ""
     ],
     "bball_min": [
-      21.4,
       72.4,
+      0,
       0,
       0,
       0,
@@ -237,8 +237,8 @@
       0
     ],
     "bball_cal": [
-      130,
       823,
+      0,
       0,
       0,
       0,
@@ -247,18 +247,18 @@
     ],
     "walk_min": [
       0,
-      0,
       64.8,
       10.3,
+      0,
       0,
       0,
       0
     ],
     "walk_cal": [
       0,
-      0,
       626,
       31,
+      0,
       0,
       0,
       0
@@ -274,13 +274,13 @@
       5,
       5,
       5,
+      5,
       28,
       18,
       14,
       20,
-      26,
-      26,
-      26,
+      20,
+      20,
       65,
       72,
       78,
@@ -293,7 +293,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:02 AM · No workout · Natural curve"
+    "footer": "Wake — · No workout · Natural curve"
   },
   "hydration": {
     "date_label": "Jul 10 — Today",
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-10T08:25:15-07:00",
-    "last_updated_label": "Jul 10, 8:25 AM PST",
+    "last_updated_iso": "2026-07-10T13:11:50-07:00",
+    "last_updated_label": "Jul 10, 1:11 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,17 +336,17 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-09T13:41:21-07:00",
+    "last_zepp_data_iso": "2026-07-10T13:11:50-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-09T13:41:23-07:00",
+        "last_ok_iso": "2026-07-10T13:11:55-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-10T08:25:15-07:00",
+        "last_ok_iso": "2026-07-10T13:11:51-07:00",
         "error": null
       },
       "notion": {
