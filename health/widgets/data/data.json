@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-13T13:06:38-07:00",
-    "last_updated_label": "Jul 13, 1:06 PM PST",
+    "last_updated_iso": "2026-07-13T20:50:39-07:00",
+    "last_updated_label": "Jul 13, 8:50 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,7 +346,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-13T13:06:39-07:00",
+        "last_ok_iso": "2026-07-13T20:50:40-07:00",
         "error": null
       },
       "notion": {
