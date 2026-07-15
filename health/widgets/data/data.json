@@ -54,25 +54,25 @@
     "today_workout": null
   },
   "macros_week": {
-    "week_label": "Macros — Jul 8–14",
+    "week_label": "Macros — Jul 9–15",
     "macro_score_pct": 0,
     "labels": [
-      "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
-      "Tue"
+      "Tue",
+      "Wed"
     ],
     "dates": [
-      "Jul 8",
       "Jul 9",
       "Jul 10",
       "Jul 11",
       "Jul 12",
       "Jul 13",
-      "Jul 14"
+      "Jul 14",
+      "Jul 15"
     ],
     "protein_g": [
       0,
@@ -266,7 +266,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jul 14",
+    "date_label": "Jul 15",
     "curve_24h": [
       5,
       5,
@@ -296,19 +296,19 @@
     "footer": "Wake 6:45 AM · No workout · Natural curve"
   },
   "hydration": {
-    "date_label": "Jul 14 — Today",
+    "date_label": "Jul 15 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "oz": [
         0,
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-14T20:51:45-07:00",
-    "last_updated_label": "Jul 14, 8:51 PM PST",
+    "last_updated_iso": "2026-07-15T02:04:03-07:00",
+    "last_updated_label": "Jul 15, 2:04 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,7 +346,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-14T20:51:46-07:00",
+        "last_ok_iso": "2026-07-15T02:04:05-07:00",
         "error": null
       },
       "notion": {
