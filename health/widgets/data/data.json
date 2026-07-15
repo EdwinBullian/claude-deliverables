@@ -14,7 +14,7 @@
     "awakenings": 2
   },
   "activity": {
-    "date_label": "Jul 14 — Today",
+    "date_label": "Tue Jul 14 — Latest",
     "today": {
       "rhr": 55,
       "steps": 222,
@@ -23,31 +23,31 @@
     },
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "steps": [
-        1269,
         1325,
         1275,
         1882,
         2105,
         2463,
-        222
+        222,
+        null
       ],
       "rhr": [
-        52,
         57,
         58,
         60,
         59,
         57,
-        55
+        55,
+        null
       ],
       "today_index": 6
     },
@@ -183,22 +183,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
-      "Tue"
+      "Tue",
+      "Wed"
     ],
     "date_labels": [
-      "Wed 7/8",
       "Thu 7/9",
       "Fri 7/10",
       "Sat 7/11",
       "Sun 7/12",
       "Mon 7/13",
-      "Tue 7/14"
+      "Tue 7/14",
+      "Wed 7/15"
     ],
     "lift_min": [
       0,
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-15T07:41:01-07:00",
-    "last_updated_label": "Jul 15, 7:41 AM PST",
+    "last_updated_iso": "2026-07-15T13:00:40-07:00",
+    "last_updated_label": "Jul 15, 1:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,17 +336,17 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-14T13:03:49-07:00",
+    "last_zepp_data_iso": "2026-07-15T13:00:40-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-14T13:03:52-07:00",
+        "last_ok_iso": "2026-07-15T13:00:42-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-15T07:41:02-07:00",
+        "last_ok_iso": "2026-07-15T13:00:41-07:00",
         "error": null
       },
       "notion": {
