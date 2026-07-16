@@ -1,57 +1,62 @@
 {
   "sleep": {
-    "date_label": "Jul 14 — Last Night",
-    "score": 66,
-    "total_minutes": 361,
-    "total_label": "6 h 1 m",
-    "deep_minutes": 33,
-    "light_minutes": 218,
-    "rem_minutes": 110,
-    "awake_minutes": 2,
-    "bedtime_label": "12:42 AM",
-    "wake_label": "6:45 AM",
-    "resting_hr": 55,
-    "awakenings": 2
+    "date_label": "Jul 16 — Last Night",
+    "score": 78,
+    "total_minutes": 464,
+    "total_label": "7 h 44 m",
+    "deep_minutes": 61,
+    "light_minutes": 265,
+    "rem_minutes": 138,
+    "awake_minutes": 9,
+    "bedtime_label": "12:46 AM",
+    "wake_label": "8:39 AM",
+    "resting_hr": 60,
+    "awakenings": 6
   },
   "activity": {
-    "date_label": "Tue Jul 14 — Latest",
+    "date_label": "Jul 16 — Today",
     "today": {
-      "rhr": 55,
-      "steps": 222,
-      "avg_hr": 63,
-      "sleep_score": 66
+      "rhr": 60,
+      "steps": 4501,
+      "avg_hr": 69,
+      "sleep_score": 78
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        1325,
         1275,
         1882,
         2105,
         2463,
-        222,
-        null
+        754,
+        5325,
+        4501
       ],
       "rhr": [
-        57,
         58,
         60,
         59,
         57,
         55,
-        null
+        57,
+        60
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Walk",
+      "duration_min": 39,
+      "calories": 222,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — Jul 10–16",
@@ -183,22 +188,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed"
+      "Wed",
+      "Thu"
     ],
     "date_labels": [
-      "Thu 7/9",
       "Fri 7/10",
       "Sat 7/11",
       "Sun 7/12",
       "Mon 7/13",
       "Tue 7/14",
-      "Wed 7/15"
+      "Wed 7/15",
+      "Thu 7/16"
     ],
     "lift_min": [
       0,
@@ -233,7 +238,7 @@
       0,
       0,
       0,
-      0,
+      35.5,
       0
     ],
     "bball_cal": [
@@ -242,7 +247,7 @@
       0,
       0,
       0,
-      0,
+      148,
       0
     ],
     "walk_min": [
@@ -252,7 +257,7 @@
       0,
       0,
       0,
-      0
+      39.2
     ],
     "walk_cal": [
       0,
@@ -261,7 +266,7 @@
       0,
       0,
       0,
-      0
+      222
     ],
     "top_lifts": []
   },
@@ -274,13 +279,13 @@
       5,
       5,
       5,
+      5,
+      5,
       28,
       18,
       14,
-      20,
-      26,
-      26,
-      26,
+      14,
+      14,
       65,
       72,
       78,
@@ -293,7 +298,7 @@
       46,
       32
     ],
-    "footer": "Wake 6:45 AM · No workout · Natural curve"
+    "footer": "Wake 8:39 AM · Walk 39 min · Natural curve"
   },
   "hydration": {
     "date_label": "Jul 16 — Today",
@@ -324,8 +329,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-16T07:51:34-07:00",
-    "last_updated_label": "Jul 16, 7:51 AM PST",
+    "last_updated_iso": "2026-07-16T12:54:46-07:00",
+    "last_updated_label": "Jul 16, 12:54 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,17 +341,17 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-15T13:00:40-07:00",
+    "last_zepp_data_iso": "2026-07-16T12:54:46-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-15T13:00:42-07:00",
+        "last_ok_iso": "2026-07-16T12:54:49-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-16T07:51:35-07:00",
+        "last_ok_iso": "2026-07-16T12:54:47-07:00",
         "error": null
       },
       "notion": {
