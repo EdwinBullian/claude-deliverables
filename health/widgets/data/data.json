@@ -329,8 +329,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-16T12:54:46-07:00",
-    "last_updated_label": "Jul 16, 12:54 PM PST",
+    "last_updated_iso": "2026-07-16T20:54:04-07:00",
+    "last_updated_label": "Jul 16, 8:54 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -350,9 +350,9 @@
         "error": null
       },
       "cronometer": {
-        "ok": true,
+        "ok": false,
         "last_ok_iso": "2026-07-16T12:54:47-07:00",
-        "error": null
+        "error": "auth failed: Cronometer v2 login failed: Too Many Attempts. Please try again later.. If rate-limited, wait a few minutes and retry."
       },
       "notion": {
         "ok": false,
