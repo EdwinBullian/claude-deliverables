@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — Drain Run (2026-07-17 14:00 PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-07-17</div>
+<h1>Research Queue — Drain Run (2026-07-17 14:00 PST)</h1>
+<h2>Answer first</h2>
+<p>There is nothing to research this run. The queue snapshot reports zero open items (<code>todo: 0, in_progress: 0, done: 0, flipped: 0</code>) and an empty <code>item</code>/<code>item_slug</code>, with the liveness line stating plainly: "queue has no open items — nothing to drain." Per the heavy-depth protocol, no topic means no brief — I will not pad an empty queue into a manufactured deliverable or invent a GOAL that wasn't handed to me. No sources were fetched because there is no claim to support. This is a clean no-op, not a failure.</p>
+<h2>Findings</h2>
+<ul><li>The producer received a well-formed snapshot with an explicit empty-queue signal, not a malformed or missing input. (Source: snapshot.liveness / snapshot.queue_stats)</li><li>No <code>research</code> payload, ticker set, or topic slug was attached, so there is no core-flagged depth instruction to honor or override. (Source: snapshot fields <code>research: null</code>, <code>item: ""</code>)</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — the input is internally consistent (empty <code>item</code> matches zero queue_stats matches the liveness message). The only open question is upstream, not resolvable from this snapshot: whether the queue is empty because work is genuinely done, or because an intake/enqueue step failed to populate it. This run cannot distinguish those two from the data given.</p>
+<h2>So-what for Eddie</h2>
+<p>No context_digest was provided, so there's no thesis to update. Practical takeaway: the Research desk is idle and healthy. If you expected a topic to be waiting here (e.g., a Tuesday research-day carryover), the gap is on the enqueue side, not the drain side — check that whatever feeds the queue actually wrote an item.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ul><li>Confirm whether the enqueue path (request-inbox / scheduler handoff) ran and simply had nothing to add, versus silently failing to write.</li><li>Consider seeding the queue with one standing research topic so heavy-depth runs never idle on scheduled research days.</li></ul>
+</body>
+</html>
