@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Weekly health review</title>
+<title>Health Weekly Review &amp; Plan — Week of 2026-07-18 (PST)</title>
 <style>
 :root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,16 +31,27 @@ tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
 <body>
 
 <div class="meta">2026-07-18</div>
-<h1>Weekly health review</h1>
-<h2>Sleep &amp; recovery</h2>
-<p>Averaged 80 sleep score on 432 min.</p>
-<h2>Nutrition</h2>
-<p>Protein averaged 199g vs the 200g target.</p>
-<h2>Training</h2>
-<p>5 sessions.</p>
-<h2>Body trend</h2>
-<p>Not tracked yet.</p>
-<h2>Next week</h2>
-<p>Keep the split; add a top set (opinion/inference).</p>
+<h1>Health Weekly Review &amp; Plan — Week of 2026-07-18 (PST)</h1>
+<p><strong>Written:</strong> 2026-07-18 08:00 PST · Producer: health-weekly desk</p>
+<h2>Headline: this review ran blind — the data pipeline is down</h2>
+<p>Every live metric in this week's snapshot is null. The device/nutrition feeds did not authenticate: <code>zepp auth failed: Missing required env var: ZEPP_EMAIL</code> and <code>cronometer auth failed: Missing required env var: CRONOMETER_EMAIL</code>, plus <code>NOTION_WORKOUT_DB_ID absent — session history unavailable</code>. So there are no sleep, recovery, nutrition-actuals, or confirmed training numbers to review this week. I will not invent any. What follows is honest about what's missing and gives you a plan and meal prep off the targets that ARE present.</p>
+<h2>1. Sleep &amp; Recovery</h2>
+<p>No data. Sleep score, duration, deep/REM, awakenings, 7-day averages, and resting-HR (last / 7-day / 28-day) are all null in the snapshot because the Zepp feed didn't authenticate. No trend, no bad-night driver can be reported — there's nothing behind it. (opinion/inference) Nothing here is a concern signal; it's a plumbing outage, not a physiological one. Fix noted in tasks.</p>
+<h2>2. Nutrition</h2>
+<p>Actuals are unavailable — yesterday shows <code>"logged": false</code> and both <code>avg7_kcal</code> and <code>avg7_protein_g</code> are null (Cronometer didn't authenticate). Compliance vs target can't be computed this week. The <strong>targets themselves are intact</strong>: <code>target_kcal</code> 2500 and <code>target_protein_g</code> 200. No micronutrient callout is possible without logged data. (opinion/inference) Treat this week's logging as a gap caused by the outage, not by you skipping entries.</p>
+<h2>3. Training</h2>
+<p>The snapshot reports <code>"sessions_last7": 0</code>, but read that against <code>NOTION_WORKOUT_DB_ID absent — session history unavailable</code>: the zero reflects a missing history feed, not a confirmed zero-training week. Split coverage and top-lift progression can't be assessed — no session records came through. (opinion/inference) Assume you trained roughly to plan and treat this as a reporting hole, not a training hole.</p>
+<h2>4. Body Trend</h2>
+<p>Not tracked yet — the snapshot carries no body/weight data (v1). No number to report; I won't estimate one.</p>
+<h2>Next Week — Plan</h2>
+<p><strong>Training focus (home gym only — dumbbells to 100 lb, flat bench, pull-up bar, bands):</strong> run a 4-day upper/lower split — Upper A (flat DB bench, DB row, pull-ups, band face-pulls, DB curls/extensions), Lower A (DB goblet squat, DB RDL, DB walking lunge, calf raises), Upper B (DB overhead press, weighted pull-ups, DB incline-angle press off flat bench, band pull-aparts), Lower B (DB Bulgarian split squat, DB stiff-leg deadlift, step-ups). (opinion/inference) No exact sets/weights prescribed — the snapshot carries no current lifts, so I won't fabricate loads; keep last known working weights and add a rep or a small DB jump when the top set feels easy.</p>
+<p><strong>Nutrition adjustment:</strong> get logging back to daily so next review can actually score you against 2500 kcal / 200 g protein — the single most useful change this week is closing the data gap, since compliance is currently unmeasurable.</p>
+<p><strong>Recovery priority:</strong> restore the Zepp/Cronometer/Notion credentials (tasks below) so sleep and RHR trends are visible again; you can't manage recovery you can't see. (opinion/inference) Until the feed is back, anchor a fixed sleep/wake window as the one controllable lever.</p>
+<h2>5. Next Week — Meal Prep (batch-cookable, ordinary kitchen)</h2>
+<p>Built to the snapshot targets: <code>target_kcal</code> 2500 / <code>target_protein_g</code> 200. Four boxes across the day land near 2500 kcal and ~200 g protein. (opinion/inference — per-meal kcal/protein are my estimates; only the daily targets are from the snapshot.)</p>
+<ol><li><strong>Chicken &amp; rice bowl</strong> — 8 oz chicken breast, 1.5 cup cooked rice, bell peppers, 1 tbsp olive oil. ~650 kcal / ~55 g protein.</li><li><strong>Beef &amp; sweet potato</strong> — 6 oz 90/10 ground beef, 1 large sweet potato, broccoli. ~600 kcal / ~45 g protein.</li><li><strong>Egg &amp; turkey breakfast box</strong> — 3 whole eggs + 4 egg whites, 3 oz turkey sausage, 0.5 cup dry oats. ~600 kcal / ~48 g protein.</li><li><strong>Yogurt protein overnight oats</strong> — 1 cup nonfat Greek yogurt, 1 scoop whey, 0.75 cup oats, berries, 1 tbsp peanut butter. ~620 kcal / ~52 g protein.</li></ol>
+<p>This is the floor. For a full week's plan, run /meal-prep.</p>
+<hr>
+<p><em>No medical diagnoses here — pattern/plumbing observations and training/nutrition adjustments only. Nothing in this snapshot is a health concern to escalate; it's a data outage.</em></p>
 </body>
 </html>
