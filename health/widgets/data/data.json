@@ -54,59 +54,59 @@
     "today_workout": null
   },
   "macros_week": {
-    "week_label": "Macros — Jul 13–19",
+    "week_label": "Macros — Jul 14–20",
     "macro_score_pct": 64,
     "labels": [
-      "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
-      "Sun"
+      "Sun",
+      "Mon"
     ],
     "dates": [
-      "Jul 13",
       "Jul 14",
       "Jul 15",
       "Jul 16",
       "Jul 17",
       "Jul 18",
-      "Jul 19"
+      "Jul 19",
+      "Jul 20"
     ],
     "protein_g": [
       0,
       0,
-      0,
       166,
       175,
+      0,
       0,
       0
     ],
     "carbs_g": [
       0,
       0,
-      0,
       82,
       120,
+      0,
       0,
       0
     ],
     "fat_g": [
       0,
       0,
-      0,
       92,
       98,
+      0,
       0,
       0
     ],
     "has_data": [
       false,
       false,
+      true,
+      true,
       false,
-      true,
-      true,
       false,
       false
     ],
@@ -266,7 +266,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jul 19",
+    "date_label": "Jul 20",
     "curve_24h": [
       5,
       5,
@@ -296,26 +296,26 @@
     "footer": "Wake 8:22 AM · No workout · Natural curve"
   },
   "hydration": {
-    "date_label": "Jul 19 — Today",
+    "date_label": "Jul 20 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
-        "Sun"
+        "Sun",
+        "Mon"
       ],
       "oz": [
         0,
         0,
-        0,
         29,
         32,
+        0,
         0,
         0
       ],
@@ -324,8 +324,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-19T21:29:28-07:00",
-    "last_updated_label": "Jul 19, 9:29 PM PST",
+    "last_updated_iso": "2026-07-20T02:48:47-07:00",
+    "last_updated_label": "Jul 20, 2:48 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -346,7 +346,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-19T21:29:29-07:00",
+        "last_ok_iso": "2026-07-20T02:48:50-07:00",
         "error": null
       },
       "notion": {
