@@ -1,57 +1,62 @@
 {
   "sleep": {
-    "date_label": "Jul 21 — Last Night",
-    "score": 77,
-    "total_minutes": 505,
-    "total_label": "8 h 25 m",
-    "deep_minutes": 77,
-    "light_minutes": 278,
-    "rem_minutes": 150,
-    "awake_minutes": 9,
-    "bedtime_label": "12:08 AM",
-    "wake_label": "8:42 AM",
-    "resting_hr": 58,
-    "awakenings": 7
+    "date_label": "Jul 23 — Last Night",
+    "score": 74,
+    "total_minutes": 619,
+    "total_label": "10 h 19 m",
+    "deep_minutes": 57,
+    "light_minutes": 379,
+    "rem_minutes": 183,
+    "awake_minutes": 3,
+    "bedtime_label": "11:08 PM",
+    "wake_label": "9:30 AM",
+    "resting_hr": 60,
+    "awakenings": 3
   },
   "activity": {
-    "date_label": "Tue Jul 21 — Latest",
+    "date_label": "Jul 23 — Today",
     "today": {
-      "rhr": 58,
-      "steps": 3627,
-      "avg_hr": 79,
-      "sleep_score": 77
+      "rhr": 60,
+      "steps": 6,
+      "avg_hr": 60,
+      "sleep_score": 74
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        6874,
         3047,
         3232,
         3088,
         3268,
-        3627,
-        null
+        3981,
+        2294,
+        6
       ],
       "rhr": [
-        60,
         56,
         55,
         60,
         58,
         58,
-        null
+        60,
+        60
       ],
       "today_index": 6
     },
-    "today_workout": null
+    "today_workout": {
+      "type": "Walk",
+      "duration_min": 4,
+      "calories": 24,
+      "avg_hr": null
+    }
   },
   "macros_week": {
     "week_label": "Macros — Jul 17–23",
@@ -183,22 +188,22 @@
   "strength_week": {
     "week_label": "Training — Last 7 Days",
     "labels": [
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed"
+      "Wed",
+      "Thu"
     ],
     "date_labels": [
-      "Thu 7/16",
       "Fri 7/17",
       "Sat 7/18",
       "Sun 7/19",
       "Mon 7/20",
       "Tue 7/21",
-      "Wed 7/22"
+      "Wed 7/22",
+      "Thu 7/23"
     ],
     "lift_min": [
       0,
@@ -228,40 +233,40 @@
       ""
     ],
     "bball_min": [
-      30.1,
       21.6,
       45.9,
       28.6,
       39.9,
       31.7,
+      0,
       0
     ],
     "bball_cal": [
-      197,
       141,
       350,
       192,
       285,
       266,
+      0,
       0
     ],
     "walk_min": [
-      39.2,
       0,
       0,
       0,
       0,
       0,
-      0
+      0,
+      3.8
     ],
     "walk_cal": [
-      222,
       0,
       0,
       0,
       0,
       0,
-      0
+      0,
+      24
     ],
     "top_lifts": []
   },
@@ -276,11 +281,11 @@
       5,
       5,
       5,
+      5,
       28,
       18,
-      14,
-      14,
-      14,
+      18,
+      18,
       65,
       72,
       78,
@@ -293,7 +298,7 @@
       46,
       32
     ],
-    "footer": "Wake 8:42 AM · No workout · Natural curve"
+    "footer": "Wake 9:30 AM · Walk 4 min · Natural curve"
   },
   "hydration": {
     "date_label": "Jul 23 — Today",
@@ -324,8 +329,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-23T07:59:48-07:00",
-    "last_updated_label": "Jul 23, 7:59 AM PST",
+    "last_updated_iso": "2026-07-23T13:06:39-07:00",
+    "last_updated_label": "Jul 23, 1:06 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -336,17 +341,17 @@
       "micros_week",
       "hydration"
     ],
-    "last_zepp_data_iso": "2026-07-22T21:08:18-07:00",
+    "last_zepp_data_iso": "2026-07-23T13:06:39-07:00",
     "refresh_endpoint": "https://health-refresh.edwinbullian.workers.dev",
     "sources": {
       "zepp": {
         "ok": true,
-        "last_ok_iso": "2026-07-22T21:08:21-07:00",
+        "last_ok_iso": "2026-07-23T13:06:45-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-23T07:59:49-07:00",
+        "last_ok_iso": "2026-07-23T13:06:41-07:00",
         "error": null
       },
       "notion": {
