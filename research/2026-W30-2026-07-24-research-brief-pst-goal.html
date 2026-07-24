@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — Producer Run · 2026-07-24 14:00 PST</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-07-24</div>
+<h1>Research Queue — Producer Run · 2026-07-24 14:00 PST</h1>
+<h2>Answer first</h2>
+<p>Nothing to research this run: the queue is empty. The snapshot reports <code>queue has no open items — nothing to drain</code>, and <code>queue_stats</code> is all zeros (todo 0, in_progress 0, done 0, flipped 0). There is no <code>item</code>, no <code>item_slug</code>, and <code>research</code> is null — so there is no GOAL to run the heavy-depth protocol against. Per the queue-drainer contract this is a clean no-op, not a topic that needs a different depth; padding it with invented research would violate the citations-mandatory and counter-evidence rules. No sources were fetched because there was no question to source.</p>
+<h2>Findings</h2>
+<ul><li><strong>Queue state: drained.</strong> The producer had no open item to pull. Source: snapshot <code>liveness</code> and <code>queue_stats</code>.</li><li><strong>No topic payload.</strong> <code>item</code>, <code>item_slug</code>, and <code>research</code> are all empty/null — nothing was flagged by the core for a depth adjustment either. Source: snapshot fields.</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>No conflict to report — a single authoritative snapshot says the queue is empty and its fields corroborate that. The only open uncertainty is upstream: whether an item was <em>expected</em> to be here and failed to enqueue (intake/coordinator hiccup) versus the queue simply being empty by design right now. This run can't distinguish those from the snapshot alone.</p>
+<h2>So-what for Eddie</h2>
+<p>No action required from you. The research desk is idle because nothing is queued — that's the system working, not a failure. If you expected a topic to be waiting (e.g. a <code>have research dig into X</code> request you texted), the fact that it didn't materialize here is worth a glance at the request-inbox loop, since an empty queue when you thought you'd filled it usually means the enqueue step, not the research step, is the problem.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ol><li>Is there a pending request-inbox item that should have populated this queue but didn't?</li><li>Should the producer emit a heartbeat/last-drained timestamp so an empty queue is distinguishable from a stalled feeder?</li><li>Queue backlog SLA — if items sit in <code>todo</code>, how long before they escalate to a text?</li></ol>
+</body>
+</html>
