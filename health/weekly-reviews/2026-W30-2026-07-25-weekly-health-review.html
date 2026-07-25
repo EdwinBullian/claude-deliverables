@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health Weekly Review &amp; Plan — Week of 2026-07-25 (PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-07-25</div>
+<h1>Health Weekly Review &amp; Plan — Week of 2026-07-25 (PST)</h1>
+<p><strong>Written:</strong> 2026-07-25 08:00 PST · Producer: health-weekly desk</p>
+<blockquote><strong>Data status: this week's snapshot is empty — the health pipeline did not authenticate.</strong> Zepp, Cronometer, and the Notion workout DB all failed to load, so every sleep, recovery, nutrition, and training metric came through <code>null</code>. I will not invent numbers. This review reports what the pipeline <em>could</em> confirm and flags the outage as the top action item.</blockquote>
+<hr>
+<h2>1. Sleep &amp; Recovery</h2>
+<p><strong>No data this week.</strong> Last-night sleep score, duration, deep/REM, awakenings, and the 7-night averages are all <code>null</code> in the snapshot. Resting-HR (last / 7-day / 28-day) is also <code>null</code>. Root cause is not a bad night — it's an auth failure: <code>zepp auth failed: Missing required env var: ZEPP_EMAIL</code>. So there is nothing to trend and nothing that "drove bad nights" — the sensor feed simply wasn't read.</p>
+<p>One factual bright spot the snapshot does carry: <code>nights_below_6h_last3 = 0</code> — no flagged short-sleep nights in the last three. (opinion/inference) With the Zepp feed down, treat that zero as "none recorded" rather than a confirmed clean streak.</p>
+<h2>2. Nutrition</h2>
+<p><strong>No intake data.</strong> Yesterday logged = <code>false</code>; yesterday's kcal and protein are <code>null</code>, and the 7-day averages are <code>null</code>. Cause is the same class of failure: <code>cronometer auth failed: Missing required env var: CRONOMETER_EMAIL</code>. So compliance vs target cannot be computed this week. No micro callout is possible — there is no food data to read a micronutrient from.</p>
+<p>What <em>is</em> in the snapshot: your targets — <strong>2,500 kcal / 200 g protein per day</strong>. <code>protein_miss_streak = 0</code> and <code>logging_gap_days = 0</code>, but with <code>logged = false</code> those counters didn't advance this week; don't read them as adherence wins. (opinion/inference)</p>
+<h2>3. Training</h2>
+<p><strong>Sessions last 7 days: 0</strong> — but read that with the outage in mind. The snapshot says <code>NOTION_WORKOUT_DB_ID absent — session history unavailable</code>, so the <code>0</code> is almost certainly a missing feed, not a confirmed zero-training week. <code>days_since_last_session</code>, <code>last_session</code>, and <code>today_planned</code> are all <code>null</code>. Split coverage and top-lift progression can't be assessed without the session history. (opinion/inference) I'm treating training as unmeasured this week, not as a missed week.</p>
+<p>One confirmed config note from the snapshot: the preworkout schedule DB resolved to the canonical default (<code>b69b8ae8-ad5d-4636-85b5-39eda976573a</code>), and no workout was scheduled for today.</p>
+<h2>4. Body Trend</h2>
+<p><strong>Not tracked yet.</strong> The v1 snapshot carries no body-composition or weight field, so there is no weight to report — I won't invent one.</p>
+<hr>
+<h2>Next Week — Plan</h2>
+<p><strong>Training focus (home gym: DBs to 100 lb, flat bench, pull-up bar, bands).</strong> Because the snapshot carries no current lifts, I can't prescribe exact working weights without guessing — so run a simple full-body A/B this week at a weight where the last 2 reps are hard, and log every set so next week's review has real progression data:</p>
+<ul><li><strong>Day A (push/legs):</strong> flat DB bench, DB goblet squat, DB overhead press, band triceps pushdown.</li><li><strong>Day B (pull/legs):</strong> pull-ups (bands for assist), DB Romanian deadlift, DB row, DB curl.</li><li>Aim 3–4 sessions; 3–4 sets each, 6–12 reps. Add a rep or a small load when you hit the top of the range. (opinion/inference — no lift data in snapshot to anchor exact weights)</li></ul>
+<p><strong>One nutrition adjustment:</strong> get logging back to <code>true</code> every day — the highest-value change this week is re-establishing the data feed (see task below), then hitting <strong>200 g protein</strong> by anchoring each meal at ~40–50 g. Can't tune macros further until Cronometer reports again.</p>
+<p><strong>One recovery priority:</strong> protect sleep consistency (same lights-out time) so that when the Zepp feed is restored we get a clean 7-night baseline to trend against.</p>
+<hr>
+<h2>5. Next Week — Meal Prep (floor; run /meal-prep for a full plan)</h2>
+<p>Batch-cookable, ordinary kitchen, built to hit the snapshot targets of <strong>2,500 kcal / 200 g protein/day</strong>. Four preps that stack toward the daily numbers:</p>
+<ol><li><strong>Chicken + rice + broccoli bowls</strong> — 2 lb chicken thigh, 3 cups cooked rice, broccoli, olive oil. Per bowl (makes 4): ~600 kcal / ~50 g protein.</li><li><strong>Beef &amp; bean chili</strong> — 1.5 lb 90/10 ground beef, 2 cans kidney beans, tomato, onion. Per serving (makes 5): ~500 kcal / ~40 g protein.</li><li><strong>Baked salmon + potatoes</strong> — 1.5 lb salmon, 2 lb potatoes, olive oil. Per serving (makes 4): ~600 kcal / ~40 g protein.</li><li><strong>Egg + oats breakfast jars</strong> — 8 eggs, 2 cups dry oats, milk, peanut butter. Per jar (makes 4): ~550 kcal / ~30 g protein.</li></ol>
+<p>Rotate two of these per day plus a Greek-yogurt/whey snack (~250 kcal / ~35 g protein) to close the gap to 2,500 kcal / 200 g.</p>
+<hr>
+<p><strong>Bottom line:</strong> No health data was captured this week — the pipeline was down, not your habits. Fix the two missing env vars and the workout DB id so next Saturday's review has real numbers to trend. Nothing here is a medical concern; if fatigue or poor sleep persists once tracking resumes, that's worth a professional look.</p>
+</body>
+</html>
