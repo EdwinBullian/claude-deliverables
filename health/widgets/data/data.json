@@ -59,131 +59,131 @@
     }
   },
   "macros_week": {
-    "week_label": "Macros — Jul 19–25",
-    "macro_score_pct": 57,
+    "week_label": "Macros — Jul 20–26",
+    "macro_score_pct": 44,
     "labels": [
-      "Sun",
       "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
-      "Sat"
+      "Sat",
+      "Sun"
     ],
     "dates": [
-      "Jul 19",
       "Jul 20",
       "Jul 21",
       "Jul 22",
       "Jul 23",
       "Jul 24",
-      "Jul 25"
+      "Jul 25",
+      "Jul 26"
     ],
     "protein_g": [
-      0,
       138,
       137,
       73,
       164,
       0,
+      85,
       0
     ],
     "carbs_g": [
-      0,
       127,
       139,
       79,
       109,
       0,
+      74,
       0
     ],
     "fat_g": [
-      0,
       95,
       106,
       53,
       93,
       0,
+      37,
       0
     ],
     "has_data": [
-      false,
       true,
       true,
       true,
       true,
       false,
+      true,
       false
     ],
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
     "target_fat_g": 100,
-    "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 4/7 days logged"
+    "footer": "Target: 2,400 kcal · 150p / 200c / 100f · 5/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 57,
-    "days_logged": 4,
+    "macro_score_pct": 44,
+    "days_logged": 5,
     "days_total": 7,
-    "avg_protein_g": 128,
-    "avg_carbs_g": 113,
-    "avg_fat_g": 86,
+    "avg_protein_g": 119,
+    "avg_carbs_g": 105,
+    "avg_fat_g": 76,
     "target_kcal": 2400,
     "target_protein_g": 150,
     "target_carbs_g": 200,
     "target_fat_g": 100,
     "nutrients": [
       {
-        "pct": 34,
+        "pct": 30,
         "label": "Fiber",
-        "sub": "13g / 38g",
+        "sub": "11g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 78,
+        "pct": 75,
         "label": "Calcium",
-        "sub": "789mg / 1.0g",
+        "sub": "759mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 37,
+        "pct": 35,
         "label": "Magnesium",
-        "sub": "148mg / 400mg",
+        "sub": "141mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 61,
+        "pct": 53,
         "label": "Potassium",
-        "sub": "2.9g / 4.7g",
+        "sub": "2.5g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 70,
+        "pct": 62,
         "label": "Sodium",
-        "sub": "1.6g / 2.3g",
+        "sub": "1.4g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 124,
+        "pct": 110,
         "label": "Iron",
-        "sub": "10mg / 8mg",
+        "sub": "9mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 119,
+        "pct": 98,
         "label": "Vitamin A",
-        "sub": "1079mcg / 900mcg",
+        "sub": "889mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 65,
+        "pct": 54,
         "label": "Vitamin C",
-        "sub": "59mg / 90mg",
+        "sub": "49mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "4 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "5 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "strength_week": {
     "week_label": "Training — Last 7 Days",
@@ -271,7 +271,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jul 25",
+    "date_label": "Jul 26",
     "curve_24h": [
       5,
       5,
@@ -301,27 +301,27 @@
     "footer": "Wake 7:26 AM · Walk 21 min · Natural curve"
   },
   "hydration": {
-    "date_label": "Jul 25 — Today",
+    "date_label": "Jul 26 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun"
       ],
       "oz": [
-        0,
         22,
         13,
         12,
         21,
         0,
+        12,
         0
       ],
       "today_index": 6
@@ -329,8 +329,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-25T13:04:12-07:00",
-    "last_updated_label": "Jul 25, 1:04 PM PST",
+    "last_updated_iso": "2026-07-26T02:06:40-07:00",
+    "last_updated_label": "Jul 26, 2:06 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -351,7 +351,7 @@
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-25T13:04:16-07:00",
+        "last_ok_iso": "2026-07-26T02:06:43-07:00",
         "error": null
       },
       "notion": {
