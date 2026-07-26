@@ -1,147 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:380px;overflow:hidden;background:#191919;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
   body{display:flex;flex-direction:column;padding:16px 18px 12px}
-
-  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:14px}
-
+  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:14px}
   .today-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
   .stat{display:flex;flex-direction:column;gap:4px}
   .stat .val{font-size:26px;font-weight:800;color:#f0f0f0;line-height:1}
   .stat .val.orange{color:#e8943a}
   .stat .val.green{color:#6bda87}
-  .stat .lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;
-              letter-spacing:.3px;color:rgba(255,255,255,.35)}
-
+  .stat .lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:rgba(255,255,255,.35)}
   .divider{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
-
   .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
   .day-cell{display:flex;flex-direction:column;align-items:center;gap:3px}
   .day-lbl{font-size:8.5px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase}
   .day-lbl.today{color:#e8943a}
-
-  .bar-track{width:100%;height:52px;background:rgba(255,255,255,.05);border-radius:4px;
-             display:flex;align-items:flex-end;overflow:hidden}
+  .bar-track{width:100%;height:52px;background:rgba(255,255,255,.05);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden}
   .bar-fill{width:100%;border-radius:4px 4px 0 0}
   .bar-fill.today-bar{background:rgba(232,148,58,.90)}
   .bar-fill.normal-bar{background:rgba(184,88,32,.65)}
   .bar-fill.empty-bar{background:transparent}
-
   .step-val{font-size:7px;color:rgba(255,255,255,.3);text-align:center}
   .rhr-val{font-size:10.5px;font-weight:700;text-align:center}
-  .rhr-val.low{color:#6bda87}
-  .rhr-val.norm{color:rgba(255,255,255,.65)}
-  .rhr-val.high{color:#e8943a}
-
-  .workout-strip{background:rgba(232,148,58,.08);border-left:3px solid #e8943a;
-                 border-radius:0 6px 6px 0;
-                 padding:8px 12px;margin-top:12px;
-                 display:flex;align-items:center;gap:8px}
-  .workout-strip .wlbl{font-size:9px;font-weight:700;text-transform:uppercase;
-                        letter-spacing:.4px;color:#e8943a;flex-shrink:0}
+  .rhr-val.low{color:#6bda87}.rhr-val.norm{color:rgba(255,255,255,.65)}.rhr-val.high{color:#e8943a}
+  .workout-strip{background:rgba(232,148,58,.08);border-left:3px solid #e8943a;border-radius:0 6px 6px 0;padding:8px 12px;margin-top:12px;display:flex;align-items:center;gap:8px}
+  .workout-strip .wlbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#e8943a;flex-shrink:0}
   .workout-strip .wval{font-size:12px;font-weight:600;color:rgba(255,255,255,.7)}
   .dot{color:rgba(255,255,255,.2);margin:0 4px}
-</style>
-</head>
-<body>
-
-<div class="stats-heading" id="date-label">—</div>
-
+</style></head><body>
+<div class="stats-heading">Today</div>
 <div class="today-row">
-  <div class="stat"><span class="val orange" id="t-rhr">—</span>  <span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange" id="t-steps">—</span><span class="lbl">Steps</span></div>
-  <div class="stat"><span class="val orange" id="t-avg">—</span>  <span class="lbl">Avg HR</span></div>
-  <div class="stat"><span class="val"        id="t-slp">—</span>  <span class="lbl">Sleep score</span></div>
+  <div class="stat"><span class="val orange">0</span><span class="lbl">RHR bpm</span></div>
+  <div class="stat"><span class="val orange">0</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">0</span><span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val">0</span><span class="lbl">Sleep score</span></div>
 </div>
-
 <div class="divider"></div>
-
 <div class="week-grid" id="grid"></div>
 
-<div class="workout-strip" id="workout-strip" style="display:none">
-  <span class="wlbl">Workout</span>
-  <span class="wval" id="workout-text">—</span>
-</div>
-
 <script>
-const FALLBACK = {
-  date_label: "May 23 — Today",
-  today: { rhr: 52, steps: 5369, avg_hr: 70, sleep_score: 81 },
-  week: {
-    labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-    steps: [null,9666,9757,7815,6200,2797,5369],
-    rhr:   [null,54,54,54,60,55,52],
-    today_index: 6
-  },
-  today_workout: { type: 'Strength', duration_min: 47, calories: 225, avg_hr: 98 }
-};
-
-function render(d) {
-  document.getElementById('date-label').textContent = d.date_label || 'Today';
-  document.getElementById('t-rhr').textContent   = d.today?.rhr ?? '—';
-  document.getElementById('t-steps').textContent = d.today?.steps != null ? d.today.steps.toLocaleString() : '—';
-  document.getElementById('t-avg').textContent   = d.today?.avg_hr ?? '—';
-  document.getElementById('t-slp').textContent   = d.today?.sleep_score ?? '—';
-
-  const days  = d.week?.labels || ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const steps = d.week?.steps  || [];
-  const rhr   = d.week?.rhr    || [];
-  const todayIdx = d.week?.today_index ?? 6;
-  const maxSteps = Math.max(...steps.filter(v => v != null), 1);
-
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  days.forEach((name, i) => {
-    const isToday = i === todayIdx;
-    const has = steps[i] != null;
-    const pct = has ? (steps[i] / maxSteps * 100).toFixed(1) : 0;
-    let rhrClass = 'norm';
-    if (has) rhrClass = rhr[i] <= 53 ? 'low' : rhr[i] >= 58 ? 'high' : 'norm';
-    const cell = document.createElement('div');
-    cell.className = 'day-cell';
-    cell.innerHTML = `
-      <div class="day-lbl${isToday?' today':''}">${name}</div>
-      <div class="bar-track">
-        <div class="bar-fill ${isToday?'today-bar':has?'normal-bar':'empty-bar'}"
-             style="height:${pct}%"></div>
-      </div>
-      <div class="step-val">${has ? (steps[i]/1000).toFixed(1)+'k' : '—'}</div>
-      <div class="rhr-val ${rhrClass}">${has ? rhr[i] : '—'}</div>`;
-    grid.appendChild(cell);
-  });
-
-  const w = d.today_workout;
-  if (w && w.type) {
-    document.getElementById('workout-strip').style.display = 'flex';
-    document.getElementById('workout-text').innerHTML =
-      `${w.type}<span class="dot">·</span>${w.duration_min ?? '—'} min` +
-      `<span class="dot">·</span>${w.calories ?? '—'} cal` +
-      `<span class="dot">·</span>avg HR ${w.avg_hr ?? '—'}`;
-  } else {
-    document.getElementById('workout-strip').style.display = 'none';
-  }
-}
-
-(async function () {
-  let d = FALLBACK;
-  try {
-    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
-    if (r.ok) {
-      const all = await r.json();
-      if (all && all.activity) d = all.activity;
-    }
-  } catch (e) { /* fall back */ }
-  render(d);
-})();
-</script>
-<script>window.REFRESH_SECTIONS='activity';window.REFRESH_FORCE_ZEPP=true;</script>
-<script src="./refresh.js"></script>
-</body>
-</html>
+const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const steps=[];
+const rhr=[];
+const max=Math.max(...steps.filter(Boolean));
+const grid=document.getElementById('grid');
+days.forEach((d,i)=>{
+  const isToday=i===6,hasData=steps[i]!==null;
+  const pct=hasData?(steps[i]/max*100).toFixed(1):0;
+  let rhrClass='norm';
+  if(hasData)rhrClass=rhr[i]<=53?'low':rhr[i]>=58?'high':'norm';
+  const cell=document.createElement('div');
+  cell.className='day-cell';
+  cell.innerHTML=`<div class="day-lbl${isToday?' today':''}">${d}</div>
+    <div class="bar-track"><div class="bar-fill ${isToday?'today-bar':hasData?'normal-bar':'empty-bar'}" style="height:${pct}%"></div></div>
+    <div class="step-val">${hasData?(steps[i]/1000).toFixed(1)+'k':'—'}</div>
+    <div class="rhr-val ${rhrClass}">${hasData?rhr[i]:'—'}</div>`;
+  grid.appendChild(cell);
+});
+</script></body></html>
