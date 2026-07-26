@@ -1,157 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      width: 100%; height: 290px; overflow: hidden;
-      background: #191919;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-    }
-    body { display: flex; align-items: center; padding: 0 18px; gap: 0; }
-
-    .ring-wrap { position: relative; width: 200px; height: 200px; flex-shrink: 0; }
-    .ring-wrap svg { width: 200px; height: 200px; }
-    .ring-center {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .score-num { font-size: 42px; font-weight: 800; color: #f0f0f0; line-height: 1; }
-    .score-label {
-      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1px; color: rgba(255,255,255,0.38); margin-top: 4px;
-    }
-    .score-dur { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.65); margin-top: 6px; }
-
-    .stats { flex: 1; padding-left: 18px; }
-    .stats-heading {
-      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.6px; color: rgba(255,255,255,0.35); margin-bottom: 13px;
-    }
-    .stage-row { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
-    .stage-row:last-of-type { margin-bottom: 0; }
-    .swatch { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-    .stage-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); width: 36px; }
-    .bar-bg { flex: 1; height: 6px; background: #2a2a2a; border-radius: 3px; overflow: hidden; }
-    .bar    { height: 100%; border-radius: 3px; }
-    .stage-val { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); width: 48px; text-align: right; }
-
-    .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 13px 0; }
-    .meta { font-size: 11.5px; color: rgba(255,255,255,0.38); line-height: 1.8; }
-    .meta strong { color: rgba(255,255,255,0.6); font-weight: 600; }
-  </style>
-</head>
-<body>
-  <div class="ring-wrap">
-    <svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="105" cy="105" r="84" fill="none" stroke="#252525" stroke-width="20"/>
-      <circle id="arc-deep"  cx="105" cy="105" r="84" fill="none" stroke="#2d7dd2" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
-      <circle id="arc-light" cx="105" cy="105" r="84" fill="none" stroke="#5aaed4" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
-      <circle id="arc-rem"   cx="105" cy="105" r="84" fill="none" stroke="#94cfe3" stroke-width="20" stroke-linecap="butt" transform="rotate(-90 105 105)"/>
-    </svg>
-    <div class="ring-center">
-      <span class="score-num" id="score">—</span>
-      <span class="score-label">Sleep Score</span>
-      <span class="score-dur" id="total">—</span>
-    </div>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:290px;overflow:hidden;background:#191919;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif}
+  body{display:flex;align-items:center;padding:0 18px;gap:0}
+  .ring-wrap{position:relative;width:200px;height:200px;flex-shrink:0}
+  .ring-wrap svg{width:200px;height:200px}
+  .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .score-num{font-size:42px;font-weight:800;color:#f0f0f0;line-height:1}
+  .score-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.38);margin-top:4px}
+  .score-dur{font-size:14px;font-weight:600;color:rgba(255,255,255,0.65);margin-top:6px}
+  .stats{flex:1;padding-left:18px}
+  .stats-heading{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.35);margin-bottom:13px}
+  .stage-row{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .stage-row:last-of-type{margin-bottom:0}
+  .swatch{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+  .stage-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.75);width:36px}
+  .bar-bg{flex:1;height:6px;background:#2a2a2a;border-radius:3px;overflow:hidden}
+  .bar{height:100%;border-radius:3px}
+  .stage-val{font-size:12px;font-weight:700;color:rgba(255,255,255,.6);width:48px;text-align:right}
+  .divider{height:1px;background:rgba(255,255,255,.08);margin:13px 0}
+  .meta{font-size:11.5px;color:rgba(255,255,255,.38);line-height:1.8}
+  .meta strong{color:rgba(255,255,255,.6);font-weight:600}
+</style></head><body>
+<!-- v2 · r=84, C=2pi x 84 approx 527.79 -->
+<div class="ring-wrap">
+  <svg viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="105" cy="105" r="84" fill="none" stroke="#252525" stroke-width="20"/>
+    <circle cx="105" cy="105" r="84" fill="none" stroke="#2d7dd2" stroke-width="20"
+      stroke-dasharray="0.0 527.79" stroke-dashoffset="0"
+      stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+    <circle cx="105" cy="105" r="84" fill="none" stroke="#5aaed4" stroke-width="20"
+      stroke-dasharray="0.0 527.79" stroke-dashoffset="-0.0"
+      stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+    <circle cx="105" cy="105" r="84" fill="none" stroke="#94cfe3" stroke-width="20"
+      stroke-dasharray="0.0 527.79" stroke-dashoffset="-0.0"
+      stroke-linecap="butt" transform="rotate(-90 105 105)"/>
+  </svg>
+  <div class="ring-center">
+    <span class="score-num">0</span>
+    <span class="score-label">Sleep Score</span>
+    <span class="score-dur">0 h 0 m</span>
   </div>
-
-  <div class="stats">
-    <div class="stats-heading" id="date-label">—</div>
-    <div class="stage-row">
-      <div class="swatch" style="background:#2d7dd2"></div>
-      <span class="stage-name">Deep</span>
-      <div class="bar-bg"><div class="bar" id="bar-deep" style="background:#2d7dd2;width:0%"></div></div>
-      <span class="stage-val" id="val-deep">—</span>
-    </div>
-    <div class="stage-row">
-      <div class="swatch" style="background:#5aaed4"></div>
-      <span class="stage-name">Light</span>
-      <div class="bar-bg"><div class="bar" id="bar-light" style="background:#5aaed4;width:0%"></div></div>
-      <span class="stage-val" id="val-light">—</span>
-    </div>
-    <div class="stage-row">
-      <div class="swatch" style="background:#94cfe3"></div>
-      <span class="stage-name">REM</span>
-      <div class="bar-bg"><div class="bar" id="bar-rem" style="background:#94cfe3;width:0%"></div></div>
-      <span class="stage-val" id="val-rem">—</span>
-    </div>
-    <div class="stage-row">
-      <div class="swatch" style="background:#2a2a2a;border:1px solid #444"></div>
-      <span class="stage-name">Awake</span>
-      <div class="bar-bg"><div class="bar" id="bar-awake" style="background:#444;width:0%"></div></div>
-      <span class="stage-val" id="val-awake">—</span>
-    </div>
-    <div class="divider"></div>
-    <div class="meta" id="meta">—</div>
-  </div>
-
-<script>
-const FALLBACK = {
-  date_label: "May 23 — Last Night",
-  score: 73, total_minutes: 490, total_label: "8 h 10 m",
-  deep_minutes: 52, light_minutes: 292, rem_minutes: 146, awake_minutes: 4,
-  bedtime_label: "1:52 AM", wake_label: "10:06 AM",
-  resting_hr: 55, awakenings: 3
-};
-
-function fmtHM(m) {
-  if (m == null) return "—";
-  const h = Math.floor(m / 60), mm = m % 60;
-  if (h === 0) return mm + " min";
-  return h + "h " + mm + "m";
-}
-
-function render(d) {
-  const total = d.total_minutes || (d.deep_minutes + d.light_minutes + d.rem_minutes + d.awake_minutes);
-  const pct = (v) => total ? (v / total) * 100 : 0;
-  const C = 2 * Math.PI * 84; // 527.79
-
-  const dp = pct(d.deep_minutes), lp = pct(d.light_minutes),
-        rp = pct(d.rem_minutes),  ap = pct(d.awake_minutes);
-  const dArc = (dp / 100) * C, lArc = (lp / 100) * C, rArc = (rp / 100) * C;
-
-  document.getElementById('arc-deep').setAttribute('stroke-dasharray',  dArc.toFixed(2) + ' ' + (C - dArc).toFixed(2));
-  document.getElementById('arc-deep').setAttribute('stroke-dashoffset', 0);
-  document.getElementById('arc-light').setAttribute('stroke-dasharray', lArc.toFixed(2) + ' ' + (C - lArc).toFixed(2));
-  document.getElementById('arc-light').setAttribute('stroke-dashoffset', (-dArc).toFixed(2));
-  document.getElementById('arc-rem').setAttribute('stroke-dasharray',   rArc.toFixed(2) + ' ' + (C - rArc).toFixed(2));
-  document.getElementById('arc-rem').setAttribute('stroke-dashoffset',  (-(dArc + lArc)).toFixed(2));
-
-  document.getElementById('score').textContent = d.score ?? '—';
-  document.getElementById('total').textContent = d.total_label || fmtHM(total);
-  document.getElementById('date-label').textContent = d.date_label || 'Last Night';
-
-  document.getElementById('bar-deep').style.width  = dp.toFixed(1) + '%';
-  document.getElementById('bar-light').style.width = lp.toFixed(1) + '%';
-  document.getElementById('bar-rem').style.width   = rp.toFixed(1) + '%';
-  document.getElementById('bar-awake').style.width = Math.max(ap, 1).toFixed(1) + '%';
-
-  document.getElementById('val-deep').textContent  = fmtHM(d.deep_minutes);
-  document.getElementById('val-light').textContent = fmtHM(d.light_minutes);
-  document.getElementById('val-rem').textContent   = fmtHM(d.rem_minutes);
-  document.getElementById('val-awake').textContent = fmtHM(d.awake_minutes);
-
-  document.getElementById('meta').innerHTML =
-    `<strong>Bed</strong> ${d.bedtime_label || '—'} &nbsp;·&nbsp; <strong>Wake</strong> ${d.wake_label || '—'}<br>` +
-    `<strong>RHR</strong> ${d.resting_hr ?? '—'} bpm &nbsp;·&nbsp; <strong>Awakenings</strong> ${d.awakenings ?? '—'}`;
-}
-
-(async function () {
-  let d = FALLBACK;
-  try {
-    const r = await fetch('./data/data.json?t=' + Date.now(), { cache: 'no-store' });
-    if (r.ok) {
-      const all = await r.json();
-      if (all && all.sleep) d = all.sleep;
-    }
-  } catch (e) { /* use fallback */ }
-  render(d);
-})();
-</script>
-<script>window.REFRESH_SECTIONS='sleep,energy';window.REFRESH_FORCE_ZEPP=true;</script>
-<script src="./refresh.js"></script>
-</body>
-</html>
+</div>
+<div class="stats">
+  <div class="stats-heading">Last Night</div>
+  <div class="stage-row"><div class="swatch" style="background:#2d7dd2"></div><span class="stage-name">Deep</span><div class="bar-bg"><div class="bar" style="background:#2d7dd2;width:0%"></div></div><span class="stage-val">0 min</span></div>
+  <div class="stage-row"><div class="swatch" style="background:#5aaed4"></div><span class="stage-name">Light</span><div class="bar-bg"><div class="bar" style="background:#5aaed4;width:0%"></div></div><span class="stage-val">0h 0m</span></div>
+  <div class="stage-row"><div class="swatch" style="background:#94cfe3"></div><span class="stage-name">REM</span><div class="bar-bg"><div class="bar" style="background:#94cfe3;width:0%"></div></div><span class="stage-val">0h 0m</span></div>
+  <div class="stage-row"><div class="swatch" style="background:#2a2a2a;border:1px solid #444"></div><span class="stage-name">Awake</span><div class="bar-bg"><div class="bar" style="background:#444;width:1%"></div></div><span class="stage-val">0 min</span></div>
+  <div class="divider"></div>
+  <div class="meta"><strong>Bed</strong>  &nbsp;·&nbsp; <strong>Wake</strong> <br><strong>RHR</strong> 0 bpm &nbsp;·&nbsp; <strong>Awakenings</strong> 0</div>
+</div>
+</body></html>
