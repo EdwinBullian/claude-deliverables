@@ -32,18 +32,18 @@
 </style></head><body>
 <div class="stats-heading">Today</div>
 <div class="today-row">
-  <div class="stat"><span class="val orange">0</span><span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange">0</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">59.0</span><span class="lbl">RHR bpm</span></div>
+  <div class="stat"><span class="val orange">18,849.6</span><span class="lbl">Steps</span></div>
   <div class="stat"><span class="val orange">0</span><span class="lbl">Avg HR</span></div>
-  <div class="stat"><span class="val">0</span><span class="lbl">Sleep score</span></div>
+  <div class="stat"><span class="val">100</span><span class="lbl">Sleep score</span></div>
 </div>
 <div class="divider"></div>
 <div class="week-grid" id="grid"></div>
 
 <script>
 const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const steps=[];
-const rhr=[];
+const steps=[4657.5, 3231.3, 3828.9, 7048.5, 9475.4, 18849.6];
+const rhr=[58.0, 60.0, 60.0, 58.0, 57.0, 59.0];
 const max=Math.max(...steps.filter(Boolean));
 const grid=document.getElementById('grid');
 days.forEach((d,i)=>{
