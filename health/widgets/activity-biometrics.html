@@ -32,18 +32,18 @@
 </style></head><body>
 <div class="stats-heading">Today</div>
 <div class="today-row">
-  <div class="stat"><span class="val orange">55.0</span><span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange">814.0</span><span class="lbl">Steps</span></div>
-  <div class="stat"><span class="val orange">58.9</span><span class="lbl">Avg HR</span></div>
-  <div class="stat"><span class="val">0</span><span class="lbl">Sleep score</span></div>
+  <div class="stat"><span class="val orange">57.0</span><span class="lbl">RHR bpm</span></div>
+  <div class="stat"><span class="val orange">304.0</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">61.9</span><span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val">100</span><span class="lbl">Sleep score</span></div>
 </div>
 <div class="divider"></div>
 <div class="week-grid" id="grid"></div>
 
 <script>
 const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const steps=[3828.9, 7048.5, 9475.4, 18849.6, 10117.5, 814.0];
-const rhr=[60.0, 58.0, 57.0, 59.0, 55.0, null];
+const steps=[7048.5, 9475.4, 18849.6, 10117.5, 4885.0, 304.0];
+const rhr=[58.0, 57.0, 59.0, 55.0, 58.0, 57.0];
 const max=Math.max(...steps.filter(Boolean));
 const grid=document.getElementById('grid');
 days.forEach((d,i)=>{
