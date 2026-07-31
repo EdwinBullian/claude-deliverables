@@ -1,6 +1,6 @@
 {
   "sleep": {
-    "date_label": "Jul 30 — Last Night",
+    "date_label": "Jul 30 — Last Synced",
     "score": 100,
     "total_minutes": 548,
     "total_label": "9 h 8 m",
@@ -10,44 +10,44 @@
     "awake_minutes": 5,
     "bedtime_label": "10:43 PM",
     "wake_label": "8:03 AM",
-    "resting_hr": 57,
+    "resting_hr": null,
     "awakenings": null
   },
   "activity": {
-    "date_label": "Jul 30 — Today",
+    "date_label": "Jul 31 — Today",
     "today": {
-      "rhr": 57,
-      "steps": 14282,
-      "avg_hr": 78,
+      "rhr": null,
+      "steps": null,
+      "avg_hr": null,
       "sleep_score": 100
     },
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "steps": [
-        7048,
         9475,
         18850,
         null,
         10118,
         4885,
-        14282
+        14513,
+        null
       ],
       "rhr": [
-        58,
         57,
         59,
         null,
         55,
         58,
-        57
+        57,
+        null
       ],
       "today_index": 6
     },
@@ -65,19 +65,19 @@
       "Sat"
     ],
     "date_labels": [
-      "Fri 7/24",
       "Sat 7/25",
       "Sun 7/26",
       "Mon 7/27",
       "Tue 7/28",
       "Wed 7/29",
-      "Thu 7/30"
+      "Thu 7/30",
+      "Fri 7/31"
     ],
     "lift_min": [
       0,
       0,
-      0,
       85,
+      0,
       0,
       0,
       0
@@ -94,8 +94,8 @@
     "lift_type": [
       "",
       "",
-      "",
       "Upper",
+      "",
       "",
       "",
       ""
@@ -139,7 +139,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Jul 30",
+    "date_label": "Jul 31",
     "curve_24h": [
       5,
       5,
@@ -169,59 +169,59 @@
     "footer": "Wake 8:03 AM · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Jul 24–30",
+    "week_label": "Macros — Jul 25–31",
     "macro_score_pct": 46,
     "labels": [
-      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
-      "Thu"
+      "Thu",
+      "Fri"
     ],
     "dates": [
-      "Jul 24",
       "Jul 25",
       "Jul 26",
       "Jul 27",
       "Jul 28",
       "Jul 29",
-      "Jul 30"
+      "Jul 30",
+      "Jul 31"
     ],
     "protein_g": [
-      0,
       85,
       148,
       123,
       153,
       0,
+      0,
       0
     ],
     "carbs_g": [
-      0,
       74,
       114,
       128,
       132,
       0,
+      0,
       0
     ],
     "fat_g": [
-      0,
       37,
       69,
       68,
       69,
       0,
+      0,
       0
     ],
     "has_data": [
+      true,
+      true,
+      true,
+      true,
       false,
-      true,
-      true,
-      true,
-      true,
       false,
       false
     ],
@@ -292,26 +292,26 @@
     "footer": "4 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Jul 30 — Today",
+    "date_label": "Jul 31 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "oz": [
-        0,
         12,
         36,
         96,
         15,
+        0,
         0,
         0
       ],
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-07-30T18:22:46-07:00",
-    "last_updated_label": "Jul 30, 6:22 PM PST",
+    "last_updated_iso": "2026-07-31T09:30:04-07:00",
+    "last_updated_label": "Jul 31, 9:30 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-07-30T18:22:46-07:00",
+    "last_body_data_iso": "2026-07-31T09:30:04-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-07-30T18:22:46-07:00",
+        "last_ok_iso": "2026-07-31T09:30:05-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-07-30T18:22:51-07:00",
+        "last_ok_iso": "2026-07-31T09:30:09-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-07-30T18:22:47-07:00",
+        "last_ok_iso": "2026-07-31T09:30:05-07:00",
         "error": null
       }
     },
