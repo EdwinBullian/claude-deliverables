@@ -1,11 +1,18 @@
 name: Refresh Health Data
 
-# Runs every 6 hours. Pulls fresh data from Zepp / Cronometer / Notion,
-# commits the new data.json so GitHub Pages serves it to the Notion widgets.
+# MANUAL ONLY as of 2026-07-30. Do not restore the `schedule:` block.
+#
+# This job used to run every 6 hours against Zepp / Cronometer / Notion.
+# Zepp was retired 2026-07-27 -- its login flow invalidates Eddie's phone
+# session and signs him out of the Zepp app -- and this runner was the last
+# live Zepp caller in the system, missed because it runs in the cloud rather
+# than on EDWIN. The Zepp secrets are gone from this file; the body data now
+# comes from Apple Health / Health Auto Export, built on EDWIN.
+#
+# It also re-authenticated to Cronometer with email+password on every run.
+# Cronometer logins are account-throttled and shared across hosts, so a cloud
+# job logging in 4x/day competes with the local MCP for the same session.
 on:
-  schedule:
-    # 06:00, 12:00, 18:00, 00:00 PST  → 13, 19, 01, 07 UTC
-    - cron: '0 1,7,13,19 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -17,12 +24,7 @@ on:
         description: 'Sections preset (full/fast/nutrition) or comma list'
         required: false
         type: string
-        default: 'full'
-      force_zepp:
-        description: 'Force a Zepp re-pull (override the once/day guard)'
-        required: false
-        type: string
-        default: 'false'
+        default: 'nutrition'
 
 permissions:
   contents: write   # required so the job can commit back to main
@@ -58,10 +60,6 @@ jobs:
 
       - name: Build data.json
         env:
-          ZEPP_EMAIL:               ${{ secrets.ZEPP_EMAIL }}
-          ZEPP_PASSWORD:            ${{ secrets.ZEPP_PASSWORD }}
-          ZEPP_APP_TOKEN:           ${{ secrets.ZEPP_APP_TOKEN }}
-          ZEPP_USER_ID:             ${{ secrets.ZEPP_USER_ID }}
           CRONOMETER_EMAIL:         ${{ secrets.CRONOMETER_EMAIL }}
           CRONOMETER_PASSWORD:      ${{ secrets.CRONOMETER_PASSWORD }}
           CRONOMETER_TARGET_KCAL:   ${{ vars.CRONOMETER_TARGET_KCAL }}
@@ -70,9 +68,8 @@ jobs:
           NOTION_WORKOUT_DB_ID:     ${{ secrets.NOTION_WORKOUT_DB_ID }}
           NOTION_SUPPLEMENT_DB_ID:  ${{ secrets.NOTION_SUPPLEMENT_DB_ID }}
           REFRESH_ENDPOINT:         ${{ vars.REFRESH_ENDPOINT }}
-          FORCE_ZEPP:               ${{ (github.event_name == 'workflow_dispatch' && inputs.force_zepp == 'true') && '1' || '' }}
         run: |
-          python scripts/build_data.py health/widgets/data/data.json --sections "${{ (github.event_name == 'workflow_dispatch' && inputs.sections) || 'full' }}"
+          python scripts/build_data.py health/widgets/data/data.json --sections "${{ inputs.sections || 'nutrition' }}"
         continue-on-error: true   # let us commit a partial update if 1 source dies
 
       - name: Show updated payload (head)
