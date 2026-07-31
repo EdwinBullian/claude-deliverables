@@ -32,23 +32,27 @@
 </style></head><body>
 <div class="stats-heading">Today</div>
 <div class="today-row">
-  <div class="stat"><span class="val orange">57.0</span><span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange">304.0</span><span class="lbl">Steps</span></div>
-  <div class="stat"><span class="val orange">61.9</span><span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val orange">57</span><span class="lbl">RHR bpm</span></div>
+  <div class="stat"><span class="val orange">10,490</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">75</span><span class="lbl">Avg HR</span></div>
   <div class="stat"><span class="val">100</span><span class="lbl">Sleep score</span></div>
 </div>
 <div class="divider"></div>
 <div class="week-grid" id="grid"></div>
 
 <script>
-const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const steps=[7048.5, 9475.4, 18849.6, 10117.5, 4885.0, 304.0];
-const rhr=[58.0, 57.0, 59.0, 55.0, 58.0, 57.0];
-const max=Math.max(...steps.filter(Boolean));
+const days=["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"];
+const steps=[7048, 9475, 18850, null, 10118, 4885, 10490];
+const rhr=[58, 57, 59, null, 55, 58, 57];
+// filter(Boolean) over an all-null week yields Math.max() === -Infinity, which
+// makes every height NaN and the grid render empty with no hint why.
+const vals=steps.filter(v=>typeof v==='number'&&v>0);
+const max=vals.length?Math.max(...vals):0;
 const grid=document.getElementById('grid');
 days.forEach((d,i)=>{
-  const isToday=i===6,hasData=steps[i]!==null;
-  const pct=hasData?(steps[i]/max*100).toFixed(1):0;
+  // The window always ends on today, so today is the last slot by construction.
+  const isToday=i===days.length-1,hasData=steps[i]!==null&&steps[i]!==undefined;
+  const pct=(hasData&&max>0)?(steps[i]/max*100).toFixed(1):0;
   let rhrClass='norm';
   if(hasData)rhrClass=rhr[i]<=53?'low':rhr[i]>=58?'high':'norm';
   const cell=document.createElement('div');
