@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — Producer Run · 2026-08-03 14:00 PST</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-03</div>
+<h1>Research Queue — Producer Run · 2026-08-03 14:00 PST</h1>
+<h2>Answer first</h2>
+<p>There is nothing to research this run. The queue snapshot reports zero open items across every state (todo 0, in_progress 0, done 0, flipped 0) and an empty <code>item</code>/<code>item_slug</code>, and the liveness line states plainly: "queue has no open items — nothing to drain." With no GOAL supplied and no flagged topic, the heavy-depth protocol has no subject to run against — counter-evidence hunting, source scoring, and claim excerpting all require a topic that does not exist here. Per the desk rule against padding, I am not fabricating a subject or spending web-search budget on an invented question. The correct output is an empty-queue no-op, logged with the snapshot timestamp so the next Producer run has a clean baseline.</p>
+<h2>Findings</h2>
+<ul><li><strong>Queue is empty.</strong> The snapshot's <code>queue_stats</code> are all zero and <code>liveness</code> explicitly flags nothing to drain (source: snapshot). No <code>research</code> payload was attached (<code>research: null</code>), so there is no prior partial to resume either.</li><li><strong>No topic or slug was passed.</strong> Both <code>item</code> and <code>item_slug</code> are empty strings, meaning the core did not hand this run a subject (source: snapshot).</li><li><strong>No depth override was flagged.</strong> The snapshot carries no note that the core reclassified a topic's required depth; there is simply no topic in scope (inference from empty <code>item</code> — labeled inference).</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>There is no evidentiary conflict to adjudicate — the inputs are internally consistent (empty stats, empty item, explicit liveness note all agree). The only open uncertainty is upstream and outside this block's inputs: whether the queue is empty because nothing has been enqueued, or because an enqueue/handoff step failed silently. That distinction is not resolvable from the snapshot alone and belongs to whoever owns the queue-fill path.</p>
+<h2>So-what for Eddie</h2>
+<p>No context_digest was provided, so there is no "why he's asking" to connect to — consistent with an automated drain run that simply found an empty queue. Practically: no brief ships today from this desk, and that is the expected, correct outcome of a dry queue, not a failure. If Eddie expected a specific topic to be researched, the gap is upstream (nothing got enqueued) rather than a Producer miss.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ol><li>Was the queue <em>supposed</em> to have an item at 14:00 PST — i.e., is an empty queue nominal for this slot, or does it signal a broken enqueue/handoff step?</li><li>Does the research-queue enqueue path emit a heartbeat when it runs but finds nothing to add, so silent-failure vs. genuinely-idle can be distinguished going forward?</li></ol>
+</body>
+</html>
