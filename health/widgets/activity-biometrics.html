@@ -33,16 +33,16 @@
 <div class="stats-heading">Today</div>
 <div class="today-row">
   <div class="stat"><span class="val orange">55</span><span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange">569</span><span class="lbl">Steps</span></div>
-  <div class="stat"><span class="val orange">61</span><span class="lbl">Avg HR</span></div>
-  <div class="stat"><span class="val">0</span><span class="lbl">Sleep score</span></div>
+  <div class="stat"><span class="val orange">1,022</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">67</span><span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val">100</span><span class="lbl">Sleep score</span></div>
 </div>
 <div class="divider"></div>
 <div class="week-grid" id="grid"></div>
 
 <script>
 const days=["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
-const steps=[16371, 10721, 17800, 11694, 19631, 20445, 569];
+const steps=[16371, 10721, 17800, 11694, 19631, 20445, 1022];
 const rhr=[57, 52, 56, 54, 52, 53, 55];
 // filter(Boolean) over an all-null week yields Math.max() === -Infinity, which
 // makes every height NaN and the grid render empty with no hint why.
@@ -63,4 +63,24 @@ days.forEach((d,i)=>{
     <div class="rhr-val ${rhrClass}">${hasData?rhr[i]:'—'}</div>`;
   grid.appendChild(cell);
 });
-</script></body></html>
+</script>
+
+<button id="rlbtn" title="Reload latest published data" aria-label="Reload">&#8635;</button>
+<style>
+  body{position:relative}
+  #rlbtn{position:absolute;top:9px;right:11px;z-index:20;width:21px;height:21px;
+    padding:0;border:0;border-radius:50%;cursor:pointer;font-size:12px;line-height:21px;
+    background:rgba(255,255,255,.06);color:rgba(255,255,255,.38);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    transition:background .15s,color .15s}
+  #rlbtn:hover{background:rgba(255,255,255,.15);color:rgba(255,255,255,.85)}
+  #rlbtn.spin{animation:rlspin .7s linear infinite}
+  @keyframes rlspin{to{transform:rotate(360deg)}}
+</style>
+<script>
+document.getElementById('rlbtn').addEventListener('click', function () {
+  this.classList.add('spin');
+  location.replace(location.pathname + '?t=' + Date.now());
+});
+</script>
+</body></html>
