@@ -1,25 +1,25 @@
 {
   "sleep": {
-    "date_label": "Aug 07 — Last Synced",
-    "score": 98,
-    "total_minutes": 510,
-    "total_label": "8 h 30 m",
-    "deep_minutes": 59,
-    "light_minutes": 322,
-    "rem_minutes": 129,
-    "awake_minutes": 23,
-    "bedtime_label": "11:17 PM",
-    "wake_label": "8:23 AM",
-    "resting_hr": null,
+    "date_label": "Aug 08 — Last Night",
+    "score": 100,
+    "total_minutes": 499,
+    "total_label": "8 h 19 m",
+    "deep_minutes": 67,
+    "light_minutes": 267,
+    "rem_minutes": 165,
+    "awake_minutes": 0,
+    "bedtime_label": "11:47 PM",
+    "wake_label": "8:28 AM",
+    "resting_hr": 54,
     "awakenings": null
   },
   "activity": {
     "date_label": "Aug 08 — Today",
     "today": {
-      "rhr": null,
-      "steps": null,
-      "avg_hr": null,
-      "sleep_score": 98
+      "rhr": 54,
+      "steps": 1172,
+      "avg_hr": 58,
+      "sleep_score": 100
     },
     "week": {
       "labels": [
@@ -37,8 +37,8 @@
         20445,
         15316,
         13408,
-        9315,
-        null
+        10469,
+        1172
       ],
       "rhr": [
         54,
@@ -47,7 +47,7 @@
         55,
         54,
         50,
-        null
+        54
       ],
       "today_index": 6
     },
@@ -166,7 +166,7 @@
       46,
       32
     ],
-    "footer": "Wake 8:23 AM · No workout · Natural curve"
+    "footer": "Wake 8:28 AM · No workout · Natural curve"
   },
   "macros_week": {
     "week_label": "Macros — Aug 2–8",
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-08T07:00:04-07:00",
-    "last_updated_label": "Aug 8, 7:00 AM PST",
+    "last_updated_iso": "2026-08-08T10:00:06-07:00",
+    "last_updated_label": "Aug 8, 10:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-08T07:00:04-07:00",
+    "last_body_data_iso": "2026-08-08T10:00:06-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-08-08T07:00:04-07:00",
+        "last_ok_iso": "2026-08-08T10:00:06-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-08T07:00:07-07:00",
+        "last_ok_iso": "2026-08-08T10:00:09-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-08T07:00:05-07:00",
+        "last_ok_iso": "2026-08-08T10:00:06-07:00",
         "error": null
       }
     },
