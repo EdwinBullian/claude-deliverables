@@ -17,7 +17,7 @@
   .footer{font-size:8.5px;color:rgba(107,218,135,.42);margin-top:3px;padding-top:3px;border-top:1px solid rgba(255,255,255,.06)}
 </style></head><body>
 <div class="header">
-  <span class="title">W32 Macros — 2026-08-02 to 2026-08-08</span>
+  <span class="title">W32 Macros — 2026-08-03 to 2026-08-09</span>
   <div class="header-right">
     <span class="score-badge">Macro Score 63%</span>
     <div class="legend">
@@ -31,9 +31,9 @@
 <div class="footer">Target: 2,500 kcal &nbsp;·&nbsp; 200g protein</div>
 <script>
 Chart.defaults.color='rgba(255,255,255,.38)';Chart.defaults.borderColor='rgba(255,255,255,.05)';
-const labels=["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];const dates=["Aug 02", "Aug 03", "Aug 04", "Aug 05", "Aug 06", "Aug 07", "Aug 08"];
-const protG=[0, 170, 116, 77, 0, 0, 151];const carbG=[0, 218, 36, 45, 0, 0, 137];const fatG=[0, 104, 50, 38, 0, 0, 83];
-const hasData=[false, true, true, true, false, false, true];
+const labels=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];const dates=["Aug 03", "Aug 04", "Aug 05", "Aug 06", "Aug 07", "Aug 08", "Aug 09"];
+const protG=[170, 116, 77, 0, 0, 151, 0];const carbG=[218, 36, 45, 0, 0, 137, 0];const fatG=[104, 50, 38, 0, 0, 83, 0];
+const hasData=[true, true, true, false, false, true, false];
 const protCal=protG.map(g=>g*4),carbCal=carbG.map(g=>g*4),fatCal=fatG.map(g=>Math.round(g*9));
 const pa=i=>hasData[i]?'rgba(107,218,135,.88)':'rgba(255,255,255,.04)';
 const ca=i=>hasData[i]?'rgba(90,174,212,.82)':'transparent';
