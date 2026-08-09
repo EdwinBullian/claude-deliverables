@@ -19,7 +19,7 @@
 <div class="header">
   <span class="title">W32 Macros — 2026-08-02 to 2026-08-08</span>
   <div class="header-right">
-    <span class="score-badge">Macro Score 59%</span>
+    <span class="score-badge">Macro Score 56%</span>
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:#6bda87"></div>Protein</div>
       <div class="leg"><div class="leg-dot" style="background:#5aaed4"></div>Carbs</div>
@@ -32,8 +32,8 @@
 <script>
 Chart.defaults.color='rgba(255,255,255,.38)';Chart.defaults.borderColor='rgba(255,255,255,.05)';
 const labels=["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];const dates=["Aug 02", "Aug 03", "Aug 04", "Aug 05", "Aug 06", "Aug 07", "Aug 08"];
-const protG=[0, 170, 116, 77, 0, 0, 0];const carbG=[0, 218, 36, 45, 0, 0, 0];const fatG=[0, 104, 50, 38, 0, 0, 0];
-const hasData=[false, true, true, true, false, false, false];
+const protG=[0, 170, 116, 77, 0, 0, 84];const carbG=[0, 218, 36, 45, 0, 0, 82];const fatG=[0, 104, 50, 38, 0, 0, 58];
+const hasData=[false, true, true, true, false, false, true];
 const protCal=protG.map(g=>g*4),carbCal=carbG.map(g=>g*4),fatCal=fatG.map(g=>Math.round(g*9));
 const pa=i=>hasData[i]?'rgba(107,218,135,.88)':'rgba(255,255,255,.04)';
 const ca=i=>hasData[i]?'rgba(90,174,212,.82)':'transparent';
