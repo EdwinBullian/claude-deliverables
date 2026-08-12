@@ -33,17 +33,17 @@
 <div class="stats-heading">Today</div>
 <div class="today-row">
   <div class="stat"><span class="val orange">53</span><span class="lbl">RHR bpm</span></div>
-  <div class="stat"><span class="val orange">2,511</span><span class="lbl">Steps</span></div>
-  <div class="stat"><span class="val orange">70</span><span class="lbl">Avg HR</span></div>
+  <div class="stat"><span class="val orange">98</span><span class="lbl">Steps</span></div>
+  <div class="stat"><span class="val orange">58</span><span class="lbl">Avg HR</span></div>
   <div class="stat"><span class="val">100</span><span class="lbl">Sleep score</span></div>
 </div>
 <div class="divider"></div>
 <div class="week-grid" id="grid"></div>
 
 <script>
-const days=["Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue"];
-const steps=[15316, 13408, 10469, 11123, 13432, 2084, 2511];
-const rhr=[55, 54, 50, 54, 54, 60, 53];
+const days=["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
+const steps=[13408, 10469, 11123, 13432, 2084, 3732, 98];
+const rhr=[54, 50, 54, 54, 60, 53, null];
 // filter(Boolean) over an all-null week yields Math.max() === -Infinity, which
 // makes every height NaN and the grid render empty with no hint why.
 const vals=steps.filter(v=>typeof v==='number'&&v>0);
