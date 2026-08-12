@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — Empty-Run Report</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-12</div>
+<h1>Research Queue — Empty-Run Report</h1>
+<p><strong>Generated:</strong> 2026-08-12 14:00 PST</p>
+<h2>1. Answer first</h2>
+<p>There is nothing to research this run. The snapshot reports the queue has no open items, and every queue counter — todo, in_progress, done, flipped — is zero. There is no <code>item</code>, no <code>item_slug</code>, and <code>research</code> is null, so no GOAL was handed to this desk. Per the heavy-depth protocol, I will not manufacture a topic or pad a brief to fill the slot. This is a clean no-op: the queue is drained and the desk correctly did no work.</p>
+<h2>2. Findings</h2>
+<ul><li><strong>Queue is empty.</strong> The liveness feed states plainly: "queue has no open items — nothing to drain." (source: snapshot.liveness)</li><li><strong>All counters zero.</strong> <code>queue_stats</code> = todo 0 / in_progress 0 / done 0 / flipped 0 — no backlog, no in-flight item, nothing recently completed to follow up on. (source: snapshot.queue_stats)</li><li><strong>No topic payload.</strong> <code>item</code> and <code>item_slug</code> are empty strings and <code>research</code> is null — the core did not flag a topic at any depth for this run. (source: snapshot.item / snapshot.research)</li></ul>
+<h2>3. Disagreements &amp; uncertainty</h2>
+<p>No source conflict — the liveness note and the counters agree the queue is empty. The one genuine uncertainty is <em>why</em> it is empty: this snapshot cannot distinguish "Eddie has queued nothing" from "an upstream enqueue step failed silently." Nothing in the inputs lets me resolve that, so I flag it rather than assume. (opinion/inference)</p>
+<h2>4. So-what for Eddie</h2>
+<p>No <code>context_digest</code> was provided, so there is no stated reason behind this run — consistent with it being a scheduled tick that found an empty queue. Nothing is required of you. If you expected a topic to be waiting here (e.g. you'd asked a desk to enqueue one), that's the signal worth checking: an empty queue when you expected work usually means the enqueue side, not the research side, is the problem.</p>
+<h2>5. Next questions worth a deeper pass</h2>
+<ul><li>Was this an unexpected empty run, or the normal state? If unexpected, verify the enqueue path from the request-inbox loop.</li><li>Should the queue-drainer emit a heartbeat vs. a silent no-op when empty, so an upstream failure can't hide as "nothing to do"?</li><li>Do you want a standing research topic queued for the Tuesday research slot so this desk always has something to chew on?</li></ul>
+</body>
+</html>
