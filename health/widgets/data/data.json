@@ -17,8 +17,8 @@
     "date_label": "Aug 13 — Today",
     "today": {
       "rhr": null,
-      "steps": null,
-      "avg_hr": null,
+      "steps": 131,
+      "avg_hr": 59,
       "sleep_score": 100
     },
     "week": {
@@ -37,8 +37,8 @@
         13432,
         2084,
         3732,
-        2582,
-        null
+        2938,
+        131
       ],
       "rhr": [
         50,
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-13T07:00:05-07:00",
-    "last_updated_label": "Aug 13, 7:00 AM PST",
+    "last_updated_iso": "2026-08-13T10:00:03-07:00",
+    "last_updated_label": "Aug 13, 10:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-13T07:00:05-07:00",
+    "last_body_data_iso": "2026-08-13T10:00:03-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-08-13T07:00:05-07:00",
+        "last_ok_iso": "2026-08-13T10:00:03-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-13T07:00:08-07:00",
+        "last_ok_iso": "2026-08-13T10:00:07-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-13T07:00:05-07:00",
+        "last_ok_iso": "2026-08-13T10:00:04-07:00",
         "error": null
       }
     },
