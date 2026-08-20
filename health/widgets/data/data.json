@@ -8,8 +8,8 @@
     "light_minutes": 308,
     "rem_minutes": 153,
     "awake_minutes": 5,
-    "bedtime_label": "11:53 PM",
-    "wake_label": "9:03 AM",
+    "bedtime_label": "12:53 AM",
+    "wake_label": "10:03 AM",
     "resting_hr": null,
     "awakenings": null
   },
@@ -17,8 +17,8 @@
     "date_label": "Aug 20 — Today",
     "today": {
       "rhr": null,
-      "steps": null,
-      "avg_hr": null,
+      "steps": 253,
+      "avg_hr": 60,
       "sleep_score": 100
     },
     "week": {
@@ -36,9 +36,9 @@
         4046,
         9826,
         5938,
-        4552,
-        228,
-        null
+        4925,
+        8406,
+        253
       ],
       "rhr": [
         54,
@@ -150,8 +150,8 @@
       5,
       5,
       5,
+      5,
       28,
-      18,
       18,
       18,
       65,
@@ -166,7 +166,7 @@
       46,
       32
     ],
-    "footer": "Wake 9:03 AM · No workout · Natural curve"
+    "footer": "Wake 10:03 AM · No workout · Natural curve"
   },
   "macros_week": {
     "week_label": "Macros — Aug 14–20",
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-20T10:00:03-07:00",
-    "last_updated_label": "Aug 20, 10:00 AM PST",
+    "last_updated_iso": "2026-08-20T13:00:04-07:00",
+    "last_updated_label": "Aug 20, 1:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-20T10:00:03-07:00",
+    "last_body_data_iso": "2026-08-20T13:00:04-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-08-20T10:00:04-07:00",
+        "last_ok_iso": "2026-08-20T13:00:04-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-20T10:00:06-07:00",
+        "last_ok_iso": "2026-08-20T13:00:06-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-20T10:00:04-07:00",
+        "last_ok_iso": "2026-08-20T13:00:05-07:00",
         "error": null
       }
     },
