@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Health Review &amp; Plan — Week ending 2026-08-26 (PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-26</div>
+<h1>Weekly Health Review &amp; Plan — Week ending 2026-08-26 (PST)</h1>
+<p><strong>Written:</strong> 2026-08-26 10:24 PST · Producer: health-weekly desk</p>
+<hr>
+<h2>Data note (read first)</h2>
+<p>Most of this week's tracking is missing. Apple Health hasn't exported in ~6 days (145h stale), so <strong>sleep and recovery are entirely null</strong> — no score, no duration, no RHR, no HRV, no steps. Cronometer has a <strong>6-day logging gap</strong> and yesterday shows 0 kcal / 0 protein / not logged. This review is honest about what that means: the college move (Aug 21) knocked the whole tracking stack over, and until Apple Health and Cronometer are re-syncing, the desk is flying blind. Everything below is either a snapshot-backed number or explicitly labeled inference.</p>
+<hr>
+<h2>1. Sleep &amp; recovery</h2>
+<p>Nothing to review. <code>last_night_score</code>, <code>last_night_min</code>, <code>deep_min</code>, <code>rem_min</code>, <code>awakenings</code>, <code>avg7_score</code>, <code>avg7_min</code>, <code>rhr_last</code>, <code>rhr_avg7</code>, <code>rhr_avg28</code>, <code>hrv_last</code>, <code>hrv_avg7</code>, and <code>steps_yday</code> are all null in the snapshot. The upstream cause is the stale Apple Health export ("newest export in ...Daily is 145h old (stale)"). <em>(opinion/inference)</em> Given the move-in timing, the most likely fix is that the HAE app on the phone stopped auto-exporting into iCloud when the network context changed — a one-tap re-trigger usually restores it. Nothing here rises to "worth a professional look"; it's a pipeline problem, not a physiology problem.</p>
+<h2>2. Nutrition</h2>
+<p>7-day average is <strong>1429 kcal / 165g protein</strong> against targets of <strong>2500 kcal / 200g protein</strong> — a ~1071 kcal/day gap and a 35g protein gap. Yesterday logged <strong>0 kcal, 0g protein, not logged</strong>, and the logging gap is <strong>6 days</strong>. <em>(opinion/inference)</em> Two possible reads and you can't tell them apart from the snapshot alone: (a) intake actually collapsed during move week, or (b) intake is fine and only the logging died. Either way the fix is the same — restart Cronometer logging today, and if the deficit is real, the meal-prep list below closes the kcal gap. No micro callout is possible because macro-only data is available. <code>protein_miss_streak</code> is 0, which is consistent with the logging gap: you can't miss a target you never recorded.</p>
+<h2>3. Training</h2>
+<p><strong>Zero sessions in the last 7 days.</strong> Last session was <strong>2026-08-08 (Push)</strong> — <strong>18 days ago</strong>. <code>top_lifts</code> is empty on that session. No workout planned today (<code>today_planned: null</code>). Split coverage this week: none. Top-lift progression: not evaluable — no lifts in the snapshot.</p>
+<p><em>(opinion/inference)</em> An 18-day layoff after a domestic move is normal, not concerning. Expect first-week-back sessions to feel disproportionately hard; that's re-sensitization, not decondition of any meaningful magnitude at this timescale.</p>
+<h2>4. Body trend</h2>
+<p>Not tracked yet — the snapshot carries no body-weight or composition field.</p>
+<hr>
+<h2>Next week's plan</h2>
+<p><strong>Training focus: re-entry week, not a PR week.</strong> Three full-body sessions, dumbbells + bench + pull-up bar + bands only. Prescribe by RPE, not %1RM, because we have no current top-lift data in the snapshot:</p>
+<ul><li><strong>Session A (push-lean):</strong> DB bench press, DB overhead press, band push-down, pike push-up. 3×8–10 each at RPE 7.</li><li><strong>Session B (pull-lean):</strong> Pull-ups (assisted with band if needed), single-arm DB row, DB curl, band face-pull. 3×8–10 at RPE 7.</li><li><strong>Session C (legs + core):</strong> DB goblet squat, DB RDL, DB step-up, hanging knee raise. 3×8–10 at RPE 7.</li></ul>
+<p>No exact weights prescribed because the snapshot's <code>top_lifts: []</code> gives nothing to progress from — pick loads that hit RPE 7 on the day.</p>
+<p><strong>Nutrition adjustment (one):</strong> Restart Cronometer logging today, before touching training. The single highest-leverage fix is getting the pipeline back on, because right now every number is either 0 or missing and no adjustment can be verified. If after 5 logged days the ~1071 kcal deficit is real, add one prep-ahead 700+ kcal / 40g+ protein meal from the list below to close it.</p>
+<p><strong>Recovery priority (one):</strong> Fix the Apple Health export. Open HAE on the phone, confirm the iCloud Daily folder is writing, and force a manual export. Sleep and recovery adjustments are meaningless while the pipe is dead.</p>
+<hr>
+<h2>5. Next Week — Meal Prep</h2>
+<p>Floor of 3–4 prep-ahead meals that hit the snapshot's Cronometer targets (<code>target_kcal: 2500</code>, <code>target_protein_g: 200</code>). Ordinary kitchen only, batch-cookable. Numbers are approximate — log actuals in Cronometer to true them up.</p>
+<ol><li><strong>Sheet-pan chicken thighs + rice + broccoli.</strong> 1.5 lb boneless-skinless chicken thigh, 1.5 cups dry jasmine rice, 1 head broccoli, olive oil, soy sauce, garlic. ~4 servings, each ~<strong>650 kcal / 45g protein</strong>.</li><li><strong>Ground-beef + sweet-potato + black-bean bowls.</strong> 1.5 lb 85/15 ground beef, 3 medium sweet potatoes cubed and roasted, 1 can black beans, chili spice, cheddar. ~4 servings, each ~<strong>700 kcal / 42g protein</strong>.</li><li><strong>Overnight oats + Greek yogurt + peanut butter jars.</strong> ½ cup oats + 1 cup full-fat Greek yogurt + 2 tbsp PB + 1 tbsp honey + milk to cover. Per jar ~<strong>600 kcal / 35g protein</strong>. Make 5 at once; grab-and-go breakfast.</li><li><strong>Turkey + pasta + marinara + parmesan.</strong> 1.5 lb 93/7 ground turkey browned into 1 jar marinara + 1 lb penne + ½ cup parm. ~4 servings, each ~<strong>650 kcal / 45g protein</strong>.</li></ol>
+<p>Stacking any three of these hits ~2000 kcal / ~130g protein — add a Greek-yogurt jar or a protein shake to clear 2500 kcal / 200g.</p>
+<hr>
+<p><em>Nothing in this review is a medical assessment. Sleep/recovery gaps here are tracking-pipeline gaps, not physiological findings. If any pattern persists after the pipeline is restored, that would be worth a professional look — not before.</em></p>
+</body>
+</html>
