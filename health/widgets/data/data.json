@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Aug 21",
+    "date_label": "Aug 26",
     "curve_24h": [
       5,
       5,
@@ -156,149 +156,149 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Aug 15–21",
-    "macro_score_pct": 16,
+    "week_label": "Macros — Aug 20–26",
+    "macro_score_pct": 0,
     "labels": [
+      "Thu",
+      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed",
-      "Thu",
-      "Fri"
+      "Wed"
     ],
     "dates": [
-      "Aug 15",
-      "Aug 16",
-      "Aug 17",
-      "Aug 18",
-      "Aug 19",
       "Aug 20",
-      "Aug 21"
+      "Aug 21",
+      "Aug 22",
+      "Aug 23",
+      "Aug 24",
+      "Aug 25",
+      "Aug 26"
     ],
     "protein_g": [
       0,
       0,
-      128,
-      6,
-      165,
+      0,
+      0,
+      0,
       0,
       0
     ],
     "carbs_g": [
       0,
       0,
-      162,
-      21,
-      97,
+      0,
+      0,
+      0,
       0,
       0
     ],
     "fat_g": [
       0,
       0,
-      63,
-      6,
-      39,
+      0,
+      0,
+      0,
       0,
       0
     ],
     "has_data": [
       false,
       false,
-      true,
-      true,
-      true,
+      false,
+      false,
+      false,
       false,
       false
     ],
     "target_kcal": 2400,
     "target_protein_g": 150,
-    "footer": "Target: 2,400 kcal · 150g protein · 3/7 days logged"
+    "footer": "Target: 2,400 kcal · 150g protein · 0/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 16,
-    "days_logged": 3,
+    "macro_score_pct": 0,
+    "days_logged": 0,
     "days_total": 7,
-    "avg_protein_g": 99,
-    "avg_carbs_g": 93,
-    "avg_fat_g": 36,
+    "avg_protein_g": 0,
+    "avg_carbs_g": 0,
+    "avg_fat_g": 0,
     "target_kcal": 2400,
     "target_protein_g": 150,
     "nutrients": [
       {
-        "pct": 20,
+        "pct": 0,
         "label": "Fiber",
-        "sub": "8g / 38g",
+        "sub": "0g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 44,
+        "pct": 0,
         "label": "Calcium",
-        "sub": "448mg / 1.0g",
+        "sub": "0mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 37,
+        "pct": 0,
         "label": "Magnesium",
-        "sub": "150mg / 400mg",
+        "sub": "0mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 35,
+        "pct": 0,
         "label": "Potassium",
-        "sub": "1.7g / 4.7g",
+        "sub": "0mg / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 66,
+        "pct": 0,
         "label": "Sodium",
-        "sub": "1.5g / 2.3g",
+        "sub": "0mg / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 70,
+        "pct": 0,
         "label": "Iron",
-        "sub": "6mg / 8mg",
+        "sub": "0mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 17,
+        "pct": 0,
         "label": "Vitamin A",
-        "sub": "160mcg / 900mcg",
+        "sub": "0mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 26,
+        "pct": 0,
         "label": "Vitamin C",
-        "sub": "24mg / 90mg",
+        "sub": "0mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "3 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "0 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Aug 21 — Today",
+    "date_label": "Aug 26 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
+        "Thu",
+        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed",
-        "Thu",
-        "Fri"
+        "Wed"
       ],
       "oz": [
         0,
         0,
-        24,
         0,
-        15,
+        0,
+        0,
         0,
         0
       ],
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-21T13:00:04-07:00",
-    "last_updated_label": "Aug 21, 1:00 PM PST",
+    "last_updated_iso": "2026-08-26T10:24:58-07:00",
+    "last_updated_label": "Aug 26, 10:24 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-21T13:00:04-07:00",
+    "last_body_data_iso": "2026-08-26T10:24:58-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
-        "ok": true,
+        "ok": false,
         "last_ok_iso": "2026-08-21T13:00:04-07:00",
-        "error": null
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 145h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-21T13:00:06-07:00",
+        "last_ok_iso": "2026-08-26T10:25:05-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-21T13:00:06-07:00",
+        "last_ok_iso": "2026-08-26T10:25:04-07:00",
         "error": null
       }
     },
