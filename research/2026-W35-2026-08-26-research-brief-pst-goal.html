@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — 2026-08-26 14:00 PST</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-26</div>
+<h1>Research Queue — 2026-08-26 14:00 PST</h1>
+<h2>Answer first</h2>
+<p>Queue is empty; there is nothing to drain this run. The snapshot reports zero todo, zero in-progress, zero done, zero flipped, and the liveness field explicitly says "queue has no open items — nothing to drain." No topic was flagged by the core, no item slug was passed, and no research payload is attached, so there is no GOAL to research on this pass. Per the heavy-depth protocol, padding is disallowed — the correct output is a null-run memo instead of a fabricated brief. Next producer tick will pick up whatever the core enqueues.</p>
+<h2>Findings</h2>
+<ul><li><strong>Queue counters are all zero.</strong> Source: snapshot.queue_stats — <code>{"todo": 0, "in_progress": 0, "done": 0, "flipped": 0}</code>. No item is even in-flight from a previous run.</li><li><strong>Liveness confirms the empty state.</strong> Source: snapshot.liveness — <code>"queue has no open items — nothing to drain"</code>. This is the producer's own health signal, not an inference.</li><li><strong>No target was passed.</strong> Source: snapshot.item / snapshot.item_slug — both empty strings; snapshot.research is null. Without a topic, the counter-evidence + rubric-scored-sources protocol has nothing to attach to.</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — the three snapshot signals (counters, liveness string, empty item fields) all agree. The only open question is whether the queue is empty because the core hasn't enqueued yet today or because upstream feeders (research intake, thesis-desk requests, Eddie's ad-hoc drops) are silent. That's a core-side question, not a research question, and doesn't change this run's output.</p>
+<h2>So-what for Eddie</h2>
+<p>No action required from you. This is a healthy no-op — the drainer ran on schedule, correctly detected an empty queue, and is exiting without inventing work. If you expected something in the queue today (e.g., a follow-up from the Aug 21 Calc-exam-adjacent finance backlog, or a leftover from FIN M1.4 on the GOOGL 10-K walkthrough), the gap is upstream: check the intake / core enqueue path, not the research desk.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ul><li>Is the research intake path actually writing to the queue, or has an enqueue job silently failed? (Ops question for the core, not research.)</li><li>Should the producer emit a lightweight "idle-tick" telemetry row so consecutive empty runs are visible on the command center? (Framework question.)</li><li>Any parked topics from the [hold] projects (Stock Analysis, IB Deep Dive, VC Deep Dive) worth promoting into the queue now that the Calc exam is behind us?</li></ul>
+</body>
+</html>
