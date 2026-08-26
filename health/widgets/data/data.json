@@ -1,7 +1,7 @@
 {
   "sleep": {},
   "activity": {
-    "date_label": "Aug 21 — Today",
+    "date_label": "Aug 26 — Today",
     "today": {
       "rhr": null,
       "steps": null,
@@ -10,29 +10,29 @@
     },
     "week": {
       "labels": [
+        "Thu",
+        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed",
-        "Thu",
-        "Fri"
+        "Wed"
       ],
       "steps": [
-        4046,
-        9826,
-        5938,
-        4925,
-        8406,
-        253,
+        3142,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ],
       "rhr": [
-        51,
-        54,
-        55,
-        52,
-        51,
+        null,
+        null,
+        null,
+        null,
+        null,
         null,
         null
       ],
@@ -52,13 +52,13 @@
       "Sat"
     ],
     "date_labels": [
-      "Sat 8/15",
-      "Sun 8/16",
-      "Mon 8/17",
-      "Tue 8/18",
-      "Wed 8/19",
       "Thu 8/20",
-      "Fri 8/21"
+      "Fri 8/21",
+      "Sat 8/22",
+      "Sun 8/23",
+      "Mon 8/24",
+      "Tue 8/25",
+      "Wed 8/26"
     ],
     "lift_min": [
       0,
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-26T10:24:58-07:00",
-    "last_updated_label": "Aug 26, 10:24 AM PST",
+    "last_updated_iso": "2026-08-26T13:24:40-07:00",
+    "last_updated_label": "Aug 26, 1:24 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-26T10:24:58-07:00",
+    "last_body_data_iso": "2026-08-26T13:24:40-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
-        "ok": false,
-        "last_ok_iso": "2026-08-21T13:00:04-07:00",
-        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 145h old (stale)"
+        "ok": true,
+        "last_ok_iso": "2026-08-26T13:24:40-07:00",
+        "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-26T10:25:05-07:00",
+        "last_ok_iso": "2026-08-26T13:24:41-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-26T10:25:04-07:00",
+        "last_ok_iso": "2026-08-26T13:24:41-07:00",
         "error": null
       }
     },
