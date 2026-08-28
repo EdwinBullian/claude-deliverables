@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue Drain — 2026-08-28 (PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-28</div>
+<h1>Research Queue Drain — 2026-08-28 (PST)</h1>
+<h2>Answer first</h2>
+<p>The research queue is empty — todo=0, in_progress=0, done=0, flipped=0 — so there is no topic to drain this run. Per protocol, when the core has no topic queued, the correct action is to report the empty state rather than invent a target or pad depth on a stale item. No web fetches, no source scoring, no counter-evidence pass — none of it applies without a GOAL. Queue liveness confirms this directly: 'queue has no open items — nothing to drain.' Next run will pick up whatever Eddie or another desk queues between now and then.</p>
+<h2>Findings</h2>
+<ul><li>Queue snapshot at 2026-08-28T14:00 PST shows all four counters at zero (todo/in_progress/done/flipped). Source: inputs.snapshot.queue_stats.</li><li>Liveness string explicitly declares the empty state. Source: inputs.snapshot.liveness[0].</li><li><code>item</code> and <code>item_slug</code> are empty strings; <code>research</code> is null. Source: inputs.snapshot.item / item_slug / research.</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — the snapshot is internally consistent. The only uncertainty is upstream: whether the queue truly has nothing pending, or whether a producer failed to enqueue. That is a plumbing question for the queue writer, not a research question this desk can answer.</p>
+<h2>So-what for Eddie</h2>
+<p>No action required from you. If you expected a specific topic to be researched today (e.g., something you flagged in Notion or asked another desk to hand off), the handoff didn't land — check the queue writer rather than assuming this desk skipped it. Otherwise, this is a clean idle tick and next scheduled drain will pick up whatever's queued by then.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ul><li>Is the queue producer (which desk or skill enqueues items?) healthy, or did a recent hand-off silently drop?</li><li>Should idle drains auto-pull from a fallback backlog (e.g., open theses on the watchlist) instead of no-op'ing?</li><li>Worth adding a liveness alert if the queue sits empty for N consecutive drains, to catch a stuck producer?</li></ul>
+</body>
+</html>
