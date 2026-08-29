@@ -1,7 +1,7 @@
 {
   "sleep": {},
   "activity": {
-    "date_label": "Aug 28 — Today",
+    "date_label": "Aug 29 — Today",
     "today": {
       "rhr": null,
       "steps": null,
@@ -10,17 +10,17 @@
     },
     "week": {
       "labels": [
-        "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
-        "Fri"
+        "Fri",
+        "Sat"
       ],
       "steps": [
-        23367,
         34074,
+        null,
         null,
         null,
         null,
@@ -28,8 +28,8 @@
         null
       ],
       "rhr": [
-        57,
         67,
+        null,
         null,
         null,
         null,
@@ -52,13 +52,13 @@
       "Sat"
     ],
     "date_labels": [
-      "Sat 8/22",
       "Sun 8/23",
       "Mon 8/24",
       "Tue 8/25",
       "Wed 8/26",
       "Thu 8/27",
-      "Fri 8/28"
+      "Fri 8/28",
+      "Sat 8/29"
     ],
     "lift_min": [
       0,
@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Aug 28",
+    "date_label": "Aug 29",
     "curve_24h": [
       5,
       5,
@@ -156,25 +156,25 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Aug 22–28",
+    "week_label": "Macros — Aug 23–29",
     "macro_score_pct": 0,
     "labels": [
-      "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
       "Thu",
-      "Fri"
+      "Fri",
+      "Sat"
     ],
     "dates": [
-      "Aug 22",
       "Aug 23",
       "Aug 24",
       "Aug 25",
       "Aug 26",
       "Aug 27",
-      "Aug 28"
+      "Aug 28",
+      "Aug 29"
     ],
     "protein_g": [
       0,
@@ -279,19 +279,19 @@
     "footer": "0 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Aug 28 — Today",
+    "date_label": "Aug 29 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
-        "Fri"
+        "Fri",
+        "Sat"
       ],
       "oz": [
         0,
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-08-28T22:00:07-07:00",
-    "last_updated_label": "Aug 28, 10:00 PM PST",
+    "last_updated_iso": "2026-08-29T07:00:04-07:00",
+    "last_updated_label": "Aug 29, 7:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-08-28T22:00:07-07:00",
+    "last_body_data_iso": "2026-08-29T07:00:04-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-08-28T22:00:07-07:00",
+        "last_ok_iso": "2026-08-29T07:00:04-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-08-28T22:00:08-07:00",
+        "last_ok_iso": "2026-08-29T07:00:05-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-08-28T22:00:08-07:00",
+        "last_ok_iso": "2026-08-29T07:00:06-07:00",
         "error": null
       }
     },
