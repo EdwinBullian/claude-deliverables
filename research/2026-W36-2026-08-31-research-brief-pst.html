@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — 2026-08-31 (PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-08-31</div>
+<h1>Research Queue — 2026-08-31 (PST)</h1>
+<h2>Answer first</h2>
+<p>The research queue is empty — nothing to drain this cycle. No <code>todo</code> or <code>in_progress</code> items, no target topic in the snapshot, and no prior research payload to build on. There is no load-bearing factual work to do, so per the desk's rule against padding, this run stops here rather than manufacturing a topic. The correct next action is Eddie's — either queue a topic or let the queue stay idle until the market-scan / weekly-review desks feed one in. All downstream sections (Findings, Disagreements, So-what, Next questions) are intentionally short because there is no source material to interpret.</p>
+<h2>Findings</h2>
+<ul><li>Snapshot <code>queue_stats</code> shows <code>todo: 0, in_progress: 0, done: 0, flipped: 0</code> — a genuinely empty queue, not a paused or errored one. (Source: inputs.snapshot.queue_stats.)</li><li>Liveness message reads <code>"queue has no open items — nothing to drain"</code>, which is the producer's canonical no-op signal, not a validation failure. (Source: inputs.snapshot.liveness[0].)</li><li><code>item</code>, <code>item_slug</code>, and <code>research</code> are all empty/null — no topic was selected upstream, so there is nothing for the heavy-depth protocol to attach counter-evidence or sources to. (Source: inputs.snapshot.item / item_slug / research.)</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — a single, internally consistent snapshot with no conflicting signals. The only latent uncertainty is <em>why</em> the queue is empty (never populated this week vs. drained earlier vs. upstream producer failed to enqueue), which the snapshot doesn't disambiguate.</p>
+<h2>So-what for Eddie</h2>
+<p>The research desk isn't broken; it's just idle. Given the ND semester scheduling rules (personal-interest work capped at 90 min/day, one block, and finance side-projects parked until winter break), an empty research queue this week is actually <em>aligned</em> with your stated posture, not a gap to backfill. If you want the desk earning its keep during the semester, the lightest-touch fix is to seed 1–2 evergreen questions tied to your ECON/ACCT coursework (which is on-track, not parked) rather than reviving parked finance projects.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ol><li>Is the queue empty because nothing was enqueued, or because the enqueuer (market-scan Wed, weekly-review) silently failed? Worth one look at the producer logs before assuming it's intentional.</li><li>Should the desk have a semester-mode default — e.g., auto-seed one ECON/ACCT-adjacent topic per week — so it doesn't sit fully idle for months?</li><li>Are any parked items in the flipped/done history worth a refresh pass in December when finance side-projects unpark?</li></ol>
+</body>
+</html>
