@@ -1,25 +1,25 @@
 {
   "sleep": {
-    "date_label": "Aug 31 — Last Synced",
-    "score": 95,
-    "total_minutes": 448,
-    "total_label": "7 h 28 m",
-    "deep_minutes": 76,
-    "light_minutes": 271,
-    "rem_minutes": 101,
-    "awake_minutes": 4,
-    "bedtime_label": "12:30 AM",
-    "wake_label": "8:08 AM",
-    "resting_hr": null,
+    "date_label": "Sep 01 — Last Night",
+    "score": 100,
+    "total_minutes": 502,
+    "total_label": "8 h 22 m",
+    "deep_minutes": 103,
+    "light_minutes": 281,
+    "rem_minutes": 118,
+    "awake_minutes": 8,
+    "bedtime_label": "12:22 AM",
+    "wake_label": "8:54 AM",
+    "resting_hr": 52,
     "awakenings": null
   },
   "activity": {
     "date_label": "Sep 01 — Today",
     "today": {
-      "rhr": null,
-      "steps": null,
-      "avg_hr": null,
-      "sleep_score": 95
+      "rhr": 52,
+      "steps": 15652,
+      "avg_hr": 73,
+      "sleep_score": 100
     },
     "week": {
       "labels": [
@@ -38,7 +38,7 @@
         16903,
         11491,
         20407,
-        null
+        15652
       ],
       "rhr": [
         null,
@@ -47,7 +47,7 @@
         62,
         56,
         50,
-        null
+        52
       ],
       "today_index": 6
     },
@@ -166,7 +166,7 @@
       46,
       32
     ],
-    "footer": "Wake 8:08 AM · No workout · Natural curve"
+    "footer": "Wake 8:54 AM · No workout · Natural curve"
   },
   "macros_week": {
     "week_label": "Macros — Aug 26–1",
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-09-01T19:00:05-07:00",
-    "last_updated_label": "Sep 1, 7:00 PM PST",
+    "last_updated_iso": "2026-09-01T22:00:07-07:00",
+    "last_updated_label": "Sep 1, 10:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-09-01T19:00:05-07:00",
+    "last_body_data_iso": "2026-09-01T22:00:07-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-09-01T19:00:06-07:00",
+        "last_ok_iso": "2026-09-01T22:00:08-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-09-01T19:00:07-07:00",
+        "last_ok_iso": "2026-09-01T22:00:09-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-09-01T19:00:06-07:00",
+        "last_ok_iso": "2026-09-01T22:00:08-07:00",
         "error": null
       }
     },
