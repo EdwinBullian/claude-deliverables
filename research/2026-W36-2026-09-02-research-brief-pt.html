@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue Drainer — 2026-09-02 14:00 PT</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-09-02</div>
+<h1>Research Queue Drainer — 2026-09-02 14:00 PT</h1>
+<h2>Answer first</h2>
+<p>The research queue is empty — there is nothing to drain this run. Snapshot <code>queue_stats</code> reports <code>todo: 0, in_progress: 0, done: 0, flipped: 0</code>, and the liveness channel confirms it with the message "queue has no open items — nothing to drain." No <code>item</code> or <code>item_slug</code> was passed, so there is no topic to hunt sources for, no counter-evidence to gather, and no rubric to score. Per the heavy-depth protocol, padding a brief without a topic would violate the rule that flagged depth mismatches get named plainly rather than fabricated around. Recommend enqueuing at least one topic (or letting the intake desks flip questions in from the last week's briefings) before firing the drainer again.</p>
+<h2>Findings</h2>
+<ul><li><strong>Queue is genuinely empty, not stuck.</strong> The snapshot's <code>queue_stats</code> is all zeros across every state — todo, in_progress, done, flipped — which means this isn't a drainer that's failing to pick up work; there simply are no rows. (source: snapshot.queue_stats)</li><li><strong>Liveness agrees with the counter.</strong> The <code>liveness</code> array carries exactly one line, "queue has no open items — nothing to drain," so the queue reader and the counter are consistent — no split-brain to investigate. (source: snapshot.liveness[0])</li><li><strong>No topic was passed in.</strong> Both <code>item</code> and <code>item_slug</code> are empty strings, and <code>research</code> is <code>null</code>, so even if I wanted to run a heavy pass anyway there is no goal to anchor sources or claims against. (source: snapshot.item, snapshot.item_slug, snapshot.research)</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — every field in the snapshot points the same direction. The only open question is <em>why</em> the queue is empty on a Wednesday (market-scan day per Eddie's weekly cadence): either upstream intake desks didn't flip questions in this week, or the queue was drained clean in the last run and nothing new was added. That's an operational question for the queue writer, not a research question.</p>
+<h2>So-what for Eddie</h2>
+<p>Context digest wasn't provided, but the pattern is clear: the drainer fired on schedule and found no work. This is a cheap, correct no-op — not a failure. The signal worth acting on is that the upstream flippers (weekly review, earnings summaries, sector monitors) may not be feeding the queue. If Wednesday market-scan days keep coming up empty, the drainer isn't the problem; the intake side is.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ol><li>When did the queue last have a <code>todo</code> row, and which desk wrote it? (Check <code>queue_stats.done</code> history over the last 4 weeks.)</li><li>Are the monitor/earnings/sector desks actually enqueuing follow-ups, or are their outputs dead-ending in the digest instead of flipping into research?</li><li>Should the drainer's cron have a floor — e.g., if the queue has been empty for N consecutive runs, ping the intake desks instead of no-op'ing silently?</li></ol>
+</body>
+</html>
