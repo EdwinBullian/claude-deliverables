@@ -1,7 +1,7 @@
 {
   "sleep": {},
   "activity": {
-    "date_label": "Sep 08 — Today",
+    "date_label": "Sep 09 — Today",
     "today": {
       "rhr": null,
       "steps": null,
@@ -10,29 +10,29 @@
     },
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "steps": [
-        12841,
         19646,
         13461,
         14284,
         9874,
         null,
+        null,
         null
       ],
       "rhr": [
-        50,
         52,
         55,
         50,
         50,
+        null,
         null,
         null
       ],
@@ -52,21 +52,21 @@
       "Sat"
     ],
     "date_labels": [
-      "Wed 9/2",
       "Thu 9/3",
       "Fri 9/4",
       "Sat 9/5",
       "Sun 9/6",
       "Mon 9/7",
-      "Tue 9/8"
+      "Tue 9/8",
+      "Wed 9/9"
     ],
     "lift_min": [
       0,
       0,
       0,
       0,
-      0,
       80,
+      0,
       0
     ],
     "lift_cal": [
@@ -83,8 +83,8 @@
       "",
       "",
       "",
-      "",
       "Push",
+      "",
       ""
     ],
     "bball_min": [
@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Sep 8",
+    "date_label": "Sep 9",
     "curve_24h": [
       5,
       5,
@@ -156,79 +156,79 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Sep 2–8",
-    "macro_score_pct": 75,
+    "week_label": "Macros — Sep 3–9",
+    "macro_score_pct": 76,
     "labels": [
-      "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
-      "Tue"
+      "Tue",
+      "Wed"
     ],
     "dates": [
-      "Sep 2",
       "Sep 3",
       "Sep 4",
       "Sep 5",
       "Sep 6",
       "Sep 7",
-      "Sep 8"
+      "Sep 8",
+      "Sep 9"
     ],
     "protein_g": [
-      186,
       0,
       0,
       0,
       186,
       152,
-      163
+      163,
+      0
     ],
     "carbs_g": [
-      168,
       0,
       0,
       0,
       86,
       131,
-      222
+      222,
+      0
     ],
     "fat_g": [
-      86,
       0,
       0,
       0,
       89,
       79,
-      122
+      122,
+      0
     ],
     "has_data": [
-      true,
       false,
       false,
       false,
       true,
       true,
-      true
+      true,
+      false
     ],
     "target_kcal": 2400,
     "target_protein_g": 150,
-    "footer": "Target: 2,400 kcal · 150g protein · 4/7 days logged"
+    "footer": "Target: 2,400 kcal · 150g protein · 3/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 75,
-    "days_logged": 4,
+    "macro_score_pct": 76,
+    "days_logged": 3,
     "days_total": 7,
-    "avg_protein_g": 171,
-    "avg_carbs_g": 151,
-    "avg_fat_g": 94,
+    "avg_protein_g": 167,
+    "avg_carbs_g": 146,
+    "avg_fat_g": 96,
     "target_kcal": 2400,
     "target_protein_g": 150,
     "nutrients": [
       {
-        "pct": 35,
+        "pct": 34,
         "label": "Fiber",
         "sub": "13g / 38g",
         "upper_limit": false
@@ -236,79 +236,79 @@
       {
         "pct": 62,
         "label": "Calcium",
-        "sub": "627mg / 1.0g",
+        "sub": "624mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 54,
+        "pct": 53,
         "label": "Magnesium",
-        "sub": "219mg / 400mg",
+        "sub": "213mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 59,
+        "pct": 58,
         "label": "Potassium",
         "sub": "2.8g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 105,
+        "pct": 109,
         "label": "Sodium",
-        "sub": "2.4g / 2.3g",
+        "sub": "2.5g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 171,
+        "pct": 161,
         "label": "Iron",
-        "sub": "14mg / 8mg",
+        "sub": "13mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 121,
+        "pct": 135,
         "label": "Vitamin A",
-        "sub": "1096mcg / 900mcg",
+        "sub": "1217mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 40,
+        "pct": 35,
         "label": "Vitamin C",
-        "sub": "36mg / 90mg",
+        "sub": "32mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "4 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "3 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Sep 8 — Today",
-    "today_oz": 19.7,
+    "date_label": "Sep 9 — Today",
+    "today_oz": 0.0,
     "target_oz": 130,
-    "pct": 15,
+    "pct": 0,
     "week": {
       "labels": [
-        "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
-        "Tue"
+        "Tue",
+        "Wed"
       ],
       "oz": [
-        26,
         0,
         0,
         0,
         24,
         22,
-        20
+        20,
+        0
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-09-08T22:00:04-07:00",
-    "last_updated_label": "Sep 8, 10:00 PM PST",
+    "last_updated_iso": "2026-09-09T10:00:06-07:00",
+    "last_updated_label": "Sep 9, 10:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-09-08T22:00:04-07:00",
+    "last_body_data_iso": "2026-09-09T10:00:06-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-09-08T22:00:05-07:00",
+        "last_ok_iso": "2026-09-09T10:00:06-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-09-08T22:00:09-07:00",
+        "last_ok_iso": "2026-09-09T10:00:09-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-09-08T22:00:09-07:00",
+        "last_ok_iso": "2026-09-09T10:00:08-07:00",
         "error": null
       }
     },
