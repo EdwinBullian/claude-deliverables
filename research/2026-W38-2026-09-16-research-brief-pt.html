@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — 2026-09-16 14:00 PT</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-09-16</div>
+<h1>Research Queue — 2026-09-16 14:00 PT</h1>
+<h2>Answer first</h2>
+<p>The research queue is empty; there is no topic to drain this run. The producer's <code>liveness</code> field reports <code>"queue has no open items — nothing to drain"</code> and <code>queue_stats</code> shows 0 todo / 0 in-progress / 0 done / 0 flipped, so no brief is owed. There is also no core-flagged depth change to honor — the core did not hand us a topic at all. The correct output today is an idle memo, not a padded deep-dive on a topic that was never queued. Next run will produce a brief the moment a topic appears in <code>snapshot.item</code>.</p>
+<h2>Findings</h2>
+<ul><li><strong>Queue is idle by explicit signal, not by inference.</strong> The producer snapshot's <code>liveness</code> array contains a single string: <code>"queue has no open items — nothing to drain"</code>. That is the framework's canonical way of telling this desk to stand down for the run. (Source: producer snapshot, <code>liveness[0]</code>.)</li><li><strong>Counters corroborate the liveness message.</strong> <code>queue_stats = {todo: 0, in_progress: 0, done: 0, flipped: 0}</code>. All four buckets are zero, so there is no in-flight item that was mis-classified as "done" and no stalled item sitting in-progress waiting on this desk. (Source: producer snapshot, <code>queue_stats</code>.)</li><li><strong>No topic was passed in.</strong> <code>snapshot.item</code> and <code>snapshot.item_slug</code> are empty strings and <code>snapshot.research</code> is null, so there is no goal, no context_digest, and no prior research state to extend. Attempting to synthesize a topic here would violate the desk's one-topic-per-run contract. (Source: producer snapshot, <code>item</code> / <code>item_slug</code> / <code>research</code>.)</li><li><strong>No depth override was issued.</strong> The core is the only party that can flag "this topic needs a different depth," and the payload contains no such flag. Absent a topic <em>and</em> absent a depth signal, there is nothing to escalate or de-escalate. (Source: producer snapshot — full payload inspected; no <code>depth</code> or <code>override</code> key present.)</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None. The liveness message and the counters agree, and there is no third source to conflict with them. The only latent uncertainty is upstream: if the queue <em>should</em> have had items today and doesn't, that is a producer/steward problem, not a research-desk conclusion — this desk cannot distinguish "genuinely nothing queued" from "queue writer failed silently" without a separate liveness signal on the writer itself. Flagging as a next question rather than a claim.</p>
+<h2>So-what for Eddie</h2>
+<p>No action for you. The research desk ran, saw an empty queue, and stood down cleanly — that is the designed behavior, not a miss. You should expect the next run (per the Tue research cadence and any ad-hoc topics you drop in) to produce a real brief the moment <code>snapshot.item</code> is populated. If you were expecting a specific topic to have been queued by now and it wasn't, that's worth a one-line check on the queue writer, not on this desk.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ul><li>Is the queue writer itself healthy? An empty queue and a broken writer look identical from here. Worth a producer-side liveness check that reports last-write timestamp, not just current depth.</li><li>Should idle runs be suppressed entirely (no memo shipped) rather than shipping an idle memo? Current contract requires a memo; if the framework would rather see silence, the producer should skip the desk call when <code>liveness</code> says nothing to drain.</li></ul>
+</body>
+</html>
