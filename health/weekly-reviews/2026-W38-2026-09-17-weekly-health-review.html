@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Health Review &amp; Plan — Week ending 2026-09-16 (ET)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-09-17</div>
+<h1>Weekly Health Review &amp; Plan — Week ending 2026-09-16 (ET)</h1>
+<p><strong>Written:</strong> 2026-09-17 10:29 ET · Producer: health-weekly desk</p>
+<blockquote>Note: last night (2026-09-17) not yet in the export; this review covers through the night ending 2026-09-16. The morning job is firing before the night rolls into Apple Health — worth moving later.</blockquote>
+<hr>
+<h2>1. Sleep &amp; Recovery</h2>
+<p>Sleep quality over the trailing week is excellent: <strong>7-night average score 94.5</strong> on <strong>472.9 min (~7h 53m) of sleep per night</strong>, with <strong>0 nights under 6h in the last 3</strong>. Last-night specifics (score, deep, REM, awakenings) are null — the export didn't have them yet at run time, so no single-night breakdown this week.</p>
+<p>Resting HR is drifting slightly in the wrong direction as a point-in-time reading: <strong>RHR last = 49.0</strong>, above the <strong>7-day average of 47.7</strong> (opinion/inference: one day above a 7-day mean is noise, not a trend — flag only if it persists 3+ days). HRV is a bright spot — <strong>last 99.2 vs 7-day avg 75.5</strong>, meaning autonomic recovery is running well ahead of baseline (opinion/inference).</p>
+<p>Schedule consistency is the one soft signal: sleep <strong>midpoint stddev is 38.4 min over the last 14 nights (12 nights of data)</strong> — roughly ±38 min of drift in when the middle of your sleep lands. Not concerning at ND, but tightening that would compound with the already-good duration.</p>
+<h2>2. Nutrition</h2>
+<p>This is the load-bearing problem of the week. Targets are <strong>2,500 kcal / 165 g protein</strong>. Actuals:</p>
+<ul><li><strong>7-day avg kcal: 1,669.5</strong> — a <strong>~830 kcal/day deficit vs target</strong>, ~33% under.</li><li><strong>7-day avg protein: 125.2 g</strong> — <strong>~40 g under target</strong>, protein miss streak = 1 day.</li><li><strong>Yesterday: 258.8 kcal, 13.5 g protein, logged = true.</strong> That is a logging-quality issue, not a real intake — a single small meal got captured and the rest of the day did not. <code>logging_gap_days = 0</code> says Cronometer thinks every day is logged, so nothing will nudge you.</li></ul>
+<p>Micro callout: with training volume near zero this week (see §3), the kcal deficit is less physiologically costly than it looks — but you cannot build anything on 1,670 kcal and 125 g protein averaged over a week. Get the average back to target before adding training load, not after.</p>
+<h2>3. Training</h2>
+<p><strong>0 sessions in the last 7 days. 7 days since last session.</strong> Last logged workout was <strong>2026-09-10, basketball, 38 min, avg HR 150.2, peak 177</strong> (inferred from HR, high confidence). No lift session in the snapshot's <code>last_session.top_lifts</code> — empty array — so there is no top-lift progression to report this week. No workout scheduled for today.</p>
+<p>Split coverage this week: none. That is the first full off-week of the ND semester in this data.</p>
+<h2>4. Body</h2>
+<p>Not tracked yet — snapshot carries no weight or measurements this week.</p>
+<hr>
+<h2>Next Week — Plan</h2>
+<p><strong>Training focus (home-gym equipment only: dumbbells to 100 lb, flat bench, pull-up bar, bands).</strong> Four sessions, back on the horse without going scorched-earth after a full week off:</p>
+<ul><li><strong>Mon — Push (DB bench, DB overhead press, band flyes, DB triceps ext.)</strong></li><li><strong>Wed — Pull (pull-ups to failure, DB row, band face-pulls, DB curls)</strong></li><li><strong>Fri — Legs (DB goblet squat, DB RDL, DB split squat, band abductions)</strong></li><li><strong>Sat — Basketball or a full-body dumbbell circuit if courts are booked</strong></li></ul>
+<p>Sets/reps intentionally not prescribed: the snapshot carries <strong>no current top-lift data</strong> (opinion/inference), so pinning weights would be invented. First session back: pick a weight that feels like a 7/10 for 3×8–10 and log it — that becomes next week's baseline.</p>
+<p><strong>Nutrition adjustment (one thing):</strong> fix the logging first, then the intake. Log <strong>breakfast, lunch, dinner, and one snack every day</strong> — four entries, not one. Once logging is honest, aim the 7-day avg at <strong>≥2,300 kcal / ≥155 g protein</strong> by end of week (a first step toward the 2,500 / 165 target — don't jump the full 830 kcal overnight).</p>
+<p><strong>Recovery priority (one thing):</strong> tighten sleep midpoint. Target <strong>±20 min of a fixed lights-out</strong> (pick 23:00 or 23:30 ET and hold it Mon–Fri). The duration and score are already excellent; consistency is the only free upside left.</p>
+<hr>
+<h2>5. Next Week — Meal Prep</h2>
+<p>Four batch-cookable meals aimed at the <strong>2,500 kcal / 165 g protein</strong> targets. Prep Sunday, eat Mon–Fri. Ordinary kitchen — sheet pan, one pot, blender.</p>
+<ol><li><strong>Chicken + rice + broccoli tray (5 servings).</strong> 2.5 lb chicken thigh, 3 cups jasmine rice (dry), 2 heads broccoli, olive oil, garlic, soy sauce. <strong>Per serving: ~750 kcal, ~55 g protein.</strong> Sheet pan chicken, rice cooker for rice, roast broccoli.</li><li><strong>Beef &amp; bean chili (6 servings, freezer-safe).</strong> 1.5 lb ground beef 85/15, 2 cans black beans, 2 cans kidney beans, 2 cans diced tomato, onion, chili powder, cumin. <strong>Per serving: ~550 kcal, ~35 g protein.</strong> One pot, 45 min.</li><li><strong>Overnight oats jars (5 jars — grab-and-go breakfast).</strong> 1 cup rolled oats, 1 cup milk, 1 scoop whey, 1 tbsp peanut butter, 1 banana per jar. <strong>Per jar: ~520 kcal, ~35 g protein.</strong> No cooking.</li><li><strong>Greek yogurt + granola + berries snack cups (5 cups).</strong> 1 cup 2% Greek yogurt, ½ cup granola, ½ cup mixed berries, drizzle honey per cup. <strong>Per cup: ~380 kcal, ~22 g protein.</strong> No cooking.</li></ol>
+<p><strong>Daily hit against targets:</strong> one tray meal (~750/55) + one chili (~550/35) + one oats jar (~520/35) + one yogurt cup (~380/22) = <strong>~2,200 kcal, ~147 g protein</strong>. Backfill the last 300 kcal / 18 g with a shake, extra rice, or a second yogurt cup — do not skip it and call the day done. If you want a full plan, run /meal-prep.</p>
+<hr>
+<p><em>No medical claims. Everything above is a training/nutrition observation from the week's data; nothing here suggests anything worth a professional look.</em></p>
+</body>
+</html>
