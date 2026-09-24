@@ -1,52 +1,39 @@
 {
-  "sleep": {
-    "date_label": "Sep 22 — Last Synced",
-    "score": 91,
-    "total_minutes": 420,
-    "total_label": "7 h 0 m",
-    "deep_minutes": 52,
-    "light_minutes": 252,
-    "rem_minutes": 116,
-    "awake_minutes": 9,
-    "bedtime_label": "2:01 AM",
-    "wake_label": "9:11 AM",
-    "resting_hr": null,
-    "awakenings": null
-  },
+  "sleep": {},
   "activity": {
-    "date_label": "Sep 23 — Today",
+    "date_label": "Sep 24 — Today",
     "today": {
       "rhr": null,
-      "steps": 341,
-      "avg_hr": 94,
-      "sleep_score": 91
+      "steps": null,
+      "avg_hr": null,
+      "sleep_score": null
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        15077,
         13105,
         14244,
         14726,
         15051,
         21970,
-        341
+        341,
+        null
       ],
       "rhr": [
-        48,
         45,
         50,
         48,
         75,
         66,
+        null,
         null
       ],
       "today_index": 6
@@ -65,17 +52,17 @@
       "Sat"
     ],
     "date_labels": [
-      "Thu 9/17",
       "Fri 9/18",
       "Sat 9/19",
       "Sun 9/20",
       "Mon 9/21",
       "Tue 9/22",
-      "Wed 9/23"
+      "Wed 9/23",
+      "Thu 9/24"
     ],
     "lift_min": [
-      0,
       85,
+      0,
       0,
       0,
       0,
@@ -92,8 +79,8 @@
       0
     ],
     "lift_type": [
-      "",
       "Upper",
+      "",
       "",
       "",
       "",
@@ -139,10 +126,8 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Sep 23",
+    "date_label": "Sep 24",
     "curve_24h": [
-      5,
-      5,
       5,
       5,
       5,
@@ -152,8 +137,10 @@
       5,
       28,
       18,
-      18,
-      18,
+      14,
+      20,
+      20,
+      20,
       65,
       72,
       78,
@@ -166,28 +153,28 @@
       46,
       32
     ],
-    "footer": "Wake 9:11 AM · No workout · Natural curve"
+    "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Sep 17–23",
+    "week_label": "Macros — Sep 18–24",
     "macro_score_pct": 0,
     "labels": [
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed"
+      "Wed",
+      "Thu"
     ],
     "dates": [
-      "Sep 17",
       "Sep 18",
       "Sep 19",
       "Sep 20",
       "Sep 21",
       "Sep 22",
-      "Sep 23"
+      "Sep 23",
+      "Sep 24"
     ],
     "protein_g": [
       0,
@@ -292,19 +279,19 @@
     "footer": "0 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Sep 23 — Today",
+    "date_label": "Sep 24 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "oz": [
         0,
@@ -320,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-09-23T19:00:05-07:00",
-    "last_updated_label": "Sep 23, 7:00 PM PST",
+    "last_updated_iso": "2026-09-24T04:00:04-07:00",
+    "last_updated_label": "Sep 24, 4:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-09-23T19:00:05-07:00",
+    "last_body_data_iso": "2026-09-24T04:00:04-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-09-23T19:00:06-07:00",
+        "last_ok_iso": "2026-09-24T04:00:04-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-09-23T19:00:06-07:00",
+        "last_ok_iso": "2026-09-24T04:00:05-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-09-23T19:00:06-07:00",
+        "last_ok_iso": "2026-09-24T04:00:05-07:00",
         "error": null
       }
     },
