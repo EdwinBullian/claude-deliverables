@@ -225,9 +225,9 @@
       false,
       false
     ],
-    "target_kcal": 2400,
-    "target_protein_g": 150,
-    "footer": "Target: 2,400 kcal · 150g protein · 0/7 days logged"
+    "target_kcal": 2500,
+    "target_protein_g": 165,
+    "footer": "Target: 2,500 kcal · 165g protein · 0/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
@@ -237,8 +237,8 @@
     "avg_protein_g": 0,
     "avg_carbs_g": 0,
     "avg_fat_g": 0,
-    "target_kcal": 2400,
-    "target_protein_g": 150,
+    "target_kcal": 2500,
+    "target_protein_g": 165,
     "nutrients": [
       {
         "pct": 0,
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-09-26T13:00:05-07:00",
-    "last_updated_label": "Sep 26, 1:00 PM PST",
+    "last_updated_iso": "2026-09-26T16:00:05-07:00",
+    "last_updated_label": "Sep 26, 4:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-09-26T13:00:05-07:00",
+    "last_body_data_iso": "2026-09-26T16:00:05-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-09-26T13:00:06-07:00",
+        "last_ok_iso": "2026-09-26T16:00:06-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-09-26T13:00:06-07:00",
+        "last_ok_iso": "2026-09-26T16:00:06-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-09-26T13:00:06-07:00",
+        "last_ok_iso": "2026-09-26T16:00:06-07:00",
         "error": null
       }
     },
