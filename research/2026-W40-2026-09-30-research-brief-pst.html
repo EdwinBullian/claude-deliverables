@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Queue — Idle Run (2026-09-30, 07:00 PST)</title>
+<style>
+:root { --bg: #e4d9c4; --card: #dbd0ba; --border: #c8bfa8; --text: #3d3d3d; --heading: #1a1a1a; --accent: #1b3a5c; --accent2: #4a7c59; --warn: #a67c3d; --danger: #9b3b3b; --subtle: #7a7568; --good: #4a7c59; --bad: #9b3b3b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; font-size: 1rem; }
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+h1 { color: var(--heading); font-size: 1.9rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; font-weight: 700; }
+h2 { color: var(--accent); font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; font-weight: 600; }
+h3 { color: var(--heading); font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; font-weight: 600; }
+p { margin-bottom: 0.8rem; color: var(--text); }
+ul, ol { margin: 0.4rem 0 0.8rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--heading); }
+em { font-style: italic; }
+code { font-family: 'SFMono-Regular', Consolas, monospace; background: rgba(27,58,92,0.08); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.9em; }
+blockquote { border-left: 4px solid var(--accent); background: var(--card); padding: 0.5rem 1rem; margin: 0.6rem 0 0.9rem; border-radius: 0 6px 6px 0; color: var(--subtle); }
+hr { border: none; border-top: 1px solid var(--border); margin: 1.4rem 0; }
+a { color: var(--accent); }
+.meta { color: var(--subtle); font-size: 0.84rem; margin-bottom: 1.5rem; font-family: -apple-system, sans-serif; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1.2rem; font-size: 0.87rem; font-family: -apple-system, sans-serif; }
+th { background: var(--accent); color: #faf8f4; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(219,208,186,0.4); }
+</style>
+</head>
+<body>
+
+<div class="meta">2026-09-30</div>
+<h1>Research Queue — Idle Run (2026-09-30, 07:00 PST)</h1>
+<h2>Answer first</h2>
+<p>The research queue is empty — zero items in <code>todo</code>, <code>in_progress</code>, <code>done</code>, or <code>flipped</code> — so there is no topic to drain this cycle. The producer contract requires one topic per run with sources, excerpts, and counter-evidence, and none of those can be manufactured from an empty queue without violating the citations-mandatory rule. Rather than pad a brief on a topic Eddie didn't ask for, this run reports the idle state and stops. No web searches were executed because there is no GOAL to anchor sources to. Next cycle will fire normally when a topic is enqueued.</p>
+<h2>Findings</h2>
+<ul><li>Snapshot <code>queue_stats</code> returned <code>{todo: 0, in_progress: 0, done: 0, flipped: 0}</code>, and the <code>liveness</code> array explicitly says "queue has no open items — nothing to drain." That is the entire signal.</li><li><code>item</code>, <code>item_slug</code>, and <code>research</code> are all empty/null, confirming no partial or stalled work to resume.</li></ul>
+<h2>Disagreements &amp; uncertainty</h2>
+<p>None — the snapshot is unambiguous. The only judgment call is whether to fabricate a topic; the domain rules ("citations mandatory," "counter-evidence is part of the deliverable") make that the wrong move.</p>
+<h2>So-what for Eddie</h2>
+<p>Queue-drainer ran clean and cost nothing. If you expected a brief today, the enqueue step upstream didn't fire — check whichever desk or skill was supposed to add the topic (most likely a Mon/Tue/Wed scheduled task or a manual <code>/research</code> add). Otherwise, no action.</p>
+<h2>Next questions worth a deeper pass</h2>
+<ul><li>Is the queue-add pipeline healthy, or did a scheduled task silently fail to enqueue this week's research topic?</li><li>Should the idle-run behavior auto-ping the scheduler owner (or Eddie) after N consecutive empty cycles?</li></ul>
+</body>
+</html>
