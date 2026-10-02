@@ -1,6 +1,6 @@
 {
   "sleep": {
-    "date_label": "Oct 01 — Last Night",
+    "date_label": "Oct 01 — Last Synced",
     "score": 96,
     "total_minutes": 502,
     "total_label": "8 h 22 m",
@@ -10,44 +10,44 @@
     "awake_minutes": 9,
     "bedtime_label": "12:47 AM",
     "wake_label": "9:37 AM",
-    "resting_hr": 50,
+    "resting_hr": null,
     "awakenings": null
   },
   "activity": {
-    "date_label": "Oct 01 — Today",
+    "date_label": "Oct 02 — Today",
     "today": {
-      "rhr": 50,
-      "steps": 10406,
-      "avg_hr": 72,
+      "rhr": null,
+      "steps": null,
+      "avg_hr": null,
       "sleep_score": 96
     },
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "steps": [
-        11415,
         13770,
         18143,
         12626,
         17266,
         14583,
-        10406
+        12190,
+        null
       ],
       "rhr": [
-        55,
         54,
         55,
         52,
         50,
         51,
-        50
+        50,
+        null
       ],
       "today_index": 6
     },
@@ -65,21 +65,21 @@
       "Sat"
     ],
     "date_labels": [
-      "Fri 9/25",
       "Sat 9/26",
       "Sun 9/27",
       "Mon 9/28",
       "Tue 9/29",
       "Wed 9/30",
-      "Thu 10/1"
+      "Thu 10/1",
+      "Fri 10/2"
     ],
     "lift_min": [
       0,
       0,
-      0,
       75,
       75,
       0,
+      75,
       75
     ],
     "lift_cal": [
@@ -94,15 +94,15 @@
     "lift_type": [
       "",
       "",
-      "",
       "Upper",
       "Lower",
       "",
-      "Upper"
+      "Upper",
+      "Lower"
     ],
     "bball_min": [
-      0,
       51.0,
+      0,
       0,
       0,
       0,
@@ -139,7 +139,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Oct 1",
+    "date_label": "Oct 2",
     "curve_24h": [
       5,
       5,
@@ -169,33 +169,33 @@
     "footer": "Wake 9:37 AM · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Sep 25–1",
+    "week_label": "Macros — Sep 26–2",
     "macro_score_pct": 32,
     "labels": [
-      "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
       "Wed",
-      "Thu"
+      "Thu",
+      "Fri"
     ],
     "dates": [
-      "Sep 25",
       "Sep 26",
       "Sep 27",
       "Sep 28",
       "Sep 29",
       "Sep 30",
-      "Oct 1"
+      "Oct 1",
+      "Oct 2"
     ],
     "protein_g": [
       0,
       0,
       0,
       0,
-      0,
       296,
+      0,
       0
     ],
     "carbs_g": [
@@ -203,8 +203,8 @@
       0,
       0,
       0,
-      0,
       89,
+      0,
       0
     ],
     "fat_g": [
@@ -212,8 +212,8 @@
       0,
       0,
       0,
-      0,
       59,
+      0,
       0
     ],
     "has_data": [
@@ -221,8 +221,8 @@
       false,
       false,
       false,
-      false,
       true,
+      false,
       false
     ],
     "target_kcal": 2500,
@@ -292,27 +292,27 @@
     "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Oct 1 — Today",
+    "date_label": "Oct 2 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
         "Wed",
-        "Thu"
+        "Thu",
+        "Fri"
       ],
       "oz": [
         0,
         0,
         0,
         0,
-        0,
         23,
+        0,
         0
       ],
       "today_index": 6
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-01T19:00:04-07:00",
-    "last_updated_label": "Oct 1, 7:00 PM PST",
+    "last_updated_iso": "2026-10-02T04:00:07-07:00",
+    "last_updated_label": "Oct 2, 4:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-01T19:00:04-07:00",
+    "last_body_data_iso": "2026-10-02T04:00:07-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T19:00:05-07:00",
+        "last_ok_iso": "2026-10-02T04:00:08-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T19:00:07-07:00",
+        "last_ok_iso": "2026-10-02T04:00:09-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T19:00:05-07:00",
+        "last_ok_iso": "2026-10-02T04:00:07-07:00",
         "error": null
       }
     },
