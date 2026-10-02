@@ -1,24 +1,24 @@
 {
   "sleep": {
-    "date_label": "Sep 30 — Last Synced",
+    "date_label": "Oct 01 — Last Night",
     "score": 96,
-    "total_minutes": 456,
-    "total_label": "7 h 36 m",
-    "deep_minutes": 54,
-    "light_minutes": 253,
-    "rem_minutes": 149,
-    "awake_minutes": 15,
-    "bedtime_label": "1:09 AM",
-    "wake_label": "9:11 AM",
-    "resting_hr": null,
+    "total_minutes": 502,
+    "total_label": "8 h 22 m",
+    "deep_minutes": 57,
+    "light_minutes": 325,
+    "rem_minutes": 120,
+    "awake_minutes": 9,
+    "bedtime_label": "12:47 AM",
+    "wake_label": "9:37 AM",
+    "resting_hr": 50,
     "awakenings": null
   },
   "activity": {
     "date_label": "Oct 01 — Today",
     "today": {
-      "rhr": null,
-      "steps": 412,
-      "avg_hr": 56,
+      "rhr": 50,
+      "steps": 10406,
+      "avg_hr": 72,
       "sleep_score": 96
     },
     "week": {
@@ -38,7 +38,7 @@
         12626,
         17266,
         14583,
-        412
+        10406
       ],
       "rhr": [
         55,
@@ -47,7 +47,7 @@
         52,
         50,
         51,
-        null
+        50
       ],
       "today_index": 6
     },
@@ -166,7 +166,7 @@
       46,
       32
     ],
-    "footer": "Wake 9:11 AM · No workout · Natural curve"
+    "footer": "Wake 9:37 AM · No workout · Natural curve"
   },
   "macros_week": {
     "week_label": "Macros — Sep 25–1",
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-01T16:00:04-07:00",
-    "last_updated_label": "Oct 1, 4:00 PM PST",
+    "last_updated_iso": "2026-10-01T19:00:04-07:00",
+    "last_updated_label": "Oct 1, 7:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-01T16:00:04-07:00",
+    "last_body_data_iso": "2026-10-01T19:00:04-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T16:00:05-07:00",
+        "last_ok_iso": "2026-10-01T19:00:05-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T16:00:07-07:00",
+        "last_ok_iso": "2026-10-01T19:00:07-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-01T16:00:05-07:00",
+        "last_ok_iso": "2026-10-01T19:00:05-07:00",
         "error": null
       }
     },
