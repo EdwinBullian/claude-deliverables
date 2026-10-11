@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Oct 10",
+    "date_label": "Oct 11",
     "curve_24h": [
       5,
       5,
@@ -156,29 +156,29 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Oct 4–10",
+    "week_label": "Macros — Oct 5–11",
     "macro_score_pct": 68,
     "labels": [
-      "Sun",
       "Mon",
       "Tue",
       "Wed",
       "Thu",
       "Fri",
-      "Sat"
+      "Sat",
+      "Sun"
     ],
     "dates": [
-      "Oct 4",
       "Oct 5",
       "Oct 6",
       "Oct 7",
       "Oct 8",
       "Oct 9",
-      "Oct 10"
+      "Oct 10",
+      "Oct 11"
     ],
     "protein_g": [
-      0,
       217,
+      0,
       0,
       0,
       0,
@@ -186,8 +186,8 @@
       0
     ],
     "carbs_g": [
-      0,
       181,
+      0,
       0,
       0,
       0,
@@ -195,8 +195,8 @@
       0
     ],
     "fat_g": [
-      0,
       117,
+      0,
       0,
       0,
       0,
@@ -204,8 +204,8 @@
       0
     ],
     "has_data": [
-      false,
       true,
+      false,
       false,
       false,
       false,
@@ -279,23 +279,23 @@
     "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Oct 10 — Today",
+    "date_label": "Oct 11 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Sun",
         "Mon",
         "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun"
       ],
       "oz": [
-        0,
         77,
+        0,
         0,
         0,
         0,
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-10T19:00:05-07:00",
-    "last_updated_label": "Oct 10, 7:00 PM PST",
+    "last_updated_iso": "2026-10-11T04:00:05-07:00",
+    "last_updated_label": "Oct 11, 4:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-10T19:00:05-07:00",
+    "last_body_data_iso": "2026-10-11T04:00:05-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
-        "ok": true,
+        "ok": false,
         "last_ok_iso": "2026-10-10T19:00:06-07:00",
-        "error": null
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 57h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-10T19:00:07-07:00",
+        "last_ok_iso": "2026-10-11T04:00:07-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-10T19:00:05-07:00",
+        "last_ok_iso": "2026-10-11T04:00:05-07:00",
         "error": null
       }
     },
