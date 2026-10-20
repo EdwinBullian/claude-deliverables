@@ -139,7 +139,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Oct 19",
+    "date_label": "Oct 20",
     "curve_24h": [
       5,
       5,
@@ -169,159 +169,159 @@
     "footer": "Wake 8:06 AM · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Oct 13–19",
-    "macro_score_pct": 34,
+    "week_label": "Macros — Oct 14–20",
+    "macro_score_pct": 82,
     "labels": [
-      "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
-      "Mon"
+      "Mon",
+      "Tue"
     ],
     "dates": [
-      "Oct 13",
       "Oct 14",
       "Oct 15",
       "Oct 16",
       "Oct 17",
       "Oct 18",
-      "Oct 19"
+      "Oct 19",
+      "Oct 20"
     ],
     "protein_g": [
-      75,
       0,
       0,
       0,
       0,
       0,
-      168
+      168,
+      0
     ],
     "carbs_g": [
-      71,
       0,
       0,
       0,
       0,
       0,
-      116
+      116,
+      0
     ],
     "fat_g": [
-      51,
       0,
       0,
       0,
       0,
       0,
-      102
+      102,
+      0
     ],
     "has_data": [
+      false,
+      false,
+      false,
+      false,
+      false,
       true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      true
+      false
     ],
     "target_kcal": 2500,
     "target_protein_g": 165,
-    "footer": "Target: 2,500 kcal · 165g protein · 2/7 days logged"
+    "footer": "Target: 2,500 kcal · 165g protein · 1/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 34,
-    "days_logged": 2,
+    "macro_score_pct": 82,
+    "days_logged": 1,
     "days_total": 7,
-    "avg_protein_g": 121,
-    "avg_carbs_g": 93,
-    "avg_fat_g": 76,
+    "avg_protein_g": 168,
+    "avg_carbs_g": 116,
+    "avg_fat_g": 102,
     "target_kcal": 2500,
     "target_protein_g": 165,
     "nutrients": [
       {
-        "pct": 30,
+        "pct": 56,
         "label": "Fiber",
-        "sub": "12g / 38g",
+        "sub": "21g / 38g",
         "upper_limit": false
       },
       {
-        "pct": 27,
+        "pct": 42,
         "label": "Calcium",
-        "sub": "276mg / 1.0g",
+        "sub": "425mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 38,
+        "pct": 66,
         "label": "Magnesium",
-        "sub": "153mg / 400mg",
+        "sub": "267mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 57,
+        "pct": 109,
         "label": "Potassium",
-        "sub": "2.7g / 4.7g",
+        "sub": "5.1g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 84,
+        "pct": 28,
         "label": "Sodium",
-        "sub": "2.0g / 2.3g",
+        "sub": "652mg / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 106,
+        "pct": 168,
         "label": "Iron",
-        "sub": "9mg / 8mg",
+        "sub": "13mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 55,
+        "pct": 107,
         "label": "Vitamin A",
-        "sub": "497mcg / 900mcg",
+        "sub": "967mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 19,
+        "pct": 37,
         "label": "Vitamin C",
-        "sub": "17mg / 90mg",
+        "sub": "33mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "2 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Oct 19 — Today",
-    "today_oz": 29.8,
+    "date_label": "Oct 20 — Today",
+    "today_oz": 0.0,
     "target_oz": 130,
-    "pct": 23,
+    "pct": 0,
     "week": {
       "labels": [
-        "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
-        "Mon"
+        "Mon",
+        "Tue"
       ],
       "oz": [
-        3,
         0,
         0,
         0,
         0,
         0,
-        30
+        30,
+        0
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-19T22:02:13-07:00",
-    "last_updated_label": "Oct 19, 10:02 PM PST",
+    "last_updated_iso": "2026-10-20T07:02:06-07:00",
+    "last_updated_label": "Oct 20, 7:02 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-19T22:02:13-07:00",
+    "last_body_data_iso": "2026-10-20T07:02:06-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": false,
         "last_ok_iso": "2026-10-17T19:00:04-07:00",
-        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1069h old (stale)"
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1078h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-19T22:02:16-07:00",
+        "last_ok_iso": "2026-10-20T07:02:08-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-19T22:02:14-07:00",
+        "last_ok_iso": "2026-10-20T07:02:06-07:00",
         "error": null
       }
     },
