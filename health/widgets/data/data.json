@@ -170,7 +170,7 @@
   },
   "macros_week": {
     "week_label": "Macros — Oct 15–21",
-    "macro_score_pct": 44,
+    "macro_score_pct": 78,
     "labels": [
       "Thu",
       "Fri",
@@ -196,7 +196,7 @@
       0,
       168,
       0,
-      86
+      139
     ],
     "carbs_g": [
       0,
@@ -205,7 +205,7 @@
       0,
       116,
       0,
-      100
+      129
     ],
     "fat_g": [
       0,
@@ -214,7 +214,7 @@
       0,
       102,
       0,
-      75
+      91
     ],
     "has_data": [
       false,
@@ -231,12 +231,12 @@
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 44,
+    "macro_score_pct": 78,
     "days_logged": 2,
     "days_total": 7,
-    "avg_protein_g": 127,
-    "avg_carbs_g": 108,
-    "avg_fat_g": 88,
+    "avg_protein_g": 153,
+    "avg_carbs_g": 122,
+    "avg_fat_g": 96,
     "target_kcal": 2500,
     "target_protein_g": 165,
     "nutrients": [
@@ -247,39 +247,39 @@
         "upper_limit": false
       },
       {
-        "pct": 42,
+        "pct": 43,
         "label": "Calcium",
-        "sub": "421mg / 1.0g",
+        "sub": "432mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 53,
+        "pct": 64,
         "label": "Magnesium",
-        "sub": "216mg / 400mg",
+        "sub": "258mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 77,
+        "pct": 84,
         "label": "Potassium",
-        "sub": "3.6g / 4.7g",
+        "sub": "4.0g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 37,
+        "pct": 50,
         "label": "Sodium",
-        "sub": "860mg / 2.3g",
+        "sub": "1.2g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 160,
+        "pct": 181,
         "label": "Iron",
-        "sub": "13mg / 8mg",
+        "sub": "15mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 67,
+        "pct": 128,
         "label": "Vitamin A",
-        "sub": "609mcg / 900mcg",
+        "sub": "1159mcg / 900mcg",
         "upper_limit": false
       },
       {
@@ -293,9 +293,9 @@
   },
   "hydration": {
     "date_label": "Oct 21 — Today",
-    "today_oz": 16.7,
+    "today_oz": 20.5,
     "target_oz": 130,
-    "pct": 13,
+    "pct": 16,
     "week": {
       "labels": [
         "Thu",
@@ -313,15 +313,15 @@
         0,
         30,
         0,
-        17
+        20
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-21T19:02:05-07:00",
-    "last_updated_label": "Oct 21, 7:02 PM PST",
+    "last_updated_iso": "2026-10-21T22:02:05-07:00",
+    "last_updated_label": "Oct 21, 10:02 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-21T19:02:05-07:00",
+    "last_body_data_iso": "2026-10-21T22:02:05-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": false,
         "last_ok_iso": "2026-10-17T19:00:04-07:00",
-        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1114h old (stale)"
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1117h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-21T19:02:08-07:00",
+        "last_ok_iso": "2026-10-21T22:02:08-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-21T19:02:06-07:00",
+        "last_ok_iso": "2026-10-21T22:02:06-07:00",
         "error": null
       }
     },
