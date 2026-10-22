@@ -170,7 +170,7 @@
   },
   "macros_week": {
     "week_label": "Macros — Oct 15–21",
-    "macro_score_pct": 82,
+    "macro_score_pct": 44,
     "labels": [
       "Thu",
       "Fri",
@@ -196,7 +196,7 @@
       0,
       168,
       0,
-      0
+      86
     ],
     "carbs_g": [
       0,
@@ -205,7 +205,7 @@
       0,
       116,
       0,
-      0
+      100
     ],
     "fat_g": [
       0,
@@ -214,7 +214,7 @@
       0,
       102,
       0,
-      0
+      75
     ],
     "has_data": [
       false,
@@ -223,79 +223,79 @@
       false,
       true,
       false,
-      false
+      true
     ],
     "target_kcal": 2500,
     "target_protein_g": 165,
-    "footer": "Target: 2,500 kcal · 165g protein · 1/7 days logged"
+    "footer": "Target: 2,500 kcal · 165g protein · 2/7 days logged"
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 82,
-    "days_logged": 1,
+    "macro_score_pct": 44,
+    "days_logged": 2,
     "days_total": 7,
-    "avg_protein_g": 168,
-    "avg_carbs_g": 116,
-    "avg_fat_g": 102,
+    "avg_protein_g": 127,
+    "avg_carbs_g": 108,
+    "avg_fat_g": 88,
     "target_kcal": 2500,
     "target_protein_g": 165,
     "nutrients": [
       {
-        "pct": 56,
+        "pct": 46,
         "label": "Fiber",
-        "sub": "21g / 38g",
+        "sub": "18g / 38g",
         "upper_limit": false
       },
       {
         "pct": 42,
         "label": "Calcium",
-        "sub": "425mg / 1.0g",
+        "sub": "421mg / 1.0g",
         "upper_limit": false
       },
       {
-        "pct": 66,
+        "pct": 53,
         "label": "Magnesium",
-        "sub": "267mg / 400mg",
+        "sub": "216mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 109,
+        "pct": 77,
         "label": "Potassium",
-        "sub": "5.1g / 4.7g",
+        "sub": "3.6g / 4.7g",
         "upper_limit": false
       },
       {
-        "pct": 28,
+        "pct": 37,
         "label": "Sodium",
-        "sub": "652mg / 2.3g",
+        "sub": "860mg / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 168,
+        "pct": 160,
         "label": "Iron",
         "sub": "13mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 107,
+        "pct": 67,
         "label": "Vitamin A",
-        "sub": "967mcg / 900mcg",
+        "sub": "609mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 37,
+        "pct": 20,
         "label": "Vitamin C",
-        "sub": "33mg / 90mg",
+        "sub": "19mg / 90mg",
         "upper_limit": false
       }
     ],
-    "footer": "1 of 7 days logged · RDI for adult males · ↓ = upper limit"
+    "footer": "2 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
     "date_label": "Oct 21 — Today",
-    "today_oz": 0.0,
+    "today_oz": 16.7,
     "target_oz": 130,
-    "pct": 0,
+    "pct": 13,
     "week": {
       "labels": [
         "Thu",
@@ -313,15 +313,15 @@
         0,
         30,
         0,
-        0
+        17
       ],
       "today_index": 6
     },
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-21T16:02:06-07:00",
-    "last_updated_label": "Oct 21, 4:02 PM PST",
+    "last_updated_iso": "2026-10-21T19:02:05-07:00",
+    "last_updated_label": "Oct 21, 7:02 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-21T16:02:06-07:00",
+    "last_body_data_iso": "2026-10-21T19:02:05-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": false,
         "last_ok_iso": "2026-10-17T19:00:04-07:00",
-        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1111h old (stale)"
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 1114h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-21T16:02:08-07:00",
+        "last_ok_iso": "2026-10-21T19:02:08-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-21T16:02:07-07:00",
+        "last_ok_iso": "2026-10-21T19:02:06-07:00",
         "error": null
       }
     },
