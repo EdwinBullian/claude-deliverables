@@ -8,8 +8,8 @@
     "light_minutes": 267,
     "rem_minutes": 141,
     "awake_minutes": 4,
-    "bedtime_label": "12:58 AM",
-    "wake_label": "9:03 AM",
+    "bedtime_label": "1:58 AM",
+    "wake_label": "10:03 AM",
     "resting_hr": null,
     "awakenings": null
   },
@@ -17,8 +17,8 @@
     "date_label": "Oct 25 — Today",
     "today": {
       "rhr": null,
-      "steps": 1503,
-      "avg_hr": 60,
+      "steps": 1541,
+      "avg_hr": 62,
       "sleep_score": 98
     },
     "week": {
@@ -37,8 +37,8 @@
         1790,
         1297,
         7385,
-        5098,
-        1503
+        5172,
+        1541
       ],
       "rhr": [
         47,
@@ -150,8 +150,8 @@
       5,
       5,
       5,
+      5,
       28,
-      18,
       18,
       18,
       65,
@@ -166,7 +166,7 @@
       46,
       32
     ],
-    "footer": "Wake 9:03 AM · No workout · Natural curve"
+    "footer": "Wake 10:03 AM · No workout · Natural curve"
   },
   "macros_week": {
     "week_label": "Macros — Oct 19–25",
@@ -320,8 +320,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-25T10:00:10-07:00",
-    "last_updated_label": "Oct 25, 10:00 AM PST",
+    "last_updated_iso": "2026-10-25T13:00:11-07:00",
+    "last_updated_label": "Oct 25, 1:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -332,22 +332,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-25T10:00:10-07:00",
+    "last_body_data_iso": "2026-10-25T13:00:11-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-10-25T10:00:11-07:00",
+        "last_ok_iso": "2026-10-25T13:00:12-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-25T10:00:13-07:00",
+        "last_ok_iso": "2026-10-25T13:00:14-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-25T10:00:11-07:00",
+        "last_ok_iso": "2026-10-25T13:00:12-07:00",
         "error": null
       }
     },
