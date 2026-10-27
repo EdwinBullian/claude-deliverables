@@ -1,39 +1,39 @@
 {
   "sleep": {},
   "activity": {
-    "date_label": "Oct 26 — Today",
+    "date_label": "Oct 27 — Today",
     "today": {
       "rhr": null,
-      "steps": 8113,
-      "avg_hr": 110,
+      "steps": null,
+      "avg_hr": null,
       "sleep_score": null
     },
     "week": {
       "labels": [
-        "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
-        "Mon"
+        "Mon",
+        "Tue"
       ],
       "steps": [
-        6901,
         1790,
         1297,
         7385,
         6816,
-        5317,
-        8113
+        7925,
+        11272,
+        null
       ],
       "rhr": [
-        50,
         50,
         47,
         50,
         50,
         53,
+        49,
         null
       ],
       "today_index": 6
@@ -52,13 +52,13 @@
       "Sat"
     ],
     "date_labels": [
-      "Tue 10/20",
       "Wed 10/21",
       "Thu 10/22",
       "Fri 10/23",
       "Sat 10/24",
       "Sun 10/25",
-      "Mon 10/26"
+      "Mon 10/26",
+      "Tue 10/27"
     ],
     "lift_min": [
       0,
@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Oct 26",
+    "date_label": "Oct 27",
     "curve_24h": [
       5,
       5,
@@ -156,57 +156,57 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Oct 20–26",
+    "week_label": "Macros — Oct 21–27",
     "macro_score_pct": 27,
     "labels": [
-      "Tue",
       "Wed",
       "Thu",
       "Fri",
       "Sat",
       "Sun",
-      "Mon"
+      "Mon",
+      "Tue"
     ],
     "dates": [
-      "Oct 20",
       "Oct 21",
       "Oct 22",
       "Oct 23",
       "Oct 24",
       "Oct 25",
-      "Oct 26"
+      "Oct 26",
+      "Oct 27"
     ],
     "protein_g": [
-      0,
       139,
       92,
+      0,
       0,
       0,
       0,
       0
     ],
     "carbs_g": [
-      0,
       129,
       73,
+      0,
       0,
       0,
       0,
       0
     ],
     "fat_g": [
-      0,
       91,
       43,
+      0,
       0,
       0,
       0,
       0
     ],
     "has_data": [
+      true,
+      true,
       false,
-      true,
-      true,
       false,
       false,
       false,
@@ -279,24 +279,24 @@
     "footer": "2 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Oct 26 — Today",
+    "date_label": "Oct 27 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Tue",
         "Wed",
         "Thu",
         "Fri",
         "Sat",
         "Sun",
-        "Mon"
+        "Mon",
+        "Tue"
       ],
       "oz": [
-        0,
         20,
         14,
+        0,
         0,
         0,
         0,
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-10-26T19:00:08-07:00",
-    "last_updated_label": "Oct 26, 7:00 PM PST",
+    "last_updated_iso": "2026-10-27T04:00:09-07:00",
+    "last_updated_label": "Oct 27, 4:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-10-26T19:00:08-07:00",
+    "last_body_data_iso": "2026-10-27T04:00:09-07:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-10-26T19:00:10-07:00",
+        "last_ok_iso": "2026-10-27T04:00:10-07:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-10-26T19:00:11-07:00",
+        "last_ok_iso": "2026-10-27T04:00:11-07:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-10-26T19:00:09-07:00",
+        "last_ok_iso": "2026-10-27T04:00:09-07:00",
         "error": null
       }
     },
