@@ -4,8 +4,8 @@
     "date_label": "Nov 04 — Today",
     "today": {
       "rhr": null,
-      "steps": null,
-      "avg_hr": null,
+      "steps": 204,
+      "avg_hr": 62,
       "sleep_score": null
     },
     "week": {
@@ -24,8 +24,8 @@
         7465,
         14826,
         16231,
-        7072,
-        null
+        7297,
+        204
       ],
       "rhr": [
         52,
@@ -157,7 +157,7 @@
   },
   "macros_week": {
     "week_label": "Macros — Oct 29–4",
-    "macro_score_pct": 28,
+    "macro_score_pct": 43,
     "labels": [
       "Thu",
       "Fri",
@@ -182,7 +182,7 @@
       73,
       0,
       0,
-      180,
+      201,
       0
     ],
     "carbs_g": [
@@ -191,7 +191,7 @@
       64,
       0,
       0,
-      92,
+      114,
       0
     ],
     "fat_g": [
@@ -200,7 +200,7 @@
       47,
       0,
       0,
-      62,
+      88,
       0
     ],
     "has_data": [
@@ -218,61 +218,61 @@
   },
   "micros_week": {
     "week_label": "Nutrition — 7-Day Avg",
-    "macro_score_pct": 28,
+    "macro_score_pct": 43,
     "days_logged": 2,
     "days_total": 7,
-    "avg_protein_g": 126,
-    "avg_carbs_g": 78,
-    "avg_fat_g": 54,
+    "avg_protein_g": 137,
+    "avg_carbs_g": 89,
+    "avg_fat_g": 67,
     "target_kcal": 2500,
     "target_protein_g": 165,
     "nutrients": [
       {
-        "pct": 21,
+        "pct": 32,
         "label": "Fiber",
-        "sub": "8g / 38g",
-        "upper_limit": false
-      },
-      {
-        "pct": 37,
-        "label": "Calcium",
-        "sub": "377mg / 1.0g",
+        "sub": "12g / 38g",
         "upper_limit": false
       },
       {
         "pct": 38,
-        "label": "Magnesium",
-        "sub": "155mg / 400mg",
+        "label": "Calcium",
+        "sub": "388mg / 1.0g",
         "upper_limit": false
       },
       {
         "pct": 42,
-        "label": "Potassium",
-        "sub": "2.0g / 4.7g",
+        "label": "Magnesium",
+        "sub": "172mg / 400mg",
         "upper_limit": false
       },
       {
-        "pct": 64,
+        "pct": 52,
+        "label": "Potassium",
+        "sub": "2.5g / 4.7g",
+        "upper_limit": false
+      },
+      {
+        "pct": 73,
         "label": "Sodium",
-        "sub": "1.5g / 2.3g",
+        "sub": "1.7g / 2.3g",
         "upper_limit": true
       },
       {
-        "pct": 60,
+        "pct": 71,
         "label": "Iron",
-        "sub": "5mg / 8mg",
+        "sub": "6mg / 8mg",
         "upper_limit": false
       },
       {
-        "pct": 2,
+        "pct": 3,
         "label": "Vitamin A",
-        "sub": "23mcg / 900mcg",
+        "sub": "27mcg / 900mcg",
         "upper_limit": false
       },
       {
-        "pct": 12,
+        "pct": 18,
         "label": "Vitamin C",
-        "sub": "11mg / 90mg",
+        "sub": "17mg / 90mg",
         "upper_limit": false
       }
     ],
@@ -299,7 +299,7 @@
         7,
         0,
         0,
-        17,
+        20,
         0
       ],
       "today_index": 6
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-11-04T04:00:06-08:00",
-    "last_updated_label": "Nov 4, 4:00 AM PST",
+    "last_updated_iso": "2026-11-04T07:00:06-08:00",
+    "last_updated_label": "Nov 4, 7:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-11-04T04:00:06-08:00",
+    "last_body_data_iso": "2026-11-04T07:00:06-08:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T04:00:07-08:00",
+        "last_ok_iso": "2026-11-04T07:00:07-08:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T04:00:09-08:00",
+        "last_ok_iso": "2026-11-04T07:00:09-08:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T04:00:07-08:00",
+        "last_ok_iso": "2026-11-04T07:00:07-08:00",
         "error": null
       }
     },
