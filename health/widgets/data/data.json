@@ -1,38 +1,38 @@
 {
   "sleep": {},
   "activity": {
-    "date_label": "Nov 04 — Today",
+    "date_label": "Nov 05 — Today",
     "today": {
       "rhr": null,
-      "steps": 7628,
-      "avg_hr": 62,
+      "steps": null,
+      "avg_hr": null,
       "sleep_score": null
     },
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "steps": [
-        17359,
         12890,
         7465,
         14826,
         16231,
         7297,
-        7628
+        7628,
+        null
       ],
       "rhr": [
-        52,
         55,
         54,
         53,
         54,
+        null,
         null,
         null
       ],
@@ -52,13 +52,13 @@
       "Sat"
     ],
     "date_labels": [
-      "Thu 10/29",
       "Fri 10/30",
       "Sat 10/31",
       "Sun 11/1",
       "Mon 11/2",
       "Tue 11/3",
-      "Wed 11/4"
+      "Wed 11/4",
+      "Thu 11/5"
     ],
     "lift_min": [
       0,
@@ -88,11 +88,11 @@
       ""
     ],
     "bball_min": [
-      56.0,
       84.0,
       0,
       0,
       86.0,
+      0,
       0,
       0
     ],
@@ -126,7 +126,7 @@
     "top_lifts": []
   },
   "energy": {
-    "date_label": "Nov 4",
+    "date_label": "Nov 5",
     "curve_24h": [
       5,
       5,
@@ -156,60 +156,60 @@
     "footer": "Wake — · No workout · Natural curve"
   },
   "macros_week": {
-    "week_label": "Macros — Oct 29–4",
+    "week_label": "Macros — Oct 30–5",
     "macro_score_pct": 43,
     "labels": [
-      "Thu",
       "Fri",
       "Sat",
       "Sun",
       "Mon",
       "Tue",
-      "Wed"
+      "Wed",
+      "Thu"
     ],
     "dates": [
-      "Oct 29",
       "Oct 30",
       "Oct 31",
       "Nov 1",
       "Nov 2",
       "Nov 3",
-      "Nov 4"
+      "Nov 4",
+      "Nov 5"
     ],
     "protein_g": [
-      0,
       0,
       73,
       0,
       0,
       201,
+      0,
       0
     ],
     "carbs_g": [
-      0,
       0,
       64,
       0,
       0,
       114,
+      0,
       0
     ],
     "fat_g": [
-      0,
       0,
       47,
       0,
       0,
       88,
+      0,
       0
     ],
     "has_data": [
       false,
-      false,
       true,
       false,
       false,
       true,
+      false,
       false
     ],
     "target_kcal": 2500,
@@ -279,27 +279,27 @@
     "footer": "2 of 7 days logged · RDI for adult males · ↓ = upper limit"
   },
   "hydration": {
-    "date_label": "Nov 4 — Today",
+    "date_label": "Nov 5 — Today",
     "today_oz": 0.0,
     "target_oz": 130,
     "pct": 0,
     "week": {
       "labels": [
-        "Thu",
         "Fri",
         "Sat",
         "Sun",
         "Mon",
         "Tue",
-        "Wed"
+        "Wed",
+        "Thu"
       ],
       "oz": [
-        0,
         0,
         7,
         0,
         0,
         20,
+        0,
         0
       ],
       "today_index": 6
@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-11-04T19:00:03-08:00",
-    "last_updated_label": "Nov 4, 7:00 PM PST",
+    "last_updated_iso": "2026-11-05T04:00:04-08:00",
+    "last_updated_label": "Nov 5, 4:00 AM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-11-04T19:00:03-08:00",
+    "last_body_data_iso": "2026-11-05T04:00:04-08:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T19:00:04-08:00",
+        "last_ok_iso": "2026-11-05T04:00:05-08:00",
         "error": null
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T19:00:06-08:00",
+        "last_ok_iso": "2026-11-05T04:00:07-08:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-11-04T19:00:04-08:00",
+        "last_ok_iso": "2026-11-05T04:00:05-08:00",
         "error": null
       }
     },
