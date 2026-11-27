@@ -41,9 +41,9 @@
 <div class="week-grid" id="grid"></div>
 
 <script>
-const days=["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"];
-const steps=[20419, 22926, 10869, 11151, 12497, 3712, null];
-const rhr=[55, 68, 58, 53, 52, null, null];
+const days=["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+const steps=[22926, 10869, 11151, 12497, 3712, null, null];
+const rhr=[68, 58, 53, 52, null, null, null];
 // filter(Boolean) over an all-null week yields Math.max() === -Infinity, which
 // makes every height NaN and the grid render empty with no hint why.
 const vals=steps.filter(v=>typeof v==='number'&&v>0);
