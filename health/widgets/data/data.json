@@ -307,8 +307,8 @@
     "footer": "Goal 130 oz · total water (drinks + food) from Cronometer"
   },
   "_meta": {
-    "last_updated_iso": "2026-11-27T13:00:09-08:00",
-    "last_updated_label": "Nov 27, 1:00 PM PST",
+    "last_updated_iso": "2026-11-27T16:00:06-08:00",
+    "last_updated_label": "Nov 27, 4:00 PM PST",
     "refreshed_sections": [
       "sleep",
       "activity",
@@ -319,22 +319,22 @@
       "micros_week",
       "hydration"
     ],
-    "last_body_data_iso": "2026-11-27T13:00:09-08:00",
+    "last_body_data_iso": "2026-11-27T16:00:06-08:00",
     "refresh_endpoint": "",
     "sources": {
       "apple_health": {
         "ok": false,
         "last_ok_iso": "2026-11-27T10:00:07-08:00",
-        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 50h old (stale)"
+        "error": "apple health export unavailable: newest export in C:\\Users\\edwin\\iCloudDrive\\iCloud~com~ifunography~HealthExport\\Daily is 53h old (stale)"
       },
       "cronometer": {
         "ok": true,
-        "last_ok_iso": "2026-11-27T13:00:10-08:00",
+        "last_ok_iso": "2026-11-27T16:00:08-08:00",
         "error": null
       },
       "notion": {
         "ok": true,
-        "last_ok_iso": "2026-11-27T13:00:09-08:00",
+        "last_ok_iso": "2026-11-27T16:00:07-08:00",
         "error": null
       }
     },
